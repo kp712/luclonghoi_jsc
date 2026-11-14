@@ -1,0 +1,118 @@
+{
+  "_readme": "Salinity CANNOT be measured by satellite in paddies; these are ESTIMATES from river and canal station readings in public reports. station = the pin's nearest station in data/raw/salinity_stations.json (yearly highest readings, Nguyễn Trọng Khanh et al. 2025). build.py averages that station's highest reading of each dry season over Dec 2014 - Nov 2024, separately for typical and El Niño seasons, and sets the level: high >= 15‰ (near-sea water; the team's cut-off), medium 4-15‰ (above 4‰ rice is clearly damaged; see the SGGP source), low < 4‰. level (optional) overrides that rule for a pin, with the reason in its note. note = the pin's text; build.py appends the station averages. Fields behind sluices are often less salty than the river. months: when salt usually comes, from public reports; build.py adds any month in which the station had its highest reading in at least 2 of the last 10 dry seasons. verified = true once the claim has been found in the source, with a short quote in the note.",
+  "sites": {
+    "vinh_chau": {
+      "station": "khanh_hoa",
+      "months": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "note": {
+        "en": "Coastal strip. Nearest station: Khánh Hòa, on the Vĩnh Châu coast.",
+        "vi": "Dải ven biển. Trạm gần nhất: Khánh Hòa, ven biển Vĩnh Châu."
+      }
+    },
+    "tran_de": {
+      "station": "tran_de",
+      "months": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "note": {
+        "en": "Trần Đề station at the Hậu River mouth, 10 km from the sea.",
+        "vi": "Trạm Trần Đề ở cửa sông Hậu, cách biển 10 km."
+      }
+    },
+    "my_xuyen": {
+      "station": "thanh_phu",
+      "months": [
+        2,
+        3,
+        4
+      ],
+      "note": {
+        "en": "Known rice–shrimp area. Nearest station: Thạnh Phú, on the Nhu Gia canal.",
+        "vi": "Vùng lúa – tôm truyền thống. Trạm gần nhất: Thạnh Phú, trên kênh Nhu Gia."
+      }
+    },
+    "long_phu": {
+      "station": "long_phu",
+      "months": [
+        2,
+        3,
+        4
+      ],
+      "note": {
+        "en": "Along the Hậu River. Long Phú station, 15 km from the sea; in 2019–20 salt arrived from mid-December.",
+        "vi": "Dọc sông Hậu. Trạm Long Phú, cách biển 15 km; mùa khô 2019–20 mặn đến từ giữa tháng 12."
+      }
+    },
+    "nga_nam": {
+      "station": "nga_nam",
+      "level": "low",
+      "months": [
+        3,
+        4
+      ],
+      "note": {
+        "en": "Rated low although the Ngã Năm canal station reads higher: salt-control sluices around Ngã Năm and Mỹ Tú keep salt out of the fields, and NASA MODIS sees nearly 3 rice crops a year here, a freshwater pattern.",
+        "vi": "Xếp mức thấp dù trạm kênh Ngã Năm đo cao hơn: các cống ngăn mặn quanh Ngã Năm và Mỹ Tú chặn mặn vào ruộng, và NASA MODIS ghi nhận gần 3 vụ lúa/năm ở đây, dấu hiệu vùng nước ngọt."
+      }
+    }
+  },
+  "sources": [
+    {
+      "title": "Southern Institute of Water Resources Research (SIWRR) salinity bulletins",
+      "url": "https://vawr.org.vn/Upload/DUBAO-CANHBAO/%C4%90BSCL/NGU%E1%BB%92N%20N%C6%AF%E1%BB%9AC/vkhtlmn_bantintuan13-dubaonguonnuoc_24022022_v1a.pdf",
+      "note": "Checked 2026-11-05. siwrr.org.vn did not connect, but the institute's (Viện Khoa học Thủy lợi miền Nam) weekly water-source bulletins for the Mekong Delta are published on the parent academy's site vawr.org.vn; example: 'BẢN TIN DỰ BÁO TUẦN', week of 24/02 – 03/03/2022, with salinity at stations such as Đại Ngãi.",
+      "verified": true
+    },
+    {
+      "title": "National Center for Hydro-Meteorological Forecasting (KTTV): salinity intrusion forecasts for the Southern region (Tin dự báo xâm nhập mặn khu vực Nam Bộ)",
+      "url": "https://kttv.gov.vn/kttv/vi-VN/1/xam-nhap-man-20-18.html",
+      "note": "Checked 2026-11-05. Official 10-day bulletins; Table 1 ('Bảng độ mặn cao nhất') gives the measured highest salinity at Long Phú, Đại Ngãi, Trần Đề, Thạnh Phú and Sóc Trăng. The 20 found online for 2024–2026 are in data/raw/salinity_bulletins.json; they match the station table's 2024 and 2025 peaks.",
+      "verified": true
+    },
+    {
+      "title": "2015–2016 and 2019–2020 Mekong Delta drought and saltwater intrusion reports",
+      "url": "https://www.acaps.org/sites/acaps/files/products/files/20200211_acaps_start_fund_anticipatory_note_drought_and_saltwater_intrusion_vietnam.pdf",
+      "note": "Checked 2026-11-05. ACAPS anticipatory note, 11 Feb 2020: per VNDMA and MARD, 'since December 2019 saltwater intrusion in the Mekong Delta is deeper and occurring earlier compared to the strong salinity intrusion of 2015-2016'; the 2015–16 intrusion 'affected approximately 400,000 ha in the Mekong Delta'; 'Eight of 12 provinces in the Mekong Delta region are reported to be at risk', Sóc Trăng among them.",
+      "verified": true
+    },
+    {
+      "title": "Báo CAND (23 Feb 2016), Sóc Trăng căng mình chống hạn mặn",
+      "url": "https://cand.vn/doi-song/Soc-Trang-cang-minh-chong-han-man-i381514/",
+      "note": "Checked 2026-11-05. 2016 peaks so far: Trần Đề '27,3‰' (up 6.5‰ on 2015), Long Phú '20,4‰' (up 7.7‰), Thạnh Phú (Mỹ Xuyên) '7‰' (up 3.7‰).",
+      "verified": true
+    },
+    {
+      "title": "Khuyến nông VN (12 Feb 2020), Minister surveys drought and salinity in Sóc Trăng",
+      "url": "https://khuyennongvn.gov.vn/thien-tai-dich-hai/bo-truong-nguyen-xuan-cuong-khao-sat-tinh-hinh-han-xam-nhap-man-tai-soc-trang-19731.html",
+      "note": "Checked 2026-11-05. 'Hiện tại độ mặn cao nhất tại trạm Trần Đề: 21 g/l; Long Phú: 16,9 g/l; Đại Ngãi 11,3 g/l; An Lạc Tây 7,0 g/l' (1 g/l ≈ 1‰); 'Xâm nhập mặn lấn sâu vào nội đồng khoảng 40 – 50 km (so với năm 2016 tăng 10 – 15 km)'.",
+      "verified": true
+    },
+    {
+      "title": "Báo Thanh tra (9 Feb 2020), Sóc Trăng: Hạn hán, xâm nhập mặn diễn ra gay gắt",
+      "url": "https://thanhtra.com.vn/kinh-te/lao-dong-viec-lam/Soc-Trang-Han-han-xam-nhap-man-dien-ra-gay-gat-160024.html",
+      "note": "Checked 2026-11-05. Peaks in 'trung tuần tháng 12/2019' (mid-December 2019): Trần Đề 20,5‰, Long Phú 14,2‰. Early February 2020 ('số liệu mới nhất' from the Sóc Trăng Irrigation Sub-Department): Thạnh Thới Thuận (Mỹ Thanh River) 15,9‰, Thạnh Phú (Nhu Gia) 6,8‰.",
+      "verified": true
+    },
+    {
+      "title": "SGGP (5 May 2026), Vĩnh Long cảnh báo xâm nhập mặn gia tăng",
+      "url": "https://www.sggp.org.vn/vinh-long-canh-bao-xam-nhap-man-gia-tang-de-doa-san-xuat-nong-nghiep-post851137.html",
+      "note": "Checked 2026-11-05. The Vĩnh Long provincial hydro-met station calls the 4‰ line 'ngưỡng gây hại trực tiếp đến sản xuất nông nghiệp' (the threshold that directly harms farming); rice and fruit trees are 'bị ảnh hưởng rõ rệt' (clearly affected); advice: do not irrigate above 4‰ for sensitive crops. Basis for the 4‰ cut-off.",
+      "verified": true
+    },
+    {
+      "title": "Nguyễn Trọng Khanh et al. (2025), Phân tích xu thế xâm nhập mặn trên hệ thống sông, kênh Tỉnh Sóc Trăng (cũ), Tạp chí Khoa học Biến đổi khí hậu 36, Table 4",
+      "url": "https://vjol.info.vn/TCKHBDKH/article/view/121694",
+      "note": "Checked 2026-11-05 (full text). Table 4: highest salinity of each dry season and its month at 8 Sóc Trăng river and canal stations, 1999–2025, typed into data/raw/salinity_stations.json and checked against the paper's Table 2; data from the provincial hydro-met station (ref. 12, Đài KTTV Tỉnh Sóc Trăng 2025). Smax 'phần lớn xuất hiện vào tháng 2 đến tháng 4' (mostly Feb–Apr). Significant rising trend at Long Phú and An Lạc Tây and falling trend at Thạnh Phú and Trần Đề (Mann–Kendall, α < 0.1); sluices at Mỹ Tú and Ngã Năm and the Ninh Quới lock 'đã ngăn mặn phần nào đến khu vực trạm Thạnh Phú'.",
+      "verified": true
+    }
+  ]
+}

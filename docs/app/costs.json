@@ -1,0 +1,487 @@
+{
+ "_readme": "Published PRODUCTION COST (money spent before revenue), million ₫ per ha, per crop key (same keys as pipeline/profits.json). cost = the figure, or the midpoint of range [low, high]; range is null for a single number. unit 'crop' = per crop, 'year' = per year (shrimp: one season a year). year = harvest year (winter–spring 2023–24 = 2024). kind: government | cooperative | university | news | farmer. method: 'stated' (page states the cost), 'revenue-minus-profit' (yield × price, or stated revenue, minus stated profit; arithmetic in calc), 'unit-cost-x-yield' (giá thành ₫/kg × yield). bound: 'upper' or 'lower' when the page says 'over'/'under' so the computed cost is a bound, not a value. covers: what the cost includes when it is known (some surveys leave out land preparation, machinery or harvest, or include family labour); none of these figures includes land rent unless covers says so. 1 công taken as 1,000 m² unless the page states its size. Quotes are Vietnamese as printed (the Mỹ Xuyên PDF uses a legacy font; its quote is transcribed from the decoded text). Checked 2026-11-14.",
+ "figures": [
+  {
+   "key": "rice_ws",
+   "cost": 26.7,
+   "range": null,
+   "unit": "crop",
+   "place": "Vinacam cooperative, Kiên Giang (low-emission trial, ĐS1)",
+   "year": 2025,
+   "kind": "cooperative",
+   "method": "revenue-minus-profit",
+   "calc": "stated revenue 82.2 M/ha − stated profit 55.5 M/ha = 26.7 M/ha (yield 10.3 t/ha fresh paddy)",
+   "covers": "not stated; a trial field, profit 6.7 M above the control field",
+   "source": {
+    "title": "VOV (28 Mar 2025), Kiên Giang thí điểm canh tác lúa giảm phát thải, lợi nhuận 55,5 triệu đồng/ha",
+    "url": "https://vov.vn/kinh-te/kien-giang-thi-diem-canh-tac-lua-giam-phat-thai-loi-nhuan-555-trieu-dongha-post1188014.vov",
+    "quote": "tổng thu nhập đạt 82,2 triệu đồng/ha … lợi nhuận cho nhà nông lên đến 55,5 triệu đồng/ha",
+    "checked": "2026-11-14"
+   }
+  },
+  {
+   "key": "rice_ws",
+   "cost": 20.8,
+   "range": [
+    15,
+    26.6
+   ],
+   "unit": "crop",
+   "place": "Long Phú district, Sóc Trăng",
+   "year": 2024,
+   "kind": "government",
+   "method": "revenue-minus-profit",
+   "calc": "district yield 6.5 t/ha × ordinary-rice price 8,700–10,000 ₫/kg = 56.6–65.0 M; minus district profit 30–50 M. Midpoint 6.5 × 9,350 = 60.8 − 40 = 20.8; ends paired low price/low profit 56.6 − 30 = 26.6 and high price/high profit 65.0 − 50 = 15",
+   "covers": "not stated. Yield and profit from the district agriculture office (Lâm Văn Vũ); prices are the reporter's, so the pairing is an assumption",
+   "source": {
+    "title": "VietnamPlus (10 Jan 2024), Sóc Trăng: Lúa Đông Xuân có giá bán và lợi nhuận cao kỷ lục",
+    "url": "https://www.vietnamplus.vn/soc-trang-lua-dong-xuan-co-gia-ban-va-loi-nhuan-cao-ky-luc-post920243.vnp",
+    "quote": "Ước tính năng suất đầu vụ đạt 6,5 tấn/ha … giá lúa thường từ 8.700-10.000 đồng/kg … lợi nhuận từ 30-50 triệu đồng/ha",
+    "checked": "2026-11-14"
+   }
+  },
+  {
+   "key": "rice_ws",
+   "cost": 16.0,
+   "range": null,
+   "unit": "crop",
+   "place": "Vĩnh Viễn A, Long Mỹ, Hậu Giang (acid soil, 2-crop farms; average of winter–spring and summer–autumn)",
+   "year": 2024,
+   "kind": "university",
+   "method": "stated",
+   "calc": "Bảng 7, 'Lúa 2 vụ' column: 16,048,625 ₫/ha per crop",
+   "covers": "seed + fertiliser + pesticide + family labour only (no land preparation, machinery, harvest or irrigation), so it understates the full cost; per-crop average over two seasons, not winter–spring alone",
+   "source": {
+    "title": "Tất Anh Thư et al. (2025), Đánh giá hiện trạng canh tác và hiệu quả tài chính của mô hình trồng lúa trên đất phèn tại huyện Long Mỹ, tỉnh Hậu Giang, Tạp chí Khoa học ĐH Cần Thơ 61(5B): 133-142",
+    "url": "https://ctujsvn.ctu.edu.vn/index.php/ctujsvn/article/download/7025/5153/33034",
+    "quote": "Tổng chi phí (đồng/ha) 16.048.625±2.391.169 17.449.439±2.245.109",
+    "checked": "2026-11-14"
+   }
+  },
+  {
+   "key": "st_ws",
+   "cost": 15,
+   "range": null,
+   "unit": "crop",
+   "place": "Hưng Lợi cooperative, Long Đức, Long Phú, Sóc Trăng (mostly ST25)",
+   "year": 2024,
+   "kind": "cooperative",
+   "method": "stated",
+   "calc": "stated by the cooperative's deputy director Lý Công Chức",
+   "covers": "not stated; looks low next to the same cooperative's revenue-minus-profit figure (≥ 20.5), so it may leave out harvest or labour",
+   "source": {
+    "title": "VietnamPlus (10 Jan 2024), Sóc Trăng: Lúa Đông Xuân có giá bán và lợi nhuận cao kỷ lục",
+    "url": "https://www.vietnamplus.vn/soc-trang-lua-dong-xuan-co-gia-ban-va-loi-nhuan-cao-ky-luc-post920243.vnp",
+    "quote": "chi phí đầu tư giảm còn 15 triệu đồng/ha",
+    "checked": "2026-11-14"
+   }
+  },
+  {
+   "key": "st_ws",
+   "cost": 20.5,
+   "range": null,
+   "unit": "crop",
+   "bound": "lower",
+   "place": "Hưng Lợi cooperative, Long Phú, Sóc Trăng (ST25, over 100 ha)",
+   "year": 2024,
+   "kind": "cooperative",
+   "method": "revenue-minus-profit",
+   "calc": "7 t/ha (stated 'over 7') × 11,500 ₫/kg = 80.5 M − profit 60 M = 20.5 M; yield is a floor, so cost ≥ 20.5",
+   "covers": "not stated",
+   "source": {
+    "title": "VietnamPlus (10 Jan 2024), Sóc Trăng: Lúa Đông Xuân có giá bán và lợi nhuận cao kỷ lục",
+    "url": "https://www.vietnamplus.vn/soc-trang-lua-dong-xuan-co-gia-ban-va-loi-nhuan-cao-ky-luc-post920243.vnp",
+    "quote": "năng suất đạt trên 7 tấn, giá bán 11.500 đồng/kg … trừ chi phí nông dân lợi nhuận 60 triệu đồng/ha",
+    "checked": "2026-11-14"
+   }
+  },
+  {
+   "key": "rice_sa",
+   "cost": 24.2,
+   "range": [
+    23.5,
+    24.9
+   ],
+   "unit": "crop",
+   "place": "Đồng Tháp province (summer–autumn average)",
+   "year": 2024,
+   "kind": "government",
+   "method": "unit-cost-x-yield",
+   "calc": "giá thành 3,458–3,667 ₫/kg × provincial average yield 6.8 t/ha = 23.5–24.9 M/ha; midpoint 24.2",
+   "covers": "the department's giá thành (production cost per kg); breakdown not given",
+   "source": {
+    "title": "Tuổi Trẻ (24 Jul 2024), Đồng Tháp thu hoạch lúa hè thu cuối vụ, nông dân đạt lợi nhuận 26 - 32 triệu đồng mỗi ha",
+    "url": "https://tuoitre.vn/dong-thap-thu-hoach-lua-he-thu-cuoi-vu-nong-dan-dat-loi-nhuan-26-32-trieu-dong-moi-ha-20240724164140909.htm",
+    "quote": "Giá thành sản xuất lúa vụ hè thu dao động 3.458 - 3.667 đồng/kg … năng suất trung bình 6,8 tấn/ha",
+    "checked": "2026-11-14"
+   }
+  },
+  {
+   "key": "rice_sa",
+   "cost": 18.8,
+   "range": null,
+   "unit": "crop",
+   "place": "Tháp Mười, Đồng Tháp (one farmer, 1.2 ha)",
+   "year": 2024,
+   "kind": "farmer",
+   "method": "revenue-minus-profit",
+   "calc": "8 t/ha × 8,600 ₫/kg = 68.8 M − profit 50 M = 18.8 M",
+   "covers": "not stated; a good season with little pest spraying",
+   "source": {
+    "title": "VnExpress (11 May 2024), Nông dân Đồng Tháp trúng đậm vụ lúa Hè Thu",
+    "url": "https://vnexpress.net/nong-dan-dong-thap-trung-dam-vu-lua-he-thu-4744751.html",
+    "quote": "Mỗi kg lúa chủ ruộng bán với giá 8.600 đồng, sau khi trừ chi phí ông lãi khoảng 50 triệu đồng một ha.",
+    "checked": "2026-11-14"
+   }
+  },
+  {
+   "key": "st_sa",
+   "cost": 21.2,
+   "range": null,
+   "unit": "crop",
+   "place": "Sóc Trăng, 50 ha ST25 model field of the 1-million-ha programme (Long Phú)",
+   "year": 2024,
+   "kind": "government",
+   "method": "revenue-minus-profit",
+   "calc": "6.5 t/ha × 10,800 ₫/kg = 70.2 M − profit 49 M ('nearly 49') = 21.2 M. Cross-check: the same department says model cost is 'over 5.3 M/ha, more than 20%' below fields outside the model: 5.3 / 0.2 ≈ 26.5 outside, 26.5 − 5.3 = 21.2 inside",
+   "covers": "not stated",
+   "source": {
+    "title": "Thương hiệu và Công luận, citing VOV (10 Sep 2024), Tin vui trồng lúa theo mô hình thí điểm 1 triệu ha, nông dân thu lời gần 50 triệu/ha",
+    "url": "https://thuonghieucongluan.com.vn/tin-vui-trong-lua-theo-mo-hinh-thi-diem-1-trieu-ha-nong-dan-thu-loi-gan-50-trieu-ha-a235179.html",
+    "quote": "năng suất lúa sản xuất trong Đề án đạt 6,5 tấn/ha, với giá lúa ST25 được bán 10.800/kg",
+    "checked": "2026-11-14"
+   }
+  },
+  {
+   "key": "st_sa",
+   "cost": 26.5,
+   "range": null,
+   "unit": "crop",
+   "place": "Sóc Trăng, ST25 fields outside the 1-million-ha model (same comparison)",
+   "year": 2024,
+   "kind": "government",
+   "method": "revenue-minus-profit",
+   "calc": "model cost 21.2 M (from 70.2 M − 49 M) + stated gap 5.3 M = 26.5 M; consistent with the gap being '>20%' (5.3 / 26.5 = 20%)",
+   "covers": "not stated; this is the usual-practice cost, so better for an ordinary farm than the model figure",
+   "source": {
+    "title": "Thương hiệu và Công luận, citing VOV (10 Sep 2024), Tin vui trồng lúa theo mô hình thí điểm 1 triệu ha, nông dân thu lời gần 50 triệu/ha",
+    "url": "https://thuonghieucongluan.com.vn/tin-vui-trong-lua-theo-mo-hinh-thi-diem-1-trieu-ha-nong-dan-thu-loi-gan-50-trieu-ha-a235179.html",
+    "quote": "tổng chi phí sản xuất thấp hơn trên 5,3 triệu/ha so với ngoài mô hình, giảm hơn 20%",
+    "checked": "2026-11-14"
+   }
+  },
+  {
+   "key": "st_sa",
+   "cost": 21.5,
+   "range": null,
+   "unit": "crop",
+   "bound": "upper",
+   "place": "Đông Đầy cooperative group, Thạnh Thới An, Trần Đề, Sóc Trăng (ST25)",
+   "year": 2024,
+   "kind": "cooperative",
+   "method": "revenue-minus-profit",
+   "calc": "6.5 t/ha × 11,000 ₫/kg = 71.5 M − profit 'over 50 M' = under 21.5 M",
+   "covers": "not stated",
+   "source": {
+    "title": "Báo Tin tức – Dân tộc & Miền núi, Sản xuất lúa – tôm đặc sản cho nông dân Sóc Trăng thu nhập bạc tỷ",
+    "url": "https://dantocmiennui.baotintuc.vn/san-xuat-lua-tom-dac-san-cho-nong-dan-soc-trang-thu-nhap-bac-ty-post354705.html",
+    "quote": "năng suất đạt 6,5 tấn/ha, giá lúa được đơn vị bao tiêu là 11.000 đồng/kg, trừ chi phí lợi nhuận … trên 50 triệu đồng/ha",
+    "checked": "2026-11-06 (quote from profits.json note, not re-opened today)"
+   }
+  },
+  {
+   "key": "rice_aw",
+   "cost": 23.3,
+   "range": [
+    15.4,
+    27.4
+   ],
+   "unit": "crop",
+   "place": "An Giang, survey of 68 farms in 9 districts (range = district means)",
+   "year": 2020,
+   "kind": "university",
+   "method": "stated",
+   "calc": "Bảng 5 'Trung bình': Tổng chi 23,272,285 ₫/ha; district means 15,422,077 (An Phú) to 27,392,192 (Châu Đốc)",
+   "covers": "total cost; the paper does not list whether family labour is included",
+   "source": {
+    "title": "Nguyễn Thành Tâm, Nguyễn Thị Tuyết Mai, Đặng Kiều Nhân (2024), Đánh giá hiện trạng sản xuất lúa vụ thu đông tại tỉnh An Giang, Tạp chí Khoa học ĐH Cần Thơ 60(6B): 151-160",
+    "url": "https://doi.org/10.22144/ctujos.2024.476",
+    "quote": "tổng chi phí sản xuất lúa vụ Thu Đông năm 2020 dao động từ 15.422.077 đồng/ha đến 27.392.192 đồng/ha, trung bình 23.272.285 đồng/ha",
+    "checked": "2026-11-14"
+   }
+  },
+  {
+   "key": "rice_aw",
+   "cost": 20.4,
+   "range": null,
+   "unit": "crop",
+   "place": "Tiền Giang (Cái Bè area), autumn–winter",
+   "year": 2023,
+   "kind": "government",
+   "method": "unit-cost-x-yield",
+   "calc": "giá thành about 3,400 ₫/kg × provisional yield about 6 t/ha = 20.4 M/ha (both from Võ Văn Men, head of the provincial Crop Production and Plant Protection Sub-Department)",
+   "covers": "giá thành; breakdown not given",
+   "source": {
+    "title": "Nông nghiệp Việt Nam (16 Oct 2023), Nhìn vào vụ lúa Thu Đông 2023 – Bài 2: Vùng hạ chuẩn bị mở đồng",
+    "url": "https://nongnghiepmoitruong.vn/nhin-vao-vu-lua-thu-dong-2023-bai-2-vung-ha-chuan-bi-mo-dong-d364409.html",
+    "quote": "Năng suất lúa tươi tạm tính khoảng 6 tấn/ha … Năm nay, giá thành sản xuất lúa khoảng 3.400 đồng/kg.",
+    "checked": "2026-11-14"
+   }
+  },
+  {
+   "key": "rice_aw",
+   "cost": 21,
+   "range": [
+    20,
+    22
+   ],
+   "unit": "crop",
+   "place": "Nguyễn Văn Thảnh, Bình Tân, Vĩnh Long (one farmer, 1 ha OM18)",
+   "year": 2023,
+   "kind": "farmer",
+   "method": "stated",
+   "calc": "stated 20–22 M/ha; midpoint 21",
+   "covers": "not stated",
+   "source": {
+    "title": "Nông nghiệp Việt Nam (16 Oct 2023), Nhìn vào vụ lúa Thu Đông 2023 – Bài 2: Vùng hạ chuẩn bị mở đồng",
+    "url": "https://nongnghiepmoitruong.vn/nhin-vao-vu-lua-thu-dong-2023-bai-2-vung-ha-chuan-bi-mo-dong-d364409.html",
+    "quote": "sau khi trừ đi chi phí (từ 20 - 22 triệu đồng/ha), lợi nhuận vẫn đạt hơn 50%",
+    "checked": "2026-11-14"
+   }
+  },
+  {
+   "key": "rice_aw",
+   "cost": 17.4,
+   "range": null,
+   "unit": "crop",
+   "place": "Vĩnh Viễn A, Long Mỹ, Hậu Giang (acid soil, 3-crop farms; average of the three seasons incl. autumn–winter)",
+   "year": 2024,
+   "kind": "university",
+   "method": "stated",
+   "calc": "Bảng 7, 'Lúa 3 Vụ' column: 17,449,439 ₫/ha per crop",
+   "covers": "seed + fertiliser + pesticide + family labour only (no land preparation, machinery, harvest or irrigation); per-crop average over three seasons, not autumn–winter alone",
+   "source": {
+    "title": "Tất Anh Thư et al. (2025), Đánh giá hiện trạng canh tác và hiệu quả tài chính của mô hình trồng lúa trên đất phèn tại huyện Long Mỹ, tỉnh Hậu Giang, Tạp chí Khoa học ĐH Cần Thơ 61(5B): 133-142",
+    "url": "https://ctujsvn.ctu.edu.vn/index.php/ctujsvn/article/download/7025/5153/33034",
+    "quote": "Tổng chi phí (đồng/ha) 16.048.625±2.391.169 17.449.439±2.245.109",
+    "checked": "2026-11-14"
+   }
+  },
+  {
+   "key": "rice_rs",
+   "cost": 20.4,
+   "range": null,
+   "unit": "crop",
+   "place": "Hòa Tú 1 and Ngọc Đông, Mỹ Xuyên, Sóc Trăng (survey of 30 rice–shrimp farms)",
+   "year": 2024,
+   "kind": "university",
+   "method": "stated",
+   "calc": "2.04 M ₫ per 1,000 m² per rice crop × 10 = 20.4 M/ha (rice yield 900 kg/1,000 m², price 8,570 ₫/kg, profit 6.11 M/1,000 m²)",
+   "covers": "not itemised in the table",
+   "source": {
+    "title": "Đặc điểm kỹ thuật, kinh tế, xã hội và môi trường của mô hình lúa - tôm và chuyên tôm tại huyện Mỹ Xuyên, tỉnh Sóc Trăng, Tạp chí Nông nghiệp và Phát triển nông thôn, kỳ 1 tháng 11/2024, Bảng 6 (survey Mar–May 2024)",
+    "url": "https://tapchikhoahoc.nnmt.net.vn/index.php/vjae/article/view/104",
+    "quote": "Chi phí của mô hình lúa - tôm là 28,18 triệu đồng/1.000 m2/năm (2,04 triệu đồng/vụ lúa và 26,14 triệu đồng/vụ tôm)",
+    "checked": "2026-11-14"
+   }
+  },
+  {
+   "key": "rice_rs",
+   "cost": 21.4,
+   "range": null,
+   "unit": "crop",
+   "bound": "upper",
+   "place": "Gia Hòa 2, Mỹ Xuyên, Sóc Trăng (one farmer, 2 ha ST25)",
+   "year": 2021,
+   "kind": "farmer",
+   "method": "revenue-minus-profit",
+   "calc": "16 t / 2 ha = 8 t/ha × 8,300 ₫/kg = 66.4 M − profit 45 M/ha (90 M / 2 ha) = 21.4 M; tonnage and profit are both 'over', price 'nearly', so this is approximate (taken as an upper bound because profit is a floor)",
+   "covers": "not stated",
+   "source": {
+    "title": "Nhân Dân (10 Mar 2021), Lúa thơm - tôm sạch ở Sóc Trăng",
+    "url": "https://nhandan.vn/post-637970.html",
+    "quote": "vừa thu hoạch hơn 16 tấn lúa ST25 từ 2 ha, bán gần 8.300 đồng/kg … Trừ chi phí, anh Bằng lãi hơn 90 triệu đồng.",
+    "checked": "2026-11-14"
+   }
+  },
+  {
+   "key": "rice_rs",
+   "cost": 30,
+   "range": null,
+   "unit": "crop",
+   "place": "Hòa Nhờ B, Hòa Tú, Cần Thơ city (former Sóc Trăng; one farmer)",
+   "year": 2026,
+   "kind": "farmer",
+   "method": "revenue-minus-profit",
+   "calc": "stated income 'over 70 M/ha' − profit 'nearly 40 M/ha' ≈ 30 M/ha (yield 6 t/ha). The same farmer says rice on shrimp land costs only 60–70% of rice in pure-rice areas",
+   "covers": "not stated; harvest year 2025–26, outside the 2019–2025 window",
+   "source": {
+    "title": "Nhân Dân (6 May 2026), Cần quy hoạch cụ thể vùng sản xuất tôm-lúa",
+    "url": "https://nhandan.vn/can-quy-hoach-cu-the-vung-san-xuat-tom-lua-post960415.html",
+    "quote": "đạt 6 tấn/ha, thu nhập hơn 70 triệu đồng/ha … lãi gần 40 triệu đồng/ha",
+    "checked": "2026-11-14"
+   }
+  },
+  {
+   "key": "rice_rs",
+   "cost": 20,
+   "range": null,
+   "unit": "crop",
+   "bound": "upper",
+   "place": "Kiên Giang cooperatives (ST25 on shrimp land)",
+   "year": 2025,
+   "kind": "news",
+   "method": "stated",
+   "calc": "stated 'under 20 M/ha'",
+   "covers": "not stated; reporter's narration, no official named",
+   "source": {
+    "title": "VnBusiness (18 Jul 2025), 'Cha đẻ' của các giống gạo ST chia sẻ kinh nghiệm lợi nhuận từ mô hình luân canh lúa - tôm",
+    "url": "https://vnbusiness.vn/cha-de-cua-cac-giong-gao-st-chia-se-kinh-nghiem-loi-nhuan-tu-mo-hinh-luan-canh-lua-tom.html",
+    "quote": "chi phí chưa tới 20 triệu đồng/ha, giúp tăng lợi nhuận gấp rưỡi",
+    "checked": "2026-11-14"
+   }
+  },
+  {
+   "key": "shrimp",
+   "cost": 26.1,
+   "range": null,
+   "unit": "year",
+   "place": "Hòa Tú 1 and Ngọc Đông, Mỹ Xuyên, Sóc Trăng (survey of 30 rice–shrimp farms)",
+   "year": 2024,
+   "kind": "university",
+   "method": "stated",
+   "calc": "26.14 M ₫ per shrimp season. UNIT DOUBT: the paper labels it 'per 1,000 m²', but its shrimp yield (558 kg) and revenue only make sense per ha for extensive tiger shrimp (558 kg/ha × 118,220 ₫/kg ≈ 66 M/ha), so the figure is taken as per ha. Read per 1,000 m² it would be 261 M/ha, which is not plausible",
+   "covers": "not itemised",
+   "source": {
+    "title": "Đặc điểm kỹ thuật, kinh tế, xã hội và môi trường của mô hình lúa - tôm và chuyên tôm tại huyện Mỹ Xuyên, tỉnh Sóc Trăng, Tạp chí Nông nghiệp và Phát triển nông thôn, kỳ 1 tháng 11/2024, Bảng 6 (survey Mar–May 2024)",
+    "url": "https://tapchikhoahoc.nnmt.net.vn/index.php/vjae/article/view/104",
+    "quote": "Chi phí của mô hình lúa - tôm là 28,18 triệu đồng/1.000 m2/năm (2,04 triệu đồng/vụ lúa và 26,14 triệu đồng/vụ tôm)",
+    "checked": "2026-11-14"
+   }
+  },
+  {
+   "key": "shrimp",
+   "cost": 15,
+   "range": [
+    10,
+    20
+   ],
+   "unit": "year",
+   "place": "Thành Công 1 cooperative, Phong Thạnh A, Giá Rai, Bạc Liêu (one farmer, 4 ha rice–shrimp)",
+   "year": 2023,
+   "kind": "farmer",
+   "method": "revenue-minus-profit",
+   "calc": "shrimp sales 160–200 M per season − profit about 120 M = 40–80 M on 4 ha = 10–20 M/ha; midpoint 15",
+   "covers": "not stated",
+   "source": {
+    "title": "VnEconomy (13 Nov 2023), Giải pháp cho vùng nhiễm mặn Bạc Liêu: Hiệu quả mô hình tôm – lúa",
+    "url": "https://vneconomy.vn/giai-phap-cho-vung-nhiem-man-bac-lieu-hieu-qua-mo-hinh-tom-lua.htm",
+    "quote": "mỗi vụ thu về 160-200 triệu đồng tiền bán tôm, sau khi trừ đi các khoản chi phí, lợi nhuận còn khoảng 120 triệu đồng",
+    "checked": "2026-11-14"
+   }
+  },
+  {
+   "key": "shrimp",
+   "cost": 32.2,
+   "range": null,
+   "unit": "year",
+   "place": "Kiên Giang, Cái Lớn–Cái Bé fresh–brackish zone (rice–shrimp system)",
+   "year": 2023,
+   "kind": "government",
+   "method": "stated",
+   "calc": "Bảng 2, 'Lúa - tôm': Chi phí 32,200 thousand ₫/ha/year (revenue 82.8 M, profit 50.5 M)",
+   "covers": "WHOLE rice–shrimp system per year (shrimp season + rice crop), not shrimp alone; source is Kiên Giang Department of Agriculture 2023 as cited by the paper",
+   "source": {
+    "title": "Nguyễn Tuấn Anh, Đoàn Doãn Tuấn et al. (2025), Nguồn lực và khả năng hộ sản xuất nông lâm thủy sản áp dụng mô hình canh tác hiệu quả, bền vững vùng hưởng lợi dự án Cái Lớn - Cái Bé, Tạp chí KH&CN Thủy lợi 93",
+    "url": "https://vawr.org.vn/Upload/BaibaoKH/nguyen-tuan-anh_93_2025.pdf",
+    "quote": "Mô hình tôm lúa là mô hình bền vững có hiệu quả kinh tế cao. Với mức đầu tư 32,2 tr.đ/ha/năm",
+    "checked": "2026-11-14"
+   },
+   "use": false,
+   "why_not": {
+    "vi": "Không tính vào tổng: số này là chi phí cả mô hình tôm – lúa, gồm cả vụ lúa.",
+    "en": "Not used in the totals: it is the cost of the whole rice–shrimp system, rice included."
+   }
+  },
+  {
+   "key": "watermelon",
+   "cost": 31.0,
+   "range": null,
+   "unit": "crop",
+   "place": "Long Mỹ, Hậu Giang (field trial, rice–watermelon rotation on acid soil)",
+   "year": 2018,
+   "kind": "university",
+   "method": "stated",
+   "calc": "Bảng 3: Tổng chi phí 31.017 M ₫/ha (yield 18 t/ha × 4,000 ₫/kg = 72 M revenue, profit 40.983 M); rice in the same trial 11.874 M",
+   "covers": "fertiliser incl. mulch film, seed, pesticide, labour 8.0 M; no land preparation, irrigation or land rent listed. Trial year before 2019 (published 2018)",
+   "source": {
+    "title": "Lê Hồng Việt et al. (2018), Ảnh hưởng của luân canh lúa-dưa hấu đến độ hữu dụng của đạm, lân trong đất và năng suất lúa trên nền đất phèn tại tỉnh Hậu Giang, Tạp chí Khoa học ĐH Cần Thơ 54 (chuyên đề Nông nghiệp): 235-240",
+    "url": "https://ctujsvn.ctu.edu.vn/index.php/ctujsvn/article/download/3218/601/601",
+    "quote": "Tổng chi phí của mô hình canh tác dưa hấu là 31,017 triệu đồng",
+    "checked": "2026-11-14"
+   }
+  },
+  {
+   "key": "watermelon",
+   "cost": 65,
+   "range": [
+    60,
+    70
+   ],
+   "unit": "crop",
+   "place": "Thạnh Phú, Mỹ Xuyên, Sóc Trăng (one farmer's rule of thumb, dry season)",
+   "year": 2020,
+   "kind": "farmer",
+   "method": "revenue-minus-profit",
+   "calc": "per công: 3–4 t × 4,000 ₫/kg = 12–16 M revenue; profit 5–10 M. Pairing low with low and high with high: 12 − 5 = 7 and 16 − 10 = 6 M per công; midpoint 14 − 7.5 = 6.5 M per công × 10 = 65 M/ha (60–70). Công taken as 1,000 m²; a 1,296 m² công would give about 50 M/ha",
+   "covers": "not stated",
+   "source": {
+    "title": "Thanh Tra (13 Mar 2020), Đảm bảo thu nhập cho nông dân trong mùa khô hạn",
+    "url": "https://thanhtra.com.vn/tai-chinh-701717FFD/dam-bao-thu-nhap-cho-nong-dan-trong-mua-kho-han-541B6999.html",
+    "quote": "mỗi công dưa hấu nếu cho năng suất tốt từ 3-4 tấn, giá bán khoảng 4.000 đồng/kg … thu lãi từ 5-10 triệu đồng",
+    "checked": "2026-11-14"
+   }
+  },
+  {
+   "key": "watermelon",
+   "cost": 70,
+   "range": [
+    40,
+    100
+   ],
+   "unit": "crop",
+   "bound": "upper",
+   "place": "Bồ Đề, Kế Thành, Kế Sách, Sóc Trăng (one farmer, 3,000 m²)",
+   "year": 2025,
+   "kind": "farmer",
+   "method": "revenue-minus-profit",
+   "calc": "6 t per 3,000 m² × 7,000–10,000 ₫/kg = 42–60 M − profit 'over 30 M' = under 12–30 M per 0.3 ha = under 40–100 M/ha; midpoint 70. Price range is seasonal, so the range is wide",
+   "covers": "not stated",
+   "source": {
+    "title": "Báo Sóc Trăng (1 Apr 2025), Xã Kế Thành phát triển trồng dưa hấu dưới ruộng lúa",
+    "url": "https://baosoctrang.org.vn/nong-nghiep/202504/xa-ke-thanh-phat-trien-trong-dua-hau-duoi-ruong-lua-c825f0e/",
+    "quote": "năng suất 6 tấn trái/3.000m2, giá bán 7.000 - 10.000 đồng/kg … trừ chi phí lợi nhuận hơn 30 triệu đồng/vụ/năm",
+    "checked": "2026-11-14"
+   }
+  },
+  {
+   "key": "watermelon",
+   "cost": 140,
+   "range": null,
+   "unit": "crop",
+   "bound": "upper",
+   "place": "Tân Thành, Gò Công Đông, Tiền Giang (one farmer, 8,000 m²)",
+   "year": 2024,
+   "kind": "farmer",
+   "method": "revenue-minus-profit",
+   "calc": "24 t × 8,000 ₫/kg = 192 M − profit 'over 80 M' = under 112 M on 0.8 ha = under 140 M/ha",
+   "covers": "not stated; a high-input coastal field (30 t/ha), far above the other figures",
+   "source": {
+    "title": "Báo Tin tức – Dân tộc & Miền núi (3 Jun 2024), Trồng rau màu cho lợi nhuận trên 100 triệu đồng/ha",
+    "url": "https://dantocmiennui.baotintuc.vn/trong-rau-mau-cho-loi-nhuan-tren-100-trieu-dongha-post351672.html",
+    "quote": "với 8.000 m2 dưa hấu, ông đạt sản lượng 24 tấn quả, bán giá 8.000 đồng/kg … trừ chi phí còn lãi trên 80 triệu đồng",
+    "checked": "2026-11-14"
+   }
+  }
+ ]
+}

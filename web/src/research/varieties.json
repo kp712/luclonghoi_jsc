@@ -1,0 +1,315 @@
+{
+ "checked": "2026-11-14",
+ "areas": [
+  {
+   "area_id": "vinh_chau",
+   "area_vi": "Vĩnh Châu",
+   "area_en": "Vinh Chau",
+   "varieties": [],
+   "summary_en": "No source naming a rice variety for Vinh Chau was found. Leave variety unspecified.",
+   "summary_vi": "Không tìm thấy nguồn nào nêu tên giống lúa ở Vĩnh Châu. Để trống giống.",
+   "confidence": "low",
+   "sources": [
+    {
+     "title": "Soc Trang increasingly switches to speciality rice varieties",
+     "publisher": "VietnamPlus",
+     "date": "2023-03-14",
+     "url": "https://en.vietnamplus.vn/soc-trang-increasingly-switches-to-speciality-rice-varieties-post249845.vnp",
+     "quote": "(province-wide) ST24, ST25, Tai Nguyen, RVT, Dai Thom 8 about 92% of output",
+     "verified": true,
+     "note": "Fetched. Province-wide only; the page does not mention Vinh Chau."
+    }
+   ]
+  },
+  {
+   "area_id": "tran_de",
+   "area_vi": "Trần Đề",
+   "area_en": "Tran De",
+   "varieties": [
+    "ST25",
+    "ST24",
+    "Đài Thơm 8",
+    "RVT"
+   ],
+   "summary_en": "District socio-economic reports (Jan and Q1 2025) list Đài Thơm 8, RVT, ST24, ST25 as common varieties. The government site could not be fetched, so this rests on a search snippet. The '40 ha ST25 with local grower groups' claim was NOT found for Tran De: the matching article is Hòa Bình commune, Cà Mau (27 Mar 2026), 40 ha, 20 households.",
+   "summary_vi": "Báo cáo KT-XH huyện (tháng 1 và quý I/2025) nêu Đài thơm 8, RVT, ST24, ST25 là giống phổ biến. Không truy cập được trang gốc nên chỉ dựa vào đoạn trích tìm kiếm. Thông tin '40 ha ST25' KHÔNG thuộc Trần Đề: bài khớp là xã Hòa Bình, Cà Mau (27/3/2026).",
+   "confidence": "medium",
+   "sources": [
+    {
+     "title": "BC KTXH tháng 01 năm 2025 (UBND huyện Trần Đề)",
+     "publisher": "UBND huyện Trần Đề, soctrang.gov.vn",
+     "date": "2025-01",
+     "url": "https://soctrang.gov.vn/SiteFolders/htrande/bao-cao-thong-ke/BC%20KTXH%20N%C4%83m%202025/BC%20KTXH%20th%C3%A1ng%2001%20n%C4%83m%202025.pdf",
+     "quote": "Loại giống phổ biến: Đài thơm 8, RVT, ST24, ST25, ĐS1",
+     "verified": false,
+     "note": "Quote appears in a web search result snippet; the host did not resolve from our tools (ENOTFOUND), so the page was not opened. Same report family lists prices ST25 about 8,200-8,500 d/kg, Đài thơm 8 about 6,500-6,600 d/kg (snippet only)."
+    },
+    {
+     "title": "BC KTXH quý 1 năm 2025 (UBND huyện Trần Đề)",
+     "publisher": "UBND huyện Trần Đề, soctrang.gov.vn",
+     "date": "2025-Q1",
+     "url": "https://soctrang.gov.vn/SiteFolders/htrande/bao-cao-thong-ke/BC%20KTXH%20N%C4%83m%202025/BC%20KTXH%20qu%C3%BD%201%20n%C4%83m%202025%20%20(1).pdf",
+     "quote": "lúa thơm, lúa đặc sản chiếm 90,64% diện tích",
+     "verified": false,
+     "note": "Snippet only, not fetched. Reported 22,290 ha, 6.61 t/ha."
+    },
+    {
+     "title": "Mô hình ST25 HTX Green Farm, Hòa Bình (40 ha, 20 hộ)",
+     "publisher": "Nông nghiệp và Môi trường",
+     "date": "2026-03-27",
+     "url": "https://nongnghiepmoitruong.vn/lua-st25-khang-dinh-hieu-qua-mo-huong-giam-phat-thai-d802609.html",
+     "quote": "năng suất lúa vẫn đạt 7,7 tấn/ha",
+     "verified": true,
+     "note": "Fetched. This is Hòa Bình commune, Cà Mau, NOT Trần Đề: do not use for Trần Đề. Seed 80 kg/ha, yield 7.7 t/ha."
+    }
+   ]
+  },
+  {
+   "area_id": "my_xuyen",
+   "area_vi": "Mỹ Xuyên",
+   "area_en": "My Xuyen",
+   "varieties": [
+    "ST24",
+    "ST25"
+   ],
+   "summary_en": "Nhân Dân describes Mỹ Xuyên (old Sóc Trăng, now Cần Thơ) with most rice land in Đại Tâm on ST25 and an ST24/ST25 seed lineage; the cooperative named in that fetch is Đại Thanh led by Hứa Thành Nghĩa. The '100 ha certified ST24/ST25 at Nghĩa Thắng' and the 'Hòa Tú, 3 ha ST25 after shrimp' claims were not confirmed on a fetched page.",
+   "summary_vi": "Nhân Dân mô tả Mỹ Xuyên (Sóc Trăng cũ, nay thuộc Cần Thơ): phần lớn đất lúa Đại Tâm trồng ST25, có dòng giống ST24, ST25. HTX nêu trong bài là Đại Thanh (ông Hứa Thành Nghĩa). Thông tin 100 ha ST24/ST25 xác nhận tại Nghĩa Thắng và nông dân Hòa Tú 3 ha ST25 sau tôm chưa được xác nhận trên trang đã mở.",
+   "confidence": "medium",
+   "sources": [
+    {
+     "title": "Người nông dân thông thái trên cánh đồng lúa ST25",
+     "publisher": "Báo Nhân Dân",
+     "date": "2026 (date not shown on page)",
+     "url": "https://nhandan.vn/special/nong-dan-thong-thai/index.html",
+     "quote": "Nguồn giống ST rất hiếm, vì thế, đất trồng lúa ST cũng được chọn lọc rất kỹ.",
+     "verified": true,
+     "note": "Fetched (first 100k chars). Names Đại Tâm (nay là phường Mỹ Xuyên, Cần Thơ) as mostly ST25 and HTX Đại Thanh (not Nghĩa Thắng). No Hòa Tú found."
+    },
+    {
+     "title": "Nghĩa Thắng cooperative >100 ha certified ST24, ST25",
+     "publisher": "Nông nghiệp Việt Nam / Lao Động (via search summaries)",
+     "date": "2024-2026",
+     "url": "https://vietnamagriculture.nongnghiep.vn/reviewing-the-specialty-rice-program-in-soc-trang-d323985.html",
+     "quote": "HTX hiện có hơn 100ha chuyên sản xuất giống ST24, ST25 cấp xác nhận.",
+     "verified": false,
+     "note": "Quote came from a search summary; page not opened by us. URL is a guess of the matching article."
+    },
+    {
+     "title": "Hòa Tú farmer 3 ha ST25 after shrimp",
+     "publisher": "Báo Nhân Dân (claimed)",
+     "date": "2026-03",
+     "url": "",
+     "quote": "",
+     "verified": false,
+     "note": "Could not be found by search; not confirmed."
+    }
+   ]
+  },
+  {
+   "area_id": "long_phu",
+   "area_vi": "Long Phú",
+   "area_en": "Long Phu",
+   "varieties": [
+    "ST25"
+   ],
+   "summary_en": "ST25 in Long Đức commune is confirmed by two fetched articles (Jan 2021 harvest at Hưng Lợi cooperative; Feb 2025 50 ha low-emission pilot, 46 households). The 2024 district report naming ST25, Đài Thơm 8, OM18 was not found; an April 2021 district report (snippet) says late winter-spring 2020-21 sowing was mainly Đài Thơm 8. OM18 for Long Phú unconfirmed.",
+   "summary_vi": "ST25 tại xã Long Đức được xác nhận bằng hai bài đã mở (thu hoạch 1/2021 HTX Hưng Lợi; mô hình phát thải thấp 50 ha, 46 hộ, 2/2025). Báo cáo huyện 2024 nêu ST25, Đài Thơm 8, OM18 không tìm thấy; OM18 ở Long Phú chưa xác nhận.",
+   "confidence": "medium",
+   "sources": [
+    {
+     "title": "Lúa chất lượng cao, phát thải thấp: Đáp ứng yêu cầu tăng trưởng xanh",
+     "publisher": "Báo Sài Gòn Giải Phóng",
+     "date": "2025-02-02",
+     "url": "https://www.sggp.org.vn/lua-chat-luong-cao-phat-thai-thap-dap-ung-yeu-cau-tang-truong-xanh-post778555.html",
+     "quote": "ST25, giống lúa đặc sản, chất lượng cao của địa phương, được chọn thí điểm.",
+     "verified": true,
+     "note": "Fetched. 50 ha, 46 households, Hưng Lợi cooperative, An Hưng hamlet, Long Đức commune. Search snippet adds seed 60 kg/ha (not fetched)."
+    },
+    {
+     "title": "Bộ trưởng Nguyễn Xuân Cường thăm đồng lúa ST25 tại Sóc Trăng",
+     "publisher": "Nông nghiệp và Môi trường",
+     "date": "2021-01-08",
+     "url": "https://nongnghiepmoitruong.vn/bo-truong-nguyen-xuan-cuong-tham-canh-dong-lua-st25-tai-soc-trang-d281211.html",
+     "quote": "ông Long ước năng suất lúa tươi đạt khoảng 6,8-7 tấn/ha",
+     "verified": true,
+     "note": "Fetched. Long Đức, Hưng Lợi coop over 600 ha, early winter-spring 2020-21."
+    }
+   ]
+  },
+  {
+   "area_id": "nga_nam",
+   "area_vi": "Ngã Năm",
+   "area_en": "Nga Nam",
+   "varieties": [],
+   "summary_en": "Nga Nam is named only in province-wide programme lists (Mar 2023 VietnamPlus: one of nine speciality-rice localities; Nhân Dân list of districts). The town's 2024 report (ST24, ST25, RVT, Đài Thơm 8, OM18), the summer-autumn 2024 recommendation and the Tân Thành 1.3 ha ST25 harvest were not found.",
+   "summary_vi": "Ngã Năm chỉ xuất hiện trong danh sách chương trình toàn tỉnh. Báo cáo 2024 của thị xã, khuyến cáo hè thu 2024 và nông dân Tân Thành 1,3 ha ST25 không tìm thấy.",
+   "confidence": "low",
+   "sources": [
+    {
+     "title": "Soc Trang increasingly switches to speciality rice varieties",
+     "publisher": "VietnamPlus",
+     "date": "2023-03-14",
+     "url": "https://en.vietnamplus.vn/soc-trang-increasingly-switches-to-speciality-rice-varieties-post249845.vnp",
+     "quote": "ST24, ST25, Tai Nguyen, RVT and Dai Thom 8",
+     "verified": true,
+     "note": "Fetched. Province-level share about 92%; lists Nga Nam town among nine localities. No Nga Nam-specific variety."
+    }
+   ]
+  }
+ ],
+ "varieties": [
+  {
+   "id": "om18",
+   "name": "OM18",
+   "tolerance": [
+    {
+     "stage": "not stated",
+     "salt_ppt_or_note": "3-4 per mille (‰) 'ngưỡng'",
+     "effect": "press statement, stage and measurement method not given",
+     "source_url": "https://www.sggp.org.vn/dbscl-chuyen-giao-2-giong-lua-moi-chiu-duoc-do-man-cao-post473366.html",
+     "quote": "có thể chống chịu mặn cao ở ngưỡng 3-4‰",
+     "verified": true
+    }
+   ],
+   "duration_days": null,
+   "yield_t_ha": null,
+   "notes_en": "Figure is a 2018 newspaper line (SGGP, 12 Apr 2018), not a trial table; stage unknown. A search snippet claims about 97 days to harvest (unfetched).",
+   "notes_vi": "Con số lấy từ báo SGGP 12/4/2018, không có bảng khảo nghiệm, không nêu giai đoạn."
+  },
+  {
+   "id": "dai_thom_8",
+   "name": "Đài Thơm 8",
+   "tolerance": [
+    {
+     "stage": "germinating seed",
+     "salt_ppt_or_note": "qualitative: salt-sensitive",
+     "effect": "classed salt-sensitive vs OM 9577 (tolerant) and OC 10 in a proteomic study; NaCl level not given in the abstract",
+     "source_url": "https://horizonepublishing.com/journals/index.php/PST/article/view/9049",
+     "quote": "Dai Thom 8 (salt-sensitive)",
+     "verified": true
+    }
+   ],
+   "duration_days": null,
+   "yield_t_ha": null,
+   "notes_en": "Only a qualitative rating. Plant Science Today vol 12 no 4, Dec 2025.",
+   "notes_vi": "Chỉ có xếp loại định tính: nhạy mặn (Plant Science Today, 12/2025)."
+  },
+  {
+   "id": "st25",
+   "name": "ST25",
+   "tolerance": [
+    {
+     "stage": "all",
+     "salt_ppt_or_note": "no published figure found",
+     "effect": "-",
+     "source_url": "",
+     "quote": "",
+     "verified": false
+    }
+   ],
+   "duration_days": null,
+   "yield_t_ha": null,
+   "notes_en": "No published salt figure found. UPOV story describes breeding for saline fields but gives no number. Yields seen: 7.7 t/ha (Cà Mau, Mar 2026), 6.8-7 t/ha fresh paddy (Long Đức, Jan 2021), seed rate 60-80 kg/ha machine sowing.",
+   "notes_vi": "Không tìm thấy ngưỡng mặn đã công bố."
+  },
+  {
+   "id": "st24",
+   "name": "ST24",
+   "tolerance": [
+    {
+     "stage": "all",
+     "salt_ppt_or_note": "no published figure found",
+     "effect": "-",
+     "source_url": "",
+     "quote": "",
+     "verified": false
+    }
+   ],
+   "duration_days": null,
+   "yield_t_ha": null,
+   "notes_en": "No published figure found.",
+   "notes_vi": "Không có số liệu công bố."
+  },
+  {
+   "id": "rvt",
+   "name": "RVT",
+   "tolerance": [
+    {
+     "stage": "all",
+     "salt_ppt_or_note": "no published figure found",
+     "effect": "-",
+     "source_url": "",
+     "quote": "",
+     "verified": false
+    }
+   ],
+   "duration_days": null,
+   "yield_t_ha": null,
+   "notes_en": "No published figure found.",
+   "notes_vi": "Không có số liệu công bố."
+  },
+  {
+   "id": "om5451",
+   "name": "OM5451",
+   "tolerance": [
+    {
+     "stage": "all",
+     "salt_ppt_or_note": "no published figure found",
+     "effect": "-",
+     "source_url": "",
+     "quote": "",
+     "verified": false
+    }
+   ],
+   "duration_days": null,
+   "yield_t_ha": null,
+   "notes_en": "No published figure found.",
+   "notes_vi": "Không có số liệu công bố."
+  },
+  {
+   "id": "rice_general",
+   "name": "Rice, general rule (FAO)",
+   "tolerance": [
+    {
+     "stage": "late seedling to maturity",
+     "salt_ppt_or_note": "threshold ECe 3.0 dS/m (ECw 2.0); 50% yield at ECe 7.2 dS/m",
+     "effect": "FAO classes paddy rice 'moderately sensitive' (soil salinity, not irrigation water of a given variety)",
+     "source_url": "https://www.fao.org/4/t0234e/t0234e03.htm",
+     "quote": "Rice, paddy ... MODERATELY SENSITIVE (Table 5; threshold 3.0 dS/m, Table 4)",
+     "verified": true
+    },
+    {
+     "stage": "emergence",
+     "salt_ppt_or_note": "ECe 18 dS/m for 50% emergence reduction",
+     "effect": "rice is tolerant at germination per FAO Table 7",
+     "source_url": "https://www.fao.org/4/t0234e/t0234e03.htm",
+     "quote": "50 percent Emergence reduction (ECe in ds/m)",
+     "verified": true
+    },
+    {
+     "stage": "seedling and flowering",
+     "salt_ppt_or_note": "sensitive (qualitative)",
+     "effect": "FAO flowering statement not confirmed on the fetched page; seedling/flowering sensitivity seen only in search summaries of FAO/IRRI texts",
+     "source_url": "",
+     "quote": "",
+     "verified": false
+    }
+   ],
+   "duration_days": null,
+   "yield_t_ha": null,
+   "notes_en": "1 dS/m is about 0.64 g/L (about 0.6 per mille) - conversion is ours, not a source figure.",
+   "notes_vi": "Quy đổi 1 dS/m khoảng 0,64 g/L là của chúng tôi."
+  }
+ ],
+ "gaps": [
+  "Government PDFs on soctrang.gov.vn (Tran De reports) could not be fetched (DNS failure); varieties from them are snippet-only (verified:false).",
+  "Vinh Chau: no named-variety source found.",
+  "Nga Nam: 2024 town report, summer-autumn 2024 recommendation, Tan Thanh 1.3 ha ST25 harvest not found.",
+  "My Xuyen: Nghia Thang 100 ha and Hoa Tu 3 ha ST25-after-shrimp claims not confirmed; fetched Nhan Dan page names Dai Thanh cooperative instead.",
+  "Tran De 40 ha ST25 harvest matches a Ca Mau (Hoa Binh) article, not Tran De.",
+  "Long Phu: 2024 district report listing OM18 not found.",
+  "Several laodong.vn pages returned empty content, so they were not used as verified sources.",
+  "No variety-specific, stage-specific salt thresholds found for ST24, ST25, RVT, OM5451; OM18 has only a 3-4 per mille press line. Rice-shrimp rotation use does not establish an irrigation-salinity limit.",
+  "Duration, yield and farm-gate price per variety only partial and mostly from unfetched snippets; AGENT NOTE: the 'Hòa Tú' and 'Nghĩa Thắng' URL slots are placeholders or unverified."
+ ]
+}

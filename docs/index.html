@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mekong Rotation Explorer</title>
+<meta name="description" content="Crop rotation and salt planning for coastal Sóc Trăng farmers, from NASA data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400..600&display=swap">
+<link rel="stylesheet" href="app/leaflet.css">
+<link rel="stylesheet" href="app/style.css">
+<link rel="stylesheet" href="app/map.css">
+<link rel="stylesheet" href="app/content.css">
+<link rel="stylesheet" href="app/lab.css">
+<link rel="stylesheet" href="app/draft5.css">
+<link rel="stylesheet" href="app/side.css">
+<link rel="stylesheet" href="app/home.css">
+<link rel="stylesheet" href="app/onboard.css">
+<link rel="stylesheet" href="app/cost.css">
+<link rel="stylesheet" href="app/mentor.css">
+<link rel="stylesheet" href="app/dash.css">
+</head>
+<body>
+<!-- ============ Home page (home.js fills it; shown on every load before the map) ============ -->
+<section id="home" aria-labelledby="hmTitle">
+  <div class="hm-hero">
+    <div class="hm-scene" id="hmArt" aria-hidden="true"></div>
+    <div class="hm-hero-in">
+      <header class="hm-top">
+        <p class="hm-brand">Mekong Rotation Explorer</p>
+        <div class="hm-lang" role="group" aria-label="Language">
+          <button type="button" data-hlang="vi" lang="vi" aria-pressed="true">VI</button>
+          <button type="button" data-hlang="en" lang="en" aria-pressed="false">EN</button>
+        </div>
+      </header>
+      <div class="hm-hero-text">
+        <p class="hm-hello" id="hmHello"></p>
+        <h1 id="hmTitle">Lịch luân canh cho ruộng của bạn</h1>
+        <p class="hm-lead" id="hmLead"></p>
+        <button type="button" class="hm-start" id="hmStart">Bắt đầu</button>
+        <div class="hm-fields" id="hmFields" hidden></div>
+      </div>
+    </div>
+    <svg class="hm-wave" viewBox="0 0 1600 60" preserveAspectRatio="none" aria-hidden="true"><path class="w1" d="M0 30 C200 10 400 50 600 30 S1000 10 1200 30 S1500 50 1600 26 V60 H0z"/><path class="w2" d="M0 42 C240 26 460 58 700 42 S1140 26 1360 42 S1540 54 1600 40 V60 H0z"/></svg>
+  </div>
+  <div class="hm-wrap">
+    <div class="hm-how">
+      <h2 class="hm-h" id="hmHow">Cách dùng</h2>
+      <ol class="hm-steps" id="hmSteps"></ol>
+    </div>
+    <div class="hm-cols">
+      <div class="hm-main">
+        <div class="hm-alert" id="hmAlert" role="note"></div>
+        <section class="hm-card" id="hmPrep" aria-labelledby="hmPrepH"></section>
+      </div>
+      <div class="hm-side">
+        <section class="hm-card" id="hmNow" aria-labelledby="hmNowH"></section>
+        <section class="hm-card hm-card-flat" id="hmData" aria-labelledby="hmDataH"></section>
+      </div>
+    </div>
+    <footer class="hm-foot"><p class="hm-sign" id="hmSign"></p><button type="button" class="hm-link" data-open="sources" id="hmSources">Nguồn dữ liệu NASA</button></footer>
+  </div>
+</section>
+
+<!-- Full-screen satellite map (map.js renders into #map) -->
+<div id="map" aria-label="Map of the Sóc Trăng coast"></div>
+
+<!-- Visual overlay: vignette, fine grid, scanlines, frame brackets. Never takes clicks. -->
+<div id="fx" aria-hidden="true">
+  <i class="fx-shade"></i><i class="fx-grid"></i><i class="fx-scan"></i><i class="fx-vig"></i><i class="fx-sweep"></i>
+  <b class="fx-c tl"></b><b class="fx-c tr"></b><b class="fx-c bl"></b><b class="fx-c br"></b>
+</div>
+
+<!-- ============ Top bar ============ -->
+<header id="topbar">
+  <a id="brand" href="#" aria-label="Mekong Rotation Explorer">
+    <b aria-hidden="true">MEKONG</b>
+    <span class="brand-tag" aria-hidden="true"><span>Rotation</span><span>Explorer</span></span>
+    <span class="sr" data-t="title">Mekong Rotation Explorer</span>
+  </a>
+
+
+  <div class="tools">
+    <div class="seg" id="layerSeg" role="group" aria-label="Map layer">
+      <button type="button" data-layer="sat" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.6 2.4 3.8 5.2 3.8 8.5s-1.2 6.1-3.8 8.5c-2.6-2.4-3.8-5.2-3.8-8.5S9.4 5.9 12 3.5z"/></svg><span class="lbl" data-t="layerSat">Satellite</span></button>
+      <button type="button" data-layer="night" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 14.5A8 8 0 0 1 9.5 4.5a8 8 0 1 0 10 10z"/></svg><span class="lbl" data-t="layerNight">Night (NASA)</span></button>
+    </div>
+    <div class="seg" id="langSeg" role="group" aria-label="Language">
+      <button type="button" id="lEn" aria-pressed="true" lang="en">EN</button>
+      <button type="button" id="lVi" aria-pressed="false" lang="vi">VI</button>
+    </div>
+    <div class="set-wrap">
+      <button type="button" class="icon-btn icon-btn-t" id="gearBtn" aria-expanded="false" aria-controls="setPanel" aria-label="Settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span class="ib-t" data-t="setT">Settings</span>
+      </button>
+      <div id="setPanel" class="glass" role="group" aria-label="Settings">
+        <p class="eyebrow">Settings</p>
+        <div id="setBody">
+          <div class="seg" role="group" aria-label="View detail"><button type="button" id="uSimple" aria-pressed="false" data-t="uiSimple">Simple</button><button type="button" id="uAdv" aria-pressed="true" data-t="uiAdvanced">Advanced</button></div>
+          <p class="set-note">Text size · calm motion · in the field · guide</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ First screen ============ -->
+<section id="hero" aria-labelledby="heroH">
+  <p id="heroEyebrow" class="eyebrow" data-t="heroEyebrow">Sóc Trăng coast · NASA Earth data</p>
+  <h1 id="heroH" data-t="heroH">Plan your next 12 months.</h1>
+  <p id="heroP" data-t="heroP">Rice, shrimp or upland crops, ranked for your area and your priorities, with NASA rain, heat and field-greenness data.</p>
+  <div class="hero-act">
+    <button type="button" id="heroCta" class="btn gold"><span data-t="heroCta">Choose your area on the map</span><svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    <a id="judgeLink" href="#about" data-t="aboutLink">For judges: what this is and which NASA data it uses</a>
+  </div>
+  <div class="hero-index">
+    <span id="uiPickL" class="eyebrow" data-t="uiPickL">How much detail do you want?</span>
+  </div>
+  <div id="uiPick" role="group" aria-labelledby="uiPickL">
+    <button type="button" class="pick brk" data-ui="simple"><span class="k">A</span><span><b data-t="uiSimple">Simple</b><small data-t="uiSimpleD">Plain words and big buttons: just what to do</small></span></button>
+    <button type="button" class="pick brk" data-ui="advanced"><span class="k">B</span><span><b data-t="uiAdvanced">Advanced</b><small data-t="uiAdvancedD">Numbers, sources, El Niño (drought) years and every score</small></span></button>
+  </div>
+</section>
+
+<!-- Hover readout (position set by map/app via left/top) -->
+<div id="hoverCard" class="glass brk" role="status" aria-live="polite">
+  <p class="eyebrow">Area</p><p class="hc-name">Long Phú</p>
+  <div class="hc-bars" aria-hidden="true"><i style="height:30%"></i><i style="height:22%"></i><i style="height:18%"></i><i style="height:35%"></i><i style="height:60%"></i><i style="height:80%"></i><i style="height:76%"></i><i style="height:84%"></i><i style="height:92%"></i><i style="height:88%"></i><i style="height:54%"></i><i style="height:36%"></i></div>
+  <p class="hc-line"><span class="k">Salt</span> Feb–May · <span class="k">NDVI</span> 0.71</p>
+</div>
+
+<!-- ============ Drawer (side panel / bottom sheet) ============ -->
+<aside id="drawer" class="glass" aria-labelledby="dTitle">
+  <div id="grab" aria-hidden="true"><i></i></div>
+  <header class="d-head">
+    <span id="dNum" aria-hidden="true">/01</span>
+    <div class="d-titles">
+      <p id="dSub" class="eyebrow">Area · Long Phú</p>
+      <h2 id="dTitle" data-t="navArea">Area</h2>
+    </div>
+    <button type="button" class="icon-btn" id="dClose" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </header>
+  <div class="d-prog" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+
+  <div class="d-body">
+    <section class="view on" id="v1" aria-label="Area">
+      <div id="areaHead"><p class="eyebrow">Selected area</p><p class="ph-big">Long Phú</p></div>
+      <div class="seg" id="modeSeg" role="group" aria-label="Year">
+        <button type="button" data-mode="typical" aria-pressed="true" data-t="modeTypical">Typical year</button>
+        <button type="button" data-mode="elnino" aria-pressed="false" data-t="modeElnino">El Niño year</button>
+        <button type="button" data-mode="latest" aria-pressed="false" data-t="modeLatest">Latest 12 months</button>
+      </div>
+      <div id="year" class="box" aria-live="polite"><p class="eyebrow" data-t="yearEyebrow">Your area's typical year (2000–2024)</p><p class="ph">12-month year box</p></div>
+      <div id="outlook" class="box"><p class="ph">El Niño outlook</p></div>
+      <div id="areaMore"></div>
+    </section>
+
+    <section class="view" id="v2" aria-label="Priorities">
+      <div id="growNow" class="sz-wrap" role="group" aria-labelledby="gnL"></div>
+      <div id="sliders" class="sliders"><p class="ph">4 priority sliders</p></div>
+      <div class="wf"></div>
+      <div class="limits">
+        <label class="tog"><input type="checkbox" id="noBrackish"><span data-t="c_brackish">I cannot use brackish water</span></label>
+      </div>
+      <div id="bestNow" class="box" aria-live="polite"><p class="ph">Best right now</p></div>
+    </section>
+
+    <section class="view" id="v3" aria-label="Rotations">
+      <p id="common" hidden></p>
+      <div id="cards" class="cards"><p class="ph">Rotation cards</p></div>
+      <div id="compare" aria-live="polite" hidden></div>
+    </section>
+
+    <section class="view" id="v4" aria-label="12-month plan" data-pv="cal">
+      <p id="planFor" class="eyebrow">Plan for · Long Phú</p>
+      <div class="plan-tools">
+        <button type="button" class="btn" id="printPlan"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4v-7h16v7h-2"/><path d="M6 14h12v7H6z"/></svg><span data-t="printPlan">Print or save as PDF</span></button>
+        <button type="button" class="btn" id="sharePlan"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg><span data-t="sharePlan">Share plan</span></button>
+        <button type="button" class="btn" id="readPlan" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg><span id="readL" data-t="readPlan">Read aloud</span></button>
+        <span id="shareMsg" class="share-msg" role="status"></span>
+      </div>
+      <p id="planWarn" class="warn" hidden></p>
+      <div class="seg" id="planView" role="group" aria-label="Plan view">
+        <button type="button" data-pv="cal" aria-pressed="true"><span data-t="calView">Calendar</span></button>
+        <button type="button" data-pv="list" aria-pressed="false"><span data-t="listView">List</span></button>
+      </div>
+      <div id="calendar" class="calendar"><p class="ph">Calendar</p></div>
+      <div class="pv-list"><div id="strip" class="strip"></div></div>
+      <div id="stripKey" class="strip-key"></div>
+      <div class="pv-list"><ol id="timeline" class="timeline"></ol><details id="planMore" class="plan-more" hidden><summary data-t="planMore">Rest of the year</summary><ol id="timelineMore" class="timeline"></ol></details></div>
+      <h3 class="eyebrow" data-t="planNeed">What you need for this plan</h3>
+      <div id="needs" class="needs"></div>
+      <p id="talk" class="talk" data-t="talk">Talk it over with your local agricultural extension officer before you change your rotation.</p>
+    </section>
+
+    <section class="view" id="vLab" aria-label="Plan Lab">
+      <section id="planLab" tabindex="-1"><p class="ph">Plan Lab</p></section>
+    </section>
+  </div>
+
+  <footer class="d-foot">
+    <button type="button" class="btn" id="dPrev"><svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><span data-t="drawerPrev">Back</span></button>
+    <button type="button" class="btn gold" id="dNext"><span data-t="drawerNext">Next</span><svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+  </footer>
+</aside>
+
+<!-- ============ Dialog: plan popup, about, sources, field form ============ -->
+<dialog id="modal" aria-label="Details">
+  <button type="button" class="icon-btn" id="mClose" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <div id="mBody">
+    <p class="eyebrow">Plan</p>
+    <p class="ph">Plan popup with score</p>
+  </div>
+  <section id="aboutBox" class="m-part" aria-labelledby="aboutH" hidden>
+    <h2 id="aboutH" data-t="aboutH">About this project (for judges)</h2>
+    <div id="aboutBody" class="about-grid"></div>
+  </section>
+  <section id="sourcesBox" class="m-part" aria-labelledby="sourcesH" hidden>
+    <h2 id="sourcesH" data-t="sources">Sources</h2>
+    <ol id="sourceList"></ol>
+    <p class="disclaimer" data-t="disclaimer">For reference only.</p>
+  </section>
+  <form id="fieldForm" class="m-part" hidden>
+    <h2 data-t="fieldsH">Your fields</h2>
+    <label><span data-t="fName">Field name</span><input id="fName" maxlength="40" autocomplete="off"></label>
+    <label><span data-t="fArea">Area</span><select id="fArea"></select></label>
+    <label><span data-t="fNow">What you grow now</span><select id="fNow"></select></label>
+    <label><span data-t="fSize">Size</span><input id="fSize" type="text" inputmode="decimal" autocomplete="off" placeholder="1,5"></label>
+    <div class="f-actions"><button type="submit" class="btn gold" data-t="fSave">Save</button><button type="button" class="btn" id="fCancel" data-t="fCancel">Cancel</button></div>
+    <p class="f-note" data-t="fNote"></p>
+  </form>
+</dialog>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="app/load.js"></script>
+<script src="app/builder.js"></script>
+<script src="app/tiles.js"></script>
+<script src="app/districts.js"></script>
+<script src="app/nitrogen.js"></script>
+<script src="app/strings.js"></script>
+<script src="app/map.js"></script>
+<script src="app/app.js"></script>
+<script src="app/lab.js"></script>
+<script src="app/rx.js"></script>
+<script src="app/extra.js"></script>
+<script src="app/side.js"></script>
+<script src="app/cost.js"></script>
+<script src="app/srcextra.js"></script>
+<script src="app/scene.js"></script>
+<script src="app/home.js"></script>
+<script src="app/onboard.js"></script>
+<script src="app/learn.js"></script>
+<script src="app/mentor.js"></script>
+<script src="app/dash.js"></script>
+</body>
+</html>

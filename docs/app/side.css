@@ -1,0 +1,226 @@
+/* side.css (Draft 5): left info panel on the map page (desktop) and the full-screen drawer.
+   Built by side.js. Uses the theme tokens from style.css / draft5.css only. */
+
+/* ---------- left info panel (desktop) ---------- */
+#side {
+  position: fixed; z-index: 15;
+  left: 20px; top: calc(var(--top-h) + 16px);
+  width: min(340px, calc(100vw - 40px));
+  max-height: calc(100vh - var(--top-h) - 36px); max-height: calc(100dvh - var(--top-h) - 36px);
+  overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain;
+  scrollbar-width: thin; scrollbar-color: var(--line-2) transparent;
+  padding: 18px 18px 16px; border-radius: 16px;
+  background: var(--panel); border: 1px solid var(--line-2);
+  -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
+  box-shadow: 0 1px 2px color-mix(in srgb, #000 12%, transparent), 0 16px 40px color-mix(in srgb, #000 22%, transparent);
+  color: var(--ink); font-family: var(--font);
+  transition: opacity .3s var(--ease), transform .3s var(--ease), visibility 0s;
+}
+#side > * + * { margin-top: 16px }
+#side #sdMonthHost:empty { display: none }
+#side :focus-visible { outline: 2px solid var(--water); outline-offset: 2px }
+
+.sd-eyebrow { margin: 0; font-size: .8125rem; font-weight: 600; color: var(--ink-2) }
+.sd-h { margin: 4px 0 0; font-size: 1.375rem; font-weight: 700; line-height: 1.25; letter-spacing: -.01em; color: var(--ink) }
+.sd-lead { margin: 6px 0 0; font-size: .9375rem; line-height: 1.5; color: var(--ink-2) }
+.sd-k { margin: 0 0 8px; font-size: .8125rem; font-weight: 600; color: var(--ink-2) }
+
+/* salt level dot + chip: high var(--risk), medium var(--gold), low var(--ok) */
+.sd-dot { display: inline-block; flex: none; width: 12px; height: 12px; border-radius: 50%; background: var(--gold) }
+.sd-dot.lv-high { background: var(--risk) } .sd-dot.lv-medium { background: var(--gold) } .sd-dot.lv-low { background: var(--ok) }
+.sd-chip {
+  --lv: var(--gold);
+  display: inline-flex; align-items: center; gap: 6px; flex: none;
+  padding: 3px 10px; border-radius: 999px; white-space: nowrap;
+  font-size: .8125rem; font-weight: 600; color: var(--ink);
+  background: color-mix(in srgb, var(--lv) 13%, var(--panel-solid));
+  border: 1px solid color-mix(in srgb, var(--lv) 42%, transparent);
+}
+.sd-chip.lv-high { --lv: var(--risk) } .sd-chip.lv-low { --lv: var(--ok) }
+.sd-chip .sd-dot { width: 9px; height: 9px }
+
+/* the 5 areas */
+.sd-list { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 6px }
+.sd-row {
+  width: 100%; min-height: 58px; display: flex; align-items: center; gap: 12px;
+  padding: 9px 10px 9px 12px; border-radius: 12px; text-align: left; cursor: pointer;
+  background: var(--panel-solid); border: 1px solid var(--line); color: var(--ink); font: inherit;
+  transition: border-color .2s, background .2s, box-shadow .2s;
+}
+.sd-row:hover { border-color: color-mix(in srgb, var(--ink) 35%, transparent); box-shadow: 0 4px 14px color-mix(in srgb, #000 10%, transparent) }
+.sd-row.is-now { box-shadow: inset 3px 0 0 var(--risk) }
+.sd-row.is-now:hover { box-shadow: inset 3px 0 0 var(--risk), 0 4px 14px color-mix(in srgb, #000 10%, transparent) }
+.sd-row-t { flex: 1 1 auto; min-width: 0 }
+.sd-row-t b { display: block; font-size: 1rem; font-weight: 600; line-height: 1.3 }
+.sd-row-t small { display: block; margin-top: 2px; font-size: .8125rem; line-height: 1.35; color: var(--ink-2) }
+.sd-chev { flex: none; width: 18px; height: 18px; fill: none; stroke: var(--ink-3); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s var(--ease), stroke .2s }
+.sd-row:hover .sd-chev { transform: translateX(2px); stroke: var(--ink) }
+
+.sd-ex, .sd-open {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-top: 10px;
+  font: 600 .9375rem var(--font); cursor: pointer;
+}
+.sd-ex { padding: 0 2px; color: var(--ink-2); background: none; border: 0 }
+.sd-ex:hover { color: var(--ink) }
+.sd-ex svg, .sd-open svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none }
+.sd-open {
+  width: 100%; justify-content: space-between; margin-top: 0; padding: 0 16px; border-radius: 12px;
+  background: var(--ink); color: var(--panel-solid); border: 0;
+}
+.sd-open:hover svg { transform: translateX(2px) }
+.sd-open svg { transition: transform .2s var(--ease) }
+
+/* legend */
+.sd-legend { padding-top: 14px; border-top: 1px solid var(--line) }
+.sd-legend ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 16px }
+.sd-legend li { display: inline-flex; align-items: center; gap: 7px; font-size: .875rem; color: var(--ink) }
+.sd-note { margin: 10px 0 0; font-size: .8125rem; line-height: 1.45; color: var(--ink-2) }
+
+/* the month slider inside the panel (extra.js builds it; side.js moves it here on desktop) */
+#side #d5Month {
+  position: static; inset: auto; width: auto; z-index: auto;
+  padding: 14px; border-radius: 12px; opacity: 1; visibility: visible; pointer-events: auto;
+  background: var(--bg-2); border: 0; box-shadow: none;
+  -webkit-backdrop-filter: none; backdrop-filter: none; transition: none;
+}
+#side #d5Month .play { min-height: 44px; padding: 0 14px }
+#side #d5Month .ticks span:not(.s):not(.on) { color: var(--ink-2) }
+#side:not(.is-area) #d5Note { display: none }   /* the legend below says it */
+#side.is-area #d5Month .note { color: var(--ink-2) }
+
+/* selected area summary */
+.sd-title { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 2px }
+.sd-title .sd-h { margin: 0; min-width: 0 }
+.sd-mon { margin: 12px 0 0; display: flex; flex-direction: column; gap: 2px }
+.sd-mon b { font-size: 1rem; font-weight: 700; color: var(--ink) }
+.sd-mon span { font-size: .8125rem; color: var(--ink-2) }
+.sd-stats { margin: 10px 0 0; display: grid; gap: 8px }
+.sd-stat { padding: 12px 14px; border-radius: 12px; background: var(--panel-solid); border: 1px solid var(--line) }
+.sd-stat dt { font-size: .8125rem; font-weight: 600; color: var(--ink-2) }
+.sd-stat dd { margin: 0 }
+.sd-stat dd:nth-of-type(1) { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; margin-top: 2px }
+.sd-stat dd b { font-size: 1.375rem; font-weight: 700; line-height: 1.2; color: var(--ink); font-variant-numeric: tabular-nums }
+.sd-stat dd span { font-size: .9375rem; color: var(--ink-2) }
+.sd-stat dd.risk b { color: var(--risk) }
+.sd-stat .sd-src { margin-top: 4px; font-size: .8125rem; color: var(--ink-2) }
+.sd-stat .sd-say { margin-top: 6px; font-size: .875rem; color: var(--ink) }
+.sd-bars { margin-top: 8px; display: grid; gap: 4px }
+.sd-bars i { display: block; height: 6px; min-width: 4px; border-radius: 3px }
+.sd-bars .r { background: var(--water) }
+.sd-bars .n { background: color-mix(in srgb, var(--ink) 30%, transparent) }
+
+/* other areas */
+.sd-other { padding-top: 14px; border-top: 1px solid var(--line) }
+#sdFoot > .sd-open + .sd-other { margin-top: 14px }
+.sd-chips { display: flex; flex-wrap: wrap; gap: 6px }
+.sd-chips button {
+  display: inline-flex; align-items: center; gap: 7px; min-height: 44px; padding: 0 14px; border-radius: 999px;
+  background: var(--panel-solid); border: 1px solid var(--line-2); color: var(--ink); font: 600 .875rem var(--font); cursor: pointer;
+}
+.sd-chips button:hover { border-color: color-mix(in srgb, var(--ink) 40%, transparent) }
+.sd-chips .sd-dot { width: 9px; height: 9px }
+
+/* one block on the left: the panel replaces the map hero on desktop */
+@media (min-width: 761px) { body.has-side #hero { display: none } }
+/* small desktops: keep the map visible between the panel and the drawer */
+@media (min-width: 761px) and (max-width: 1179px) {
+  body.drawer-open #side { opacity: 0; visibility: hidden; pointer-events: none; transform: translateX(-12px); transition: opacity .25s var(--ease), transform .25s var(--ease), visibility 0s .25s }
+}
+/* phones: the map and the bottom sheet are enough; the slider stays where it was (extra.js / draft5.css) */
+@media (max-width: 760px) { #side { display: none } }
+@media print { #side { display: none !important } }
+@media (prefers-reduced-motion: reduce) { #side, .sd-row, .sd-chev, .sd-open svg { transition: none } }
+body.calm #side, body.calm .sd-row { transition: none }
+
+/* ---------- area HUD: small data-only box; click opens the full box ---------- */
+.sd-hudh { display: flex; align-items: center; justify-content: space-between; gap: 8px }
+.sd-hudbtn { font-size: .75rem; font-weight: 600; color: var(--gold); padding: 4px 0; min-height: 28px }
+#side.is-hud { width: min(300px, calc(100vw - 40px)); padding: 12px 14px; cursor: pointer }
+#side.is-hud:hover { border-color: var(--gold) }
+#side.is-hud > * + * { margin-top: 0 }
+#side.is-hud .sd-mon, #side.is-hud .sd-say, #side.is-hud .sd-bars, #side.is-hud .sd-src, #side.is-hud #sdFoot, #side.is-hud #sdMonthHost { display: none }
+#side.is-hud .sd-h { font-size: 1.0625rem }
+#side.is-hud .sd-title { margin-top: 2px }
+#side.is-hud .sd-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-top: 8px }
+#side.is-hud .sd-stat { padding: 7px 8px; border-radius: 10px }
+#side.is-hud .sd-stat dt { font-size: .6875rem; line-height: 1.25 }
+#side.is-hud .sd-stat dd b { font-size: 1rem }
+#side.is-hud .sd-stat dd span { display: none }
+/* "← Ruộng của tôi" sits above the box, so they never overlap */
+body.dv-off #side { top: calc(var(--top-h) + 72px); max-height: calc(100dvh - var(--top-h) - 160px) }
+body.drawer-full #dvBack { display: none !important }
+
+/* ---------- full-screen drawer ---------- */
+.d-acts { display: flex; align-items: center; gap: 8px }
+#dFull[aria-pressed="true"] { color: var(--ink); border-color: var(--ink) }
+body.drawer-full #side, body.drawer-full #d5Month, body.drawer-full #hoverCard { display: none !important }
+/* full screen: no step bar on top, only Back / Next at the bottom */
+body.drawer-full #steps, body.drawer-full .d-prog, body.drawer-full #dNum { display: none !important }
+.fc-l > * + *, .fc-r > * + * { margin-top: 1rem }
+@media (min-width: 761px) {
+  body.drawer-full #drawer { left: 0; width: auto; border-left-width: 0; box-shadow: none }
+  body.drawer-full .d-head, body.drawer-full .d-body, body.drawer-full .d-foot { padding-left: clamp(1.5rem, 3vw, 3rem); padding-right: clamp(1.5rem, 3vw, 3rem) }
+  body.drawer-full .d-head { padding-top: .75rem; padding-bottom: .5rem }
+  body.drawer-full .d-foot { justify-content: space-between }
+  body.drawer-full .d-foot .btn { min-width: 180px; justify-content: center }
+  body.drawer-full .sg-map .leaflet-bottom.leaflet-right { right: 0 }
+}
+@media (min-width: 1000px) {
+  /* two columns: left = what the farmer enters, right = what comes out */
+  body.drawer-full .view.fc.on { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 0 clamp(1.5rem, 3vw, 3rem); align-items: start }
+  body.drawer-full .view.fc > .fc-r { margin-top: 0; position: sticky; top: 0; padding-left: clamp(1.5rem, 3vw, 3rem); border-left: 1px solid var(--line-2) }
+  body.drawer-full .view.fc > .fc-r:empty { display: none }
+  body.drawer-full #v3.on #cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1rem; align-items: start }
+  body.drawer-full #v3.on #cards > * { margin: 0 }
+}
+@media (max-width: 760px) {
+  body.drawer-full #drawer {
+    top: 0; max-height: none; height: 100%; height: 100dvh; z-index: 40;
+    border-radius: 0; border-top-width: 0; padding-top: env(safe-area-inset-top, 0px);
+  }
+  body.drawer-full #grab { display: none }
+  body.drawer-full .d-head { padding-top: .75rem }
+}
+
+/* ---------- step 2 in two pages ---------- */
+#v2.sub-a :is(#howText, .howText, #goals15, .goals15, #wDef, .wDef, #sliders, #bestNow),
+#v2.sub-a #growNow :is(.sz-how, .sz-year, .sz-match, .sz-why),
+#v2.sub-a .wf :is(.wf-sub, .wf-pen, .wf-note) { display: none !important }
+#v2.sub-b :is(#myFields, .myFields, #growNow, .wf, .limits) { display: none !important }
+@media (max-width: 760px) { body.drawer-open #dvBack { display: none !important } }
+@media (min-width: 1000px) {
+  body.drawer-full #v2.sub-a.fc.on { grid-template-columns: minmax(0, 820px); justify-content: center }
+  body.drawer-full #v2.sub-a.fc > .fc-r { display: none }
+}
+/* simple mode: no "check what you entered" list */
+body.dv-simple :is(.sz-why, #fChecks) { display: none !important }
+
+/* ---------- phone and map clean-up ---------- */
+/* the area name row at the bottom of the phone screen is gone: the map pins and the area HUD do that job */
+#areaDock { display: none !important }
+@media (max-width: 760px) {
+  #d5Month, body.has-site #d5Month { bottom: calc(12px + env(safe-area-inset-bottom, 0px)) }
+}
+/* Settings open: nothing floats over it, and its last rows clear the phone's home bar */
+body:has(#gearBtn[aria-expanded="true"]) :is(#d5Month, #dvBack, #mapKey, #side) { visibility: hidden !important }
+#setPanel { padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px)); overscroll-behavior: contain }
+@media (max-width: 760px) {
+  #setPanel { z-index: 70; max-height: calc(100dvh - var(--top-h) - 16px - env(safe-area-inset-bottom, 0px)) }
+}
+/* map flow, no area picked yet: the map's salt colours already show every area, so the list box is not shown */
+body.dv-off #side:not(.is-area) { display: none }
+/* the month slider: a wide track the finger can drag anywhere on */
+#d5Month .trk { position: relative; touch-action: none; cursor: grab; padding: 4px 0 }
+#d5Month .trk:active { cursor: grabbing }
+#d5Month .trk input { pointer-events: none }
+#d5Month .ticks span { cursor: pointer; padding: 6px 0 }
+/* Simple / Advanced in Settings and at the top of the planner */
+.dv-setmode, .dv-modebar { display: grid; gap: 6px }
+.dv-setmode { margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--line) }
+.dv-modebar { grid-template-columns: auto 1fr; align-items: center; gap: 4px 10px; padding: 8px 10px; border-radius: 12px; background: var(--bg-2); border: 1px solid var(--line) }
+.dv-ml { margin: 0; font-size: .8125rem; font-weight: 700; color: var(--ink-2) }
+.dv-mh { margin: 0; font-size: .75rem; color: var(--ink-3); grid-column: 1 / -1 }
+.dv-setmode .seg, .dv-modebar .seg { display: flex } .dv-setmode .seg button, .dv-modebar .seg button { flex: 1; min-height: 44px }
+body.drawer-full .dv-modebar { max-width: 520px }
+/* planner in Simple: only the inputs and the answer; the extra numbers, sliders and notes show in Advanced */
+body.dv-simple :is(#areaMore, #howText, #wDef, #sliders, #ppRev, #congNote, .sz-why, #fChecks, .wf-pen, .wf-sub, .pz-how, .pz-conf) { display: none !important }

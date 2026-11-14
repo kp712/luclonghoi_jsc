@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Scoring Engine Explained</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 17mm 16mm 18mm; }
+  :root { --ink:#16241f; --muted:#5b6b64; --line:#d5ddd8; --soft:#f2f5f3; --accent:#1f6b52; --warn:#9a5b00; --syl:#eef1fa; --sylb:#3b4f9a; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { font-family: "Be Vietnam Pro", system-ui, sans-serif; color: var(--ink); background:#fff; font-size: 10.2pt; line-height: 1.55; margin: 0; }
+  h1 { font-size: 22pt; line-height: 1.15; margin: 0 0 6pt; }
+  h2 { font-size: 14pt; margin: 20pt 0 6pt; padding-top: 4pt; border-top: 2px solid var(--accent); break-after: avoid; }
+  h3 { font-size: 11pt; margin: 13pt 0 4pt; break-after: avoid; }
+  .part { font-size: 10pt; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin: 26pt 0 0; font-weight: 700; break-after: avoid; }
+  p { margin: 0 0 7pt; }
+  .sub { color: var(--muted); font-size: 10.6pt; margin-bottom: 12pt; }
+  .box { background: var(--soft); border-left: 3px solid var(--accent); padding: 7pt 10pt; margin: 8pt 0; break-inside: avoid; }
+  .box.warn { border-left-color: var(--warn); }
+  .syl { background: var(--syl); border-left: 3px solid var(--sylb); padding: 6pt 10pt; margin: 8pt 0; font-size: 9.4pt; break-inside: avoid; }
+  .syl b.t, .box b.t { display:block; margin-bottom: 2pt; }
+  .eq { border: 1px solid var(--line); border-radius: 4px; padding: 5pt 10pt; margin: 7pt 0; break-inside: avoid; }
+  table { border-collapse: collapse; width: 100%; margin: 7pt 0; font-size: 9.2pt; break-inside: avoid; }
+  th, td { border-bottom: 1px solid var(--line); padding: 3pt 5pt; text-align: left; vertical-align: top; }
+  th { background: var(--soft); font-weight: 600; }
+  td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; }
+  code { font-family: ui-monospace, Menlo, monospace; font-size: 8.6pt; background: var(--soft); padding: 0 3pt; border-radius: 3px; }
+  .cal { font-family: ui-monospace, Menlo, monospace; font-size: 8.8pt; }
+  .fig { text-align: center; margin: 8pt 0; break-inside: avoid; }
+  .fig .cap { font-size: 9pt; color: var(--muted); }
+  .pb { break-before: page; }
+  ol.steps li, ul li { margin-bottom: 3pt; }
+  .ans li { margin-bottom: 6pt; }
+  .katex { font-size: 1.03em; }
+  .toc { columns: 2; column-gap: 18pt; padding-left: 16pt; margin: 4pt 0; font-size: 9.6pt; }
+</style>
+</head>
+<body>
+
+<h1>The Mekong Rotation Explorer scoring engine, explained in full</h1>
+<p class="sub">A detailed guide for Cambridge International A Level Mathematics (9709) and Further Mathematics (9231) students. Every formula is taken from the real code (<code>pipeline/build.py</code>, <code>pipeline/ndvi.py</code>); every worked number was recomputed from the real data for the Vĩnh Châu pin and checked against the app. Version of 15 November 2026.</p>
+
+<div class="box">
+<b class="t">How to use this guide</b>
+Each section has three layers: <b>what</b> the formula is, <b>how you get it</b> (a derivation or reason), and a <b>worked example</b> with real numbers. Blue boxes like the one below link the step to your syllabus, so you can see which lesson the idea comes from. Exercises with full solutions are at the end.
+</div>
+<div class="syl"><b class="t">Syllabus references</b>
+9709 topics: Paper 1 (Pure 1) 1.1–1.8, Paper 3 (Pure 3) 3.1–3.9, Paper 4 (Mechanics) 4.1–4.5, Paper 5 (Probability &amp; Statistics 1) 5.1–5.5, Paper 6 (Probability &amp; Statistics 2) 6.1–6.5.
+9231 topics: Paper 1 (Further Pure 1) 1.1–1.7, Paper 2 (Further Pure 2) 2.1–2.6, Paper 4 (Further Probability &amp; Statistics) 4.1–4.5. Numbering follows the syllabuses for examination from 2023; check the one for your exam year.</div>
+
+<h3>Contents</h3>
+<ol class="toc">
+<li>The problem and the engine at a glance</li>
+<li>Map: which maths is used where</li>
+<li>Toolkit: functions, clamp, cap, Σ, median, logarithms</li>
+<li>Climate averages and El Niño</li>
+<li>Sunshine at the top of the atmosphere ($R_a$)</li>
+<li>Evaporation: the Penman–Monteith equation</li>
+<li>From days to months: sums and integrals</li>
+<li>Canal water for one month</li>
+<li>Water score</li>
+<li>Weather &amp; salt score</li>
+<li>Soil score</li>
+<li>Income score</li>
+<li>Confidence</li>
+<li>Sowing window</li>
+<li>Counting crops from space (NDVI)</li>
+<li>Checking rain data: correlation</li>
+<li>Salinity units and a sign test</li>
+<li>All results, typical and El Niño years</li>
+<li>Modelling: assumptions, strengths, limits</li>
+<li>Exercises and full solutions</li>
+</ol>
+
+<p class="part">Part A · The big picture</p>
+<h2>1. The problem and the engine at a glance</h2>
+<p>In the Mekong Delta (southern Vietnam) seawater moves up the rivers in the dry season (roughly January–May). Canal water becomes too salty for rice. Farmers ask: <i>should I keep growing 3 rice crops a year, or change plan?</i> The engine compares <b>5 plans</b> at <b>5 places</b> (pins). A plan is a list of 12 codes, one per month:</p>
+<table class="cal">
+<tr><th>Plan</th><th>J</th><th>F</th><th>M</th><th>A</th><th>M</th><th>J</th><th>J</th><th>A</th><th>S</th><th>O</th><th>N</th><th>D</th></tr>
+<tr><td>3 rice crops (today's habit)</td><td>R1</td><td>R1</td><td>-</td><td>R2</td><td>R2</td><td>R2</td><td>R2</td><td>R3</td><td>R3</td><td>R3</td><td>R1</td><td>R1</td></tr>
+<tr><td>2 rice crops</td><td>R1</td><td>R1</td><td>-</td><td>R2</td><td>R2</td><td>R2</td><td>R2</td><td>-</td><td>-</td><td>-</td><td>R1</td><td>R1</td></tr>
+<tr><td>Rice–shrimp</td><td>S</td><td>S</td><td>S</td><td>S</td><td>S</td><td>S</td><td>-</td><td>R1</td><td>R1</td><td>R1</td><td>R1</td><td>-</td></tr>
+<tr><td>Rice + upland crop</td><td>U</td><td>U</td><td>-</td><td>R1</td><td>R1</td><td>R1</td><td>R1</td><td>R2</td><td>R2</td><td>R2</td><td>-</td><td>U</td></tr>
+<tr><td>Salt-tolerant rice</td><td>R1</td><td>-</td><td>-</td><td>-</td><td>R2</td><td>R2</td><td>R2</td><td>R2</td><td>-</td><td>R1</td><td>R1</td><td>R1</td></tr>
+</table>
+<p><code>R</code> rice, <code>U</code> upland crop (watermelon, maize or mung bean), <code>S</code> shrimp in salty water, <code>-</code> rest.</p>
+<p>The engine is a <b>deterministic function</b>: no randomness, no fitted parameters. Its output for every plan at every pin is four scores in $[1,5]$ with one decimal place, plus a confidence level:</p>
+<div class="fig">
+<svg viewBox="0 0 660 150" width="640" height="146" font-family="Be Vietnam Pro, sans-serif" font-size="10.5">
+  <defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#5b6b64"/></marker></defs>
+  <g fill="#f2f5f3" stroke="#1f6b52"><rect x="4" y="10" width="128" height="58" rx="6"/><rect x="4" y="82" width="128" height="58" rx="6"/><rect x="170" y="10" width="140" height="58" rx="6"/><rect x="170" y="82" width="140" height="58" rx="6"/><rect x="350" y="46" width="130" height="58" rx="6"/><rect x="520" y="10" width="136" height="130" rx="6"/></g>
+  <g fill="#16241f" text-anchor="middle">
+   <text x="68" y="32" font-weight="700">NASA weather</text><text x="68" y="47">GPM rain, POWER</text><text x="68" y="60">temperature, sun, wind</text>
+   <text x="68" y="104" font-weight="700">Reports</text><text x="68" y="119">salinity stations,</text><text x="68" y="132">published profits</text>
+   <text x="240" y="32" font-weight="700">Monthly climate</text><text x="240" y="47">monthly rain, evaporation</text><text x="240" y="60">and hot days</text>
+   <text x="240" y="104" font-weight="700">Salt months, salinity</text><text x="240" y="119">median profits,</text><text x="240" y="132">loss shares</text>
+   <text x="415" y="68" font-weight="700">Canal water</text><text x="415" y="83">for each month</text>
+   <text x="588" y="32" font-weight="700">Per plan, per pin</text><text x="588" y="54">Water</text><text x="588" y="70">Weather &amp; salt</text><text x="588" y="86">Soil</text><text x="588" y="102">Income</text><text x="588" y="124">+ confidence</text>
+  </g>
+  <g stroke="#5b6b64" marker-end="url(#a)"><line x1="132" y1="39" x2="168" y2="39"/><line x1="132" y1="111" x2="168" y2="111"/><line x1="310" y1="45" x2="348" y2="66"/><line x1="480" y1="75" x2="518" y2="75"/><line x1="310" y1="111" x2="518" y2="111"/></g>
+</svg>
+<div class="cap">Figure 1. Data flow through the engine.</div>
+</div>
+<div class="box"><b class="t">The single most important idea: a reference point</b>
+Almost every score <b>compares a plan with 3 rice crops at the same pin</b>. 3 rice crops always score Water 1.0 and Income 3.0 by construction. A score therefore measures "better or worse than today's habit here", not an absolute quality.</div>
+
+<h2>2. Map: which maths is used where</h2>
+<table>
+<tr><th style="width:30%">Engine step</th><th>9709 (A Level Mathematics)</th><th>9231 (Further Mathematics)</th></tr>
+<tr><td>Clamp, cap, piecewise rules</td><td>P1 1.2 Functions (domain, range, composite, inverse); P3 3.1 Modulus</td><td>FP1 1.2 Rational functions and graphs (sketching piecewise behaviour)</td></tr>
+<tr><td>Water score, part scores</td><td>P1 1.3 Coordinate geometry (line through two points)</td><td>—</td></tr>
+<tr><td>Sun angle, daylight, $R_a$</td><td>P1 1.4 Circular measure; P1 1.5 Trigonometry; P1 1.8 Integration; P3 3.3 Trigonometry; P3 3.5 Integration; P3 3.7 Vectors (scalar product)</td><td>FP1 1.6 Vectors</td></tr>
+<tr><td>Saturation vapour pressure, $\Delta$</td><td>P3 3.2 Exponential functions; P3 3.4 Differentiation (quotient, chain rule); P1 1.7 Second derivative</td><td>FP2 2.3 Maclaurin series</td></tr>
+<tr><td>Energy to millimetres</td><td>M 4.5 Energy, work and power (units)</td><td>—</td></tr>
+<tr><td>Monthly sums, water balance</td><td>P1 1.8 Integration (area); P3 3.8 Differential equations</td><td>FP1 1.3 Summation of series; FP2 2.4 Integration (limits of sums of rectangles)</td></tr>
+<tr><td>Crop water as $\mathbf{K}\cdot\mathbf{E}$</td><td>P3 3.7 Vectors (scalar product)</td><td>FP1 1.4 Matrices</td></tr>
+<tr><td>Weighted mean of parts</td><td>S1 5.4 Discrete random variables ($\mathrm{E}(X)$)</td><td>FP1 1.4 Matrices (matrix × vector)</td></tr>
+<tr><td>Salt risk as a product</td><td>S1 5.3 Probability (independent events)</td><td>—</td></tr>
+<tr><td>Income score</td><td>P3 3.2 Logarithms; P1 1.2 Transformations of graphs; P3 3.4 Differentiation of $\ln$</td><td>FP2 2.3 Maclaurin series</td></tr>
+<tr><td>Medians, means, ranges</td><td>S1 5.1 Representation of data; S2 6.4 Sampling and estimation</td><td>FS 4.1 Continuous random variables (median of a distribution)</td></tr>
+<tr><td>Loss share as expected value</td><td>S1 5.4 Expectation</td><td>—</td></tr>
+<tr><td>Crop peaks from satellite</td><td>P1 1.7 Stationary points (discrete version); S1 5.1 Median</td><td>—</td></tr>
+<tr><td>Rounding errors</td><td>P3 3.1 Modulus (triangle inequality)</td><td>FP1 1.7 Proof by induction</td></tr>
+<tr><td>El Niño seasons saltier</td><td>S1 5.4 Binomial distribution; S2 6.5 Hypothesis tests</td><td>FS 4.4 Non-parametric tests (sign test)</td></tr>
+</table>
+<p>Not used: complex numbers, hyperbolic functions, polar coordinates, eigenvalues, Poisson, normal or $t$ distributions, PGFs, most mechanics.</p>
+
+<h2>3. Toolkit</h2>
+<h3>3.1 Functions and composition</h3>
+<p>Each score is a <b>composite function</b>: data $\to$ a ratio $\to$ a raw score $\to$ clamp. For example $\text{Water}=c\circ \ell\circ s$ where $s$ is "fraction of water saved", $\ell(s)=1+4s$ and $c$ is the clamp below.</p>
+<div class="syl"><b class="t">9709 P1 1.2 Functions</b>Composite $fg(x)$, domain and range, one-one functions and inverses. Each score map is one-one on the part of the domain where it is not clamped, so it has an inverse there (used in Exercise 6).</div>
+<h3>3.2 Clamp and cap, written with modulus</h3>
+<div class="eq">$$\operatorname{clamp}(x,a,b)=\min\big(\max(x,a),b\big),\qquad \max(p,q)=\tfrac12\big(p+q+|p-q|\big),\qquad \min(p,q)=\tfrac12\big(p+q-|p-q|\big).$$</div>
+<p><b>How you get the max formula.</b> If $p\ge q$ then $|p-q|=p-q$ and $\tfrac12(p+q+p-q)=p$. If $p&lt;q$ then $|p-q|=q-p$ and the expression is $q$. So clamp is built entirely from the modulus function. A <b>cap</b> $\min(x,1)$ means "more than 1 earns nothing extra".</p>
+<div class="syl"><b class="t">9709 P3 3.1 Algebra</b>The modulus function and graphs of $y=|f(x)|$. The graph of a clamp is a straight line with its ends flattened: two "corners", like a modulus graph.</div>
+<h3>3.3 Sigma notation, median, logarithms</h3>
+<ul>
+<li>$\sum_{m=1}^{12} N_m$ adds the 12 monthly values (9231 FP1 1.3).</li>
+<li>Median: the middle of a sorted list; for even length, the mean of the two middle values (9709 S1 5.1).</li>
+<li>$\log_2 x=\dfrac{\ln x}{\ln 2}$ (change of base, 9709 P3 3.2); $\log_2 2=1$, $\log_2 1=0$, $\log_2\tfrac12=-1$.</li>
+</ul>
+
+<p class="part">Part B · From weather to water</p>
+<h2>4. Climate averages and El Niño</h2>
+<p>NASA data gives daily weather from 1 Dec 2000 to 30 Nov 2024: 24 "seasons" running December–November. For calendar month $m$ and season $y$ let $x_{m,y}$ be the monthly total. The engine uses the <b>sample mean</b> over the seasons kept:</p>
+<div class="eq">$$\bar x_m=\frac{1}{|Y|}\sum_{y\in Y}x_{m,y}.$$</div>
+<p><b>El Niño</b> is a warming of the Pacific that brings drier, saltier dry seasons to the Delta. A season counts as El Niño when NOAA's Oceanic Niño Index for December–February is at least 0.5. Between 2000 and 2024 that happened in 9 of the 24 seasons (starting 2002, 2004, 2006, 2009, 2014, 2015, 2018, 2019, 2023). The <b>typical year</b> uses $Y$ = the other 15 seasons; the <b>El Niño year</b> uses those 9.</p>
+<div class="syl"><b class="t">9709 S2 6.4 Sampling and estimation; S1 5.3 conditional probability</b>$\bar x_m$ is an unbiased estimate of the population mean of month $m$. Splitting by El Niño gives two <i>conditional</i> means: "mean rain in March, given an El Niño season". The relative frequency $9/24=0.375$ estimates P(a season is El Niño).</div>
+<p>Each month's mean is computed from <b>daily</b> values: rain $P$, evaporation $ET_0$ (Sections 5–6) and the count of days with top temperature $\ge 35^\circ$C.</p>
+
+<h2>5. Sunshine at the top of the atmosphere, $R_a$</h2>
+<p>Evaporation is driven by the Sun, so the first physical quantity is $R_a$: the solar energy reaching 1 m² of horizontal ground <b>above the atmosphere</b> in a day (MJ m<sup>−2</sup> day<sup>−1</sup>). The code (<code>ra</code>, FAO-56 eq. 21) is</p>
+<div class="eq">$$R_a=\frac{24\times60}{\pi}\,G_{sc}\,d_r\Big(\omega_s\sin\varphi\sin\delta+\cos\varphi\cos\delta\sin\omega_s\Big),\qquad G_{sc}=0.082\ \text{MJ m}^{-2}\text{min}^{-1}.$$</div>
+<p>where $\varphi$ = latitude (radians), $\delta$ = the Sun's declination, $d_r$ = Earth–Sun distance factor, $\omega_s$ = sunset hour angle. Here is how every piece is obtained.</p>
+
+<h3>5.1 Seasonal inputs are sinusoidal models</h3>
+<div class="eq">$$\delta=0.409\sin\!\Big(\frac{2\pi J}{365}-1.39\Big),\qquad d_r=1+0.033\cos\!\Big(\frac{2\pi J}{365}\Big),\qquad J=\text{day of the year}.$$</div>
+<p>$\delta$ is a sine curve with period 365 days and amplitude $0.409$ rad $=23.4^\circ$, the tilt of the Earth's axis. The phase shift $1.39$ rad puts $\delta=0$ near 21 March (equinox). $d_r$ varies by ±3.3% because the orbit is slightly elliptical: largest in early January when the Earth is closest to the Sun.</p>
+<div class="syl"><b class="t">9709 P1 1.4 Circular measure; P1 1.5 Trigonometry</b>Graphs of $y=a\sin(bx+c)$: amplitude $a$, period $2\pi/b$, phase shift. Here $b=2\pi/365$, so the period is 365.</div>
+
+<h3>5.2 The angle of the Sun, from a scalar product</h3>
+<p>Put the centre of the Earth at the origin with the $z$-axis along the Earth's axis. A point at latitude $\varphi$ whose "hour angle" from noon is $\omega$ has upward unit normal, and the Sun has unit direction,</p>
+<div class="eq">$$\mathbf n=\begin{pmatrix}\cos\varphi\cos\omega\\ \cos\varphi\sin\omega\\ \sin\varphi\end{pmatrix},\qquad \mathbf s=\begin{pmatrix}\cos\delta\\0\\ \sin\delta\end{pmatrix}.$$</div>
+<p>The angle $\theta$ between the vertical and the Sun satisfies $\cos\theta=\mathbf n\cdot\mathbf s$:</p>
+<div class="eq">$$\cos\theta=\cos\varphi\cos\delta\cos\omega+\sin\varphi\sin\delta.$$</div>
+<p>Energy on a horizontal surface is proportional to $\cos\theta$ (a beam hitting at a slant spreads over more area).</p>
+<div class="syl"><b class="t">9709 P3 3.7 Vectors; 9231 FP1 1.6 Vectors</b>$\mathbf a\cdot\mathbf b=|\mathbf a||\mathbf b|\cos\theta$. Both vectors have length 1 (check: $\cos^2\varphi(\cos^2\omega+\sin^2\omega)+\sin^2\varphi=1$).</div>
+
+<h3>5.3 Sunset: solving a trigonometric equation</h3>
+<p>The Sun sets when it reaches the horizon, $\cos\theta=0$:</p>
+<div class="eq">$$\cos\varphi\cos\delta\cos\omega_s+\sin\varphi\sin\delta=0\ \Longrightarrow\ \cos\omega_s=-\tan\varphi\tan\delta\ \Longrightarrow\ \omega_s=\cos^{-1}(-\tan\varphi\tan\delta).$$</div>
+<p>Day length in hours is $\dfrac{24\,\omega_s}{\pi}$, since $\omega$ turns through $2\pi$ in 24 hours and daylight lasts from $-\omega_s$ to $\omega_s$.</p>
+
+<h3>5.4 Integrating over the day</h3>
+<p>The hour angle turns $2\pi$ radians in $1440$ minutes, so $dt=\dfrac{1440}{2\pi}\,d\omega$. The day's energy is the area under the power curve from sunrise to sunset:</p>
+<div class="eq">$$R_a=\int G_{sc}d_r\cos\theta\,dt=\frac{1440}{2\pi}G_{sc}d_r\int_{-\omega_s}^{\omega_s}\big(\sin\varphi\sin\delta+\cos\varphi\cos\delta\cos\omega\big)\,d\omega$$
+$$=\frac{1440}{2\pi}G_{sc}d_r\Big[\omega\sin\varphi\sin\delta+\cos\varphi\cos\delta\sin\omega\Big]_{-\omega_s}^{\omega_s}=\frac{1440}{\pi}G_{sc}d_r\big(\omega_s\sin\varphi\sin\delta+\cos\varphi\cos\delta\sin\omega_s\big).$$</div>
+<p>The factor 2 from the symmetric limits turns $\frac{1440}{2\pi}$ into $\frac{24\times 60}{\pi}$: <b>exactly the formula in the code</b>.</p>
+<div class="syl"><b class="t">9709 P1 1.8 and P3 3.5 Integration</b>$\int\cos\omega\,d\omega=\sin\omega$; definite integrals as areas; changing variable from time to angle. $\sin$ is odd, so $\sin\omega_s-\sin(-\omega_s)=2\sin\omega_s$.</div>
+<h3>5.5 Worked example: 15 March 2024 at Vĩnh Châu ($\varphi=9.365^\circ$)</h3>
+<table>
+<tr><th>Quantity</th><th>Working</th><th class="n">Value</th></tr>
+<tr><td>Day of year $J$</td><td>31 + 29 + 15 (2024 is a leap year)</td><td class="n">75</td></tr>
+<tr><td>$\varphi$</td><td>$9.365\times\pi/180$</td><td class="n">0.16345 rad</td></tr>
+<tr><td>$\delta$</td><td>$0.409\sin(1.29107-1.39)=0.409\sin(-0.09893)$</td><td class="n">−0.04040 rad (−2.31°)</td></tr>
+<tr><td>$d_r$</td><td>$1+0.033\cos(1.29107)$</td><td class="n">1.00911</td></tr>
+<tr><td>$\omega_s$</td><td>$\cos^{-1}(-0.16493\times-0.04042)=\cos^{-1}(0.006667)$</td><td class="n">1.5641 rad (89.6°)</td></tr>
+<tr><td>Day length</td><td>$24\times1.5641/\pi$</td><td class="n">11.95 h</td></tr>
+<tr><td>$R_a$</td><td>$458.37\times0.082\times1.00911\times(-0.01028+0.98585)$</td><td class="n">37.00 MJ m<sup>−2</sup></td></tr>
+</table>
+
+<h2>6. Evaporation: the Penman–Monteith equation</h2>
+<p>$ET_0$ is the water (mm per day) a well-watered grass field loses to the air. FAO-56 equation 6, used for every day:</p>
+<div class="eq">$$ET_0=\frac{0.408\,\Delta\,R_n+\gamma\,\dfrac{900}{T+273}\,u_2\,(e_s-e_a)}{\Delta+\gamma\,(1+0.34\,u_2)}$$</div>
+<p>Top line: an <b>energy term</b> (sunshine kept by the field, $R_n$) plus an <b>air term</b> (wind $u_2$ × how dry the air is, $e_s-e_a$). Below are the pieces.</p>
+
+<h3>6.1 Saturation vapour pressure: an exponential model</h3>
+<div class="eq">$$e^\circ(T)=0.6108\exp\!\Big(\frac{17.27\,T}{T+237.3}\Big)\ \text{kPa}$$</div>
+<p>This is the most water vapour air at $T$ °C can hold. It grows roughly exponentially: each extra degree lets air hold about 6% more water.</p>
+<h3>6.2 The gradient $\Delta$: quotient rule and chain rule</h3>
+<p>Let $g(T)=\dfrac{17.27T}{T+237.3}$. Quotient rule: $g'(T)=\dfrac{17.27(T+237.3)-17.27T}{(T+237.3)^2}=\dfrac{4098.2}{(T+237.3)^2}$. Chain rule:</p>
+<div class="eq">$$\Delta=\frac{d}{dT}\Big(0.6108\,e^{g(T)}\Big)=0.6108\,e^{g(T)}g'(T)=\frac{4098\,e^\circ(T)}{(T+237.3)^2}.$$</div>
+<div class="syl"><b class="t">9709 P3 3.4 Differentiation; P3 3.2 exponentials</b>$\frac{d}{dx}e^{f(x)}=f'(x)e^{f(x)}$; quotient rule. This is the exact expression FAO prints and the code uses.</div>
+<h3>6.3 Why average $e^\circ$ at $T_{\max}$ and $T_{\min}$, not $e^\circ$ at the mean?</h3>
+<p>The code uses $e_s=\tfrac12\big(e^\circ(T_{\max})+e^\circ(T_{\min})\big)$. Because $e^\circ$ is <b>convex</b> ($\frac{d^2e^\circ}{dT^2}&gt;0$, the curve bends upward), the chord lies above the curve, so</p>
+<div class="eq">$$\tfrac12\big(e^\circ(T_{\max})+e^\circ(T_{\min})\big)\ \ge\ e^\circ\!\Big(\tfrac{T_{\max}+T_{\min}}{2}\Big).$$</div>
+<p>On 15 March 2024: $\tfrac12(4.5699+3.3258)=3.9479$ kPa, but $e^\circ(28.56)=3.9049$ kPa. Using the mean temperature would understate how much water the air can take (this inequality is called Jensen's inequality).</p>
+<div class="syl"><b class="t">9709 P1 1.7 Second derivative</b>The sign of $f''$ tells you which way a curve bends. A positive second derivative means a chord lies above the curve.</div>
+<h3>6.4 The other pieces</h3>
+<table>
+<tr><th style="width:24%">Piece</th><th>Formula in the code</th><th>Meaning</th></tr>
+<tr><td>Actual vapour pressure</td><td>$e_a=\dfrac{RH}{100}\,e_s$</td><td>Relative humidity is the percentage of the maximum.</td></tr>
+<tr><td>Psychrometric constant</td><td>$\gamma=0.665\times10^{-3}\,P_{\text{air}}$, $P_{\text{air}}=101.3\Big(\dfrac{293-0.0065z}{293}\Big)^{5.26}$</td><td>Air pressure falls with height $z$ (a power function); here $z=2$ m.</td></tr>
+<tr><td>Clear-sky sunshine</td><td>$R_{so}=(0.75+2\times10^{-5}z)R_a$</td><td>On a cloudless day about 75% of $R_a$ gets through the air.</td></tr>
+<tr><td>Heat lost upward</td><td>$R_{nl}=\sigma\dfrac{T_{\max,K}^4+T_{\min,K}^4}{2}\big(0.34-0.14\sqrt{e_a}\big)\Big(1.35\min\!\big(\tfrac{R_s}{R_{so}},1\big)-0.35\Big)$</td><td>Warm ground glows in infrared ($\propto T^4$, Stefan–Boltzmann law, $\sigma=4.903\times10^{-9}$). Humid, cloudy air sends some back.</td></tr>
+<tr><td>Net radiation</td><td>$R_n=0.77R_s-R_{nl}$</td><td>Grass reflects 23% of the sunshine $R_s$ (albedo 0.23).</td></tr>
+</table>
+<h3>6.5 Why 0.408? Converting energy to millimetres</h3>
+<p>Evaporating 1 kg of water needs about 2.45 MJ (latent heat). 1 mm of water over 1 m² is $10^{-3}\,\text{m}^3=1$ kg. So 1 MJ m<sup>−2</sup> of energy evaporates $\frac{1}{2.45}=0.408$ mm.</p>
+<div class="syl"><b class="t">9709 M 4.5 Energy, work and power</b>Energy in joules and unit conversion; here energy per square metre becomes depth of water.</div>
+<h3>6.6 Full worked example: 15 March 2024, Vĩnh Châu</h3>
+<p>NASA POWER gives $T_{\max}=31.3$, $T_{\min}=25.82$ °C, $RH=71.48\%$, $u_2=4.68$ m/s, $R_s=20.7$ MJ m<sup>−2</sup>.</p>
+<table>
+<tr><th>Step</th><th>Working</th><th class="n">Result</th></tr>
+<tr><td>$T$</td><td>$(31.3+25.82)/2$</td><td class="n">28.56 °C</td></tr>
+<tr><td>$e_s$</td><td>$(4.5699+3.3258)/2$</td><td class="n">3.9479 kPa</td></tr>
+<tr><td>$e_a$</td><td>$0.7148\times3.9479$</td><td class="n">2.8219 kPa</td></tr>
+<tr><td>$\Delta$</td><td>$4098\times3.9049/(265.86)^2$</td><td class="n">0.2264</td></tr>
+<tr><td>$\gamma$</td><td>$0.665\times10^{-3}\times101.276$</td><td class="n">0.06735</td></tr>
+<tr><td>$R_{so}$, $R_s/R_{so}$</td><td>$0.75004\times37.00$; $20.7/27.753$</td><td class="n">27.75; 0.746</td></tr>
+<tr><td>$R_{nl}$</td><td>formula above</td><td class="n">2.799</td></tr>
+<tr><td>$R_n$</td><td>$0.77\times20.7-2.799$</td><td class="n">13.140</td></tr>
+<tr><td>Energy term</td><td>$0.408\times0.2264\times13.140$</td><td class="n">1.2137</td></tr>
+<tr><td>Air term</td><td>$0.06735\times\frac{900}{301.56}\times4.68\times1.1259$</td><td class="n">1.0591</td></tr>
+<tr><td>Denominator</td><td>$0.2264+0.06735(1+0.34\times4.68)$</td><td class="n">0.4009</td></tr>
+<tr><td>$ET_0$</td><td>$(1.2137+1.0591)/0.4009$</td><td class="n"><b>5.67 mm/day</b></td></tr>
+</table>
+<div class="box warn"><b class="t">A check: the simpler Hargreaves formula</b>
+$ET_0^{H}=0.0023\,(T+17.8)\sqrt{T_{\max}-T_{\min}}\times0.408R_a$ uses temperature only. Same day: $0.0023\times46.36\times\sqrt{5.48}\times15.10=3.77$ mm/day, much lower. Near the sea, day and night temperatures differ little, so $\sqrt{T_{\max}-T_{\min}}$ is small and Hargreaves underestimates. That is why the engine uses Penman–Monteith. The engine also checks its code against FAO's own worked example: 3.88 against FAO's 3.9 mm/day.
+</div>
+
+<h2>7. From days to months: sums and integrals</h2>
+<p>The month's evaporation is the sum of its daily values: $E_m=\sum_{\text{days }d\in m}ET_0(d)$. Each day is a rectangle of width 1 day and height $ET_0(d)$, so $E_m$ approximates the area $\int ET_0(t)\,dt$ under a smooth evaporation curve.</p>
+<div class="syl"><b class="t">9231 FP2 2.4 Integration; 9709 P1 1.8</b>Using rectangles to bound and approximate an integral. With 30 thin rectangles a month, the error is small.</div>
+<h3>7.1 The water balance as a differential equation</h3>
+<p>Let $S(t)$ be the water stored in a flooded rice field (mm). It changes by inflow minus outflow:</p>
+<div class="eq">$$\frac{dS}{dt}=\underbrace{r(t)+i(t)}_{\text{rain, irrigation}}-\underbrace{k\,e(t)}_{\text{crop use}}-\underbrace{q}_{\text{seepage}}.$$</div>
+<p>A farmer keeps the water level steady, so $\frac{dS}{dt}=0$. Integrating over a month and solving for irrigation $I=\int i\,dt$:</p>
+<div class="eq">$$I=K_cE_m+\text{PERC}_m-P_{\text{eff}}(P_m).$$</div>
+<p>That is the heart of the canal-water formula in Section 8; the one-off terms SAT and WL add the water needed to fill the store at the start.</p>
+<div class="syl"><b class="t">9709 P3 3.8 Differential equations</b>Forming a first-order equation from "rate in − rate out". Here we only need the steady state, $dS/dt=0$.</div>
+
+<h2>8. Canal water for one month</h2>
+<div class="eq">$$\boxed{\;N_m=\max\Big(K_cE_m+\text{SAT}_m+\text{PERC}_m+\text{WL}_m-P_{\text{eff}}(P_m),\ 0\Big)\;}$$</div>
+<table>
+<tr><th style="width:16%">Term</th><th>Meaning</th><th style="width:40%">Value</th></tr>
+<tr><td>$K_cE_m$</td><td>Crop water use; $K_c$ = crop factor (crop vs grass)</td><td>Rice 1.05 / 1.20 / 0.75 (first / middle / last month). Shrimp, rest: 0.</td></tr>
+<tr><td>SAT</td><td>Soak dry soil before rice</td><td>200 mm in the month before a rice crop (if that month has no rice)</td></tr>
+<tr><td>WL</td><td>Flood the field at planting</td><td>100 mm in the first rice month</td></tr>
+<tr><td>PERC</td><td>Seepage under flooded rice</td><td>$4\,\text{mm/day}\times d_m$ (heavy clay)</td></tr>
+<tr><td>$P_{\text{eff}}$</td><td>Rain the crop can use</td><td>piecewise, below</td></tr>
+</table>
+<p>The $\max(\dots,0)$ is because irrigation cannot be negative: in a very wet month, extra rain just drains away.</p>
+<h3>8.1 Crop factor: a piecewise function</h3>
+<div class="eq">$$K_c(j)=\begin{cases}1.05 & j=1\\ 1.20 & 1\lt j\lt L\\ 0.75 & j=L\end{cases}\qquad (j=\text{month of the crop's life},\ L=\text{its length})$$</div>
+<h3>8.2 Effective rain: continuity at the join</h3>
+<div class="eq">$$P_{\text{eff}}(P)=\begin{cases}0.8P-25 & P>75\\ \max(0.6P-10,0) & P\le75\end{cases}$$</div>
+<p>At $P=75$ both rules give 35, so the function is <b>continuous</b> (no jump). The gradient rises from 0.6 to 0.8: in wet months more of each extra millimetre soaks in. And $0.6P-10&lt;0$ for $P&lt;\frac{50}{3}\approx16.7$, hence the inner max.</p>
+<div class="fig">
+<svg viewBox="0 0 380 210" width="350" height="194" font-family="Be Vietnam Pro, sans-serif" font-size="10">
+  <line x1="40" y1="180" x2="350" y2="180" stroke="#5b6b64"/><line x1="40" y1="180" x2="40" y2="15" stroke="#5b6b64"/>
+  <g fill="#5b6b64" text-anchor="middle"><text x="40" y="194">0</text><text x="115" y="194">50</text><text x="152.5" y="194">75</text><text x="190" y="194">100</text><text x="265" y="194">150</text><text x="340" y="194">200</text></g>
+  <g fill="#5b6b64" text-anchor="end"><text x="34" y="183">0</text><text x="34" y="129">50</text><text x="34" y="75">100</text><text x="34" y="21">150</text></g>
+  <polyline fill="none" stroke="#1f6b52" stroke-width="2.5" points="40,180 65,180 152.5,142.2 340,34.2"/>
+  <line x1="152.5" y1="180" x2="152.5" y2="142.2" stroke="#9a5b00" stroke-dasharray="3 3"/><circle cx="152.5" cy="142.2" r="3.5" fill="#9a5b00"/>
+  <text x="160" y="150" fill="#9a5b00">(75, 35): pieces meet</text>
+  <text x="45" y="168" fill="#5b6b64">0 until 16.7</text><text x="80" y="140" fill="#1f6b52">gradient 0.6</text><text x="268" y="108" fill="#1f6b52">gradient 0.8</text>
+  <text x="195" y="207" text-anchor="middle" fill="#16241f">monthly rain P (mm)</text>
+</svg>
+<div class="cap">Figure 2. Effective rain is continuous and piecewise linear.</div>
+</div>
+<h3>8.3 Worked examples: 3 rice crops at Vĩnh Châu</h3>
+<table>
+<tr><th></th><th class="n">Jan</th><th class="n">Feb</th><th class="n">Mar</th><th class="n">Apr</th><th class="n">May</th><th class="n">Jun</th><th class="n">Jul</th><th class="n">Aug</th><th class="n">Sep</th><th class="n">Oct</th><th class="n">Nov</th><th class="n">Dec</th></tr>
+<tr><td>$P_m$</td><td class="n">27</td><td class="n">13</td><td class="n">34</td><td class="n">74</td><td class="n">221</td><td class="n">246</td><td class="n">345</td><td class="n">255</td><td class="n">325</td><td class="n">248</td><td class="n">157</td><td class="n">61</td></tr>
+<tr><td>$E_m$</td><td class="n">122</td><td class="n">132</td><td class="n">163</td><td class="n">156</td><td class="n">137</td><td class="n">119</td><td class="n">114</td><td class="n">116</td><td class="n">108</td><td class="n">115</td><td class="n">109</td><td class="n">110</td></tr>
+<tr><td>$K_c$</td><td class="n">1.20</td><td class="n">0.75</td><td class="n">0</td><td class="n">1.05</td><td class="n">1.20</td><td class="n">1.20</td><td class="n">0.75</td><td class="n">1.05</td><td class="n">1.20</td><td class="n">0.75</td><td class="n">1.05</td><td class="n">1.20</td></tr>
+<tr><td>$N_m$</td><td class="n">264</td><td class="n">212</td><td class="n">190</td><td class="n">349</td><td class="n">137</td><td class="n">91</td><td class="n">0</td><td class="n">167</td><td class="n">15</td><td class="n">37</td><td class="n">234</td><td class="n">229</td></tr>
+</table>
+<ol class="steps">
+<li><b>Jan</b> (middle month): $P_{\text{eff}}(27)=6.2$; $N=1.20(122)+4(31)-6.2=264.2\to\mathbf{264}$.</li>
+<li><b>Mar</b> (rest, but April starts rice): $N=200-P_{\text{eff}}(34)=200-10.4=189.6\to\mathbf{190}$.</li>
+<li><b>Apr</b> (first rice month): $N=1.05(156)+100+4(30)-34.4=349.4\to\mathbf{349}$.</li>
+<li><b>Jul</b> (last month, wet): $0.75(114)+124-251=-41.5$, so $N=\mathbf{0}$.</li>
+</ol>
+<p>Yearly: $W=\sum_{m=1}^{12}N_m=\mathbf{1925}$ mm. For 2 rice crops (Aug–Oct rest, Oct soaks the soil for November) $W=\mathbf{1733}$ mm.</p>
+<h3>8.4 Crop water as a scalar product</h3>
+<p>Write the crop factors and evaporations as 12-component vectors $\mathbf K$ and $\mathbf E$. The crop's own water use for the year is</p>
+<div class="eq">$$\mathbf K\cdot\mathbf E=\sum_{m=1}^{12}K_mE_m=1.20(122)+0.75(132)+0+\dots+1.20(110)=1386\ \text{mm}\quad\text{(3 rice crops).}$$</div>
+<p>The other 539 mm of $W$ is soaking, flooding and seepage minus usable rain, with the $\max$ applied month by month.</p>
+<div class="syl"><b class="t">9709 P3 3.7 Vectors; 9231 FP1 1.4 Matrices</b>A scalar product is a sum of products of matching components. The idea works in 12 dimensions just as in 3.</div>
+<h3>8.5 How big can rounding errors be?</h3>
+<p>Each $N_m$ is rounded to a whole mm before summing. If $e_m$ is the rounding error, $|e_m|\le\tfrac12$. <b>Claim:</b> $\big|\sum_{m=1}^{n}e_m\big|\le\tfrac n2$. <b>Proof by induction.</b> True for $n=1$. If true for $n=k$, then $\big|\sum_{1}^{k+1}e_m\big|\le\big|\sum_1^ke_m\big|+|e_{k+1}|\le\tfrac k2+\tfrac12=\tfrac{k+1}{2}$ (triangle inequality). So the yearly total is within 6 mm of the unrounded value: under 0.4% of 1925.</p>
+<div class="syl"><b class="t">9231 FP1 1.7 Proof by induction; 9709 P3 3.1 Modulus</b>Base case, inductive step, conclusion; $|a+b|\le|a|+|b|$.</div>
+
+<p class="part">Part C · The four scores</p>
+<h2>9. Water score</h2>
+<div class="eq">$$s=\max\!\Big(1-\frac{W}{W_3},0\Big)\ \ \text{(fraction saved)},\qquad \boxed{\text{Water}=\operatorname{clamp}(1+4s,1,5)}$$</div>
+<p><b>How you get it.</b> We want 1 when nothing is saved and 5 when all is saved, changing steadily: the straight line through $(0,1)$ and $(1,5)$. Gradient $\frac{5-1}{1-0}=4$, intercept 1, so $1+4s$.</p>
+<div class="syl"><b class="t">9709 P1 1.3 Coordinate geometry</b>$y-y_1=m(x-x_1)$ with $m=\frac{y_2-y_1}{x_2-x_1}$.</div>
+<table>
+<tr><th>Plan (Vĩnh Châu, typical)</th><th class="n">$W$ (mm)</th><th class="n">$s=1-W/1925$</th><th class="n">$1+4s$</th><th class="n">Water</th></tr>
+<tr><td>3 rice crops</td><td class="n">1925</td><td class="n">0</td><td class="n">1.000</td><td class="n">1.0</td></tr>
+<tr><td>2 rice crops</td><td class="n">1733</td><td class="n">0.0997</td><td class="n">1.399</td><td class="n">1.4</td></tr>
+<tr><td>Rice + watermelon</td><td class="n">1218</td><td class="n">0.3673</td><td class="n">2.469</td><td class="n">2.5</td></tr>
+<tr><td>Salt-tolerant rice</td><td class="n">1274</td><td class="n">0.3382</td><td class="n">2.353</td><td class="n">2.4</td></tr>
+<tr><td>Rice–shrimp</td><td class="n">372</td><td class="n">0.8068</td><td class="n">4.227</td><td class="n">4.2</td></tr>
+</table>
+<p><b>Inverse.</b> On $[0,1]$ the map is one-one, so $s=\frac{\text{Water}-1}{4}$: a Water score of 3 means half the water is saved.</p>
+
+<h2>10. Weather &amp; salt score</h2>
+<h3>10.1 From a risk to a part score</h3>
+<p>Each risk $r\in[0,1]$ becomes a part score via the line through $(0,5)$ and $(1,1)$: $\text{part}=5-4r=1+4(1-r)$.</p>
+<h3>10.2 The three risks</h3>
+<p>Let $\mathcal S$ be the pin's salty months (from station reports; never measured by satellite), $n=|\mathcal S|$.</p>
+<div class="eq">$$r_{\text{salt}}=\frac1n\sum_{m\in\mathcal S}w_m\times\min\!\Big(\frac{c}{15},1\Big),\quad w_m=\begin{cases}1&\text{rice or upland}\\0.5&\text{salt-tolerant rice}\\0&\text{shrimp or rest}\end{cases}$$
+$$r_{\text{heat}}=\min\!\Big(\frac{H}{30},1\Big),\qquad r_{\text{canal}}=\min\!\Big(\frac{C}{C_3},1\Big)$$</div>
+<ul>
+<li>$c$: the station's average highest reading per dry season (‰). From 15‰ the severity is full.</li>
+<li>$H$: hot days ($\ge35^\circ$C) in months with rice or upland crops; rice flowers fail above 35 °C (IRRI). 30 days = full risk (team choice).</li>
+<li>$C=\sum_{m\in\mathcal S}N_m$; $C_3$ = the same for 3 rice crops.</li>
+</ul>
+<div class="box"><b class="t">Why multiply in $r_{\text{salt}}$?</b>Damage needs a crop in the field <i>and</i> salty water. A product is 0 if either factor is 0, like $P(A\cap B)=P(A)P(B)$ for independent events (9709 S1 5.3). The factors here are shares, not true probabilities, so this is an analogy, not a probability model.</div>
+<h3>10.3 The weighted mean, as an expectation</h3>
+<div class="eq">$$\boxed{\text{Weather \& salt}=0.6\,p_{\text{salt}}+0.2\,p_{\text{heat}}+0.2\,p_{\text{canal}}}$$</div>
+<p><b>Proof it stays in $[1,5]$.</b> Weights are positive with sum 1. If $1\le p_i\le5$, then $\sum w_ip_i\ge\sum w_i=1$ and $\sum w_ip_i\le5\sum w_i=5$. ∎</p>
+<p><b>As an expectation.</b> Let $X$ be the part score of a randomly chosen "risk", chosen with probabilities $0.6,0.2,0.2$. Then the score is $\mathrm E(X)=\sum x\,P(X=x)$ (9709 S1 5.4). An expectation always lies between the smallest and largest value.</p>
+<h3>10.4 Matrix form for all five plans</h3>
+<p>Put each plan's parts in a row of a $5\times3$ matrix $\mathbf A$ and the weights in a column $\mathbf w$. Then all five scores are one matrix product (Vĩnh Châu, typical year):</p>
+<div class="eq">$$\underbrace{\begin{pmatrix}1.8&5&1\\1.8&5&1\\5&5&5\\1.8&5&1.906\\4.2&5&2.948\end{pmatrix}}_{\mathbf A\ (\text{salt, heat, canal})}\begin{pmatrix}0.6\\0.2\\0.2\end{pmatrix}=\begin{pmatrix}2.28\\2.28\\5.00\\2.46\\4.11\end{pmatrix}\to\begin{pmatrix}2.3\\2.3\\5.0\\2.5\\4.1\end{pmatrix}\begin{matrix}\text{3 rice}\\ \text{2 rice}\\ \text{rice–shrimp}\\ \text{rice + upland}\\ \text{salt-tolerant}\end{matrix}$$</div>
+<div class="syl"><b class="t">9231 FP1 1.4 Matrices</b>A $5\times3$ matrix times a $3\times1$ vector gives a $5\times1$ vector: each entry is a row-by-column scalar product.</div>
+<h3>10.5 Worked examples</h3>
+<p><b>3 rice crops, typical.</b> $\mathcal S=\{$Jan,…,May$\}$, $c=15.8$‰. Crops in Jan, Feb, Apr, May: share $\tfrac45$, severity $\min(15.8/15,1)=1$, $r_{\text{salt}}=0.8$, $p_{\text{salt}}=1.8$. $H=0$: $p_{\text{heat}}=5$. $C=C_3=1152$: $p_{\text{canal}}=1$. Score $=1.08+1+0.2=2.28\to\mathbf{2.3}$.</p>
+<p><b>Salt-tolerant rice.</b> Jan–May is <span class="cal">R1 - - - R2</span>: $w=(0.5,0,0,0,0.5)$, share $\frac15$, $p_{\text{salt}}=1+4(0.8)=4.2$. $C=591$: $r=591/1152=0.513$, $p_{\text{canal}}=2.948$. Score $=2.52+1+0.590=4.11\to\mathbf{4.1}$.</p>
+<p><b>3 rice crops, El Niño year.</b> $c=17.6$‰ (severity still 1). Hot days 0.8 in April and 0.4 in May: $H=1.2$, $r_{\text{heat}}=0.04$, $p_{\text{heat}}=4.84$. Score $=1.08+0.968+0.2=2.248\to\mathbf{2.2}$.</p>
+<h3>10.6 How sensitive is it to the weights?</h3>
+<p>Let the salt weight be $\lambda$ and split the rest equally: $F(\lambda)=\lambda p_{\text{salt}}+\frac{1-\lambda}{2}(p_{\text{heat}}+p_{\text{canal}})$. Then</p>
+<div class="eq">$$F'(\lambda)=p_{\text{salt}}-\tfrac12(p_{\text{heat}}+p_{\text{canal}}).$$</div>
+<p>For 3 rice crops $F'=1.8-3=-1.2$: raising the salt weight from 0.6 to 0.7 lowers the score by $0.12$. The ranking of the plans is what matters, and a team-chosen weight can shift it, which is why the app lowers confidence when team estimates are used.</p>
+
+<h2>11. Soil score</h2>
+<div class="eq">$$\text{Soil}=\operatorname{clamp}\Big(1+\min(\tfrac a2,1)+\min(\tfrac b2,1)+\min(\tfrac\ell2,1)+k-\beta,\ 1,5\Big)$$</div>
+<p>$a$ rest months, $b$ months without rice (U or S), $\ell$ bean months (mung bean adds nitrogen), $k=0.5\min(\frac a2,1)$ if a cover crop can be sown, $\beta=0.5$ if there are shrimp months (salt left in the soil; team estimate). Each $\min(\frac x2,1)$ rises with gradient $\frac12$ and is flat from $x=2$: "two months is enough".</p>
+<table>
+<tr><th>Plan</th><th class="n">$a$</th><th class="n">$b$</th><th class="n">$\ell$</th><th class="n">$k$</th><th class="n">$\beta$</th><th>Working</th><th class="n">Soil</th></tr>
+<tr><td>3 rice crops</td><td class="n">1</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>$1+0.5$</td><td class="n">1.5</td></tr>
+<tr><td>2 rice crops</td><td class="n">4</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>$1+1$</td><td class="n">2.0</td></tr>
+<tr><td>Rice–shrimp</td><td class="n">2</td><td class="n">6</td><td class="n">0</td><td class="n">0</td><td class="n">0.5</td><td>$1+1+1-0.5$</td><td class="n">2.5</td></tr>
+<tr><td>Rice + watermelon</td><td class="n">2</td><td class="n">3</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>$1+1+1$</td><td class="n">3.0</td></tr>
+<tr><td>Rice + mung bean</td><td class="n">2</td><td class="n">3</td><td class="n">3</td><td class="n">0</td><td class="n">0</td><td>$1+1+1+1$</td><td class="n">4.0</td></tr>
+<tr><td>Salt-tolerant rice</td><td class="n">4</td><td class="n">0</td><td class="n">0</td><td class="n">0.5</td><td class="n">0</td><td>$1+1+0.5$</td><td class="n">2.5</td></tr>
+</table>
+
+<h2>12. Income score</h2>
+<h3>12.1 Yearly profit from medians</h3>
+<div class="eq">$$P=\sum_{\text{crops }k}\operatorname{median}(\text{figures}_k)\times(1-L_k)$$</div>
+<p>Profit figures (million đồng per hectare) come from published studies, 2020–2025, each checked against its source. The <b>median</b> is robust: for summer–autumn rice $\{17, 25.4, 30\}$ the median is 25.4; one wrong figure of 90 would move the mean from 24.1 to 40.6 but the median only to 27.7.</p>
+<p>$L_k$ is the expected share of the crop lost. If a fraction $L$ is lost on average, the expected profit is $\mathrm E(\text{profit})=m(1-L)$ (9709 S1 5.4). In the El Niño view rice grown in salty months has $L=0.1$; shrimp has $L=0.092$ in every year.</p>
+<table>
+<tr><th>Crop</th><th>Figures used</th><th class="n">Median</th></tr>
+<tr><td>Winter–spring rice</td><td>35, 40, 40, 50</td><td class="n">40</td></tr>
+<tr><td>Summer–autumn rice</td><td>17, 25.4, 30</td><td class="n">25.4</td></tr>
+<tr><td>Autumn–winter rice</td><td>27.9, 30, 30, 40</td><td class="n">30</td></tr>
+<tr><td>Watermelon</td><td>75, 82, 100, 110, 130</td><td class="n">100</td></tr>
+</table>
+<p>3 rice crops: $P_3=40+25.4+30=95.4$. 2 rice crops: $65.4$. Rice + watermelon: $100+25.4+30=155.4$.</p>
+<h3>12.2 Deriving the score: a functional equation</h3>
+<p>We want a function $f$ of the ratio $x=P/P_3$ with: $f(1)=3$; $f(2)=5$; and <i>multiplying profit by the same factor always adds the same amount</i>: $f(\lambda x)-f(x)$ depends only on $\lambda$. Functions with that property are $f(x)=A+B\log_2x$, because $f(\lambda x)-f(x)=B\log_2\lambda$. Then $f(1)=3\Rightarrow A=3$; $f(2)=5\Rightarrow B=2$:</p>
+<div class="eq">$$\boxed{\text{Income}=\operatorname{clamp}\Big(3+2\log_2\frac{P}{P_3},1,5\Big)}\quad(\text{and }1.0\text{ if }P\le0)$$</div>
+<ul>
+<li><b>Symmetry:</b> $f(\frac1x)=3-2\log_2x=6-f(x)$. Half the profit is as far below 3 as double is above.</li>
+<li><b>Transformations:</b> $y=2\log_2x+3$ is $y=\log_2x$ stretched by factor 2 parallel to the $y$-axis, then translated by $\binom{0}{3}$ (9709 P1 1.2).</li>
+<li><b>Inverse:</b> $x=2^{(\text{Income}-3)/2}$. Income 4 needs $x=\sqrt2\approx1.41$.</li>
+</ul>
+<div class="fig">
+<svg viewBox="0 0 380 240" width="350" height="221" font-family="Be Vietnam Pro, sans-serif" font-size="10">
+  <line x1="40" y1="200" x2="350" y2="200" stroke="#5b6b64"/><line x1="40" y1="200" x2="40" y2="20" stroke="#5b6b64"/>
+  <g stroke="#d5ddd8"><line x1="40" y1="166" x2="340" y2="166"/><line x1="40" y1="132" x2="340" y2="132"/><line x1="40" y1="98" x2="340" y2="98"/><line x1="40" y1="64" x2="340" y2="64"/><line x1="40" y1="30" x2="340" y2="30"/></g>
+  <g fill="#5b6b64" text-anchor="end"><text x="34" y="169">1</text><text x="34" y="135">2</text><text x="34" y="101">3</text><text x="34" y="67">4</text><text x="34" y="33">5</text></g>
+  <g fill="#5b6b64" text-anchor="middle"><text x="40" y="214">0</text><text x="100" y="214">0.5</text><text x="160" y="214">1</text><text x="220" y="214">1.5</text><text x="280" y="214">2</text><text x="340" y="214">2.5</text></g>
+  <polyline fill="none" stroke="#1f6b52" stroke-width="2.5" points="41.2,166.0 47.2,166.0 53.2,166.0 59.2,166.0 65.2,166.0 71.2,166.0 77.2,166.0 83.2,166.0 89.2,166.0 95.2,166.0 101.2,164.1 107.2,154.9 113.2,146.5 119.2,138.8 125.2,131.6 131.2,124.9 137.2,118.7 143.2,112.8 149.2,107.3 155.2,102.0 161.2,97.0 167.2,92.3 173.2,87.8 179.2,83.4 185.2,79.3 191.2,75.3 197.2,71.5 203.2,67.8 209.2,64.3 215.2,60.9 221.2,57.6 227.2,54.4 233.2,51.3 239.2,48.3 245.2,45.4 251.2,42.5 257.2,39.8 263.2,37.1 269.2,34.5 275.2,32.0 281.2,30.0 287.2,30.0 293.2,30.0 299.2,30.0 305.2,30.0 311.2,30.0 317.2,30.0 323.2,30.0 329.2,30.0 335.2,30.0 340.0,30.0"/>
+  <circle cx="122.3" cy="135.1" r="4" fill="#9a5b00"/><text x="128" y="146" fill="#9a5b00">2 rice (0.69, 1.9)</text>
+  <circle cx="160" cy="98" r="4" fill="#9a5b00"/><text x="166" y="112" fill="#9a5b00">3 rice (1, 3)</text>
+  <circle cx="235.5" cy="50.1" r="4" fill="#9a5b00"/><text x="244" y="68" fill="#9a5b00">rice + melon (1.63, 4.4)</text>
+  <text x="195" y="230" text-anchor="middle" fill="#16241f">profit ratio x = P / P₃</text>
+</svg>
+<div class="cap">Figure 3. Income score, clamped at 1 (for $x\le\frac12$) and 5 (for $x\ge2$).</div>
+</div>
+<h3>12.3 Rate of change and a Maclaurin approximation</h3>
+<p>$\dfrac{d}{dx}\big(3+2\log_2x\big)=\dfrac{2}{x\ln2}$. At $x=\tfrac12$ the gradient is 5.77; at $x=1$, 2.89; at $x=2$, 1.44. A plan earning less than today gains score quickly as profit rises; above today the gains slow down.</p>
+<p>For a small rise $u$ in profit ($x\to x(1+u)$) the score rises by $2\log_2(1+u)=\frac{2}{\ln2}\ln(1+u)\approx\frac{2}{\ln 2}\big(u-\frac{u^2}{2}\big)$. With $u=0.1$: approximation $0.274$; exact $2\log_21.1=0.275$. So <b>each 1% more profit adds about 0.029</b> points.</p>
+<div class="syl"><b class="t">9709 P3 3.4; 9231 FP2 2.3 Maclaurin series</b>$\frac{d}{dx}\ln x=\frac1x$; $\ln(1+u)=u-\frac{u^2}{2}+\frac{u^3}{3}-\dots$ for $|u|&lt;1$.</div>
+<h3>12.4 Worked examples (Vĩnh Châu)</h3>
+<ul>
+<li><b>2 rice, typical:</b> $\log_2(65.4/95.4)=\ln0.6855/\ln2=-0.545$; $3-1.09=1.91\to\mathbf{1.9}$.</li>
+<li><b>Rice + watermelon:</b> $\log_2(155.4/95.4)=\log_21.629=0.704$; $3+1.41=4.41\to\mathbf{4.4}$.</li>
+<li><b>2 rice, El Niño:</b> winter–spring and summer–autumn rice both grow in salty months, so each loses 10%: $P=0.9(40+25.4)=58.86$; $P_3=0.9(65.4)+30=88.86$; $3+2\log_2(0.6624)=3-1.188=1.81\to\mathbf{1.8}$.</li>
+<li><b>Rice–shrimp, typical:</b> shrimp median 58.25 with $L=0.092$: $52.89$; rice in the rice–shrimp field 36.25; $P=89.14$, $\log_2(89.14/95.4)=-0.098$, score $\mathbf{2.8}$.</li>
+</ul>
+<p>The app also shows a profit range: the same sum using each crop's lowest and highest figure. For mung bean there is no checked figure, so its income is not scored at all.</p>
+
+<h2>13. Confidence</h2>
+<p>An integer counter $q$: 2 = High, 1 = Medium, 0 = Low.</p>
+<ol class="steps">
+<li>Start $q=2$.</li>
+<li>Subtract 1 for each: (i) weak income evidence: a crop has fewer than 2 good (non-fallback) figures, or $\max/\min&gt;2$, or no figure; (ii) no satellite greenness data; (iii) salinity station with fewer than 5 recent seasons or no reading after 2022; (iv) shrimp planned where there is no salty water; (v) any team estimate used (all together count once).</li>
+<li>Add 1 if satellite images show fields bare in Feb–Apr and the plan is upland or salt-tolerant.</li>
+<li>$q\leftarrow\operatorname{clamp}(q,0,u)$ with $u=1$ if (i) happened, else $u=2$.</li>
+</ol>
+<p><b>Examples.</b> 3 rice crops: autumn–winter rice has only 1 good figure (27.9; the rest are fallbacks), and the station's last reading is 2022: $q=2-1-1=0$, Low. 2 rice crops: only the station rule, $q=1$, Medium.</p>
+
+<p class="part">Part D · Supporting calculations</p>
+<h2>14. Sowing window</h2>
+<p>The app tells farmers when they can sow so the crop avoids all salty months. A crop of $D$ days started on the 1st of month $s$ occupies the months $s,s+1,\dots$ until the cumulative days reach $D$. Months wrap round with modular arithmetic: month after $m$ is $(m \bmod 12)+1$.</p>
+<p><b>Rice at Vĩnh Châu</b> ($D=100$ days, salty months Jan–May):</p>
+<table>
+<tr><th>Start $s$</th><th>Months used (cumulative days)</th><th>Salty month inside?</th></tr>
+<tr><td>May</td><td>May 31, Jun 61, Jul 92, Aug 123</td><td>yes (May)</td></tr>
+<tr><td>Jun</td><td>Jun 30, Jul 61, Aug 92, Sep 122</td><td>no ✓</td></tr>
+<tr><td>Jul, Aug</td><td>4 months each, ending Oct, Nov</td><td>no ✓</td></tr>
+<tr><td>Sep</td><td>Sep 30, Oct 61, Nov 91, Dec 122</td><td>no ✓</td></tr>
+<tr><td>Oct</td><td>Oct, Nov, Dec, Jan</td><td>yes (Jan)</td></tr>
+</table>
+<p>Safe starts: June–September, so "sow June 1 to September 1, harvest by December". If several runs of safe months exist, the engine chooses the longest; ties go to the run needing less water, then to the earlier one.</p>
+
+<h2>15. Counting crops from space (NDVI)</h2>
+<p>NDVI is a satellite "greenness" number: about 0 for bare soil or water, about 0.8 for a dense green crop (NASA MODIS, every 16 days, 250 m pixels).</p>
+<ol class="steps">
+<li><b>Smoothing with a running median.</b> Each value is replaced by the median of itself and its two neighbours, removing single cloudy dips: $\tilde v_i=\operatorname{median}(v_{i-1},v_i,v_{i+1})$.</li>
+<li><b>Peaks = local maxima.</b> Point $i$ is a crop peak if $\tilde v_i\ge0.5$, $\tilde v_i\ge\tilde v_{i-1}$ and $\tilde v_i&gt;\tilde v_{i+1}$: the discrete version of "$f'(x)=0$ and $f''(x)&lt;0$". Two peaks closer than 60 days count once (keep the higher).</li>
+<li><b>Crops per year</b> $=\dfrac{\text{number of peaks}}{\text{years covered}}$. Vĩnh Châu: <b>3.0</b>, matching 3 rice crops.</li>
+<li><b>Bare months:</b> month $m$ is "usually bare" if its mean NDVI is below 0.3 in more than half the years (a majority rule).</li>
+</ol>
+<div class="syl"><b class="t">9709 P1 1.7 Stationary points; S1 5.1</b>A maximum is where the gradient changes from positive to negative; here "gradient" is the difference between neighbouring points. The running median is robust to outliers in the same way as in Section 12.1.</div>
+
+<h2>16. Checking rain data: correlation</h2>
+<p>Two NASA rain sources are compared month by month over 288 months using Pearson's product-moment correlation coefficient:</p>
+<div class="eq">$$r=\frac{S_{xy}}{\sqrt{S_{xx}S_{yy}}},\qquad S_{xy}=\sum(x_i-\bar x)(y_i-\bar y),\ S_{xx}=\sum(x_i-\bar x)^2.$$</div>
+<p>At Vĩnh Châu $r=0.93$: the two sources rise and fall together, but GPM's yearly total is 14% higher (1993 vs 1746 mm). $r$ measures agreement in <i>pattern</i>, not in <i>size</i>. (Correlation is not on the current 9709/9231 syllabuses, but uses only the summation notation of S1 5.1.)</p>
+
+<h2>17. Salinity units and a sign test</h2>
+<h3>17.1 Units: direct proportion</h3>
+<p>Salinity is in parts per thousand (‰ = g/L). FAO uses electrical conductivity: TDS (mg/L) $\approx640\times$EC (dS/m). So $1$‰ $=1000$ mg/L $\approx\frac{1000}{640}=1.56$ dS/m. Maize starts losing yield at 1.1 dS/m $\approx0.7$‰; rice at 3.0 dS/m $\approx1.9$‰. Levels used for the area badge: low below 4‰, medium 4–15‰, high from 15‰.</p>
+<h3>17.2 Are El Niño seasons saltier? A sign test</h3>
+<p>At all 8 salinity stations, the average dry-season peak over 2001–2024 was higher in El Niño seasons than in other seasons. Is that just chance?</p>
+<p>$H_0$: El Niño makes no difference, so each station is equally likely to be higher or lower. $H_1$: El Niño seasons are saltier (one-tailed). Under $H_0$, $X$ = number of stations higher in El Niño $\sim B(8,0.5)$.</p>
+<div class="eq">$$P(X\ge8)=\Big(\tfrac12\Big)^8=\tfrac{1}{256}=0.0039&lt;0.05.$$</div>
+<p>Reject $H_0$ at the 5% level: strong evidence that El Niño seasons are saltier. <b>Caution:</b> the stations are close together and share the same weather, so they are not truly independent; the real evidence is weaker than $p=0.0039$ suggests.</p>
+<div class="syl"><b class="t">9231 FS 4.4 Non-parametric tests; 9709 S1 5.4 Binomial; S2 6.5 Hypothesis tests</b>The sign test counts "+" signs and uses $B(n,\frac12)$; independence is one of its assumptions.</div>
+
+<p class="part">Part E · Results and reflection</p>
+<h2>18. All results at Vĩnh Châu</h2>
+<table>
+<tr><th rowspan="2">Plan</th><th colspan="5">Typical year</th><th colspan="4">El Niño year</th></tr>
+<tr><th class="n">Water</th><th class="n">W&amp;S</th><th class="n">Soil</th><th class="n">Income</th><th>Conf.</th><th class="n">Water</th><th class="n">W&amp;S</th><th class="n">Income</th><th>Conf.</th></tr>
+<tr><td>3 rice crops</td><td class="n">1.0</td><td class="n">2.3</td><td class="n">1.5</td><td class="n">3.0</td><td>Low</td><td class="n">1.0</td><td class="n">2.2</td><td class="n">3.0</td><td>Low</td></tr>
+<tr><td>2 rice crops</td><td class="n">1.4</td><td class="n">2.3</td><td class="n">2.0</td><td class="n">1.9</td><td>Medium</td><td class="n">1.3</td><td class="n">2.2</td><td class="n">1.8</td><td>Low</td></tr>
+<tr><td>Rice–shrimp</td><td class="n">4.2</td><td class="n">5.0</td><td class="n">2.5</td><td class="n">2.8</td><td>Low</td><td class="n">4.5</td><td class="n">5.0</td><td class="n">3.0</td><td>Low</td></tr>
+<tr><td>Rice + watermelon</td><td class="n">2.5</td><td class="n">2.5</td><td class="n">3.0</td><td class="n">4.4</td><td>Low</td><td class="n">2.4</td><td class="n">2.4</td><td class="n">4.4</td><td>Low</td></tr>
+<tr><td>Salt-tolerant rice</td><td class="n">2.4</td><td class="n">4.1</td><td class="n">2.5</td><td class="n">3.0</td><td>Low</td><td class="n">2.4</td><td class="n">4.1</td><td class="n">3.0</td><td>Low</td></tr>
+</table>
+<p>Soil does not change between views (it depends only on the calendar). The scores are <b>not added together</b>: different farmers weigh water, salt, soil and income differently.</p>
+
+<h2>19. Modelling: assumptions, strengths, limits</h2>
+<table>
+<tr><th style="width:50%">Assumptions and limits</th><th>Strengths</th></tr>
+<tr><td><ul>
+<li>Monthly means hide bad single years (only the El Niño view partly covers this).</li>
+<li>Constants without a measured source: weights 0.6/0.2/0.2, $w=0.5$ for tolerant rice, $\beta=0.5$, 30 hot days. They lower confidence.</li>
+<li>Clamping hides differences at the ends of the scale.</li>
+<li>Salt comes from a few stations, not each field.</li>
+<li>Profit figures come from a small number of studies.</li>
+</ul></td><td><ul>
+<li>Every score can be recomputed by hand, as this guide shows.</li>
+<li>Standard, tested FAO formulas for water; checked against FAO's own example.</li>
+<li>Comparing with 3 rice crops at the same pin cancels errors common to all plans.</li>
+<li>Every number names its data source.</li>
+</ul></td></tr>
+</table>
+<div class="syl"><b class="t">The modelling cycle (9709 Mechanics and Statistics)</b>State assumptions → build a model → compute → compare with reality (here: FAO's worked example, two rain sources, satellite crop counts) → refine.</div>
+
+<h2 class="pb">20. Exercises</h2>
+<p>Use the Vĩnh Châu numbers. Syllabus links in brackets.</p>
+<ol>
+<li>Find $P_{\text{eff}}(100)$, $P_{\text{eff}}(15)$ and show $P_{\text{eff}}$ is continuous at $P=75$. (P1 1.2)</li>
+<li>Prove $\min(p,q)=\frac12(p+q-|p-q|)$. (P3 3.1)</li>
+<li>On 21 June, $\delta\approx0.409$ rad. Find the day length at $\varphi=9.365^\circ$. (P1 1.5)</li>
+<li>Show that $\displaystyle\int_{-\omega_s}^{\omega_s}\cos\omega\,d\omega=2\sin\omega_s$ and explain why the result is twice the integral from 0. (P1 1.8)</li>
+<li>Find $\frac{d^2e^\circ}{dT^2}$ in terms of $e^\circ$ and $T$, and show it is positive for all weather temperatures, $-237.3&lt;T&lt;1800$. (P3 3.4)</li>
+<li>A plan saves 30% of the water. Find its Water score. Which $s$ gives Water 3.5? (P1 1.3, 1.2)</li>
+<li>Find the profit ratio giving Income 2. (P3 3.2)</li>
+<li>Prove $\text{Income}(x)+\text{Income}(1/x)=6$ for $\frac12\le x\le2$. (P3 3.2)</li>
+<li>Using the matrix in Section 10.4 with weights $(0.5,0.25,0.25)^{\mathrm T}$, recompute all five Weather &amp; salt scores. Does the order change? (FP1 1.4)</li>
+<li>In January the rice crop needs $N=1.2(122)+124-P_{\text{eff}}(P)$. How much rain $P$ would make $N=0$? (P1 1.1)</li>
+<li>Use $\ln(1+u)\approx u-\frac{u^2}{2}$ to estimate the score gain from 20% more profit, and compare with the exact value. (FP2 2.3)</li>
+<li>Suppose only 7 of the 8 stations were saltier in El Niño years. Carry out the sign test at the 5% level. (FS 4.4)</li>
+</ol>
+<h3>Solutions</h3>
+<ol class="ans">
+<li>$0.8(100)-25=55$. $\max(0.6(15)-10,0)=\max(-1,0)=0$. Both pieces give 35 at $P=75$, so the left and right limits equal $P_{\text{eff}}(75)=35$: continuous.</li>
+<li>If $p\le q$: $|p-q|=q-p$, giving $\frac12(2p)=p=\min$. If $p&gt;q$: $|p-q|=p-q$, giving $q$. ∎</li>
+<li>$\tan\varphi=0.16493$, $\tan0.409=0.4337$; $\cos\omega_s=-0.07153$, $\omega_s=1.6424$ rad; day length $=24(1.6424)/\pi=12.55$ h (longer than at the equinox, 11.95 h).</li>
+<li>$[\sin\omega]_{-\omega_s}^{\omega_s}=\sin\omega_s-\sin(-\omega_s)=2\sin\omega_s$. $\cos$ is even, so the graph is symmetric about $\omega=0$ and the two halves have equal area.</li>
+<li>$\frac{de^\circ}{dT}=e^\circ g'$ with $g'=\frac{4098.2}{(T+237.3)^2}$. Product rule: $\frac{d^2e^\circ}{dT^2}=e^\circ(g')^2+e^\circ g''$, with $g''=\frac{-8196.4}{(T+237.3)^3}$. So $\frac{d^2e^\circ}{dT^2}=e^\circ\cdot\frac{4098.2}{(T+237.3)^3}\Big(\frac{4098.2}{T+237.3}-2\Big)$. Here $e^\circ&gt;0$ and $T+237.3&gt;0$, and the bracket is positive when $T+237.3&lt;2049.1$, i.e. $T&lt;1811.8$. So it is positive for every temperature that occurs in weather.</li>
+<li>$1+4(0.3)=2.2$. $3.5=1+4s\Rightarrow s=0.625$ (62.5% saved).</li>
+<li>$3+2\log_2x=2\Rightarrow\log_2x=-\frac12\Rightarrow x=2^{-1/2}=0.707$.</li>
+<li>In $[\frac12,2]$ no clamping: $(3+2\log_2x)+(3-2\log_2x)=6$. ∎</li>
+<li>$0.9+1.25+0.25=2.4$; $2.4$; $5.0$; $0.9+1.25+0.477=2.63\to2.6$; $2.1+1.25+0.737=4.09\to4.1$. Order unchanged: rice–shrimp, salt-tolerant, rice + upland, then the two rice plans.</li>
+<li>Need $P_{\text{eff}}=270.4$; since this is over 35, use $0.8P-25=270.4\Rightarrow P=369.25$ mm, about 14 times January's actual mean rain (27 mm).</li>
+<li>$u=0.2$: $\frac{2}{\ln2}(0.2-0.02)=0.519$; exact $2\log_21.2=0.526$. Close; the next term $+\frac{u^3}{3}$ would close the gap.</li>
+<li>$P(X\ge7)=\frac{\binom87+\binom88}{256}=\frac{9}{256}=0.0352&lt;0.05$: still reject $H_0$.</li>
+</ol>
+
+<p style="margin-top:14pt;color:var(--muted);font-size:8.8pt">Methods: FAO Irrigation and Drainage Paper 56 (Allen et al. 1998) for $R_a$, $ET_0$ and crop factors; FAO Irrigation Water Management Training Manual 3 for canal water and effective rain; FAO Papers 29 and 48 for salinity limits and units; Yoshida (1981, IRRI) for the 35 °C rice limit; NOAA CPC Oceanic Niño Index. Data: NASA GPM IMERG, NASA POWER, NASA MODIS MOD13Q1, salinity station records, published profit studies listed in the app.</p>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  renderMathInElement(document.body, { delimiters: [ {left: "$$", right: "$$", display: true}, {left: "$", right: "$", display: false} ], throwOnError: false });
+});
+</script>
+</body>
+</html>

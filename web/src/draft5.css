@@ -1,0 +1,158 @@
+/* draft5.css: Draft 5 finish on top of Draft 4. Calm light/dark theme, one font, larger small text,
+   plus the season wheel, month slider and prediction panel. */
+:root { --shrimp: #2E8C86; --upland: #C98A1E; --rest: color-mix(in srgb, var(--ink) 14%, transparent) }
+:root[data-theme="dark"] { --upland: #E2A84A; --shrimp: #5CC2B9 }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --upland: #E2A84A; --shrimp: #5CC2B9 } }
+
+body { background: var(--bg); color: var(--ink); font-family: var(--font) }
+/* no tech overlay: no grid, brackets, scanlines or sweep */
+.fx-grid, .fx-scan, .fx-sweep, .fx-c { display: none !important }
+.fx-vig { opacity: .35 }
+@media (min-width: 761px) { .fx-shade {
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--bg) 94%, transparent) 0%, color-mix(in srgb, var(--bg) 80%, transparent) 34%, color-mix(in srgb, var(--bg) 0%, transparent) 62%),
+    linear-gradient(180deg, color-mix(in srgb, var(--bg) 70%, transparent) 0, color-mix(in srgb, var(--bg) 0%, transparent) 140px);
+} }
+.eyebrow { font-size: .875rem; font-weight: 600; color: var(--ink-2) }
+#railNum, .k { font-weight: 600 }
+.glass { box-shadow: 0 8px 28px color-mix(in srgb, var(--ink) 10%, transparent) }
+button:focus-visible, [tabindex]:focus-visible, input:focus-visible { outline: 2px solid var(--water); outline-offset: 2px }
+
+/* theme button */
+#d5Theme svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round }
+
+/* month slider over the map (concept D) */
+#d5Month {
+  position: fixed; z-index: 30; right: 64px; bottom: calc(var(--tk-h) + 16px);
+  width: min(340px, calc(100vw - 32px)); padding: 12px 14px 10px; border-radius: var(--r);
+  background: var(--panel); border: 1px solid var(--line); backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+  transition: right .35s var(--ease), opacity .3s var(--ease);
+}
+#d5Month .row { display: flex; align-items: center; gap: 10px }
+#d5Month .row b { display: block; font-size: 1rem; font-weight: 700; color: var(--ink) }
+#d5Month .row span { display: block; font-size: .8125rem; color: var(--ink-2) }
+#d5Month .play {
+  flex: none; min-height: 36px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--line-2);
+  background: var(--panel-solid); color: var(--ink); font: 600 .8125rem var(--font); cursor: pointer;
+}
+#d5Month .play[aria-pressed="true"] { background: var(--ink); color: var(--bg) }
+#d5Range { display: block; width: 100%; margin: 10px 0 6px; accent-color: var(--risk); min-height: 28px }
+#d5Month .ticks { position: static; inset: auto; height: auto; margin: 0; display: grid; grid-template-columns: repeat(12, 1fr); text-align: center; font-size: .75rem; font-weight: 600; color: var(--ink-3) }
+#d5Month .ticks .s { color: var(--risk) }
+#d5Month .ticks .on { color: var(--ink); text-decoration: underline; text-underline-offset: 3px }
+#d5Month .note { margin: 6px 0 0; font-size: .75rem; color: var(--ink-3) }
+body.drawer-open #d5Month { right: calc(var(--drawer-w) + 20px) }
+body.has-site #d5Month { right: auto; left: calc(var(--rail-w) + 20px) }
+#d5Month { bottom: calc(var(--tk-h) + 20px + env(safe-area-inset-bottom, 0px)) }
+.sg-off { opacity: .18 !important; transition: opacity .3s var(--ease) }
+
+/* season wheel (concept A) */
+.d5-box { margin-top: 14px }
+.d5-wheel { position: relative; width: 100%; max-width: 340px; margin: 6px auto 0; aspect-ratio: 1 }
+.d5-wheel svg { width: 100%; height: 100%; display: block; font-family: var(--font) }
+.d5-wheel .sector { cursor: pointer; outline: none }
+.d5-wheel .sector:hover .hit, .d5-wheel .sector:focus-visible .hit { fill: var(--ink); fill-opacity: .07 }
+.d5-wheel .ctr { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none }
+.d5-wheel .ctr > div { width: 34%; text-align: center }
+.d5-wheel .big { margin: 0; font-size: 2rem; font-weight: 700; line-height: 1; color: var(--ink); font-variant-numeric: tabular-nums }
+.d5-wheel .big small { font-size: .9375rem; font-weight: 500; color: var(--ink-3) }
+.d5-wheel .nm { margin: 6px 0 0; font-size: .8125rem; line-height: 1.3; color: var(--ink-2) }
+.d5-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px; margin-top: 6px; font-size: .8125rem; color: var(--ink-2) }
+.d5-legend span { display: inline-flex; align-items: center; gap: 6px }
+.d5-legend i { width: 12px; height: 12px; border-radius: 3px }
+.d5-mon { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; margin: 12px 0 0; padding: 12px 14px; border-radius: var(--r); background: var(--bg-2) }
+.d5-mon dt:first-child { grid-column: 1 / -1; font-size: 1rem; font-weight: 700; color: var(--ink) }
+.d5-mon dt:first-child + dd { display: none }
+.d5-mon dt { font-size: .875rem; color: var(--ink-3) }
+.d5-mon dd { margin: 0; font-size: .9375rem; font-weight: 500; color: var(--ink) }
+.d5-mon dd.risk { color: var(--risk) }
+.d5-mon .src { color: var(--ink-3); font-weight: 400; font-size: .8125rem }
+
+/* prediction panel */
+#d5Pred { margin-top: 14px }
+#d5Pred .pz-seg button { min-height: 40px; font-family: var(--font) }
+
+#d5ThemeSeg { margin-top: 10px; display: flex }
+#d5ThemeSeg button { flex: 1 }
+@media (max-width: 760px) {
+  #d5Theme { display: none }
+  #d5Month, body.has-site #d5Month { left: 16px; right: 16px; width: auto; bottom: calc(var(--tk-h) + 64px + env(safe-area-inset-bottom, 0px)); background: var(--panel-solid) }  /* above the phone area row (#areaDock) */
+  body.drawer-open #d5Month { opacity: 0; visibility: hidden; pointer-events: none }
+  body:not(.has-site) #d5Month { display: none }
+}
+
+/* ---- what you grow: one box per season ---- */
+.sz-wrap { display: grid; gap: 10px; margin-bottom: 14px }
+.sz-h { margin: 0; font-weight: 700; font-size: 1.0625rem; color: var(--ink) }
+.sz-box { margin: 0; padding: 10px 12px 12px; border: 1px solid var(--line-2); border-radius: 14px; background: color-mix(in srgb, var(--ink) 3%, transparent); min-width: 0 }
+.sz-box legend { display: flex; gap: 8px; align-items: baseline; padding: 0 6px; font-size: .9375rem }
+.sz-box legend span { color: var(--ink-2); font-size: .875rem }
+.sz-opts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px }
+@media (min-width: 420px) { .sz-opts { grid-template-columns: repeat(4, minmax(0, 1fr)) } }
+.sz-o { min-height: 48px; display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 10px; border: 1.5px solid var(--line-2);
+  background: transparent; color: var(--ink); font: 600 .9375rem/1.2 var(--font); text-align: left; cursor: pointer }
+.sz-o i { width: 14px; height: 14px; border-radius: 4px; flex: none; background: var(--rest) }
+.sz-R i { background: var(--rice) } .sz-S i { background: var(--shrimp) } .sz-U i { background: var(--upland) }
+.sz-o[aria-pressed="true"] { border-color: var(--ink); background: var(--ink); color: var(--panel-solid) }
+.sz-o[aria-pressed="true"]::after { content: "✓"; margin-left: auto; font-weight: 800 }
+.sz-match { margin: 0; font-size: .9375rem; color: var(--ink) }
+.sz-guess { display: block; color: var(--ink-2); font-size: .875rem; margin-top: 2px }
+
+/* ---- workforce slider: people and machines together ---- */
+.wf { display: grid; gap: 6px; margin: 14px 0; padding: 12px 14px; border: 1px solid var(--line-2); border-radius: 14px }
+.wf-h { font-weight: 700; font-size: 1.0625rem }
+.wf-sub, .wf-pen { margin: 0; font-size: .875rem; color: var(--ink-2) }
+.wf input[type=range] { width: 100%; min-height: 44px; accent-color: var(--gold) }
+.wf-ticks { display: flex; justify-content: space-between; padding: 0 6px; font-size: .8125rem; color: var(--ink-3) }
+.wf-ticks .on { color: var(--ink); font-weight: 800 }
+.wf-now { margin: 0; font-weight: 700; font-size: 1rem }
+.f-seasons { border: 0; padding: 0; margin: 0; display: grid; gap: 8px }
+.f-seasons legend { font-weight: 600; margin-bottom: 4px }
+.f-seas small { color: var(--ink-2); font-weight: 400 }
+/* icons always come with a word (farmers read icon details literally: UNCDF/WFP 2018) */
+.icon-btn.icon-btn-t { width: auto; padding: 0 12px; gap: 6px; display: inline-flex; align-items: center }
+.ib-t { font: 600 .875rem/1 var(--font) }
+.f-edit, .f-del { display: inline-flex; align-items: center; gap: 4px; width: auto !important; padding: 0 10px; font: 600 .8125rem/1 var(--font) }
+@media (max-width: 340px) { .ib-t { display: none } }
+.wf-row { display: grid; gap: 6px }
+.wf-l { font-weight: 600; font-size: .9375rem }
+.wf-opts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px }
+.wf-opts button { min-height: 48px; padding: 6px 8px; border-radius: 10px; border: 1.5px solid var(--line-2); color: var(--ink); font: 600 .9375rem/1.2 var(--font) }
+.wf-opts button[aria-pressed="true"] { background: var(--ink); color: var(--panel-solid); border-color: var(--ink) }
+.wf-note { margin: 0; padding: 8px 10px; border-left: 3px solid var(--gold); background: var(--gold-soft); font-size: .9rem }
+/* season guide: numbered steps, quick picks, a 12-month bar that fills as you choose */
+.sz-how { margin: 0; padding-left: 1.4rem; display: grid; gap: 2px; font-size: .9375rem; color: var(--ink); list-style: decimal }
+.sz-how li::marker { font-weight: 700; color: var(--gold) }
+.sz-quick { display: grid; gap: 6px }
+.sz-quick > span { font-size: .875rem; color: var(--ink-2); font-weight: 600 }
+.sz-quick > div { display: flex; flex-wrap: wrap; gap: 6px }
+.sz-ex { min-height: 44px; padding: 6px 12px; border-radius: 999px; border: 1.5px solid var(--line-2); color: var(--ink); font: 600 .875rem/1.2 var(--font); cursor: pointer }
+.sz-ex[aria-pressed="true"] { border-color: var(--gold); background: var(--gold-soft) }
+.sz-n { display: inline-grid; place-items: center; width: 22px; height: 22px; margin-right: 6px; border-radius: 50%; background: var(--gold); color: var(--panel-solid); font-size: .8125rem; font-weight: 800 }
+.sz-year { display: grid; gap: 4px }
+.sz-year > span { font-size: .875rem; font-weight: 600; color: var(--ink-2) }
+.sz-bar { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px }
+.sz-m { display: grid; place-items: center; height: 28px; border-radius: 4px; background: var(--rest); font-style: normal }
+.sz-m span { font-size: .6875rem; font-weight: 700; color: var(--panel-solid); mix-blend-mode: normal }
+.sz-m.sz-R { background: var(--rice) } .sz-m.sz-S { background: var(--shrimp) } .sz-m.sz-U { background: var(--upland) }
+.sz-m.sz-rest span { color: var(--ink-2) }
+/* step 4: "Your plan is" confirmation */
+.plan-ok { padding: 14px 16px; border-radius: 14px; border: 2px solid var(--ok); background: color-mix(in srgb, var(--ok) 10%, transparent); display: grid; gap: 6px }
+.po-eye { margin: 0; display: flex; align-items: center; gap: 6px; font-weight: 700; color: var(--ok) }
+.po-eye svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.4 }
+.po-name { margin: 0; font-size: 1.375rem; line-height: 1.25; font-weight: 800 }
+.po-where, .po-cal, .po-fit, .po-why, .po-next { margin: 0; font-size: .9375rem }
+.po-where, .po-next { color: var(--ink-2) }
+.po-act { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px }
+/* checks on what the farmer entered */
+.sz-why, .f-checks { display: grid; gap: 6px }
+.fc-h { margin: 0; font-weight: 700; font-size: .9375rem }
+.sz-checks { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px }
+.sz-checks li { display: grid; grid-template-columns: 24px 1fr; gap: 8px; align-items: start; padding: 8px 10px; border-radius: 10px; font-size: .9rem; line-height: 1.45 }
+.sz-checks i { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; font-style: normal; font-weight: 800; font-size: .8125rem; color: #fff }
+.sz-checks .ok { background: color-mix(in srgb, var(--ok) 10%, transparent) } .sz-checks .ok i { background: var(--ok) }
+.sz-checks .no { background: color-mix(in srgb, var(--risk) 10%, transparent) } .sz-checks .no i { background: var(--risk) }
+.sz-checks .mid { background: color-mix(in srgb, var(--gold) 12%, transparent) } .sz-checks .mid i { background: var(--gold) }
+
+/* the salt month bar belongs to the map only: never over the dashboard, home or a full-screen panel */
+body.dv-on #d5Month, body.home-on #d5Month { display: none !important }
