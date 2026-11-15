@@ -437,7 +437,7 @@ Object.assign(STR.en, {
   wfFewMach: "Few people but machines: rice can be done by machine; melon and chilli still need picking by hand.",
   wfPen: (p) => p > 0 ? `Other crops (melon, maize, chilli) need much hand work, so their scores drop by ${p.toFixed(1)} point (team estimate).` : "Enough hands for other crops: no score is taken off.",
   fSeasons: "What you grow in each season", setT: "Settings", fcH: "Checking what you entered:", poEye: "Your plan is:", s4H: "Your season path", s4Need: "What to get ready",
-  s4Rest: "Rest the field", s4Salt: "Salty water", s4SaltS: "Salt", sCropL: { R: "Rice", S: "Shrimp" }, s4Cost: "Money to put in", s4Profit: "Profit", s4Year: (h) => h ? `for ${h} ha, a year` : "for 1 ha, a year", s4Est: "Estimate from published figures.", poFit: "Fit with your priorities:", poWhy: "Why:", poOther: "Choose another option", poScore: "See the plan score", poNext: "Below: what to do each month, and what you need. Print it or share it with your family and extension officer.", szHow: ["Each row is one crop season of the year.", "In each row, tap what you grow then.", "Nothing grown that season? Tap “Nothing / rest”."], szQuick: "Quick pick:", szYear: "Your year:", szEx: [["3 rice crops", ["R","R","R"]], ["2 rice crops", ["R","R","-"]], ["1 rice crop", ["R","-","-"]], ["Shrimp, then rice", ["S","S","R"]], ["Rice + other crop", ["R","U","R"]]], savedPlan: "Plan saved as a text file. Send it on Zalo or keep it.", savedPrint: "Plan saved. Open the file: it asks to print or save as PDF."
+  s4Rest: "Rest the field", s4Wait: "Wait for the next season (too late to sow)", s4Late: "sown late, short variety", s4Salt: "Salty water", s4SaltS: "Salt", sCropL: { R: "Rice", S: "Shrimp" }, s4Cost: "Money to put in", s4Profit: "Profit", s4Year: (h) => h ? `for ${h} ha, a year` : "for 1 ha, a year", s4Est: "Estimate from published figures.", poFit: "Fit with your priorities:", poWhy: "Why:", poOther: "Choose another option", poScore: "See the plan score", poNext: "Below: what to do each month, and what you need. Print it or share it with your family and extension officer.", szHow: ["Each row is one crop season of the year.", "In each row, tap what you grow then.", "Nothing grown that season? Tap “Nothing / rest”."], szQuick: "Quick pick:", szYear: "Your year:", szEx: [["3 rice crops", ["R","R","R"]], ["2 rice crops", ["R","R","-"]], ["1 rice crop", ["R","-","-"]], ["Shrimp, then rice", ["S","S","R"]], ["Rice + other crop", ["R","U","R"]]], savedPlan: "Plan saved as a text file. Send it on Zalo or keep it.", savedPrint: "Plan saved. Open the file: it asks to print or save as PDF."
 });
 Object.assign(STR.vi, {
   riceUpland: "Lúa + cây màu", seasH: "Bạn đang trồng gì? Chạm chọn cho từng vụ",
@@ -451,7 +451,7 @@ Object.assign(STR.vi, {
   wfFewMach: "Ít người nhưng có máy: lúa làm bằng máy được; dưa, ớt vẫn phải hái tay.",
   wfPen: (p) => p > 0 ? `Cây màu (dưa, bắp, ớt) cần nhiều công tay, nên điểm cây màu bị trừ ${p.toFixed(1).replace(".", ",")} điểm (ước tính của nhóm).` : "Đủ sức làm cây màu: không trừ điểm.",
   fSeasons: "Trồng gì trong từng vụ", setT: "Cài đặt", fcH: "Kiểm tra thông tin bạn nhập:", poEye: "Kế hoạch của bạn là:", s4H: "Đường mùa vụ của bạn", s4Need: "Cần chuẩn bị gì",
-  s4Rest: "Cho ruộng nghỉ", s4Salt: "Nước mặn", s4SaltS: "Mặn", sCropL: { R: "Lúa", S: "Tôm" }, s4Cost: "Vốn cần có", s4Profit: "Tiền lời", s4Year: (h) => h ? `cho ${h} ha, mỗi năm` : "cho 1 ha, mỗi năm", s4Est: "Ước tính từ số liệu đã công bố.", poFit: "Mức hợp với ưu tiên của bạn:", poWhy: "Vì sao:", poOther: "Chọn phương án khác", poScore: "Xem điểm kế hoạch", poNext: "Bên dưới: việc cần làm mỗi tháng và những gì cần chuẩn bị. In ra hoặc gửi cho gia đình, cán bộ khuyến nông.", szHow: ["Mỗi hàng là một vụ trong năm.", "Ở mỗi hàng, chạm vào thứ bạn trồng vụ đó.", "Vụ nào không trồng gì thì chạm “Bỏ trống / nghỉ”."], szQuick: "Chọn nhanh:", szYear: "Năm của bạn:", szEx: [["3 vụ lúa", ["R","R","R"]], ["2 vụ lúa", ["R","R","-"]], ["1 vụ lúa", ["R","-","-"]], ["Tôm rồi lúa", ["S","S","R"]], ["Lúa + cây màu", ["R","U","R"]]], savedPlan: "Đã lưu kế hoạch thành tệp chữ. Gửi qua Zalo hoặc giữ lại.", savedPrint: "Đã lưu kế hoạch. Mở tệp ra: máy sẽ hỏi in hoặc lưu PDF."
+  s4Rest: "Cho ruộng nghỉ", s4Wait: "Chờ vụ sau (không kịp sạ)", s4Late: "sạ muộn, giống ngắn ngày", s4Salt: "Nước mặn", s4SaltS: "Mặn", sCropL: { R: "Lúa", S: "Tôm" }, s4Cost: "Vốn cần có", s4Profit: "Tiền lời", s4Year: (h) => h ? `cho ${h} ha, mỗi năm` : "cho 1 ha, mỗi năm", s4Est: "Ước tính từ số liệu đã công bố.", poFit: "Mức hợp với ưu tiên của bạn:", poWhy: "Vì sao:", poOther: "Chọn phương án khác", poScore: "Xem điểm kế hoạch", poNext: "Bên dưới: việc cần làm mỗi tháng và những gì cần chuẩn bị. In ra hoặc gửi cho gia đình, cán bộ khuyến nông.", szHow: ["Mỗi hàng là một vụ trong năm.", "Ở mỗi hàng, chạm vào thứ bạn trồng vụ đó.", "Vụ nào không trồng gì thì chạm “Bỏ trống / nghỉ”."], szQuick: "Chọn nhanh:", szYear: "Năm của bạn:", szEx: [["3 vụ lúa", ["R","R","R"]], ["2 vụ lúa", ["R","R","-"]], ["1 vụ lúa", ["R","-","-"]], ["Tôm rồi lúa", ["S","S","R"]], ["Lúa + cây màu", ["R","U","R"]]], savedPlan: "Đã lưu kế hoạch thành tệp chữ. Gửi qua Zalo hoặc giữ lại.", savedPrint: "Đã lưu kế hoạch. Mở tệp ra: máy sẽ hỏi in hoặc lưu PDF."
 });
 const SEAS_OPTS = ["R", "S", "U", "-"];
 const SEAS_OF = { rice3: ["R", "R", "R"], rice2: ["R", "R", "-"], rice_shrimp: ["S", "S", "R"], rice_upland: ["R", "U", "R"] };
@@ -520,7 +520,7 @@ function renderSeasons() {
   const MON = [0, 0, -1, 1, 1, 1, 1, 2, 2, 2, 0, 0];   /* month -> season box (T3 is the usual gap) */
   const yr = MON.map((k, m) => { const c = k < 0 ? "-" : seasons[k]; return `<i class="sz-m sz-${c === "-" ? "rest" : c}" title="${esc(t("monthsLong")[m])}"><span>${m + 1}</span></i>` }).join("");
   const exs = t("szEx").map(([n, z]) => `<button type="button" class="sz-ex" data-szex="${z.join("")}" aria-pressed="${z.join("") === seasons.join("")}">${esc(n)}</button>`).join("");
-  g.innerHTML = `<p class="sz-h" id="gnL">${esc(t("seasH"))}</p>
+  g.innerHTML = (typeof Dash !== "undefined" && Dash.nowBlock ? Dash.nowBlock() : "") + `<p class="sz-h" id="gnL">${esc(t("seasH"))}</p>
 <ol class="sz-how">${t("szHow").map(x => `<li>${esc(x)}</li>`).join("")}</ol>
 <div class="sz-quick"><span>${esc(t("szQuick"))}</span><div>${exs}</div></div>` + S.map(([nm, mo], i) => `<fieldset class="sz-box"><legend><b><span class="sz-n">${i + 1}</span>${esc(nm)}</b><span>${esc(mo)}</span></legend>
 <div class="sz-opts">${SEAS_OPTS.map(o => `<button type="button" class="sz-o sz-${o === "-" ? "rest" : o}" data-season="${i}" data-sc="${o}" aria-pressed="${seasons[i] === o}" aria-label="${esc(C[o])}" title="${esc(C[o])}"><span class="sz-ic" aria-hidden="true">${ico({ R: "rice", S: "shrimp", U: "upland", "-": "fallow" }[o], 22)}</span><span class="sz-t" aria-hidden="true">${esc(t("sCropS")[o])}</span></button>`).join("")}</div></fieldset>`).join("") +
@@ -830,11 +830,14 @@ box.innerHTML = `<div class="cmp-head"><h3>${t("cmpH")}</h3><button type="button
 }
 
 /* ---------- step 4: the 12-month plan (same month logic as docs/app.js) ---------- */
-function renderPlan(c) {
+function renderPlan(c0) {
 const now = new Date(), m0 = now.getMonth();
+/* the plan starts this month, from the crop in the field now (asked in step 2; season.js) */
+const c = typeof Season !== "undefined" ? Season.windowOf(c0, typeof Dash !== "undefined" && Dash.flowNow ? Dash.flowNow() : null, now) : c0;
+const isWait = r => !!(c.cells && c.cells[r.from] && c.cells[r.from].src === "wait"), isLate = r => !!(c.cells && c.cells[r.from] && c.cells[r.from].late);
 const lab = i => { const d = new Date(now.getFullYear(), m0 + i); return lang === "vi" ? `T${d.getMonth() + 1}/${d.getFullYear()}` : d.toLocaleString("en", { month: "short", year: "numeric" }) };
 const span = (a, b) => a === b ? lab(a) : `${lab(a)} – ${lab(b)}`;
-const code = i => c.months[((m0 + i) % 12 + 12) % 12], salt = V(site).salt, isSalt = i => salt.includes((m0 + i) % 12 + 1);
+const code = i => c.cells ? (i < 0 ? c.before : i > 11 ? c.after : c.cells[i].code) : c.months[((m0 + i) % 12 + 12) % 12], salt = V(site).salt, isSalt = i => salt.includes((m0 + i) % 12 + 1);
 $("#planFor").textContent = `${t("planFor")}: ${pick(c.name)} · ${pick(site.name)}`;
 { let ok = document.querySelector("#planOk"); if (!ok) { $("#planFor").insertAdjacentHTML("beforebegin", `<div id="planOk" class="plan-ok" role="status"></div>`); ok = document.querySelector("#planOk") }
 const sc = (ranked().find(x => x.c.id === c.id) || {}).s, why = (c.why || [])[0];
@@ -852,16 +855,16 @@ for (let i = 0; i < 12; i++) { if (i && code(i) === code(i - 1)) runs[runs.lengt
 const items = runs.map((r, n) => {
 const sm = []; for (let i = r.from; i <= r.to; i++) if (isSalt(i)) { if (sm.length && sm[sm.length - 1][1] === i - 1) sm[sm.length - 1][1] = i; else sm.push([i, i]) }
 const saltLine = sm.length ? `<span class="salt-badge">${t("planSalt")}: ${sm.map(([a, b]) => span(a, b)).join(", ")}</span>` : "";
-if (r.code === "-") return `<li class="rest"><b>${span(r.from, r.to)}</b>${t("planRest")}<br>${saltLine}</li>`;
+if (r.code === "-") return `<li class="rest"><b>${span(r.from, r.to)}</b>${t(isWait(r) ? "s4Wait" : "planRest")}<br>${saltLine}</li>`;
 const p = c.plan[r.code], started = r.from === 0 && code(-1) === r.code, ends = code(r.to + 1) !== r.code;
-const marks = [started ? t("planCont") : `${t(r.code === "S" ? "planStock" : "planSow")}: ${lab(r.from)}`, ends ? `${t("planHarvest")}: ${lab(r.to)}` : ""].filter(Boolean);
+const marks = [started ? t("planCont") : `${t(r.code === "S" ? "planStock" : "planSow")}: ${lab(r.from)}${isLate(r) ? ` (${t("s4Late")})` : ""}`, ends ? `${t("planHarvest")}: ${lab(r.to)}` : ""].filter(Boolean);
 const name = pick(p.name);
 return `<li class="${r.code[0]}"><b>${span(r.from, r.to)}</b>${esc(name[0].toUpperCase() + name.slice(1))}<div class="hint">${marks.join(" · ")}</div>${saltLine}</li>`;
 });
 planText = runs.map(r => {
   const sm = []; for (let i = r.from; i <= r.to; i++) if (isSalt(i)) { if (sm.length && sm[sm.length - 1][1] === i - 1) sm[sm.length - 1][1] = i; else sm.push([i, i]) }
   const salt = sm.length ? ` (${t("planSalt")}: ${sm.map(([a, b]) => span(a, b)).join(", ")})` : "";
-  if (r.code === "-") return `${span(r.from, r.to)}: ${t("planRest")}.${salt}`;
+  if (r.code === "-") return `${span(r.from, r.to)}: ${t(isWait(r) ? "s4Wait" : "planRest")}.${salt}`;
   const nm = pick(c.plan[r.code].name), started = r.from === 0 && code(-1) === r.code, ends = code(r.to + 1) !== r.code;
   const marks = [started ? t("planCont") : `${t(r.code === "S" ? "planStock" : "planSow")}: ${lab(r.from)}`, ends ? `${t("planHarvest")}: ${lab(r.to)}` : ""].filter(Boolean).join(", ");
   return `${span(r.from, r.to)}: ${nm[0].toUpperCase() + nm.slice(1)}. ${marks[0].toUpperCase() + marks.slice(1)}.${salt}`;
@@ -894,13 +897,13 @@ ${s.seed ? `<div><dt>${t("seed")}</dt><dd>${esc(L(s.seed))}</dd></div>` : ""}${s
 ${r.seed ? `<div><dt>${t("seed")}</dt><dd>${esc(pick(r.seed))}</dd></div>` : ""}${r.fertiliser ? `<div><dt>${t("fert")}</dt><dd>${esc(pick(r.fertiliser))}</dd></div>` : ""}
 ${r.steps && r.steps.length ? `<div><dt>${t("steps")}</dt><dd><ol>${r.steps.map(s => `<li>${esc(pick(s))}</li>`).join("")}</ol></dd></div>` : ""}</dl></div>` }).join("");
 typeof D5 !== "undefined" && D5.plan(c);
-renderPath(c, runs, lab, span, isSalt, SHORT);
+renderPath(c, runs, lab, span, isSalt, SHORT, code, c0, isWait, isLate);
 }
 /* Simple view of step 4: one season path, a stop per crop (when, what to do, salt, what to get ready) and one money line.
    It stands in for the forecast, wheel, cost, calendar and needs boxes, which stay in Advanced. */
-function renderPath(c, runs, lab, span, isSalt, SHORT) {
+function renderPath(c, runs, lab, span, isSalt, SHORT, code0, c0, isWait, isLate) {
 let el = document.getElementById("s4"); if (!el) { const a = document.getElementById("planOk"); if (!a) return; a.insertAdjacentHTML("afterend", `<section id="s4" class="s4" aria-labelledby="s4H"></section>`); el = document.getElementById("s4") }
-const L = x => x[lang === "vi" ? 1 : 0], now = new Date(), m0 = now.getMonth(), code = i => c.months[((m0 + i) % 12 + 12) % 12];
+const L = x => x[lang === "vi" ? 1 : 0], now = new Date(), m0 = now.getMonth(), code = code0 || (i => c.months[((m0 + i) % 12 + 12) % 12]);
 /* short month labels: "T8" / "Aug"; a range is "T1–T6" */
 const mo = i => { const m = (m0 + i) % 12; return lang === "vi" ? `T${m + 1}` : t("monthsLong")[m].slice(0, 3) };
 const rg = (a, b) => a === b ? mo(a) : `${mo(a)}–${mo(b)}`;
@@ -909,10 +912,10 @@ const rows = runs.map((r, n) => {
   const sm = []; for (let i = r.from; i <= r.to; i++) if (isSalt(i)) { if (sm.length && sm[sm.length - 1][1] === i - 1) sm[sm.length - 1][1] = i; else sm.push([i, i]) }
   const k = r.code === "-" ? "F" : r.code[0], kind = { R: "rice", S: "shrimp", U: "upland" }[k] || "fallow";
   let what, act = "";
-  if (r.code === "-") what = t("s4Rest");
+  if (r.code === "-") what = t(isWait && isWait(r) ? "s4Wait" : "s4Rest");
   else { const nm = pick(c.plan[r.code].name), started = r.from === 0 && code(-1) === r.code, ends = code(r.to + 1) !== r.code;
-    what = k !== "U" && t("sCropL")[k] ? t("sCropL")[k] : nm[0].toUpperCase() + nm.slice(1);   /* rice and shrimp: one short word; an upland crop keeps its own name */
-    act = [started ? (ends ? "" : t("planCont")) : `${t(k === "S" ? "planStock" : "planSow")} ${mo(r.from)}`, ends ? `${t("planHarvest")} ${mo(r.to)}` : ""].filter(Boolean).join(" · ");
+    what = r.code[1] === "0" || !(k !== "U" && t("sCropL")[k]) ? nm[0].toUpperCase() + nm.slice(1) : t("sCropL")[k];   /* today's crop keeps its "now in the field" name */   /* rice and shrimp: one short word; an upland crop keeps its own name */
+    act = [started ? (ends ? "" : t("planCont")) : `${t(k === "S" ? "planStock" : "planSow")} ${mo(r.from)}${isLate && isLate(r) ? ` (${t("s4Late")})` : ""}`, ends ? `${t("planHarvest")} ${mo(r.to)}` : ""].filter(Boolean).join(" · ");
     act = act[0].toUpperCase() + act.slice(1) }
   const salt = sm.length ? `<span class="s4-salt" title="${esc(t("s4Salt"))}">${ico("drop", 12)}${esc(t("s4SaltS"))} ${sm.map(([a, b]) => rg(a, b)).join(", ")}</span>` : "";
   const y0 = yr(r.from), y1 = yr(r.to);
@@ -923,7 +926,7 @@ const rows = runs.map((r, n) => {
 const keys = [...new Set(runs.filter(r => r.code !== "-").flatMap(r => c.plan[r.code].res || []))].filter(x => SHORT[x]);
 const need = keys.map(x => `<li><b>${esc(pick(DATA.resources[x] ? DATA.resources[x].name : x))}</b>${SHORT[x].seed ? `<span>${esc(t("seed"))}: ${esc(L(SHORT[x].seed))}</span>` : ""}${SHORT[x].fert ? `<span>${esc(t("fert"))}: ${esc(L(SHORT[x].fert))}</span>` : ""}</li>`).join("");
 let money = "";
-if (typeof Cost !== "undefined" && Cost.calc) { const r = Cost.calc(c), h = Cost.ha ? Cost.ha() : null, k = h || 1;
+if (typeof Cost !== "undefined" && Cost.calc) { const r = Cost.calc(c0 || c), h = Cost.ha ? Cost.ha() : null, k = h || 1;
   if (r.cost || r.profit != null) money = `<div class="s4-money">${r.cost ? `<div class="c"><span>${esc(t("s4Cost"))}</span><b>${esc(Cost.money(r.cost * k))}</b></div>` : ""}${r.profit != null ? `<div class="p"><span>${esc(t("s4Profit"))}</span><b>${esc(Cost.money(r.profit * k))}</b></div>` : ""}
     <p class="s4-est">${esc(t("s4Year")(h ? num(h) : null))} · ${esc(t("s4Est"))} ${esc(Cost.machNote ? Cost.machNote() : "")}</p></div>` }
 el.innerHTML = `<h3 id="s4H" class="s4-h">${esc(t("s4H"))}</h3><ol class="s4-path">${rows}</ol>`;

@@ -10,7 +10,7 @@ const Dash = (() => {
   const lang = () => (window.App && App.lang && App.lang()) || "vi";
   const L = (o) => (o == null ? "" : typeof o === "string" ? o : o[lang()] || o.vi || o.en || "");
   const nf = (x, d = 0) => { const s = (+x).toFixed(d); return lang() === "vi" ? s.replace(".", ",") : s };
-  const CM = new Date().getMonth();
+  let CM = Season.now().getMonth();   /* the month on show: today, or the month being played in the year simulation */
   /* whole numbers with a thousands mark (1.335 / 1,335); a size keeps up to 2 decimals (0,05 ha) */
   const big = (x) => Math.round(+x).toLocaleString(lang() === "vi" ? "vi-VN" : "en-US");
   const haS = (x) => nf(+x, 2).replace(/[.,]?0+$/, "");
@@ -145,7 +145,9 @@ const Dash = (() => {
     expand: '<path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/>', x: '<path d="M6 6l12 12M18 6L6 18"/>',
     seed: '<path d="M12 20c-4 0-7-3-7-8 4 0 7 3 7 8Z"/><path d="M12 20c0-6 3-10 8-11 0 6-3 10-8 11Z"/>', drop: '<path d="M12 3.5c3.5 4.2 6 7.6 6 10.5a6 6 0 0 1-12 0c0-2.9 2.5-6.3 6-10.5Z"/>',
     sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
-    edit: '<path d="M4 20l4-1 11-11-3-3L5 16l-1 4Z"/><path d="M14 7l3 3"/>'
+    edit: '<path d="M4 20l4-1 11-11-3-3L5 16l-1 4Z"/><path d="M14 7l3 3"/>',
+    home: '<path d="M3.5 11 12 4l8.5 7"/><path d="M5.5 9.5V20h13V9.5"/><path d="M10 20v-5.5h4V20"/>',
+    chart: '<path d="M4 20h16"/><path d="M7 20v-7"/><path d="M12 20V6"/><path d="M17 20v-10"/>'
   };
   const ic = (n, s = 18) => `<svg class="dv-i" viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${ICON[n] || ""}</svg>`;
 
@@ -160,9 +162,13 @@ const Dash = (() => {
   const SEAS_OF = { rice3: ["R", "R", "R"], rice2: ["R", "R", "-"], rice_shrimp: ["S", "S", "R"], rice_upland: ["U", "R", "R"] };
   const resolve = (c, crop) => { if (!c.variants) return c; const ks = Object.keys(c.variants); return { ...(c.variants[ks.includes(crop) ? crop : c.crop_default] || c.variants[ks[0]]), id: c.id } };
   const cardsFor = (s, year, crop) => ((year === "elnino" && s.el && s.el.cards) ? s.el.cards : s.cards).map((c) => resolve(c, crop));
-  const isNino = (f) => (f.year ? f.year === "elnino" : true);   /* default: this season, NOAA >83% El Niño */
+  const isNino = (f) => (Season.yearOf() >= 1 ? false : f.year ? f.year === "elnino" : true);   /* default: this season, NOAA >83% El Niño; plan years 2–3 of the preview use the typical year (the outlook covers one season) */
   const yr = (f) => (isNino(f) ? "elnino" : "typical");
   const cardOf = (f, year) => { const cs = cardsFor(siteOf(f.site), year || yr(f), f.crop); return cs.find((c) => c.id === f.rot) || cs[0] };
+  /* the field's 12-month plan from this month: today's crop first, then the rotation (season.js) */
+  const planOf = (f, year) => { const a0 = Season.absOf(Season.real()); return Season.windowOf(cardOf(f, year), f.now, Season.mStart(a0 + 12 * Season.yearOf())) };
+  const PV = (c, m) => (c.pv ? c.pv[m] : c.months[(m + 11) % 12]), NX = (c, m) => (c.nx ? c.nx[m] : c.months[(m + 1) % 12]);
+  const W0 = (c) => (c.m0 != null ? c.m0 : CM);   /* first month of the plan window */
   const weightsOf = (f) => { const w = f.weights || GOALS[f.goal || "salt"]; return { ...w, pests: w.pests ?? 2 } };   /* fields saved before the Pests score have no pests weight */
   function scoreOf(c, f) {
     const w = weightsOf(f), ks = SK.filter((k) => c.scores[k] != null), tot = ks.reduce((a, k) => a + w[k], 0);
@@ -180,10 +186,12 @@ const Dash = (() => {
   const iconOf = (code) => ic({ R: "rice", S: "shrimp", U: "upland" }[code[0]] || "fallow", 16);
   let curSite = null, curNino = true;
   function jobAt(c, m) {
-    const ms = c.months, code = ms[m], prev = ms[(m + 11) % 12], next = ms[(m + 1) % 12], J = T("job");
-    if (code === "-") return prev !== "-" && prev[0] !== "S" ? J.restA : J.rest;
+    const code = c.months[m], prev = PV(c, m), next = NX(c, m), J = T("job");
+    const cl = c.cells && c.cells.find((y) => y.m === m);
+    if (code === "-") return cl && cl.src === "wait" ? T("waitJob") : prev !== "-" && prev[0] !== "S" ? J.restA : J.rest;
     const k = code[0], n = cropName(c, code), st0 = prev !== code, en = next !== code, f = (x) => (typeof x === "function" ? x(n) : x);
     if (st0 && k !== "S" && curSite && level(fieldSalt(curSite, m, curNino)) === "man") return T("sowWait")(n);
+    if (st0 && cl && cl.late) return T("lateSow")(n);
     return st0 ? f(J[k + "0"]) : en ? f(J[k + "1"]) : f(J[k]);
   }
   const clashOf = (f, c) => { const nino = isNino(f), out = []; c.months.forEach((code, m) => { if ((code[0] === "R" || code[0] === "U") && level(fieldSalt(f.site, m, nino)) === "man") out.push((lang() === "vi" ? "T" : "M") + (m + 1)) }); return out };
@@ -208,7 +216,15 @@ const Dash = (() => {
   function shell() {
     if ($("#dv")) return;
     const d = document.createElement("div"); d.id = "dv";
-    d.innerHTML = `<main id="dvPanel" class="dv-page" aria-labelledby="dvH"></main>
+    d.innerHTML = `<div id="dvClock" class="dv-clock"><div class="ck-in">
+        <div class="ck-row"><button type="button" id="ckPlay" class="ck-play"></button>
+          <div class="ck-d"><b id="ckDate"></b><small id="ckSub" class="ck-sub"></small></div>
+          <div id="ckHz" class="ck-hz" role="group"><button type="button" data-hz="1"></button><button type="button" data-hz="2"></button><button type="button" data-hz="3"></button></div></div>
+        <div class="ck-row2"><div class="ck-track"><div id="ckMap" class="ck-map" aria-hidden="true"></div><div id="ckYrs" class="ck-yrs" aria-hidden="true"></div><input id="ckRange" class="ck-range" type="range" min="0" max="52" step="1" value="0"></div>
+          <button type="button" id="ckReset" class="ck-reset" hidden>${ic("back", 16)}<span></span></button></div>
+        <p id="ckNote" class="ck-note" hidden></p></div><p id="ckFlash" class="ck-flash" role="status" aria-live="polite"></p></div>
+      <main id="dvPanel" class="dv-page" aria-labelledby="dvH"></main>
+      <nav id="dvNav" class="dv-nav"></nav>
       <div id="dvSheet" class="dv-sheet" hidden><div class="dv-scrim" data-dv="close"></div><div class="dv-sh" role="dialog" aria-modal="true"><div class="dv-grab" aria-hidden="true"></div><div id="dvShBody"></div></div></div>
       <div id="dvZoom" class="dv-zoom" hidden><div class="z-scrim" data-dvz="close"></div><div id="dvZP" class="z-panel" role="dialog" aria-modal="true" aria-labelledby="dvZT"></div></div>`;
     document.body.appendChild(d);
@@ -217,7 +233,7 @@ const Dash = (() => {
   /* ---------------- dashboard page: tiles ---------------- */
   const MS = () => (lang() === "vi" ? ["T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12"] : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]);
   function ribbon(f, c, small) {
-    const nino = isNino(f), order = [...Array(12)].map((_, i) => (CM + i) % 12), lvs = order.map((m) => level(fieldSalt(f.site, m, nino)));
+    const nino = isNino(f), order = [...Array(12)].map((_, i) => (W0(c) + i) % 12), lvs = order.map((m) => level(fieldSalt(f.site, m, nino)));
     const crops = ["R", "S", "U", "-"].filter((k) => c.months.some((x) => x[0] === k));
     /* the big strip (Simple, zoom) shows plain month numbers in Vietnamese, names the bar and marks this month in words */
     const mo = (m) => (!small && lang() === "vi" ? String(m + 1) : MS()[m]);
@@ -244,39 +260,13 @@ const Dash = (() => {
       <p class="sd-note"><button type="button" class="dv-link" data-open="sources">${esc(T("sources"))}</button></p></section>`;
   }
   function facts(f) {
-    const c = cardOf(f), s = siteOf(f.site), nino = isNino(f); curSite = f.site; curNino = nino;
+    const c = planOf(f), s = siteOf(f.site), nino = isNino(f); curSite = f.site; curNino = nino;
     const job = jobAt(c, CM); let nk = 1; while (nk < 12 && jobAt(c, (CM + nk) % 12) === job) nk++;
     const p = profit(c), pe = profit(cardOf(f, "elnino")), pt = profit(cardOf(f, "typical")), shown = pe || p;
     const g = fieldSalt(f.site, CM, nino);
     return { c, s, nino, job, nm: (CM + nk) % 12, p, pe, pt, shown, g, lv: level(g), sl: saltLine(f), clash: clashOf(f, c) };
   }
 
-  /* SIMPLE: few big cards, plain words, one big icon and one number each */
-  function simplePage(f) {
-    const x = facts(f), { c } = x, mon = shownMoney(f, x), k0 = c.months[CM][0];
-    const two = mon && moneyYears(f, x);
-    /* order: what to do now, the water, the warning; then dates, money and the year; rare actions last */
-    return `<div class="dv-s">
-      <div class="dv-splan"><div><span>${esc(T("yourPlan"))}</span><b>${esc(L(c.name))}</b></div></div>
-      ${planNo(f)}
-      <button type="button" class="s-card s-job" data-dv="plan"><span class="s-k">${ic("cal", 18)}${esc(T("monthOn")(CM + 1))}</span>
-        <span class="s-big"><span class="s-ico k-${k0 === "-" ? "rest" : k0}">${ic({ R: "rice", S: "shrimp", U: "upland" }[k0] || "fallow", 34)}</span><b>${esc(x.job)}</b></span>
-        <span class="s-sub">${ic("chev", 14)}${esc(T("nextM")(x.nm + 1))}: ${esc(jobAt(c, x.nm))}</span></button>
-      <div class="s-card s-salt lv-${x.lv}"><span class="s-k">${ic("drop", 18)}${esc(T("waterNow"))}</span>
-        <div class="s-row"><span class="s-drop" aria-hidden="true">${ic("drop", 46)}</span><div><b class="s-word">${esc(T("lv")[x.lv])}</b>
-        <span class="s-light" aria-hidden="true"><i class="ngot"></i><i class="lo"></i><i class="man"></i></span></div></div>
-        <span class="s-sub">${esc(x.sl.txt)}</span><small>${esc(T("est"))}</small></div>
-      ${x.clash.length ? `<div class="s-card s-warn">${ic("warn", 30)}<div><b>${esc(T("clash")(x.clash))}</b>${x.nino ? `<p>${ic("sun", 16)}${esc(T("ninoShort"))}</p>` : ""}</div></div>` : x.nino ? `<div class="s-card s-warn s-ok">${ic("check", 30)}<div><b>${esc(T("noClash"))}</b></div></div>` : ""}
-      ${remindCard(f)}
-      <div class="s-card s-money"><span class="s-k">${ic("coin", 18)}${esc(T("moneyH"))}</span>
-        ${mon ? `<div class="s-row"><span class="s-coin" aria-hidden="true">${ic("coin", 46)}</span><div><b class="s-num">${mon.per}</b><span class="s-unit">${esc(T("perCong"))}</span></div></div>${two ? two.map((t) => `<span class="s-sub s-yr">${esc(t)}</span>`).join("") : mon.tot ? `<span class="s-sub">${esc(mon.tot)}</span>` : ""}` : `<span class="s-sub">${esc(T("noMoney"))}</span>`}
-        <small>${esc(T("moneySrcS"))}</small></div>
-      <button type="button" class="s-card s-cal" data-dv="plan"><span class="s-k">${ic("cal", 18)}${esc(T("ribbonH"))}</span>${ribbon(f, c)}<span class="dv-more">${esc(T("tapPlan"))} ${ic("chev", 14)}</span></button>
-      <div class="dv-acts s-acts"><button type="button" class="btn" data-dv="paper">${ic("print", 18)}<span>${esc(T("print"))}</span></button>
-        <button type="button" class="btn" data-dv="choose">${ic("swap", 18)}<span>${esc(T("change"))}</span></button><button type="button" class="btn" data-dv="editmap">${ic("edit", 18)}<span>${esc(T("editField"))}</span></button></div>
-      <p class="sd-note s-ask">${esc(T("ask"))}</p>
-      <button type="button" class="btn dv-delrow" data-dv="delask">${ic("trash", 18)}<span>${esc(T("delThis"))}</span></button></div>`;
-  }
   const planNo = (f) => { const id = cardOf(f).id, r = rank(f).find((y) => y.c.id === id); return r && r.no ? `<div class="s-card s-warn dv-planno" role="alert">${ic("warn", 30)}<div><b>${esc(T("planNo"))}</b></div><button type="button" class="btn gold" data-dv="choose">${ic("swap", 18)}<span>${esc(T("change"))}</span></button></div>` : "" };
   /* this year and a normal year side by side, so the figure agrees with the one shown when the plan was chosen */
   function moneyYears(f, x) {
@@ -567,15 +557,20 @@ const Dash = (() => {
   });
   const MNUM = (m) => (lang() === "vi" ? "T" + (m + 1) : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][m]);
   const startOf = (f) => { const d = new Date(f.startAt || f.savedAt || Date.now()); return { y: d.getFullYear(), m: d.getMonth() } };
-  function months12(f) {
-    const s0 = startOf(f), now = new Date(), ni = now.getFullYear() * 12 + now.getMonth(), d = f.done || {};
+  function months12(f, now = Season.now()) {
+    const s0 = startOf(f), ni = now.getFullYear() * 12 + now.getMonth(), d = f.done || {};
     return [...Array(12)].map((_, i) => { const idx = s0.y * 12 + s0.m + i, y = Math.floor(idx / 12), m = idx % 12, key = `${y}-${m + 1}`, v = d[key];
       return { i, y, m, key, past: idx < ni, cur: idx === ni, future: idx > ni, done: v === true || v === "auto", auto: v === "auto" } });
   }
   /* a month that is over counts as done unless the farmer unticked it (false) */
-  function autoTick(f) { f.done = f.done || {}; let ch = false; months12(f).forEach((x) => { if (x.past && f.done[x.key] === undefined) { f.done[x.key] = "auto"; ch = true } }); if (ch) save() }
+  function autoTick(f) { f.done = f.done || {}; let ch = false; months12(f, Season.real()).forEach((x) => { if (x.past && f.done[x.key] === undefined) { f.done[x.key] = "auto"; ch = true } }); if (ch) save() }
   /* sow / harvest moments in the plan: a crop starts (sow or stock) and ends (harvest) */
   function moments(c) {
+    if (c.cells) { const cur = Season.absOf(Season.now()), out = [];
+      c.cells.forEach((x) => { if (x.code === "-" || x.idx < cur) return; const i = x.idx - cur;
+        if (PV(c, x.m) !== x.code) out.push({ k: "sow", m: x.m, i, y: x.y, code: x.code, late: !!x.late });
+        if (NX(c, x.m) !== x.code) out.push({ k: "har", m: x.m, i, y: x.y, code: x.code, date: x.src === "now" && c.end ? c.end.date : null }) });
+      return out }
     const out = [], y0 = new Date().getFullYear();
     for (let i = 0; i < 12; i++) { const m = (CM + i) % 12, code = c.months[m]; if (code === "-") continue;
       const y = y0 + Math.floor((CM + i) / 12);
@@ -587,7 +582,7 @@ const Dash = (() => {
   const momWhen = (i) => (i === 0 ? T("rmNow") : i === 1 ? T("rmNext") : T("rmIn")(i));
   /* "notification" card at the top: the next sowing and the next harvest, with a countdown and a phone-calendar reminder */
   function remindCard(f) {
-    const c = cardOf(f), ms = moments(c), nino = isNino(f), pick = ["sow", "har"].map((k) => ms.find((x) => x.k === k)).filter(Boolean).sort((a, b) => a.i - b.i);
+    const c = planOf(f), ms = moments(c), nino = isNino(f), pick = ["sow", "har"].map((k) => ms.find((x) => x.k === k)).filter(Boolean).sort((a, b) => a.i - b.i);
     if (!pick.length) return `<section class="dv-rm" aria-labelledby="dvRmH"><h3 id="dvRmH">${ic("bell", 18)}${esc(T("rmH"))}</h3><p class="rm-none">${esc(T("rmNone"))}</p></section>`;
     return `<section class="dv-rm${pick.some((x) => x.i === 0) ? " hot" : ""}" aria-labelledby="dvRmH"><h3 id="dvRmH">${ic("bell", 18)}${esc(T("rmH"))}</h3>
       <ul class="rm-list">${pick.map((x) => { const salty = x.k === "sow" && x.code[0] !== "S" && level(fieldSalt(f.site, x.m, nino)) === "man";
@@ -597,10 +592,10 @@ const Dash = (() => {
   }
   /* a .ics file with every sowing and harvest of the next 12 months; the phone's own calendar does the reminding */
   function icsDownload() {
-    const f = fieldSel(); if (!f) return; const c = cardOf(f), p2 = (n) => String(n).padStart(2, "0"), now = new Date();
+    const f = fieldSel(); if (!f) return; Sim.reset(); const c = planOf(f), p2 = (n) => String(n).padStart(2, "0"), now = new Date();
     const stamp = `${now.getUTCFullYear()}${p2(now.getUTCMonth() + 1)}${p2(now.getUTCDate())}T${p2(now.getUTCHours())}${p2(now.getUTCMinutes())}00Z`;
     const escI = (t) => String(t).replace(/[\\;,]/g, (m) => "\\" + m).replace(/\n/g, "\\n");
-    const ev = moments(c).map((x, n) => { const d0 = `${x.y}${p2(x.m + 1)}01`, nx = new Date(x.y, x.m, 2), d1 = `${nx.getFullYear()}${p2(nx.getMonth() + 1)}${p2(nx.getDate())}`, ttl = `${momLabel(x)}: ${cropName(c, x.code)} (${f.name})`;
+    const ev = moments(c).map((x, n) => { const dd = x.date || new Date(x.y, x.m, 1), d0 = `${dd.getFullYear()}${p2(dd.getMonth() + 1)}${p2(dd.getDate())}`, nx = new Date(dd.getFullYear(), dd.getMonth(), dd.getDate() + 1), d1 = `${nx.getFullYear()}${p2(nx.getMonth() + 1)}${p2(nx.getDate())}`, ttl = `${momLabel(x)}: ${cropName(c, x.code)} (${f.name})`;
       return ["BEGIN:VEVENT", `UID:${f.id}-${x.y}-${x.m}-${x.k}-${n}@mekong-rotation`, `DTSTAMP:${stamp}`, `DTSTART;VALUE=DATE:${d0}`, `DTEND;VALUE=DATE:${d1}`, `SUMMARY:${escI(ttl)}`,
         `DESCRIPTION:${escI(`${jobAt(c, x.m)}. ${T("sgSow")} ${T("est")}.`)}`, "BEGIN:VALARM", "ACTION:DISPLAY", `DESCRIPTION:${escI(ttl)}`, "TRIGGER:-P3D", "END:VALARM", "END:VEVENT"].join("\r\n") });
     const ics = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Mekong Rotation Explorer//EN", "CALSCALE:GREGORIAN", ...ev, "END:VCALENDAR"].join("\r\n");
@@ -610,12 +605,12 @@ const Dash = (() => {
   }
   function progressCard(f) {
     /* the season path: 12 months as a road coloured by crop; a marker walks along it to today; seed flags = sowing, basket flags = harvest */
-    const ms = months12(f), past = ms.filter((x) => x.past).length, now = ms.find((x) => x.cur), over = ms[11].past, s0 = startOf(f), c = cardOf(f);
-    const d = new Date(), part = now ? (d.getDate() - 1) / new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate() : 0, frac = over ? 1 : Math.min(1, (past + part) / 12);
+    const ms = months12(f), past = ms.filter((x) => x.past).length, now = ms.find((x) => x.cur), over = ms[11].past, s0 = startOf(f), c = planOf(f);
+    const d = Season.now(), part = now ? (d.getDate() - 1) / new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate() : 0, frac = over ? 1 : Math.min(1, (past + part) / 12);
     const k = over ? 12 : now ? past + 1 : 0, code0 = now ? c.months[now.m] : "-", deg = (frac * 360).toFixed(1);
     curSite = f.site; curNino = isNino(f);
     const fbDone = !!f.feedback;
-    const seg = ms.map((x) => { const code = c.months[x.m], kk = code === "-" ? "rest" : code[0], sow = code !== "-" && c.months[(x.m + 11) % 12] !== code, har = code !== "-" && c.months[(x.m + 1) % 12] !== code;
+    const seg = ms.map((x) => { const code = c.months[x.m], kk = code === "-" ? "rest" : code[0], sow = code !== "-" && PV(c, x.m) !== code, har = code !== "-" && NX(c, x.m) !== code;
       return `<li class="pg-s pk-${kk}${x.past ? " done" : ""}${x.cur ? " cur" : ""}"${x.cur ? ` style="--p:${Math.max(8, Math.round(part * 100))}%"` : ""} aria-label="${esc(MLONG(x.m))}: ${esc(cropName(c, code))}${sow ? ", " + esc(momLabel({ k: "sow", code })) : ""}${har ? ", " + esc(T("rmHar")) : ""}">
         <span class="pg-fl" aria-hidden="true">${sow ? `<i class="fl sow">${ic("seed", 13)}</i>` : ""}${har ? `<i class="fl har">${ic("basket", 13)}</i>` : ""}</span><i class="pg-bk"></i><span class="pg-l">${esc(MNUM(x.m))}</span></li>` }).join("");
     const kinds = ["R", "S", "U", "-"].filter((q) => c.months.some((x) => x[0] === q));
@@ -660,14 +655,14 @@ const Dash = (() => {
     if (a === "newask") { sheet(`<div class="dv-fbf"><h2>${ic("cal", 22)}${esc(T("fbNew"))}?</h2><p class="sd-note">${esc(T("fbNewP"))}</p><div class="dv-acts"><button type="button" class="btn gold" data-dvfb="new">${esc(T("fbNew"))}</button><button type="button" class="btn" data-dv="close">${esc(T("fbLater"))}</button></div></div>`); return }
     if (a === "new") { closeSheet(); (f.history = f.history || []).push({ startAt: f.startAt || f.savedAt, done: f.done, feedback: f.feedback }); f.startAt = Date.now(); f.done = {}; f.feedback = null; save(); render() }
   }
-  function tickMonth(key) { const f = fieldSel(); if (!f) return; f.done = f.done || {}; const x = months12(f).find((y) => y.key === key); if (!x || x.future) return; f.done[key] = x.done ? false : true; save(); render() }
+  function tickMonth(key) { const f = fieldSel(); if (!f || Season.simOn()) return; f.done = f.done || {}; const x = months12(f, Season.real()).find((y) => y.key === key); if (!x || x.future) return; f.done[key] = x.done ? false : true; save(); render() }
   let sgOpen = 0;   /* the tip deck always shows one tip; warnings come first */
   function suggestions(f) {
     const x = facts(f), { c } = x, out = [], nino = x.nino;
     out.push({ i: "cal", t: T("sgJob")(CM + 1, x.job) });
     if (x.lv !== "ngot") out.push({ i: "drop", t: T("sgSaltNow"), w: 1 });
     else { for (let k = 1; k <= 2; k++) { const m = (CM + k) % 12; if (level(fieldSalt(f.site, m, nino)) !== "ngot") { out.push({ i: "drop", t: T("sgSaltSoon")(m + 1), w: 1 }); break } } }
-    const k0 = c.months[(CM + 1) % 12][0]; if ((k0 === "R" || k0 === "U") && c.months[CM][0] !== k0) out.push({ i: "seed", t: T("sgSow") });
+    const k0 = NX(c, CM)[0]; if ((k0 === "R" || k0 === "U") && c.months[CM][0] !== k0) out.push({ i: "seed", t: T("sgSow") });
     const best = rank(f).find((y) => !y.no);
     if (x.clash.length) out.push({ i: "warn", t: T("sgClash")(x.clash.join(", ")), a: "choose", al: T("sgOpen"), w: 1 });
     else if (best && best.c.id !== c.id) out.push({ i: "star", t: T("sgBetter")(L(best.c.name)), a: "choose", al: T("sgOpen") });
@@ -692,28 +687,387 @@ const Dash = (() => {
     if (e.target.closest("[data-dvrm]")) { e.stopPropagation(); return icsDownload() }
   }, true);
 
+  /* ================= app shell: Today, Season, Fields, the crop in the field now, and the year simulation =================
+     Bottom bar: Hôm nay · Mùa vụ · (Kế hoạch: the create-plan flow) · Số liệu · Ruộng. Top date bar: play the 12 months week by week.
+     The simulation only changes the date on show; it never saves, ticks months or writes files (Season.real() is used for those). */
+  Object.assign(W.vi, {
+    navLabel: "Các trang", waterW: (w) => `Nước ${w.toLowerCase()}`, navToday: "Hôm nay", navSeason: "Mùa vụ", navPlan: "Kế hoạch", navData: "Số liệu", navFields: "Ruộng",
+    clkToday: "Bây giờ", clkNow: "Bây giờ", clkSim: (y) => `Xem thử năm ${y}`, clkPlay: (y) => `Chạy thử ${y} năm tới`, clkPause: "Tạm dừng", clkReset: "Về hôm nay", clkSlider: (y) => `Kéo để xem thử một ngày trong ${y} năm tới`,
+    hzH: "Xem thử bao xa", hzL: (y) => `${y} năm`,
+    clkNote: (y2) => `Đang xem thử: không lưu gì. Mưa, nước và độ mặn là trung bình nhiều năm, không phải dự báo.${y2 ? " Năm 2–3 dùng năm điển hình (dự báo El Niño chỉ cho mùa này)." : ""}`,
+    heroRest: "Ruộng đang nghỉ", dayOf: (a, b) => `ngày ${a}/${b}`, daysTo: { R: "ngày nữa gặt", S: "ngày nữa thu tôm", U: "ngày nữa thu hoạch" }, daysSow: (k, n) => `ngày nữa ${k === "S" ? "thả" : "sạ"} ${n}`,
+    enteredA: (d) => `nhập ngày ${d}`, sowA: (d) => `sạ ≈ ${d}`, stockA: (d) => `thả ≈ ${d}`, harA: (d) => `thu ≈ ${d}`, restEnd: "Nghỉ đến hết 12 tháng", nextMark: "Việc sắp tới",
+    afterL: (n, d) => `Sau đó: ${n}, bắt đầu ≈ ${d}`, afterRest: (r) => `nghỉ ${r}`, afterNone: "Sau đó: cho ruộng nghỉ", restFrom: (d) => `nghỉ từ ${d}`,
+    heroSrc: "Ngày là ước tính từ lịch vụ và số tuần bạn nhập. Lúa 90–100 ngày; bón thúc 7–10, 18–22, 38–42 ngày sau sạ; rút nước 7–15 ngày trước gặt (hướng dẫn kỹ thuật).",
+    mk: { top1: "Bón thúc lần 1", top2: "Bón thúc lần 2", top3: "Bón thúc lần 3", drain: "Rút nước trước khi gặt" },
+    todoH: "Việc cần làm", todoNow: (m) => `Tháng ${m}`, todoNext: (m) => `Tháng ${m}`, planL: "Kế hoạch",
+    tilesH: "Nước và cây tháng này", tRain: "Mưa", tNeed: "Cây cần", tGreen: "Độ xanh", tShort: (n) => `thiếu ${n} mm`, tOk: "mưa đủ", tNd: "0 đến 1, cao là xanh",
+    tAvg: (y) => `Trung bình nhiều năm${y ? " · năm El Niño" : ""}. Không phải dự báo.`,
+    nowQ: "Ruộng đang có gì bây giờ?", nowWhy: "Kế hoạch 12 tháng bắt đầu từ hôm nay và từ vụ đang có trên ruộng.",
+    nowK: { R: "Lúa", S: "Tôm", U: "Cây màu", "-": "Đang trống" }, nowLeft: "Còn bao lâu nữa thì thu hoạch?",
+    wk: (n) => `${n} tuần`, wkAbout: (n) => (n === 0 ? "thu hoạch tuần này" : n < 3 ? "dưới 1 tháng" : `khoảng ${nf(Math.max(1, Math.round((n / 4.35) * 2) / 2), 1).replace(/,0$/, "")} tháng`), wkLess: "Bớt 1 tuần", wkMore: "Thêm 1 tuần",
+    harvH: "Thu hoạch thế nào?", keep: { R: "Để lúa chín rồi gặt", S: "Nuôi đủ ngày rồi thu", U: "Để chín rồi thu" },
+    keepS: { R: "Gặt khi lúa chín 85–90%", S: "Tôm đủ cỡ, giá tốt hơn", U: "Thu đúng lúc" },
+    early: { R: "Gặt sớm", S: "Thu tôm sớm", U: "Thu sớm" },
+    earlyS: { R: "Sớm khoảng 2 tuần: hạt có thể chưa chắc, hao một ít (ước tính của nhóm)", S: "Thu trong tuần tới: tôm nhỏ hơn, bán giá thấp hơn", U: "Sớm khoảng 2 tuần: trái nhỏ hơn (ước tính của nhóm)" },
+    earlyNo: (n) => `Chỉ gặt sớm được khi còn ${n} tuần trở xuống: lúa cần chín 85–90%.`,
+    hitsL: (n) => (n ? `Cây gặp nước mặn ${n} tháng trong 12 tháng (ước tính)` : "Không tháng nào cây gặp nước mặn (ước tính)"), hDate: (d) => `Thu ≈ ${d}`, waterAt: (w) => `nước lúc đó: ${w}`, rec: "Nên chọn",
+    nextOk: (n, mo) => `Vụ sau: ${n}, ${mo}`, nextLate: (n, mo) => `Vụ sau: ${n} sạ muộn ${mo}`, nextWait: (mo, n) => `Vụ sau: chờ đến ${mo} (${n})`, nextNone: "Vụ sau: cho ruộng nghỉ",
+    nowSrc: "Lúa thường 90–100 ngày (hướng dẫn kỹ thuật). Ngày thu là ước tính.", nowSrc2: "Ngày thu là ước tính từ số tuần bạn nhập.", nowFree: "Kế hoạch bắt đầu ngay tháng này.",
+    nowSave: "Lưu", nowLater: "Để sau", nowSaved: "Đã lưu. Kế hoạch bắt đầu từ hôm nay.", nowEdit: "Sửa vụ đang trồng",
+    nowAskH: "Ruộng đang có gì?", nowAskP: "Trả lời 2 câu để kế hoạch bắt đầu đúng từ hôm nay: đang trồng gì, còn bao lâu nữa thu hoạch.", nowAskB: "Trả lời",
+    nowFlow: "Chưa trả lời thì kế hoạch giả định ruộng đang theo đúng lịch vụ.",
+    waitJob: "Chờ vụ sau: không kịp sạ vụ này", lateSow: (n) => `Sạ muộn ${n}: dùng giống ngắn ngày (90–100 ngày)`,
+    seasH: "Mùa vụ 12 tháng", stDone: "Xong", stNow: "Đang ở đây", stNext: "Sắp tới", stRest: "Cho ruộng nghỉ", stWait: "Chờ vụ sau",
+    lateTag: "sạ muộn", saltTag: (ms) => `gặp mặn ${ms}`, waitWhy: (n) => `Không kịp ${n}: ruộng còn bận vụ trước.`, tableB: "Bảng việc từng tháng", seasTap: "Chạm vào một vụ để xem giống, phân bón và các bước.",
+    fieldsH: "Ruộng của tôi", setH: "Cài đặt", langH2: "Ngôn ngữ", srcL: "Nguồn số liệu",
+    evSow: (n) => `Sạ ${n}`, evStock: (n) => `Thả ${n}`, evHar: (n) => `Thu hoạch ${n}`, evSaltIn: "Nước bắt đầu mặn (ước tính)", evSaltOut: "Hết mặn, nước ngọt trở lại (ước tính)", evSaltHit: (n) => `Mặn vào khi ${n} còn trên ruộng: đo mặn, giữ nước ngọt`, evSowSalt: (n) => `Đến lúc sạ ${n} nhưng nước còn mặn: đo mặn, chờ mưa rửa mặn`
+  });
+  Object.assign(W.en, {
+    navLabel: "Pages", waterW: (w) => `${w} water`, navToday: "Today", navSeason: "Season", navPlan: "Plan", navData: "Data", navFields: "Fields",
+    clkToday: "Now", clkNow: "Now", clkSim: (y) => `Preview · year ${y}`, clkPlay: (y) => `Play the next ${y} year${y > 1 ? "s" : ""}`, clkPause: "Pause", clkReset: "Back to today", clkSlider: (y) => `Drag to preview a day in the next ${y} year${y > 1 ? "s" : ""}`,
+    hzH: "How far to preview", hzL: (y) => `${y} yr`,
+    clkNote: (y2) => `Preview only: nothing is saved. Rain, water and salt are long-term averages, not a forecast.${y2 ? " Years 2–3 use the typical year (the El Niño outlook covers this season only)." : ""}`,
+    heroRest: "Field is resting", dayOf: (a, b) => `day ${a}/${b}`, daysTo: { R: "days to harvest", S: "days to shrimp harvest", U: "days to harvest" }, daysSow: (k, n) => `days to ${k === "S" ? "stock" : "sow"} ${n}`,
+    enteredA: (d) => `entered ${d}`, sowA: (d) => `sow ≈ ${d}`, stockA: (d) => `stock ≈ ${d}`, harA: (d) => `harvest ≈ ${d}`, restEnd: "Rests to the end of the 12 months", nextMark: "Next step",
+    afterL: (n, d) => `Then: ${n}, starting ≈ ${d}`, afterRest: (r) => `rest ${r}`, afterNone: "Then: the field rests", restFrom: (d) => `rest from ${d}`,
+    heroSrc: "Dates are estimates from the crop calendar and the weeks you entered. Rice takes 90–100 days; top-dress at 7–10, 18–22 and 38–42 days after sowing; drain 7–15 days before harvest (technical guide).",
+    mk: { top1: "First top-dressing", top2: "Second top-dressing", top3: "Third top-dressing", drain: "Drain before harvest" },
+    todoH: "What to do", todoNow: (m) => MLONG(m - 1), todoNext: (m) => MLONG(m - 1), planL: "Plan",
+    tilesH: "Water and crops this month", tRain: "Rain", tNeed: "Crops need", tGreen: "Greenness", tShort: (n) => `${n} mm short`, tOk: "rain is enough", tNd: "0 to 1, high is green",
+    tAvg: (y) => `Long-term average${y ? " · El Niño year" : ""}. Not a forecast.`,
+    nowQ: "What is in the field now?", nowWhy: "The 12-month plan starts today, from the crop in your field now.",
+    nowK: { R: "Rice", S: "Shrimp", U: "Upland crop", "-": "Empty" }, nowLeft: "How long until harvest?",
+    wk: (n) => `${n} week${n === 1 ? "" : "s"}`, wkAbout: (n) => { const x = Math.max(1, Math.round((n / 4.35) * 2) / 2); return n === 0 ? "harvest this week" : n < 3 ? "under a month" : `about ${String(x)} month${x === 1 ? "" : "s"}` }, wkLess: "One week less", wkMore: "One week more",
+    harvH: "How will you harvest?", keep: { R: "Let it ripen, then harvest", S: "Grow to full size", U: "Let it ripen" },
+    keepS: { R: "Harvest when 85–90% of grains are ripe", S: "Bigger shrimp, better price", U: "Harvest on time" },
+    early: { R: "Harvest early", S: "Harvest shrimp early", U: "Harvest early" },
+    earlyS: { R: "About 2 weeks early: some grains not full, a small loss (team estimate)", S: "Within a week: smaller shrimp, lower price", U: "About 2 weeks early: smaller fruit (team estimate)" },
+    earlyNo: (n) => `Early harvest only when ${n} weeks or less are left: rice must be 85–90% ripe.`,
+    hitsL: (n) => (n ? `Crops in salty water ${n} month${n > 1 ? "s" : ""} of 12 (estimate)` : "No crop month in salty water (estimate)"), hDate: (d) => `Harvest ≈ ${d}`, waterAt: (w) => `water then: ${w}`, rec: "Best choice",
+    nextOk: (n, mo) => `Next: ${n}, ${mo}`, nextLate: (n, mo) => `Next: ${n} sown late, ${mo}`, nextWait: (mo, n) => `Next: wait until ${mo} (${n})`, nextNone: "Next: the field rests",
+    nowSrc: "Rice usually takes 90–100 days (technical guide). Harvest dates are estimates.", nowSrc2: "Harvest date is an estimate from the weeks you entered.", nowFree: "The plan starts this month.",
+    nowSave: "Save", nowLater: "Later", nowSaved: "Saved. The plan now starts today.", nowEdit: "Edit the crop in the field",
+    nowAskH: "What is in your field?", nowAskP: "Answer 2 questions so the plan starts from today: what grows now, and how long until harvest.", nowAskB: "Answer",
+    nowFlow: "If you skip this, the plan assumes the field follows the usual crop calendar.",
+    waitJob: "Wait for the next season: too late to sow this one", lateSow: (n) => `Sow ${n} late: use a short variety (90–100 days)`,
+    seasH: "Your 12 months", stDone: "Done", stNow: "You are here", stNext: "Coming", stRest: "Rest the field", stWait: "Wait for the next season",
+    lateTag: "sown late", saltTag: (ms) => `salt in ${ms}`, waitWhy: (n) => `Too late for ${n}: the field is still busy.`, tableB: "Month-by-month table", seasTap: "Tap a season to see seed, fertiliser and steps.",
+    fieldsH: "My fields", setH: "Settings", langH2: "Language", srcL: "Data sources",
+    evSow: (n) => `Sow ${n}`, evStock: (n) => `Stock ${n}`, evHar: (n) => `Harvest ${n}`, evSaltIn: "Water turns salty (estimate)", evSaltOut: "Salt has gone, fresh water is back (estimate)", evSaltHit: (n) => `Salt arrives while ${n} is in the field: measure salt, keep fresh water`, evSowSalt: (n) => `Time to sow ${n}, but the water is still salty: measure salt, wait for rain`
+  });
+  const cap = (s) => (s ? s[0].toUpperCase() + s.slice(1) : s);
+  const KI = { R: "rice", S: "shrimp", U: "upland", "-": "fallow" };
+  const fD = (d) => (lang() === "vi" ? `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}` : d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }));
+  const fDs = (d) => (lang() === "vi" ? `${d.getDate()}/${d.getMonth() + 1}` : d.toLocaleDateString("en-GB", { day: "numeric", month: "short" }));
+  const fMY = (idx) => `${MNUM(((idx % 12) + 12) % 12)}${lang() === "vi" ? "/" : " "}${Math.floor(idx / 12)}`;
+  const fRg = (a, b) => (a === b ? fMY(a) : Math.floor(a / 12) === Math.floor(b / 12) ? `${MNUM(a % 12)}–${fMY(b)}` : `${fMY(a)} – ${fMY(b)}`);
+  const runName = (c, code) => cap(cropName(c, code));
+
+  /* ---------- the crop in the field now: one form for the dashboard sheet and the create-plan flow ---------- */
+  let flowNow = null, shNow = null;
+  const WK = { R: [2, 4, 6, 8, 10, 12], U: [2, 4, 6, 8, 10, 12], S: [2, 4, 8, 12, 16, 20] }, WMAX = { R: 15, U: 16, S: 26 };
+  function nowForm(nw, ctx, flow) {
+    const d = nw || {}, k = d.k, P = flow ? "nf" : "ns", H = flow ? "h3" : "h2";
+    const kinds = ["R", "S", "U", "-"].map((x) => `<button type="button" class="nw-k nk-${x === "-" ? "rest" : x}" id="${P}K${x === "-" ? "F" : x}" data-nw="k" data-v="${x}" aria-pressed="${k === x}"><span class="nw-ki" aria-hidden="true">${ic(KI[x], 26)}</span><span class="nw-kl">${esc(T("nowK")[x])}</span></button>`).join("");
+    let body = "";
+    if (k && k !== "-") {
+      const wk = d.weeks == null ? 6 : d.weeks, base = { k, weeks: wk, at: Date.now() }, eOk = Season.earlyOk(base);
+      const hk = Season.harvestOf(base, "keep"), he = eOk ? Season.harvestOf(base, "early") : null, ch = d.choice === "early" && eOk ? "early" : "keep";
+      const lvAt = (dt) => level(fieldSalt(ctx.site, dt.getMonth(), ctx.nino));
+      const nextOf = (choice) => { if (!ctx.card) return ""; const w = Season.windowOf(ctx.card, { ...base, choice }, Season.real()), r = w.runs.find((x) => !x.cur);
+        if (!r) return T("nextNone"); const mo = fMY(w.a0 + r.from), n = runName(w, r.code), gap = w.cells.slice(0, r.from).some((x) => x.src === "wait");
+        return r.late ? T("nextLate")(n, mo) : gap ? T("nextWait")(mo, n) : T("nextOk")(n, mo) };
+      /* best choice: the option whose 12 months put fewer crop months in salty water (estimate); a tie keeps the crop to ripeness */
+      const hits = (choice) => { if (!ctx.site) return 0; const w = ctx.card ? Season.windowOf(ctx.card, { ...base, choice }, Season.real()) : null;
+        return w ? w.cells.filter((x) => (x.code[0] === "R" || x.code[0] === "U") && level(fieldSalt(ctx.site, x.m, ctx.nino)) === "man").length : lvAt(choice === "early" ? he : hk) === "man" ? 1 : 0 };
+      const rec = ctx.site && he && hits("early") < hits("keep") ? "early" : "keep";
+      const opt = (v, dt, dis) => `<button type="button" class="nw-o" id="${P}C${v}" data-nw="ch" data-v="${v}" aria-pressed="${ch === v}"${dis ? " disabled" : ""}>
+        <span class="nw-ot"><span class="nw-rd" aria-hidden="true"></span><b>${esc(T(v)[k])}</b>${!dis && rec === v ? `<em>${esc(T("rec"))}</em>` : ""}</span>
+        <span class="nw-os">${esc(dis ? T("earlyNo")(Season.RIPE_WEEKS) : T(v === "keep" ? "keepS" : "earlyS")[k])}</span>
+        ${dt ? `<span class="nw-od">${ic("basket", 16)}<span>${esc(T("hDate")(fD(dt)))}${ctx.site ? ` · ${esc(T("waterAt")(T("lv")[lvAt(dt)]))}` : ""}</span></span>${ctx.card ? `<span class="nw-od">${ic("seed", 16)}<span>${esc(nextOf(v))}</span></span>` : ""}${ctx.card && ctx.site ? (() => { const h = hits(v); return `<span class="nw-od${h ? " bad" : " good"}">${ic(h ? "warn" : "check", 16)}<span>${esc(T("hitsL")(h))}</span></span>` })() : ""}` : ""}</button>`;
+      body = `<p class="nw-q" id="${P}LQ">${esc(T("nowLeft"))}</p>
+        <div class="nw-step" role="group" aria-labelledby="${P}LQ"><button type="button" class="nw-pm" id="${P}M" data-nw="wk" data-v="-1" aria-label="${esc(T("wkLess"))}"${wk <= 0 ? " disabled" : ""}><span aria-hidden="true">−</span></button>
+          <output class="nw-wk" aria-live="polite"><b>${esc(T("wk")(wk))}</b><small>${esc(T("wkAbout")(wk))}</small></output>
+          <button type="button" class="nw-pm" id="${P}P" data-nw="wk" data-v="1" aria-label="${esc(T("wkMore"))}"${wk >= WMAX[k] ? " disabled" : ""}><span aria-hidden="true">+</span></button></div>
+        <div class="nw-chips" role="group" aria-labelledby="${P}LQ">${WK[k].map((n) => `<button type="button" id="${P}W${n}" data-nw="w" data-v="${n}" aria-pressed="${wk === n}">${esc(T("wk")(n))}</button>`).join("")}</div>
+        <p class="nw-q">${esc(T("harvH"))}</p>
+        <div class="nw-opts">${opt("keep", hk, false)}${opt("early", he, !eOk)}</div>
+        <p class="nw-src">${esc(T(k === "R" ? "nowSrc" : "nowSrc2"))}</p>`;
+    } else if (k === "-") body = `<p class="nw-free">${ic("check", 18)}<span>${esc(T("nowFree"))}</span></p>`;
+    else if (flow) body = `<p class="nw-src">${esc(T("nowFlow"))}</p>`;
+    return `<${H} class="nw-h" id="${P}H">${esc(T("nowQ"))}</${H}><p class="nw-why">${esc(T("nowWhy"))}</p><div class="nw-kinds" role="group" aria-labelledby="${P}H">${kinds}</div>${body}`;
+  }
+  function nwApply(d0, b) {
+    const v = b.dataset.v, t = b.dataset.nw, d = { ...(d0 || {}) };
+    if (t === "k") { d.k = v; if (v !== "-") { d.weeks = Math.min(d.weeks == null ? (v === "S" ? 8 : 6) : d.weeks, WMAX[v]); d.choice = d.choice || "keep" } }
+    if (t === "wk") d.weeks = Math.max(0, Math.min(WMAX[d.k] || 26, (d.weeks == null ? 6 : d.weeks) + +v));
+    if (t === "w") d.weeks = +v;
+    if (t === "ch") d.choice = v;
+    d.at = Date.now(); if (d.choice === "early" && !Season.earlyOk(d)) d.choice = "keep";
+    return d;
+  }
+  const flowCtx = () => { const A = window.App, s = A && A.site && A.site(); return { site: s ? s.id : null, nino: !!(A && A.mode && A.mode() === "elnino"), card: null } };
+  function nowSheet(open) {
+    const f = fieldSel(); if (!f) return;
+    if (open) shNow = Season.valid(f.now) ? { ...f.now, weeks: Season.growing(f.now) ? Season.weeksLeft(f.now) : 0 } : null;
+    sheet(`<div class="nw nw-sheet">${nowForm(shNow, { site: f.site, nino: isNino(f), card: cardOf(f) }, false)}
+      <div class="dv-acts"><button type="button" class="btn gold" id="nsSave" data-dv="nwsave"${shNow && shNow.k ? "" : " disabled"}>${ic("check", 16)}<span>${esc(T("nowSave"))}</span></button><button type="button" class="btn" data-dv="close"><span>${esc(T("nowLater"))}</span></button></div></div>`);
+  }
+  function paintFlowNow(focusId) {
+    if (!document.getElementById("nowCrop")) return;
+    /* the plan of step 4 is built from this answer: re-draw it too */
+    try { window.App && App.refresh && App.refresh() } catch (e) {}
+    const el2 = document.getElementById("nowCrop"); if (el2) el2.innerHTML = nowForm(flowNow, flowCtx(), true);
+    const b = focusId && document.getElementById(focusId); if (b) b.focus({ preventScroll: true });
+  }
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest && e.target.closest("[data-nw]"); if (!b || b.disabled) return;
+    if (b.closest("#dvShBody")) { shNow = nwApply(shNow, b); return nowSheet(false) }
+    if (b.closest("#nowCrop")) { flowNow = nwApply(flowNow, b); paintFlowNow(b.id) }
+  });
+
+  /* ---------- Today ---------- */
+  function hero(f, c) {
+    const d = Season.now(), a = Season.at(c, d);
+    if (a.run) {
+      const r = a.run, k = r.k, n = runName(c, r.code), mk = Season.marks(r), nx = mk.find((x) => +x.date >= +d), pct = (x) => Math.min(100, Math.max(0, x * 100)).toFixed(1);
+      const ticks = mk.map((x) => `<i class="hx-tk${+x.date <= +d ? " past" : ""}" style="left:${pct((x.date - r.sow) / (r.har - r.sow))}%"></i>`).join("");
+      const after = c.runs.find((x) => +x.sow > +r.har), gapA = r.to + 1, gapB = after ? after.from - 1 : 11;
+      const rest = gapB >= gapA ? T("afterRest")(fRg(c.a0 + gapA, c.a0 + gapB)) : "";
+      const then = after ? T("afterL")((rest ? rest + " → " : "") + runName(c, after.code) + (after.late ? ` (${T("lateTag")})` : ""), fDs(after.sow)) : T("afterNone");
+      const known = !(r.cur && k !== "R");   /* shrimp or an upland crop already in the field: we know when it ends, not when it began */
+      return `<section class="hx hk-${k}" aria-labelledby="hxH">
+        <div class="hx-hd"><h3 id="hxH"><span class="hx-ic" aria-hidden="true">${ic(KI[k], 20)}</span><span>${esc(n)}</span></h3>${known ? `<span class="hx-pill">${esc(T("dayOf")(Math.min(a.day, r.len), r.len))}</span>` : ""}</div>
+        <p class="hx-big"><b>${a.left}</b><span>${esc(T("daysTo")[k])}</span></p>
+        <div class="hx-bar" role="progressbar" aria-valuemin="0" aria-valuemax="${r.len}" aria-valuenow="${Math.min(a.day, r.len)}" aria-label="${esc(n)}: ${a.left} ${esc(T("daysTo")[k])}"><span class="hx-fill" style="width:${pct(a.frac)}%"></span>${ticks}<span class="hx-dot" style="left:${pct(a.frac)}%"></span></div>
+        <p class="hx-ends"><span>${esc(known ? T(k === "S" ? "stockA" : "sowA")(fDs(r.sow)) : T("enteredA")(fDs(r.sow)))}</span><span>${esc(T("harA")(fDs(r.har)))}</span></p>
+        ${nx ? `<p class="hx-row">${ic("cal", 18)}<span><small>${esc(T("nextMark"))}</small><b>${esc(T("mk")[nx.k])} · ${esc(fDs(nx.date))}</b></span></p>` : ""}
+        <p class="hx-row">${ic("chev", 18)}<span><b>${esc(then)}</b></span></p>
+        ${r.cur ? `<button type="button" class="btn hx-edit" data-dv="nownow">${ic("edit", 16)}<span>${esc(T("nowEdit"))}</span></button>` : ""}
+        <p class="hx-src">${esc(T("heroSrc"))}</p></section>`;
+    }
+    const nx = a.next, prev = [...c.runs].reverse().find((x) => +x.har < +d), from = prev ? prev.har : Season.mStart(c.a0), to = nx ? nx.sow : Season.mEnd(c.a0 + 11);
+    const frac = Math.min(1, Math.max(0, (d - from) / (to - from || 1))), pct = (frac * 100).toFixed(1);
+    return `<section class="hx hk-rest" aria-labelledby="hxH">
+      <div class="hx-hd"><h3 id="hxH"><span class="hx-ic" aria-hidden="true">${ic("fallow", 20)}</span><span>${esc(T("heroRest"))}</span></h3></div>
+      ${nx ? `<p class="hx-big"><b>${a.wait}</b><span>${esc(T("daysSow")(nx.k, cropName(c, nx.code)))}</span></p>` : `<p class="hx-big sm"><span>${esc(T("restEnd"))}</span></p>`}
+      <div class="hx-bar" aria-hidden="true"><span class="hx-fill" style="width:${pct}%"></span><span class="hx-dot" style="left:${pct}%"></span></div>
+      <p class="hx-ends"><span>${esc(T("restFrom")(fDs(from)))}</span><span>${nx ? esc(T(nx.k === "S" ? "stockA" : "sowA")(fDs(nx.sow))) : ""}</span></p>
+      ${nx && nx.late ? `<p class="hx-row">${ic("seed", 18)}<span><b>${esc(T("lateSow")(runName(c, nx.code)))}</b></span></p>` : ""}
+      <p class="hx-src">${esc(T("heroSrc"))}</p></section>`;
+  }
+  function todo(f, x) {
+    const { c } = x, it = [], nino = x.nino, k0 = c.months[CM][0], k1 = c.months[x.nm][0];
+    it.push({ i: KI[k0 === "-" ? "-" : k0], when: T("todoNow")(CM + 1), t: x.job, on: 1 });
+    it.push({ i: KI[k1 === "-" ? "-" : k1], when: T("todoNext")(x.nm + 1), t: jobAt(c, x.nm) });
+    if (x.lv !== "ngot") it.push({ i: "drop", t: T("sgSaltNow"), w: 1 });
+    else for (let k = 1; k <= 2; k++) { const m = (CM + k) % 12; if (level(fieldSalt(f.site, m, nino)) !== "ngot") { it.push({ i: "drop", t: T("sgSaltSoon")(m + 1), w: 1 }); break } }
+    if (x.clash.length) it.push({ i: "warn", t: T("clash")(x.clash), w: 1, a: "choose", al: T("sgOpen") });
+    return `<section class="t-card t-todo" aria-labelledby="tTdH"><h3 class="t-k" id="tTdH">${ic("check", 18)}<span>${esc(T("todoH"))}</span></h3>
+      <ul class="t-list">${it.map((y) => `<li class="${y.w ? "w" : ""}${y.on ? " on" : ""}"><span class="t-ti" aria-hidden="true">${ic(y.i, 20)}</span><span class="t-tx">${y.when ? `<small>${esc(y.when)}</small>` : ""}<b>${esc(y.t)}</b>${y.a ? `<button type="button" class="dv-link" data-dv="${y.a}">${esc(y.al)}${ic("chev", 14)}</button>` : ""}</span></li>`).join("")}</ul></section>`;
+  }
+  function tiles(f, x) {
+    const { s, nino } = x, m = CM, rainA = (nino && s.el && s.el.rain) || s.rain || [], et0A = (nino && s.el && s.el.et0) || s.et0 || [], nd = (nino && s.el && s.el.ndvi) || s.ndvi || [];
+    const r = rainA[m], e = et0A[m], g = nd[m], short = e != null && r != null ? Math.round(e - r) : null;
+    const tl = (ico, h, v, u, sub, src, cls) => `<div class="t-tile ${cls || ""}"><span class="t-th">${esc(h)}</span><b class="t-tv">${v}<small>${esc(u)}</small></b><span class="t-ts">${esc(sub)}</span><span class="t-src">${esc(src)}</span></div>`;
+    return `<section class="t-card t-tiles" aria-labelledby="tTlH"><h3 class="t-k" id="tTlH">${ic("drop", 18)}<span>${esc(T("tilesH"))} · ${esc(MLONG(m))}</span></h3>
+      <div class="t-grid">${r != null ? tl("drop", T("tRain"), big(r), "mm", short > 0 ? T("tShort")(short) : T("tOk"), "NASA GPM IMERG", short > 0 ? "dry" : "wet") : ""}
+        ${e != null ? tl("sun", T("tNeed"), big(e), "mm", "ET₀", "NASA POWER") : ""}
+        ${g != null ? tl("rice", T("tGreen"), nf(g, 2), "", T("tNd"), "NASA MODIS NDVI") : ""}</div>
+      <p class="t-note">${esc(T("tAvg")(nino))}</p></section>`;
+  }
+  function moneyCard(f, x) {
+    const mon = shownMoney(f, x), two = mon && moneyYears(f, x);
+    return `<div class="s-card s-money"><span class="s-k">${ic("coin", 18)}${esc(T("moneyH"))}</span>
+      ${mon ? `<div class="s-row"><span class="s-coin" aria-hidden="true">${ic("coin", 46)}</span><div><b class="s-num">${mon.per}</b><span class="s-unit">${esc(T("perCong"))}</span></div></div>${two ? two.map((t) => `<span class="s-sub s-yr">${esc(t)}</span>`).join("") : mon.tot ? `<span class="s-sub">${esc(mon.tot)}</span>` : ""}` : `<span class="s-sub">${esc(T("noMoney"))}</span>`}
+      <small>${esc(T("moneySrcS"))}</small></div>`;
+  }
+  function todayPage(f) {
+    const x = facts(f), { c } = x;
+    const ask = Season.valid(f.now) ? "" : `<section class="t-card t-ask" aria-labelledby="tAkH"><span class="t-aki" aria-hidden="true">${ic("rice", 28)}</span><div><h3 id="tAkH">${esc(T("nowAskH"))}</h3><p>${esc(T("nowAskP"))}</p></div>
+      <button type="button" class="btn gold" data-dv="nownow"><span>${esc(T("nowAskB"))}</span>${ic("chev", 16)}</button></section>`;
+    return `<div class="t-page"><h2 id="dvH" class="sr">${esc(f.name)} · ${esc(T("navToday"))}</h2>
+      <div class="t-chips"><button type="button" class="t-field" data-dv="fields"><span class="t-fi" aria-hidden="true">${ic("pin", 16)}</span><b>${esc(f.name)}</b><span class="t-fs">${esc(f.size ? haS(f.size) + " ha" : short(x.s))}</span>${ic("chev", 14)}</button>
+        <span class="t-stat lv-${x.lv}"><i aria-hidden="true"></i>${esc(T("waterW")(T("lv")[x.lv]))}</span></div>
+      <p class="t-plan"><span>${esc(T("planL"))}:</span> <b>${esc(L(c.name))}</b></p>
+      ${planNo(f)}${ask}${hero(f, c)}${todo(f, x)}
+      <div class="s-card s-salt lv-${x.lv}"><span class="s-k">${ic("drop", 18)}${esc(T("waterNow"))}</span>
+        <div class="s-row"><span class="s-drop" aria-hidden="true">${ic("drop", 46)}</span><div><b class="s-word">${esc(T("lv")[x.lv])}${adv() ? ` <small>${nf(x.g, 1)}‰</small>` : ""}</b>
+        <span class="s-light" aria-hidden="true"><i class="ngot"></i><i class="lo"></i><i class="man"></i></span></div></div>
+        <span class="s-sub">${esc(x.sl.txt)}</span><small>${esc(T("est"))}</small></div>
+      ${tiles(f, x)}${remindCard(f)}${moneyCard(f, x)}
+      <button type="button" class="s-card s-cal" data-dv="season"><span class="s-k">${ic("cal", 18)}${esc(T("ribbonH"))}</span>${ribbon(f, c)}<span class="dv-more">${esc(T("tapPlan"))} ${ic("chev", 14)}</span></button>
+      <p class="sd-note s-ask">${esc(T("ask"))}</p></div>`;
+  }
+
+  /* ---------- Season: the 12 months as a path, done / you are here / coming ---------- */
+  function seasonPage(f) {
+    const c = planOf(f), d = Season.now(), ni = Season.absOf(d), nino = isNino(f), segs = [];
+    c.cells.forEach((x) => { const l = segs[segs.length - 1]; if (l && l.code === x.code && l.src === x.src) l.to = x.i; else segs.push({ code: x.code, src: x.src, from: x.i, to: x.i, miss: x.miss }) });
+    const rows = segs.map((g) => {
+      const a = c.a0 + g.from, b = c.a0 + g.to, stt = b < ni ? "done" : a <= ni ? "now" : "next", k = g.code === "-" ? "rest" : g.code[0];
+      const r = g.code !== "-" && c.runs.find((y) => y.from === g.from), name = g.code === "-" ? T(g.src === "wait" ? "stWait" : "stRest") : runName(c, g.code);
+      const sm = []; for (let i = g.from; i <= g.to; i++) { const m = c.cells[i].m; if ((k === "R" || k === "U") && level(fieldSalt(f.site, m, nino)) === "man") sm.push(MNUM(m)) }
+      const det = r ? `${esc(T(k === "S" ? "stockA" : "sowA")(fDs(r.sow)))} · ${esc(T("harA")(fDs(r.har)))}` : g.src === "wait" && g.miss ? esc(T("waitWhy")(cropName(c, g.miss))) : "";
+      return `<li class="ss-st st-${stt} ssk-${k}"><span class="ss-dot" aria-hidden="true">${stt === "done" ? ic("check", 16) : ic(KI[g.code === "-" ? "-" : g.code[0]], 16)}</span>
+        <button type="button" class="ss-card" data-dvm="${c.cells[g.from].m}"><span class="ss-l1"><b>${esc(name)}</b><span class="ss-tag">${esc(T(stt === "done" ? "stDone" : stt === "now" ? "stNow" : "stNext"))}</span></span>
+          <span class="ss-when">${esc(fRg(a, b))}</span>${det ? `<span class="ss-det">${det}</span>` : ""}
+          ${(r && r.late) || sm.length ? `<span class="ss-tags">${r && r.late ? `<em class="late">${esc(T("lateTag"))}</em>` : ""}${sm.length ? `<em class="salt">${ic("warn", 12)}${esc(T("saltTag")(sm.join(", ")))}</em>` : ""}</span>` : ""}</button></li>`;
+    }).join("");
+    return `<div class="t-page">
+      <header class="ss-hd"><p class="sd-eyebrow">${esc(f.name)} · ${esc(short(siteOf(f.site)))}</p><h2 id="dvH" class="ss-h">${esc(T("seasH"))}</h2><p class="ss-sub"><b>${esc(L(c.name))}</b> · ${esc(fRg(c.a0, c.a0 + 11))}</p></header>
+      <p class="sd-note">${esc(T("seasTap"))}</p>
+      <ol class="ss-tl">${rows}</ol>
+      ${Season.valid(f.now) ? "" : `<button type="button" class="btn gold t-wide" data-dv="nownow">${ic("rice", 18)}<span>${esc(T("nowAskH"))}</span></button>`}
+      <div class="t-acts"><button type="button" class="btn" data-dv="plan">${ic("cal", 18)}<span>${esc(T("tableB"))}</span></button>
+        <button type="button" class="btn" data-dv="choose">${ic("swap", 18)}<span>${esc(T("change"))}</span></button>
+        <button type="button" class="btn" data-dv="paper">${ic("print", 18)}<span>${esc(T("print"))}</span></button></div>
+      <p class="sd-src">${esc(T("est"))}</p></div>`;
+  }
+
+  /* ---------- Fields: the list, actions and settings ---------- */
+  function fieldsPage() {
+    const f0 = fieldSel();
+    const list = st.fields.map((f) => { const sel = !!(f0 && f.id === f0.id), c = cardOf(f), lv = areaLv(f.site);
+      return `<li><button type="button" class="fl-it${sel ? " on" : ""}" data-dvf="${f.id}" aria-pressed="${sel}"><i class="sd-dot lv-${lv}" aria-hidden="true"></i><span class="fl-tx"><b>${esc(f.name)}</b><small>${esc(short(siteOf(f.site)))}${f.size ? " · " + esc(haS(f.size)) + " ha" : ""}</small><small>${esc(L(c.name))}</small></span>${sel ? ic("check", 18) : ic("chev", 16)}</button></li>` }).join("");
+    const lang2 = `<div class="dv-setlang"><p class="dv-ml">${esc(T("langH2"))}</p><div class="seg" role="group" aria-label="${esc(T("langH2"))}"><button type="button" data-dvlang="vi" lang="vi" aria-pressed="${lang() === "vi"}">Tiếng Việt</button><button type="button" data-dvlang="en" lang="en" aria-pressed="${lang() === "en"}">English</button></div></div>`;
+    return `<div class="t-page">
+      <header class="ss-hd"><h2 id="dvH" class="ss-h">${esc(T("fieldsH"))}</h2></header>
+      ${st.fields.length ? `<ul class="fl-list">${list}</ul>` : ""}
+      <button type="button" class="btn gold t-wide" data-dv="add">${ic("plus", 18)}<span>${esc(T("addShort"))}</span></button>
+      ${f0 ? `<section class="t-card" aria-labelledby="flAH"><h3 class="t-k" id="flAH">${ic("pin", 18)}<span>${esc(f0.name)}</span></h3>
+        <div class="t-acts g2"><button type="button" class="btn" data-dv="nownow">${ic("rice", 18)}<span>${esc(T("nowEdit"))}</span></button>
+          <button type="button" class="btn" data-dv="choose">${ic("swap", 18)}<span>${esc(T("change"))}</span></button>
+          <button type="button" class="btn" data-dv="editmap">${ic("edit", 18)}<span>${esc(T("editField"))}</span></button>
+          <button type="button" class="btn" data-dv="paper">${ic("print", 18)}<span>${esc(T("print"))}</span></button></div>
+        <button type="button" class="btn dv-delrow" data-dv="delask">${ic("trash", 18)}<span>${esc(T("delThis"))}</span></button></section>` : ""}
+      <section class="t-card t-set" aria-labelledby="flSH"><h3 class="t-k" id="flSH">${ic("star", 18)}<span>${esc(T("setH"))}</span></h3>${modeSeg("dv-setmode")}${lang2}
+        <p class="sd-note"><button type="button" class="dv-link" data-open="sources">${esc(T("srcL"))}</button></p></section></div>`;
+  }
+
+  /* ---------- top date bar + bottom bar (made once; only their text and state change) ---------- */
+  const NAV = [["dash", "navToday", "home"], ["season", "navSeason", "cal"], ["plan+", "navPlan", "plus"], ["data", "navData", "chart"], ["fields", "navFields", "pin"]];
+  const navOf = (v) => (v === "plan" ? "season" : v);
+  function paintNav() {
+    const nv = $("#dvNav"); if (!nv) return; nv.setAttribute("aria-label", T("navLabel"));
+    if (!nv.firstChild) nv.innerHTML = NAV.map(([v, , i]) => v === "plan+" ? `<button type="button" class="nv-b nv-plan" data-dvnav="${v}"><span class="nv-fab" aria-hidden="true">${ic(i, 26)}</span><span class="nv-l"></span></button>` : `<button type="button" class="nv-b" data-dvnav="${v}"><span class="nv-i" aria-hidden="true">${ic(i, 22)}</span><span class="nv-l"></span></button>`).join("");
+    const cur = navOf(view), has = !!fieldSel();
+    NAV.forEach(([v, k]) => { const b = nv.querySelector(`[data-dvnav="${v}"]`); b.querySelector(".nv-l").textContent = T(k); if (v === cur) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); b.disabled = !has && (v === "season" || v === "data") });
+  }
+  const PLAY = '<path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/>', PAUSE = '<path d="M8.5 5.5v13M15.5 5.5v13" stroke-width="3"/>';
+  const hz = () => ([1, 2, 3].includes(st.hz) ? st.hz : 1);
+  const hhmm = (d) => `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+  const wday = (d) => (lang() === "vi" ? ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"][d.getDay()] : d.toLocaleDateString("en-GB", { weekday: "long" }));
+  /* the slider track is the season map itself: one block per month for the chosen 1–3 years, coloured by crop, salt marked */
+  let mapKey = "";
+  function paintMap(f) {
+    const box = $("#ckMap"); if (!box) return; const a0 = Season.absOf(Season.real()), n = 12 * hz(), key = `${f.id}|${f.rot}|${JSON.stringify(f.now || null)}|${n}|${lang()}|${a0}|${f.year}|${f.crop}`;
+    if (key === mapKey) return; mapKey = key;
+    const nino0 = f.year ? f.year === "elnino" : true;
+    const ws = [...Array(hz())].map((_, y) => Season.windowOf(cardOf(f, y || !nino0 ? "typical" : "elnino"), f.now, Season.mStart(a0 + 12 * y)));
+    const sp = Season.span(hz()), t0 = +sp.from, t1 = +sp.to;
+    const pos = (d) => Math.min(100, Math.max(0, ((+d - t0) / (t1 - t0)) * 100));
+    box.innerHTML = [...Array(n)].map((_, i) => { const y = Math.floor(i / 12), x = ws[y].cells[i % 12], k = x.code === "-" ? "rest" : x.code[0];
+      const s0 = Math.max(t0, +Season.mStart(a0 + i)), s1 = Math.min(t1, +Season.mEnd(a0 + i) + Season.DAY), lv = level(fieldSalt(f.site, x.m, y ? false : nino0));
+      return s1 <= s0 ? "" : `<i class="k-${k} s-${lv}${x.m === 0 ? " yr" : ""}" style="left:${pos(s0).toFixed(2)}%;width:${(pos(s1) - pos(s0)).toFixed(2)}%"></i>` }).join("");
+    /* year labels under the strip: the start year at the left, then each 1 January */
+    const yl = [[t0, new Date(t0).getFullYear()]]; for (let i = 1; i < n; i++) if ((a0 + i) % 12 === 0) yl.push([+Season.mStart(a0 + i), Math.floor((a0 + i) / 12)]);
+    if (yl.length > 1 && pos(yl[1][0]) < 16) yl.shift();   /* the start label would touch the next one */
+    const yb = $("#ckYrs"); if (yb) yb.innerHTML = yl.map(([t, y]) => `<b style="left:${pos(t).toFixed(2)}%"${pos(t) < 4 ? ' class="first"' : ""}>${y}</b>`).join("");
+  }
+  function paintClock() {
+    const ck = $("#dvClock"); if (!ck) return; const f = fieldSel(); document.body.classList.toggle("dv-noclock", !f); if (!f) return;
+    const sp = Season.span(hz()), d = Season.now(), rl = Season.real(), on2 = Season.simOn(), pl = Sim.playing();
+    const pb = $("#ckPlay"); pb.innerHTML = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-linecap="round" aria-hidden="true">${pl ? PAUSE : PLAY}</svg>`; pb.setAttribute("aria-label", pl ? T("clkPause") : T("clkPlay")(hz())); pb.classList.toggle("on", pl);
+    $("#ckDate").textContent = fD(on2 ? d : rl);
+    $("#ckSub").innerHTML = on2 ? `<span class="ck-tag">${esc(T("clkSim")(Season.yearOf() + 1))}</span><span class="ck-now">${esc(T("clkNow"))} ${hhmm(rl)}</span>` : `<span class="ck-live" aria-hidden="true"></span><span class="ck-nw">${esc(wday(rl))} · ${hhmm(rl)}</span>`;
+    const rg = $("#ckRange"); rg.max = sp.weeks; rg.value = Sim.week(); rg.setAttribute("aria-label", T("clkSlider")(hz())); rg.setAttribute("aria-valuetext", fD(d)); ck.style.setProperty("--p", `${((Sim.week() / sp.weeks) * 100).toFixed(2)}%`);
+    const rs = $("#ckReset"); rs.hidden = !on2; rs.querySelector("span").textContent = T("clkReset");
+    $$("#ckHz [data-hz]").forEach((b) => { b.setAttribute("aria-pressed", +b.dataset.hz === hz()); b.textContent = T("hzL")(+b.dataset.hz) }); $("#ckHz").setAttribute("aria-label", T("hzH"));
+    $("#ckNote").textContent = on2 ? T("clkNote")(Season.yearOf() >= 1) : ""; $("#ckNote").hidden = !on2;
+    ck.classList.toggle("sim", on2); document.body.classList.toggle("dv-sim", on2); paintMap(f);
+  }
+  /* the real clock keeps running: the minutes update, and a new day or month re-draws the page */
+  let lastDay = Season.real().toDateString();
+  setInterval(() => { if (!on) return; try { const r = Season.real(); if (r.toDateString() !== lastDay) { lastDay = r.toDateString(); if (!Season.simOn()) { CM = r.getMonth(); render() } } paintClock() } catch (e) {} }, 15000);
+  /* what happens between two dates of the preview: sow, harvest, rice steps, salt coming and going */
+  function eventsIn(f, w, a, b) {
+    const out = [], inR = (x) => +x > +a && +x <= +b, nino = isNino(f);
+    w.runs.forEach((r) => { const n = runName(w, r.code);
+      if (!r.cur && !r.ongoing && inR(r.sow)) { if (r.k !== "S" && level(fieldSalt(f.site, r.sow.getMonth(), nino)) === "man") out.push({ t: T("evSowSalt")(n), i: "warn", p: 3, warn: 1 });
+        else out.push({ t: T(r.k === "S" ? "evStock" : "evSow")(n) + (r.late ? ` (${T("lateTag")})` : ""), i: "seed", p: 2 }) }
+      Season.marks(r).forEach((x) => { if (inR(x.date)) out.push({ t: `${T("mk")[x.k]}: ${n}`, i: "drop", p: 1 }) });
+      if (inR(r.har)) out.push({ t: T("evHar")(n), i: "basket", p: 2 }) });
+    for (let idx = Season.absOf(a) + 1; idx <= Season.absOf(b); idx++) {
+      const m = idx % 12, l0 = level(fieldSalt(f.site, (m + 11) % 12, nino)), l1 = level(fieldSalt(f.site, m, nino)), code = w.months[m];
+      if (l1 === "man" && l0 !== "man" && (code[0] === "R" || code[0] === "U")) out.push({ t: T("evSaltHit")(runName(w, code)), i: "warn", p: 3, warn: 1 });
+      else if (l1 !== "ngot" && l0 === "ngot") out.push({ t: T("evSaltIn"), i: "drop", p: 2 });
+      else if (l1 === "ngot" && l0 !== "ngot") out.push({ t: T("evSaltOut"), i: "drop", p: 1 });
+    }
+    return out.sort((x, y) => y.p - x.p);
+  }
+  let flT = 0;
+  function flash(ev) {
+    const el = $("#ckFlash"); if (!el || !ev.length) return; clearTimeout(flT);
+    el.innerHTML = `${ic(ev[0].i, 16)}<span>${esc(ev[0].t)}${ev.length > 1 ? ` <em>+${ev.length - 1}</em>` : ""}</span>`; el.className = `ck-flash on${ev[0].warn ? " warn" : ""}`;
+    flT = setTimeout(() => el.classList.remove("on"), ev[0].warn ? 5200 : 2600);
+  }
+  const Sim = (() => {
+    let tm = 0, wk = 0;
+    const slow = () => { try { return matchMedia("(prefers-reduced-motion: reduce)").matches } catch (e) { return false } };
+    const win = () => { const f = fieldSel(); return f ? planOf(f) : null };
+    function to(k, quiet) {
+      const f = fieldSel(), w = win(); if (!w) return null; const sp = Season.span(hz());
+      k = Math.max(0, Math.min(sp.weeks, Math.round(k))); const a = Season.now(); wk = k;
+      Season.set(k ? new Date(+sp.from + k * Season.WEEK) : null);
+      if (quiet) return [];
+      /* across a plan-year line both years' seasons count; the same event is said once */
+      const w2 = win(), seen = new Set(), ev = eventsIn(f, w, a, Season.now()).concat(w2 && w2.a0 !== w.a0 ? eventsIn(f, w2, a, Season.now()) : []).filter((x) => !seen.has(x.t) && seen.add(x.t)).sort((x, y) => y.p - x.p);
+      flash(ev); return ev;
+    }
+    function tick() { if (!win() || wk >= Season.span(hz()).weeks) return stop(); const ev = to(wk + 1); if (ev && ev.some((x) => x.warn)) stop() }
+    /* one week a step; longer previews step a little faster so 3 years still play in about a minute and a half */
+    function play() { if (!win()) return; if (wk >= Season.span(hz()).weeks) to(0, true); clearInterval(tm); tm = setInterval(tick, slow() ? 1500 : [0, 650, 500, 420][hz()]); paintClock() }
+    function stop() { if (tm) { clearInterval(tm); tm = 0 } paintClock() }
+    function reset() { stop(); if (Season.simOn() || wk) { wk = 0; Season.set(null) } const el = $("#ckFlash"); if (el) el.classList.remove("on") }
+    return { to, play, stop, reset, playing: () => !!tm, week: () => wk };
+  })();
+  Season.on((d) => { CM = d.getMonth(); selM = null; if (on) render(); paintClock() });
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest) return;
+    const nb = e.target.closest("[data-dvnav]"); if (nb) { const v = nb.dataset.dvnav; Sim.stop(); if (v === "plan+") return toMap(fieldSel()); return go(v) }
+    if (e.target.closest("#ckPlay")) return Sim.playing() ? Sim.stop() : Sim.play();
+    if (e.target.closest("#ckReset")) { Sim.reset(); const p = $("#ckPlay"); p && p.focus(); return }
+    const hb = e.target.closest("#ckHz [data-hz]"); if (hb) { st.hz = +hb.dataset.hz; save(); const w = Sim.week(), mx = Season.span(hz()).weeks; Sim.stop(); if (w > mx) Sim.to(mx, true); paintClock(); return }
+  });
+  document.addEventListener("input", (e) => { if (e.target.id === "ckRange") { if (Sim.playing()) Sim.stop(); Sim.to(+e.target.value, false) } });
+  /* touching the page pauses the preview, so nothing moves under the farmer's finger */
+  ["pointerdown", "wheel", "keydown"].forEach((t) => document.addEventListener(t, (e) => { if (Sim.playing() && e.target.closest && e.target.closest("#dvPanel, #dvNav, #dvSheet")) Sim.stop() }, { capture: true, passive: true }));
+  document.addEventListener("visibilitychange", () => { if (document.hidden) Sim.stop() });
+
   function panelDash() {
     const f = fieldSel();
     if (!f) return `${pageHead()}${welcome()}`;
-    return `${pageHead()}${fieldTabs()}${adv() ? advPage(f) : simplePage(f)}`;
+    return todayPage(f);
   }
 
   /* ---------------- plan table (in the panel) ---------------- */
   function planTable(f, c) {
     const nino = isNino(f), ML = (i) => (lang() === "vi" ? "Tháng " + (i + 1) : ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][i]);
     curSite = f.site; curNino = nino;
-    return `<table class="dv-table"><thead><tr><th>${esc(T("tMonth"))}</th><th>${esc(T("tJob"))}</th><th>${esc(T("tSalt"))}</th></tr></thead><tbody>${[...Array(12)].map((_, k) => { const m = (CM + k) % 12, code = c.months[m], g = fieldSalt(f.site, m, nino), lv = level(g);
+    return `<table class="dv-table"><thead><tr><th>${esc(T("tMonth"))}</th><th>${esc(T("tJob"))}</th><th>${esc(T("tSalt"))}</th></tr></thead><tbody>${[...Array(12)].map((_, k) => { const m = (W0(c) + k) % 12, code = c.months[m], g = fieldSalt(f.site, m, nino), lv = level(g);
       return `<tr class="${m === CM ? "now" : ""}" data-dvm="${m}" tabindex="0"><th scope="row">${esc(ML(m))}</th><td><span class="dv-tc">${iconOf(code)}${esc(cropName(c, code))}</span>${esc(jobAt(c, m))}</td><td><span class="sd-dot lv-${LVC[lv]}"></span> ${esc(T("lv")[lv])}${adv() ? `<small> ${nf(g, 1)}‰</small>` : ""}</td></tr>` }).join("")}</tbody></table>`;
   }
   function panelPlan() {
-    const f = fieldSel(), c = cardOf(f), s = siteOf(f.site);
-    return `<button type="button" class="dv-link back" data-dv="home">${ic("back", 16)}${esc(T("back"))}</button>
+    const f = fieldSel(), c = planOf(f), s = siteOf(f.site);
+    return `<button type="button" class="dv-link back" data-dv="season">${ic("back", 16)}${esc(T("back"))}</button>
       <p class="sd-eyebrow">${esc(f.name)} · ${esc(short(s))}</p><h2 class="sd-h">${esc(L(c.name))}</h2><p class="sd-lead">${esc(L(c.calendar))}</p>
       <p class="sd-note">${esc(T("tapMonth"))}</p>${planTable(f, c)}<p class="sd-src">${esc(T("est"))}</p>
       <div class="dv-acts"><button type="button" class="btn gold" data-dv="paper">${ic("print", 16)}<span>${esc(T("print"))}</span></button><button type="button" class="btn" data-dv="home">${ic("back", 16)}<span>${esc(T("back"))}</span></button></div>`;
   }
   function monthSheet(m) {
-    const f = fieldSel(), c = cardOf(f), code = c.months[m], r = code === "-" ? null : DATA.resources[resKey(c, code)], g = fieldSalt(f.site, m, isNino(f)), lv = level(g);
+    const f = fieldSel(), c = planOf(f), code = c.months[m], r = code === "-" ? null : DATA.resources[resKey(c, code)], g = fieldSalt(f.site, m, isNino(f)), lv = level(g);
     curSite = f.site; curNino = isNino(f);
     sheet(`<h2>${esc(lang() === "vi" ? "Tháng " + (m + 1) : "Month " + (m + 1))}: ${esc(cropName(c, code))}</h2><p class="dv-job sm">${iconOf(code)}<span>${esc(jobAt(c, m))}</span></p>
       ${r ? `<dl class="dv-dl"><dt>${esc(T("seed"))}</dt><dd>${esc(L(r.seed))}</dd>${r.fertiliser && L(r.fertiliser) ? `<dt>${esc(T("fert"))}</dt><dd>${esc(L(r.fertiliser))}</dd>` : ""}</dl><p class="sd-k">${esc(T("steps"))}</p><ol class="dv-steps">${(r.steps || []).map((x) => `<li>${esc(L(x))}</li>`).join("")}</ol>` : ""}
@@ -740,21 +1094,21 @@ const Dash = (() => {
   const pic = (k, n = 22) => `<svg class="pi" viewBox="0 0 24 24" width="${n}" height="${n}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${PI[k] || ICON[k] || ""}</svg>`;
   const pcrop = (code, n = 22) => `<svg class="pi" viewBox="0 0 24 24" width="${n}" height="${n}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[{ R: "rice", S: "shrimp", U: "upland" }[code[0]] || "fallow"]}</svg>`;
   function jobKind(c, m, site, nino) {
-    const ms = c.months, code = ms[m], prev = ms[(m + 11) % 12], next = ms[(m + 1) % 12];
+    const code = c.months[m], prev = PV(c, m), next = NX(c, m);
     if (code === "-") return "rest";
     const st0 = prev !== code;
     if (st0 && code[0] !== "S" && level(fieldSalt(site, m, nino)) === "man") return "wait";
     return st0 ? "sow" : next !== code ? "harvest" : "tend";
   }
   function paperHTML() {
-    const f = fieldSel(), c = cardOf(f), s = siteOf(f.site), nino = isNino(f), P = PW[lang()], d = new Date().toLocaleDateString(lang() === "vi" ? "vi-VN" : "en-GB");
+    const f = fieldSel(), c = planOf(f), s = siteOf(f.site), nino = isNino(f), P = PW[lang()], d = new Date().toLocaleDateString(lang() === "vi" ? "vi-VN" : "en-GB");
     curSite = f.site; curNino = nino;
-    const order = [...Array(12)].map((_, i) => (CM + i) % 12), mon = shownMoney(f, facts(f));
+    const order = [...Array(12)].map((_, i) => (W0(c) + i) % 12), mon = shownMoney(f, facts(f));
     const lvw = { ngot: P.fresh, lo: P.brack, man: P.salty };
     const strip = order.map((m) => { const code = c.months[m], lv = level(fieldSalt(f.site, m, nino)), k = jobKind(c, m, f.site, nino);
       return `<td class="c-${code[0] === "-" ? "rest" : code[0]}"><b>${MS()[m]}</b>${pcrop(code, 18)}<span class="w ${lv}">${pic("drop", 12)}</span>${pic(k, 14)}</td>` }).join("");
     const boxes = order.map((m) => {
-      const code = c.months[m], lv = level(fieldSalt(f.site, m, nino)), k = jobKind(c, m, f.site, nino), start = c.months[(m + 11) % 12] !== code && code !== "-";
+      const code = c.months[m], lv = level(fieldSalt(f.site, m, nino)), k = jobKind(c, m, f.site, nino), start = PV(c, m) !== code && code !== "-";
       const r = start ? DATA.resources[resKey(c, code)] : null;
       return `<section class="mb c-${code[0] === "-" ? "rest" : code[0]}${m === CM ? " now" : ""}">
         <header><span class="mn">${lang() === "vi" ? "Tháng" : "Month"} ${m + 1}</span><span class="cr">${pcrop(code, 20)}${esc(cropName(c, code))}</span><span class="tick">☐ ${esc(P.done)}</span></header>
@@ -800,6 +1154,7 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
 @media (max-width:600px){.boxes{grid-template-columns:1fr}.paper{padding:12px}.ph{flex-direction:column}}
 @media print{.paper{padding:0;max-width:none}@page{size:A4;margin:12mm}.mb.now{border-width:1.5px}}`;
   function paperSheet() {
+    Sim.reset();   /* the printed plan is always from today, never from a preview date */
     const doc = `<!doctype html><html><head><meta charset="utf-8"><style>${PAPER_CSS}</style></head><body>${paperHTML()}</body></html>`;
     sheet(`<h2>${esc(T("preview"))}</h2><p class="sd-note">${esc(T("printHint"))}</p><iframe class="paper-frame" title="${esc(T("preview"))}" srcdoc="${esc(doc)}"></iframe>
       <div class="dv-acts"><button type="button" class="btn gold" data-dv="doprint">${ic("print", 16)}<span>${esc(T("doPrint"))}</span></button><button type="button" class="btn" data-dv="savefile"><span>${esc(T("save"))}</span></button></div><p class="sd-note" id="dvSaveMsg" role="status"></p>`, true);
@@ -866,7 +1221,8 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
     b.innerHTML = `<span class="bm-ic">${ic("back", 18)}</span><span class="bm-tx"><span class="bm-t">${esc(T("toDash"))}</span> <span class="bm-h"><i class="bm-dot" aria-hidden="true"></i><span>${esc(hint)}</span></span></span>` };
   function toMap(field) {
     try { zoomClose() } catch (e) {}
-    editing = field ? field.id : null; on = false;
+    Sim.reset(); editing = field ? field.id : null; on = false;
+    flowNow = field && Season.valid(field.now) ? { ...field.now, weeks: Season.growing(field.now) ? Season.weeksLeft(field.now) : 0, at: Date.now() } : null;
     closeSheet(); document.body.classList.remove("dv-on"); document.body.classList.add("dv-off"); lastSite = null;
     $("#dvBack").hidden = false; backLabel();
     try { if (typeof MapView !== "undefined" && MapView.resize) setTimeout(() => MapView.resize(), 60) } catch (e) {}
@@ -875,7 +1231,7 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
   }
   function backToDash() {
     on = true; editing = null; lastSite = null; $("#dvBack").hidden = true; document.body.classList.add("dv-on"); document.body.classList.remove("dv-off");
-    try { if (window.App && App.closePanel) App.closePanel() } catch (e) {} view = "dash";
+    try { if (window.App && App.closePanel) App.closePanel() } catch (e) {} view = "dash"; mapKey = "";
     if (location.hash) { try { history.replaceState(null, "", location.pathname + location.search) } catch (e) {} }
     render();
   }
@@ -889,6 +1245,7 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
     try { const af = A.fields && A.fieldId && A.fields().find((x) => x.id === A.fieldId()); if (af) { f.appId = af.id; f.name = af.name || f.name; if (af.ha > 0) f.size = af.ha } } catch (e) {}
     Object.assign(f, { site: s.id, rot: A.planId ? A.planId() : null, weights: w, goal: null, year: m === "elnino" ? "elnino" : null, crop: A.upCrop ? A.upCrop() : null, seasons: SEAS_OF[cur] || ["R", "R", "R"], wfP: wf.p, wfM: wf.m, savedAt: Date.now() });
     if (!f.startAt) f.startAt = Date.now();
+    if (flowNow && flowNow.k) f.now = { k: flowNow.k, weeks: flowNow.k === "-" ? 0 : flowNow.weeks, choice: flowNow.choice || "keep", at: Date.now() };
     const nb = document.getElementById("noBrackish"); f.noBrackish = !!(nb && nb.checked);
     if (!f.rot) f.rot = rank(f)[0].c.id;
     if (!base) st.fields.push(f); st.sel = f.id; save();
@@ -917,7 +1274,7 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
   let shOpener = null;
   const shFocusables = (root) => [...root.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')].filter((e) => !e.disabled && e.offsetParent !== null);
   function sheet(html, wide) {
-    clearTimeout(shT); const sh = $("#dvSheet"), box = sh.querySelector(".dv-sh"), body = $("#dvShBody"), wasOpen = !sh.hidden && sh.classList.contains("on");
+    if (Sim.playing()) Sim.stop(); clearTimeout(shT); const sh = $("#dvSheet"), box = sh.querySelector(".dv-sh"), body = $("#dvShBody"), wasOpen = !sh.hidden && sh.classList.contains("on");
     const a = document.activeElement, inside = !!(a && body.contains(a)), key = inside ? (a.dataset.opt ? `[data-opt="${a.dataset.opt}"]${a.dataset.v != null ? `[data-v="${a.dataset.v}"]` : ""}` : a.id ? `#${a.id}` : a.dataset.dv ? `[data-dv="${a.dataset.dv}"]` : null) : null;
     if (!wasOpen && !inside && a && a !== document.body && !sh.contains(a)) shOpener = a;
     body.innerHTML = html; sh.classList.toggle("wide", !!wide); sh.hidden = false;
@@ -939,11 +1296,13 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
   function render() {
     if (!$("#dv")) return;
     const p = $("#dvPanel"), y = p.scrollTop;
-    if (view === "plan" && !fieldSel()) view = "dash";
-    p.innerHTML = view === "plan" ? panelPlan() : panelDash();
+    const f = fieldSel();
+    if (!f && view !== "fields") view = "dash";
+    p.innerHTML = view === "plan" ? panelPlan() : view === "season" ? seasonPage(f) : view === "data" ? `${pageHead()}${fieldTabs()}${advPage(f)}` : view === "fields" ? fieldsPage() : panelDash();
     p.scrollTop = view === "plan" ? 0 : y;
+    paintNav(); paintClock();
     document.body.classList.toggle("dv-simple", !adv()); document.body.classList.toggle("dv-nofield", !fieldSel());
-    p.classList.toggle("is-adv", adv() && view !== "plan" && !!fieldSel()); p.classList.toggle("is-simple", !adv() || view === "plan" || !fieldSel());
+    p.classList.toggle("is-adv", view === "data" && !!fieldSel()); p.classList.toggle("is-simple", view !== "data" || !fieldSel()); p.dataset.view = view;
     const hn = p.querySelector("#dvH.dv-name"); if (hn) { if (lastName !== null && hn.dataset.k !== lastName) hn.classList.add("in"); lastName = hn.dataset.k }
     const tb = p.querySelector('.dv-ftabs [aria-selected="true"]'); if (tb) { const bar = tb.parentNode; bar.scrollLeft = Math.max(0, tb.offsetLeft - (bar.clientWidth - tb.offsetWidth) / 2) }
   }
@@ -961,7 +1320,7 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
     const a = e.target.closest("[data-dv],[data-dvf],[data-dvui],[data-use],[data-tab],[data-opt],[data-dvm]"); if (!a || a.matches("input")) return;
     const d = a.dataset;
     if (d.dvui) { st.ui = d.dvui; save(); paintModes(); render(); return refocus(`[data-dvui="${d.dvui}"]`) }
-    if (d.dvf) { st.sel = d.dvf; save(); view = "dash"; selM = null; render(); $("#dvPanel").scrollTop = 0; return refocus(`[data-dvf="${d.dvf}"]`) }
+    if (d.dvf) { Sim.reset(); st.sel = d.dvf; save(); view = "dash"; selM = null; render(); $("#dvPanel").scrollTop = 0; return refocus(`[data-dvf="${d.dvf}"]`) }
     if (d.use) { const f = fieldSel(); f.rot = d.use; f.savedAt = Date.now(); save(); closeSheet(); render(); if (!zoomKey) $("#dvPanel").scrollTop = 0;
       try { window.App && App.toast && App.toast(T("usedT")(L(cardOf(f).name))) } catch (e) {} if (zoomKey) { const p = $("#dvZP"); p.innerHTML = zoomHTML(f) } return }
     if (d.tab) { tab = d.tab; return render() }
@@ -969,6 +1328,11 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
     if (d.dvm != null) return monthSheet(+d.dvm);
     switch (d.dv) {
       case "home": return go("dash");
+      case "season": return go("season");
+      case "fields": return go("fields");
+      case "data": return go("data");
+      case "nownow": return nowSheet(true);
+      case "nwsave": { const f = fieldSel(); if (!f || !shNow || !shNow.k) return; f.now = { k: shNow.k, weeks: shNow.k === "-" ? 0 : shNow.weeks, choice: shNow.choice || "keep", at: Date.now() }; save(); closeSheet(); mapKey = ""; render(); try { window.App && App.toast && App.toast(T("nowSaved")) } catch (e) {} return }
       case "plan": return go("plan");
       case "add": return toMap(null);
       case "editmap": return toMap(fieldSel());
@@ -977,7 +1341,7 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
       case "opts": return optsSheet();
       case "close": return closeSheet();
       case "savefile": return saveFile();
-      case "doprint": { const w = document.createElement("iframe"); w.style.cssText = "position:fixed;width:0;height:0;border:0"; document.body.appendChild(w); w.srcdoc = `<html><head><meta charset="utf-8"><style>${PAPER_CSS}</style></head><body>${paperHTML()}</body></html>`; w.onload = () => { try { w.contentWindow.print() } catch (er) { saveFile() } setTimeout(() => w.remove(), 4000) }; return }
+      case "doprint": { Sim.reset(); const w = document.createElement("iframe"); w.style.cssText = "position:fixed;width:0;height:0;border:0"; document.body.appendChild(w); w.srcdoc = `<html><head><meta charset="utf-8"><style>${PAPER_CSS}</style></head><body>${paperHTML()}</body></html>`; w.onload = () => { try { w.contentWindow.print() } catch (er) { saveFile() } setTimeout(() => w.remove(), 4000) }; return }
       case "delask": { const f = fieldSel(); if (!f) return; sheet(`<div class="dv-delq"><span class="dv-delico">${ic("trash", 30)}</span><h2>${esc(T("delH")(f.name))}</h2><p class="sd-note">${esc(T("delP"))}</p>
         <div class="dv-acts"><button type="button" class="btn dv-delyes" data-dv="del">${ic("trash", 16)}<span>${esc(T("delYes"))}</span></button><button type="button" class="btn gold" data-dv="close"><span>${esc(T("cancel"))}</span></button></div></div>`); return }
       case "del": { const f = fieldSel(); if (f) { st.fields = st.fields.filter((x) => x.id !== f.id);
@@ -1035,6 +1399,8 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
     document.body.classList.toggle("dv-simple", !adv());
     if (location.hash === "#plan-lab") { document.body.classList.remove("dv-on"); document.body.classList.add("dv-off"); $("#dvBack").hidden = false; backLabel(); return }
     on = true; document.body.classList.add("dv-on"); render();
+    const ck = $("#dvClock"), setH = () => document.documentElement.style.setProperty("--ck-h", `${ck && !document.body.classList.contains("dv-noclock") ? ck.offsetHeight : 0}px`);
+    try { new ResizeObserver(setH).observe(ck) } catch (e) {} setH(); new MutationObserver(setH).observe(document.body, { attributes: true, attributeFilter: ["class"] });
   }
   /* a field deleted in the planner list leaves the dashboard too */
   function unlink(id, site, name) {
@@ -1047,6 +1413,8 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
     st.fields.forEach((f) => { if (f.appId === af.id || (!f.appId && f.site === old.site && f.name === old.name)) { f.appId = af.id; f.name = af.name; f.site = af.site; f.size = af.ha || null; ch = true } });
     if (ch) { save(); render() }
   }
-  return { init, render, unlink, syncField, get state() { return st } };
+  /* the create-plan flow (app.js) asks the same "what is in the field now" question and builds its plan from the answer */
+  const nowBlock = () => `<section id="nowCrop" class="nw nw-flow" aria-labelledby="nfH">${nowForm(flowNow, flowCtx(), true)}</section>`;
+  return { init, render, unlink, syncField, nowBlock, flowNow: () => flowNow, get state() { return st } };
 })();
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", () => setTimeout(Dash.init, 0)); else setTimeout(Dash.init, 0);
