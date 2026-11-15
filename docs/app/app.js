@@ -436,7 +436,8 @@ Object.assign(STR.en, {
   wfML: "Machines (tractor, harvester, pump)", wfM: ["None", "Can hire", "Own machines"],
   wfFewMach: "Few people but machines: rice can be done by machine; melon and chilli still need picking by hand.",
   wfPen: (p) => p > 0 ? `Other crops (melon, maize, chilli) need much hand work, so their scores drop by ${p.toFixed(1)} point (team estimate).` : "Enough hands for other crops: no score is taken off.",
-  fSeasons: "What you grow in each season", setT: "Settings", fcH: "Checking what you entered:", poEye: "Your plan is:", poFit: "Fit with your priorities:", poWhy: "Why:", poOther: "Choose another option", poScore: "See the plan score", poNext: "Below: what to do each month, and what you need. Print it or share it with your family and extension officer.", szHow: ["Each row is one crop season of the year.", "In each row, tap what you grow then.", "Nothing grown that season? Tap “Nothing / rest”."], szQuick: "Quick pick:", szYear: "Your year:", szEx: [["3 rice crops", ["R","R","R"]], ["2 rice crops", ["R","R","-"]], ["1 rice crop", ["R","-","-"]], ["Shrimp, then rice", ["S","S","R"]], ["Rice + other crop", ["R","U","R"]]], savedPlan: "Plan saved as a text file. Send it on Zalo or keep it.", savedPrint: "Plan saved. Open the file: it asks to print or save as PDF."
+  fSeasons: "What you grow in each season", setT: "Settings", fcH: "Checking what you entered:", poEye: "Your plan is:", s4H: "Your season path", s4Need: "What to get ready",
+  s4Rest: "Rest the field", s4Salt: "Salty water", s4SaltS: "Salt", sCropL: { R: "Rice", S: "Shrimp" }, s4Cost: "Money to put in", s4Profit: "Profit", s4Year: (h) => h ? `for ${h} ha, a year` : "for 1 ha, a year", s4Est: "Estimate from published figures.", poFit: "Fit with your priorities:", poWhy: "Why:", poOther: "Choose another option", poScore: "See the plan score", poNext: "Below: what to do each month, and what you need. Print it or share it with your family and extension officer.", szHow: ["Each row is one crop season of the year.", "In each row, tap what you grow then.", "Nothing grown that season? Tap “Nothing / rest”."], szQuick: "Quick pick:", szYear: "Your year:", szEx: [["3 rice crops", ["R","R","R"]], ["2 rice crops", ["R","R","-"]], ["1 rice crop", ["R","-","-"]], ["Shrimp, then rice", ["S","S","R"]], ["Rice + other crop", ["R","U","R"]]], savedPlan: "Plan saved as a text file. Send it on Zalo or keep it.", savedPrint: "Plan saved. Open the file: it asks to print or save as PDF."
 });
 Object.assign(STR.vi, {
   riceUpland: "Lúa + cây màu", seasH: "Bạn đang trồng gì? Chạm chọn cho từng vụ",
@@ -449,7 +450,8 @@ Object.assign(STR.vi, {
   wfML: "Máy móc (máy cày, máy gặt, máy bơm)", wfM: ["Không có", "Thuê được", "Có máy"],
   wfFewMach: "Ít người nhưng có máy: lúa làm bằng máy được; dưa, ớt vẫn phải hái tay.",
   wfPen: (p) => p > 0 ? `Cây màu (dưa, bắp, ớt) cần nhiều công tay, nên điểm cây màu bị trừ ${p.toFixed(1).replace(".", ",")} điểm (ước tính của nhóm).` : "Đủ sức làm cây màu: không trừ điểm.",
-  fSeasons: "Trồng gì trong từng vụ", setT: "Cài đặt", fcH: "Kiểm tra thông tin bạn nhập:", poEye: "Kế hoạch của bạn là:", poFit: "Mức hợp với ưu tiên của bạn:", poWhy: "Vì sao:", poOther: "Chọn phương án khác", poScore: "Xem điểm kế hoạch", poNext: "Bên dưới: việc cần làm mỗi tháng và những gì cần chuẩn bị. In ra hoặc gửi cho gia đình, cán bộ khuyến nông.", szHow: ["Mỗi hàng là một vụ trong năm.", "Ở mỗi hàng, chạm vào thứ bạn trồng vụ đó.", "Vụ nào không trồng gì thì chạm “Bỏ trống / nghỉ”."], szQuick: "Chọn nhanh:", szYear: "Năm của bạn:", szEx: [["3 vụ lúa", ["R","R","R"]], ["2 vụ lúa", ["R","R","-"]], ["1 vụ lúa", ["R","-","-"]], ["Tôm rồi lúa", ["S","S","R"]], ["Lúa + cây màu", ["R","U","R"]]], savedPlan: "Đã lưu kế hoạch thành tệp chữ. Gửi qua Zalo hoặc giữ lại.", savedPrint: "Đã lưu kế hoạch. Mở tệp ra: máy sẽ hỏi in hoặc lưu PDF."
+  fSeasons: "Trồng gì trong từng vụ", setT: "Cài đặt", fcH: "Kiểm tra thông tin bạn nhập:", poEye: "Kế hoạch của bạn là:", s4H: "Đường mùa vụ của bạn", s4Need: "Cần chuẩn bị gì",
+  s4Rest: "Cho ruộng nghỉ", s4Salt: "Nước mặn", s4SaltS: "Mặn", sCropL: { R: "Lúa", S: "Tôm" }, s4Cost: "Vốn cần có", s4Profit: "Tiền lời", s4Year: (h) => h ? `cho ${h} ha, mỗi năm` : "cho 1 ha, mỗi năm", s4Est: "Ước tính từ số liệu đã công bố.", poFit: "Mức hợp với ưu tiên của bạn:", poWhy: "Vì sao:", poOther: "Chọn phương án khác", poScore: "Xem điểm kế hoạch", poNext: "Bên dưới: việc cần làm mỗi tháng và những gì cần chuẩn bị. In ra hoặc gửi cho gia đình, cán bộ khuyến nông.", szHow: ["Mỗi hàng là một vụ trong năm.", "Ở mỗi hàng, chạm vào thứ bạn trồng vụ đó.", "Vụ nào không trồng gì thì chạm “Bỏ trống / nghỉ”."], szQuick: "Chọn nhanh:", szYear: "Năm của bạn:", szEx: [["3 vụ lúa", ["R","R","R"]], ["2 vụ lúa", ["R","R","-"]], ["1 vụ lúa", ["R","-","-"]], ["Tôm rồi lúa", ["S","S","R"]], ["Lúa + cây màu", ["R","U","R"]]], savedPlan: "Đã lưu kế hoạch thành tệp chữ. Gửi qua Zalo hoặc giữ lại.", savedPrint: "Đã lưu kế hoạch. Mở tệp ra: máy sẽ hỏi in hoặc lưu PDF."
 });
 const SEAS_OPTS = ["R", "S", "U", "-"];
 const SEAS_OF = { rice3: ["R", "R", "R"], rice2: ["R", "R", "-"], rice_shrimp: ["S", "S", "R"], rice_upland: ["R", "U", "R"] };
@@ -886,6 +888,39 @@ ${s.seed ? `<div><dt>${t("seed")}</dt><dd>${esc(L(s.seed))}</dd></div>` : ""}${s
 ${r.seed ? `<div><dt>${t("seed")}</dt><dd>${esc(pick(r.seed))}</dd></div>` : ""}${r.fertiliser ? `<div><dt>${t("fert")}</dt><dd>${esc(pick(r.fertiliser))}</dd></div>` : ""}
 ${r.steps && r.steps.length ? `<div><dt>${t("steps")}</dt><dd><ol>${r.steps.map(s => `<li>${esc(pick(s))}</li>`).join("")}</ol></dd></div>` : ""}</dl></div>` }).join("");
 typeof D5 !== "undefined" && D5.plan(c);
+renderPath(c, runs, lab, span, isSalt, SHORT);
+}
+/* Simple view of step 4: one season path, a stop per crop (when, what to do, salt, what to get ready) and one money line.
+   It stands in for the forecast, wheel, cost, calendar and needs boxes, which stay in Advanced. */
+function renderPath(c, runs, lab, span, isSalt, SHORT) {
+let el = document.getElementById("s4"); if (!el) { const a = document.getElementById("planOk"); if (!a) return; a.insertAdjacentHTML("afterend", `<section id="s4" class="s4" aria-labelledby="s4H"></section>`); el = document.getElementById("s4") }
+const L = x => x[lang === "vi" ? 1 : 0], now = new Date(), m0 = now.getMonth(), code = i => c.months[((m0 + i) % 12 + 12) % 12];
+/* short month labels: "T8" / "Aug"; a range is "T1–T6" */
+const mo = i => { const m = (m0 + i) % 12; return lang === "vi" ? `T${m + 1}` : t("monthsLong")[m].slice(0, 3) };
+const rg = (a, b) => a === b ? mo(a) : `${mo(a)}–${mo(b)}`;
+const yr = i => new Date(now.getFullYear(), m0 + i).getFullYear();
+const rows = runs.map((r, n) => {
+  const sm = []; for (let i = r.from; i <= r.to; i++) if (isSalt(i)) { if (sm.length && sm[sm.length - 1][1] === i - 1) sm[sm.length - 1][1] = i; else sm.push([i, i]) }
+  const k = r.code === "-" ? "F" : r.code[0], kind = { R: "rice", S: "shrimp", U: "upland" }[k] || "fallow";
+  let what, act = "";
+  if (r.code === "-") what = t("s4Rest");
+  else { const nm = pick(c.plan[r.code].name), started = r.from === 0 && code(-1) === r.code, ends = code(r.to + 1) !== r.code;
+    what = k !== "U" && t("sCropL")[k] ? t("sCropL")[k] : nm[0].toUpperCase() + nm.slice(1);   /* rice and shrimp: one short word; an upland crop keeps its own name */
+    act = [started ? (ends ? "" : t("planCont")) : `${t(k === "S" ? "planStock" : "planSow")} ${mo(r.from)}`, ends ? `${t("planHarvest")} ${mo(r.to)}` : ""].filter(Boolean).join(" · ");
+    act = act[0].toUpperCase() + act.slice(1) }
+  const salt = sm.length ? `<span class="s4-salt" title="${esc(t("s4Salt"))}">${ico("drop", 12)}${esc(t("s4SaltS"))} ${sm.map(([a, b]) => rg(a, b)).join(", ")}</span>` : "";
+  const y0 = yr(r.from), y1 = yr(r.to);
+  return `<li class="s4-st s4k-${k}${n ? "" : " now"}"><span class="s4-ico" aria-hidden="true">${ico(kind, 18)}</span>
+    <span class="s4-b"><span class="s4-l1"><b class="s4-what">${esc(what)}</b>${salt}</span>${act ? `<span class="s4-act">${esc(act)}</span>` : ""}</span>
+    <span class="s4-when"><b>${rg(r.from, r.to)}</b><small>${n ? (y0 === y1 ? y0 : `${y0}–${y1}`) : esc(t("calNow"))}</small></span></li>`;
+}).join("");
+const keys = [...new Set(runs.filter(r => r.code !== "-").flatMap(r => c.plan[r.code].res || []))].filter(x => SHORT[x]);
+const need = keys.map(x => `<li><b>${esc(pick(DATA.resources[x] ? DATA.resources[x].name : x))}</b>${SHORT[x].seed ? `<span>${esc(t("seed"))}: ${esc(L(SHORT[x].seed))}</span>` : ""}${SHORT[x].fert ? `<span>${esc(t("fert"))}: ${esc(L(SHORT[x].fert))}</span>` : ""}</li>`).join("");
+let money = "";
+if (typeof Cost !== "undefined" && Cost.calc) { const r = Cost.calc(c), h = Cost.ha ? Cost.ha() : null, k = h || 1;
+  if (r.cost || r.profit != null) money = `<div class="s4-money">${r.cost ? `<div class="c"><span>${esc(t("s4Cost"))}</span><b>${esc(Cost.money(r.cost * k))}</b></div>` : ""}${r.profit != null ? `<div class="p"><span>${esc(t("s4Profit"))}</span><b>${esc(Cost.money(r.profit * k))}</b></div>` : ""}
+    <p class="s4-est">${esc(t("s4Year")(h ? num(h) : null))} · ${esc(t("s4Est"))} ${esc(Cost.machNote ? Cost.machNote() : "")}</p></div>` }
+el.innerHTML = `<h3 id="s4H" class="s4-h">${esc(t("s4H"))}</h3><ol class="s4-path">${rows}</ol>${money}${need ? `<details class="s4-need"><summary>${esc(t("s4Need"))}</summary><ul>${need}</ul></details>` : ""}`;
 }
 const setPv = v => { pv = v; $("#v4").dataset.pv = v; $$("#planView [data-pv]").forEach(b => b.setAttribute("aria-pressed", b.dataset.pv === v)); save("mre-pv", v) };
 /* print, share and read the plan aloud */
@@ -1155,7 +1190,7 @@ const v2 = document.querySelector("#v2"); if (!v2) return;
 let el = document.querySelector("#needField");
 if (!el) { el = document.createElement("div"); el.id = "needField"; el.className = "need-field"; el.setAttribute("role", "note"); v2.insertBefore(el, v2.firstChild) }
 const f = site && fields.find(x => x.id === fieldId);
-if (!site || exOn) { el.hidden = true; return }
+if (!site || exOn || f) { el.hidden = true; return }   /* a saved field is already shown, with its edit button, in "Your fields" below */
 el.hidden = false; el.classList.toggle("ok", !!f);
 el.innerHTML = f ? `<p><b>${esc(t("fieldReady")(f.name))}${f.ha ? ` · ${num(f.ha)} ha` : ""}</b></p><button type="button" class="ghost-btn" data-edit="${f.id}">${esc(t("fEdit"))}</button>`
 : `<p><b>${esc(t("needField"))}</b><span>${esc(t("needFieldP"))}</span></p><button type="button" class="btn gold" data-needfield>${esc(t("needFieldB"))}</button>`;
