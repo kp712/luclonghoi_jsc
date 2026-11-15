@@ -170,13 +170,13 @@ body.has-site #d5Month { right: auto; left: calc(var(--rail-w) + 20px) }
 body.dv-on #d5Month, body.home-on #d5Month { display: none !important }
 
 /* ---------- step 4: repeats removed in both views ---------- */
-#v4 > #planFor, #v4 > #talk { display: none }   /* plan name is in the "Your plan is" card; the talk line repeats the disclaimer */
+#v4 #planFor, #v4 #talk { display: none }   /* plan name is in the "Your plan is" card; the talk line repeats the disclaimer */
 
 /* ---------- step 4, Simple: one season path instead of five boxes ---------- */
-body.ui-advanced #s4 { display: none }
-body.ui-simple #v4 > #d5Pred, body.ui-simple #v4 > #d5W4, body.ui-simple #v4 > #d5Cost, body.ui-simple #v4 > #calendar,
-body.ui-simple #v4 > #planView, body.ui-simple #v4 > .pv-list, body.ui-simple #v4 > #strip, body.ui-simple #v4 > #stripKey,
-body.ui-simple #v4 > h3[data-t="planNeed"], body.ui-simple #v4 > #congNote, body.ui-simple #v4 > #needs,
+body.ui-advanced #s4, body.ui-advanced #s4m { display: none }
+body.ui-simple #v4 #d5Pred, body.ui-simple #v4 #d5W4, body.ui-simple #v4 #d5Cost, body.ui-simple #v4 #calendar,
+body.ui-simple #v4 #planView, body.ui-simple #v4 .pv-list, body.ui-simple #v4 #strip, body.ui-simple #v4 #stripKey,
+body.ui-simple #v4 h3[data-t="planNeed"], body.ui-simple #v4 #congNote, body.ui-simple #v4 #needs,
 body.ui-simple .plan-ok .po-where, body.ui-simple .plan-ok .po-cal, body.ui-simple .plan-ok .po-next { display: none }
 .s4 { margin: 12px 0; display: grid; gap: 10px }
 .s4-h { margin: 0; font-size: 1.125rem; font-weight: 800; line-height: 1.25 }
@@ -210,4 +210,31 @@ body.ui-simple .plan-ok .po-where, body.ui-simple .plan-ok .po-cal, body.ui-simp
 .s4-st { height: 64px; min-height: 0 }
 .s4-b { align-content: center }
 /* step 1, Simple: the area chart already shows the 12 months; the rotation wheel waits for Advanced and step 4 */
-body.ui-simple #v1 > #d5W1 { display: none }
+body.ui-simple #v1 #d5W1 { display: none }
+
+/* ---------- full screen (1000px+): the two columns scroll on their own, like two pages side by side ---------- */
+@media screen and (min-width: 1000px) {
+  body.drawer-full .d-body:has(> .view.fc.on) { overflow: hidden; display: flex; flex-direction: column; padding-bottom: 0 }
+  body.drawer-full .d-body > .view.fc.on { flex: 1 1 auto; min-height: 0; height: 100%; animation: none }
+  body.drawer-full .view.fc.on > .fc-l, body.drawer-full .view.fc.on > .fc-r { position: static; max-height: 100%; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding-bottom: 2rem; scrollbar-gutter: stable }
+  body.drawer-full .view.fc.on > .fc-l { padding-right: .5rem }
+  body.drawer-full .view.fc > .fc-l > * + *, body.drawer-full .view.fc > .fc-r > * + * { margin-top: 1rem }
+  body.drawer-full.ui-simple #v4.fc.on > .fc-r { padding-top: 0 }
+  body.drawer-full #s4m { margin-top: 0 }
+}
+
+/* ---------- printing the plan: the whole plan on paper, one column, no screen controls ---------- */
+@media print {
+  @page { margin: 14mm }
+  html, body { height: auto !important; overflow: visible !important; background: #fff !important }
+  #drawer, .d-body, .view.on, .view.fc.on, .fc-l, .fc-r { position: static !important; display: block !important; height: auto !important; max-height: none !important; overflow: visible !important; transform: none !important; animation: none !important; border: 0 !important; padding: 0 !important; box-shadow: none !important; background: none !important }
+  .fc-r { margin-top: 1rem !important }
+  #dv, #dvBack, #side, .d-prog, #dFull, #dClose, .d-head button, .d-foot, #steps, #dNum, .plan-tools, .po-act, #ppRev, #planView, #d5Pred, #shareMsg, #areaDock, .leaflet-container { display: none !important }
+  :root, body { --ink: #111; --ink-2: #333; --ink-3: #555; --panel-solid: #fff; --line: #ccc; --line-2: #999; --gold: #8A5E0B; --gold-soft: #f6ead2; --rice: #3d7a22; --water: #1f5f86; --risk: #b3361d; --ok: #2f7a3e; color: #111 }
+  #dTitle { color: #111 } #dSub { color: #444 }
+  .plan-ok { border-color: #2f7a3e !important; background: #fff !important }
+  .box, .d5-box, .s4-path, .s4-money, .s4-need, .need, .cal-m, .plan-ok, #planWarn, #d5W4 { break-inside: avoid; page-break-inside: avoid }
+  .s4-st { break-inside: avoid; -webkit-print-color-adjust: exact; print-color-adjust: exact }
+  .s4-need summary { display: none }
+  .disclaimer, .copy4 { font-size: 9pt; color: #444 }
+}

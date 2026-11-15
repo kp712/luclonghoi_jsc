@@ -920,7 +920,12 @@ let money = "";
 if (typeof Cost !== "undefined" && Cost.calc) { const r = Cost.calc(c), h = Cost.ha ? Cost.ha() : null, k = h || 1;
   if (r.cost || r.profit != null) money = `<div class="s4-money">${r.cost ? `<div class="c"><span>${esc(t("s4Cost"))}</span><b>${esc(Cost.money(r.cost * k))}</b></div>` : ""}${r.profit != null ? `<div class="p"><span>${esc(t("s4Profit"))}</span><b>${esc(Cost.money(r.profit * k))}</b></div>` : ""}
     <p class="s4-est">${esc(t("s4Year")(h ? num(h) : null))} · ${esc(t("s4Est"))} ${esc(Cost.machNote ? Cost.machNote() : "")}</p></div>` }
-el.innerHTML = `<h3 id="s4H" class="s4-h">${esc(t("s4H"))}</h3><ol class="s4-path">${rows}</ol>${money}${need ? `<details class="s4-need"><summary>${esc(t("s4Need"))}</summary><ul>${need}</ul></details>` : ""}`;
+el.innerHTML = `<h3 id="s4H" class="s4-h">${esc(t("s4H"))}</h3><ol class="s4-path">${rows}</ol>`;
+/* money and "what to get ready" sit in their own block: under the path, or in the right column on a full screen (side.js) */
+let m4 = document.getElementById("s4m");
+if (!m4) { m4 = document.createElement("div"); m4.id = "s4m"; m4.className = "s4 s4m"; const r = document.querySelector("#v4 > .fc-r"); r ? r.prepend(m4) : el.insertAdjacentElement("afterend", m4) }
+const open = m4.querySelector("details[open]");
+m4.innerHTML = `${money}${need ? `<details class="s4-need"${open ? " open" : ""}><summary>${esc(t("s4Need"))}</summary><ul>${need}</ul></details>` : ""}`;
 }
 const setPv = v => { pv = v; $("#v4").dataset.pv = v; $$("#planView [data-pv]").forEach(b => b.setAttribute("aria-pressed", b.dataset.pv === v)); save("mre-pv", v) };
 /* print, share and read the plan aloud */
@@ -1303,6 +1308,51 @@ const netState = () => { offChip.hidden = navigator.onLine; offChip.textContent 
 let dlApi = null;
 const copyB64 = (document.querySelector("#selfCopy") || {}).textContent || "";
 if (window.claude && claude.use) { try { claude.use("downloads").then(d => { dlApi = d }).catch(() => {}) } catch (e) {} }
+/* "Print or save as PDF": a clean copy of the plan as the farmer sees it (Simple or Advanced), light colours,
+   one column, no buttons, printed from a hidden frame so the drawer's scroll boxes and columns never cut it. */
+function planDocHTML() {
+  const v = document.querySelector("#v4"); if (!v) return "";
+  const shown = el => !!el && el.offsetHeight > 0;
+  const order = ["#planOk", "#s4", "#s4m", "#d5Cost", "#planWarn", "#calendar", "#v4 .pv-list", "#v4 h3[data-t='planNeed']", "#congNote", "#needs", "#v4 .disclaimer", "#v4 .copy4"];
+  const parts = order.map(q => document.querySelector(q)).filter(el => el && v.contains(el) && shown(el) && !el.closest(".plan-tools")).map(el => {
+    const c = el.cloneNode(true);
+    /* a folded part prints open, its summary as a plain title */
+    c.querySelectorAll("details").forEach(d => { const box = document.createElement("div"); box.className = d.className; const sm = d.querySelector(":scope > summary");
+      if (sm) { const h = document.createElement("p"); h.className = "pd-sub"; h.textContent = sm.textContent.trim(); box.appendChild(h); sm.remove() }
+      while (d.firstChild) box.appendChild(d.firstChild); d.replaceWith(box) });
+    c.querySelectorAll("button, .po-act, .po-next, input, [data-cost-ha], .cs-ha").forEach(x => x.remove());
+    return c.outerHTML; }).join("\n");
+  const f = fieldId && !exOn ? fields.find(x => x.id === fieldId) : null;
+  const sub = [site ? pick(site.name) : "", f ? f.name + (f.ha ? ` · ${num(f.ha)} ha` : "") : "", new Date().toLocaleDateString(lang === "vi" ? "vi-VN" : "en-GB")].filter(Boolean).map(esc).join(" · ");
+  const links = [...document.querySelectorAll('link[rel="stylesheet"]')].map(l => `<link rel="stylesheet" href="${esc(l.href)}">`).join("");
+  return `<!doctype html><html lang="${lang}" data-theme="light"><head><meta charset="utf-8"><title>${esc(t("step5"))}</title>${links}
+<style>
+@page { size: A4; margin: 14mm }
+html, body { background: #fff !important; color: #15302A; height: auto; overflow: visible }
+body { margin: 0; padding: 0; font-family: "Be Vietnam Pro", system-ui, sans-serif; font-size: 11pt; -webkit-print-color-adjust: exact; print-color-adjust: exact }
+.pd-head { border-bottom: 2px solid #15302A; padding-bottom: 8px; margin-bottom: 14px }
+.pd-head h1 { margin: 0; font-size: 18pt; line-height: 1.2 } .pd-head p { margin: 4px 0 0; font-size: 10pt; color: #44564F }
+.pd > * + * { margin-top: 12px }
+.pd, .pd * { animation: none !important; transition: none !important }
+.pd .s4-st { height: auto; min-height: 52px } .pd .s4-what, .pd .s4-act { white-space: normal }
+.pd .plan-ok, .pd .s4-path, .pd .s4m, .pd .s4-money, .pd .s4-need, .pd .box, .pd .need, .pd .cal-m, .pd #planWarn { break-inside: avoid; page-break-inside: avoid }
+.pd .s4-need { padding: 10px 12px } .pd .s4-need ul { margin: 0 }
+.pd .calendar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px }
+.pd #planWarn[hidden] { display: none }
+.pd .pd-sub { margin: 8px 0 6px; font-weight: 700; font-size: 11pt }
+.pd .disclaimer, .pd .copy4 { font-size: 8.5pt; color: #44564F }
+</style></head><body class="${document.body.className.split(" ").filter(c => /^ui-|^lang-/.test(c)).join(" ")} print-doc">
+<header class="pd-head"><h1>${esc(t("step5"))}</h1><p>${sub}</p></header><main id="v4" class="view on pd">${parts}</main></body></html>`;
+}
+function printPlanDoc() {
+  const html = planDocHTML(); if (!html) { window.print(); return }
+  const fr = document.createElement("iframe"); fr.setAttribute("aria-hidden", "true"); fr.tabIndex = -1;
+  fr.style.cssText = "position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden";
+  document.body.appendChild(fr);
+  fr.onload = () => { const w = fr.contentWindow; const go = () => { try { w.focus(); w.print() } catch (e) { window.print() } setTimeout(() => fr.remove(), 1500) };
+    (w.document.fonts && w.document.fonts.ready ? w.document.fonts.ready : Promise.resolve()).then(() => setTimeout(go, 150)) };
+  fr.srcdoc = html;
+}
 /* Printable copy of the plan as its own page: opens in the browser and asks to print (save as PDF there). */
 async function printFile() {
   const msg = $("#shareMsg"), L = planLines(), e = x => String(x).replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[c]);
@@ -1460,7 +1510,7 @@ if (c("#more15")) { document.body.classList.toggle("more15"); renderCards(false)
 if ((b = c("#cards .plan-btn"))) { planId = b.dataset.plan; renderCards(false); setTimeout(() => go(4), 120); return }
 if (!c("details, a, .cite, button") && (b = c("#cards [data-plan]"))) { planId = b.dataset.plan; renderCards(false); setTimeout(() => go(4), 120); return }
 /* step 4 */
-if (c("#printPlan")) { const pm = document.querySelector("#planMore"); if (pm) pm.open = true; if (dlApi) { printFile(); return } window.print(); return }
+if (c("#printPlan")) { const pm = document.querySelector("#planMore"); if (pm) pm.open = true; document.querySelectorAll("#s4m details").forEach(d => { d.open = true }); if (dlApi) { printFile(); return } printPlanDoc(); return }
 if (c("#sharePlan")) { sharePlan(); return }
 if (c("#readPlan")) { readPlan(); return }
 if ((b = c("#planView [data-pv]"))) { setPv(b.dataset.pv); return }
@@ -1503,7 +1553,7 @@ document.addEventListener("dragstart", e => { if (!editable(e.target) && !(e.tar
 
 /* ---------- start ---------- */
 window.App = { refresh: () => renderAll(), fieldId: () => fieldId, cur: () => cur, ranked, planId: () => planId, V, t, lang: () => lang, site: () => site, go, toast, mode: () => mode, weights: () => ({ ...w }), upCrop: () => upCrop, guide, openPanel, closePanel, ui: () => ui, setUi: u => { if (u !== ui) setUi(u) }, hasField: () => hasField(), example: () => exOn, askField: () => askField(),
-  fields: () => fields.slice(), openField: id => openField(id), openFieldForm: siteId => openFieldForm(siteId) };
+  fields: () => fields.slice(), planDoc: () => planDocHTML(), openField: id => openField(id), openFieldForm: siteId => openFieldForm(siteId) };
 function start() {
 ensureSkeleton(); buildExtras();
 document.body.appendChild(offChip);
@@ -1533,3 +1583,5 @@ let rt = 0; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout
 }
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
 })();
+
+addEventListener("beforeprint", () => { document.querySelectorAll("#s4m details, #planMore").forEach(d => { d.open = true }) });
