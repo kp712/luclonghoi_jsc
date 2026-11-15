@@ -386,3 +386,18 @@ body.dv-on .dv-page :is(.btn, .t-field, .ss-card, .fl-it, .nw-k, .nw-o, .s-cal, 
   .ck-hz { flex:1 1 100%; order:3 } .ck-hz button { flex:1 1 0 }
 }
 body.dv-on #mapKey, body.dv-on #d5Month { display:none !important }   /* map legend and month slider belong to the map, which the full-width dashboard covers */
+
+/* readable outdoors: no dashboard text under 12 px (charts included; SVG units render about 1:1 on phones) */
+body.dv-on .a-h, body.dv-on .a-src, body.dv-on .a-kpi dd .a-kn, body.dv-on .pg-l, body.dv-on .rb .mo, body.dv-on .t-src, body.dv-on .pb small { font-size:.75rem }
+body.dv-on .a-line .ax { font-size:12px } body.dv-on .a-gauge text { font-size:11px }
+@media (max-width:420px) { body.dv-on .pg-l, body.dv-on .pb small { font-size:.75rem } body.dv-on .ps-bars { gap:2px } }
+/* month strip on narrow phones: two rows of six, so each month button is wide enough to tap (WCAG 2.5.8) */
+@media (max-width:400px) { body.dv-on .a-mstrip { grid-template-columns:repeat(6, minmax(0, 1fr)); gap:6px } body.dv-on .a-mstrip button span { font-size:.75rem } }
+/* header controls meet the 44 px tap floor */
+#lEn, #lVi, #uiSw { min-height:44px }
+/* field chip on very narrow phones: drop the area text rather than cut it to one letter */
+@media (max-width:359px) { .t-field .t-fs { display:none } }
+.ck-range:focus-visible::-moz-range-thumb { outline:3px solid var(--ink); outline-offset:2px }
+@media (max-width:420px) { body.dv-on .a-line text, body.dv-on .a-line text.ax { font-size:14px } body.dv-on .a-gauge text { font-size:13px } }   /* the chart shrinks on narrow phones: larger units keep the rendered text at about 12 px */
+@media (max-width:420px) { body.dv-on .a-line text.alt:not(.on) { display:none } }   /* every other month label on narrow phones, so the larger labels never touch */
+.nv-plan .nv-fab { box-shadow:0 4px 12px rgb(0 0 0 / .28) }   /* a plain lift, not a coloured glow */
