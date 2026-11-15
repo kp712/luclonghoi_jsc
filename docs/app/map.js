@@ -1,6 +1,8 @@
 /* map.js: Leaflet map for the Sigma draft. Globals used: L (Leaflet 1.9.4), TILES (tiles.js).
    Exposes: const MapView = { init, select, setLayer, home, focus, resize, labels, month, hover }. */
-const MapView = (() => {
+/* Leaflet missing (CDN blocked or down): an empty MapView, so `typeof MapView` and the callers' feature checks
+   keep working and the cards and plan still show without the map. A throwing initializer would leave the const uninitialised. */
+const MapView = typeof L === "undefined" ? {} : (() => {
   /* Coast of the area (lon/lat) and the Hậu River, copied from Draft 3 (without its pixel projection). */
   const LAND = [[105.40,9.91],[105.84,9.91],[105.93,9.81],[106.05,9.72],[106.17,9.64],[106.27,9.56],[106.33,9.50],[106.30,9.45],[106.22,9.41],[106.12,9.36],[106.03,9.31],[105.93,9.27],[105.82,9.23],[105.70,9.20],[105.58,9.18],[105.40,9.17]];
   const RIVER = [[105.86,9.95],[105.955,9.84],[106.06,9.755],[106.175,9.672],[106.28,9.595],[106.40,9.53]];

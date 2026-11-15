@@ -733,8 +733,9 @@ body.lang-vi .brand-tag, body.lang-vi .rail-tags { letter-spacing: 0 }
 @media (max-width: 760px) {
   /* a solid top bar: map labels no longer show between its buttons */
   #topbar { background: var(--bg); border-bottom: 1px solid var(--line) }
-  /* the "My fields" button sits above the hero, not on its heading */
-  body.dv-off:not(.has-site) #hero { top: calc(var(--top-h) + 64px) }
+  /* picking an area from "My fields": the strip under the top bar already says "tap your area", and the hero
+     would cover the map pins, so it stays hidden on phones */
+  body.dv-off:not(.has-site) #hero { display: none }
   #setPanel { padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px)) }
 }
 

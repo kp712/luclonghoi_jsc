@@ -52,7 +52,20 @@ const SiteData = (() => {
   }
   return { get, app, rx };
 })();
-const SITES_JSON = SiteData.get("data/sites.json");
-const DATA = SiteData.app(SITES_JSON);
-const COSTS = SiteData.get("app/costs.json");
-const RESEARCH = SiteData.get("app/research.json");
+let SITES_JSON, DATA, COSTS, RESEARCH;
+try {
+  SITES_JSON = SiteData.get("data/sites.json");
+  DATA = SiteData.app(SITES_JSON);
+  COSTS = SiteData.get("app/costs.json");
+  RESEARCH = SiteData.get("app/research.json");
+} catch (e) {
+  /* no data, no app: cover the page with a two-language message instead of a half-drawn, broken screen */
+  const box = document.createElement("div");
+  box.setAttribute("role", "alert");
+  box.style.cssText = "position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;justify-content:center;gap:12px;padding:24px;background:#f6f4ec;color:#1f2a1f;font:18px/1.5 system-ui,sans-serif";
+  box.innerHTML = '<p lang="vi" style="margin:0">Không tải được dữ liệu. Hãy kiểm tra kết nối mạng và tải lại trang.</p>'
+    + '<p lang="en" style="margin:0">Couldn\'t load the data. Check your connection and reload the page.</p>'
+    + '<button type="button" style="align-self:flex-start;min-height:44px;padding:8px 18px;font:inherit" onclick="location.reload()">Tải lại / Reload</button>';
+  document.body.appendChild(box);
+  throw e;
+}

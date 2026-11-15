@@ -294,7 +294,7 @@ const Dash = (() => {
   const mv = () => (selM == null ? CM : selM);
   const MLONG = (m) => (lang() === "vi" ? "Tháng " + (m + 1) : ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][m]);
   const tile = (key, cls, head, body, src) => `<section class="a-t ${cls}" data-zoom="${key}">
-    <h4 class="a-h">${head}<button type="button" class="a-exp" data-zoomb="${key}" aria-label="${esc(T("open"))}: ${esc(head.replace(/<[^>]+>/g, ""))}">${ic("expand", 14)}</button></h4>${body}${src ? `<p class="a-src">${esc(src)}</p>` : ""}</section>`;
+    <h3 class="a-h">${head}<button type="button" class="a-exp" data-zoomb="${key}" aria-label="${esc(T("open"))}: ${esc(head.replace(/<[^>]+>/g, ""))}">${ic("expand", 14)}</button></h3>${body}${src ? `<p class="a-src">${esc(src)}</p>` : ""}</section>`;
   function gauge(g, big) {
     const max = 4, v = Math.min(g, max), ang = (a) => Math.PI * (1 - a / max), pt = (a, r) => `${(60 + r * Math.cos(ang(a))).toFixed(2)} ${(60 - r * Math.sin(ang(a))).toFixed(2)}`;
     const arc = (a, b, cls) => `<path class="${cls}" d="M${pt(a, 48)} A48 48 0 0 1 ${pt(b, 48)}"/>`;
@@ -959,8 +959,8 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
     const zt = e.target.closest("[data-zoom]"); if (zt && !e.target.closest("button, a, input, [data-dvm], [data-use], details")) return zoomOpen(zt.dataset.zoom, zt);
     const a = e.target.closest("[data-dv],[data-dvf],[data-dvui],[data-use],[data-tab],[data-opt],[data-dvm]"); if (!a || a.matches("input")) return;
     const d = a.dataset;
-    if (d.dvui) { st.ui = d.dvui; save(); paintModes(); return render() }
-    if (d.dvf) { st.sel = d.dvf; save(); view = "dash"; selM = null; render(); $("#dvPanel").scrollTop = 0; return }
+    if (d.dvui) { st.ui = d.dvui; save(); paintModes(); render(); return refocus(`[data-dvui="${d.dvui}"]`) }
+    if (d.dvf) { st.sel = d.dvf; save(); view = "dash"; selM = null; render(); $("#dvPanel").scrollTop = 0; return refocus(`[data-dvf="${d.dvf}"]`) }
     if (d.use) { const f = fieldSel(); f.rot = d.use; f.savedAt = Date.now(); save(); closeSheet(); render(); if (!zoomKey) $("#dvPanel").scrollTop = 0;
       try { window.App && App.toast && App.toast(T("usedT")(L(cardOf(f).name))) } catch (e) {} if (zoomKey) { const p = $("#dvZP"); p.innerHTML = zoomHTML(f) } return }
     if (d.tab) { tab = d.tab; return render() }
@@ -980,7 +980,7 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
       case "delask": { const f = fieldSel(); if (!f) return; sheet(`<div class="dv-delq"><span class="dv-delico">${ic("trash", 30)}</span><h2>${esc(T("delH")(f.name))}</h2><p class="sd-note">${esc(T("delP"))}</p>
         <div class="dv-acts"><button type="button" class="btn dv-delyes" data-dv="del">${ic("trash", 16)}<span>${esc(T("delYes"))}</span></button><button type="button" class="btn gold" data-dv="close"><span>${esc(T("cancel"))}</span></button></div></div>`); return }
       case "del": { const f = fieldSel(); if (f) { st.fields = st.fields.filter((x) => x.id !== f.id);
-        try { const af = window.App && App.fields && appFieldOf(f, App.fields()); if (af && App.removeField) App.removeField(af.id, true) } catch (e) {}   /* the planner list too */ st.sel = st.fields[0] ? st.fields[0].id : null; selM = null; save(); closeSheet(); try { zoomClose() } catch (e) {} render(); try { window.App && App.toast && App.toast(T("deleted")) } catch (e) {} } return }
+        try { const af = window.App && App.fields && appFieldOf(f, App.fields()); if (af && App.removeField) App.removeField(af.id, true) } catch (e) {}   /* the planner list too */ st.sel = st.fields[0] ? st.fields[0].id : null; selM = null; save(); closeSheet(); try { zoomClose() } catch (e) {} render(); refocus("#dvH"); try { window.App && App.toast && App.toast(T("deleted")) } catch (e) {} } return }
     }
   });
   const multiOf = (f) => { const Y = yearsOf(f); f.multi = { n: Y.n, yrs: Y.yrs }; return f.multi };
@@ -1001,6 +1001,9 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
   /* one Simple / Advanced switch for the whole app: dashboard, Settings and the planner drawer */
   const modeSeg = (cls) => `<div class="${cls}"><p class="dv-ml">${esc(T("modeH"))}</p><div class="seg" role="group" aria-label="${esc(T("modeH"))}"><button type="button" data-dvmode="simple" aria-pressed="${!adv()}">${esc(T("simple"))}</button><button type="button" data-dvmode="advanced" aria-pressed="${adv()}">${esc(T("adv"))}</button></div><p class="dv-mh">${esc(adv() ? T("modeA") : T("modeS"))}</p></div>`;
   function paintModes() {
+    /* the switches below are rebuilt (also by the watcher further down): keep keyboard focus on the one in use */
+    const af = document.activeElement, box = af && af.closest && af.closest("#uiSw, #uiSeg, .dv-setmode");
+    const back = !box ? null : af.id ? "#" + af.id : `${box.id ? "#" + box.id : ".dv-setmode"} [data-dvmode="${af.dataset.dvmode}"]`;
     const sb = document.getElementById("setBody");
     if (sb) { let x = sb.querySelector(".dv-setmode"); const h = modeSeg("dv-setmode"); if (!x) sb.insertAdjacentHTML("afterbegin", h); else x.outerHTML = h;
       const lg = sb.querySelector(".dv-setlang"), lh = `<div class="dv-setlang"><p class="dv-ml">${esc(T("langH"))}</p><div class="seg" role="group" aria-label="${esc(T("langH"))}"><button type="button" data-dvlang="vi" lang="vi" aria-pressed="${lang() === "vi"}">Tiếng Việt</button><button type="button" data-dvlang="en" lang="en" aria-pressed="${lang() === "en"}">English</button></div></div>`;
@@ -1014,7 +1017,10 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
     document.body.classList.toggle("dv-simple", !adv()); document.body.classList.toggle("dv-adv", adv());
     /* the planner (app.js) has its own detail switch: keep it the same, so Simple really shows less in the rotation cards */
     try { if (window.App && App.setUi) App.setUi(adv() ? "advanced" : "simple"); if (typeof Cost !== "undefined") Cost.cards() } catch (e) {}
+    if (back) refocus(back);
   }
+  /* render() and paintModes() rebuild the clicked control: put keyboard focus back on its new copy (or a heading) */
+  function refocus(sel) { const n = $(sel); if (!n) return; if (n.matches("h1,h2,h3")) n.tabIndex = -1; try { n.focus({ preventScroll: true }) } catch (e) {} }
   document.addEventListener("click", (e) => { const b = e.target.closest("[data-dvmode]"); if (!b) return; st.ui = b.dataset.dvmode; save(); paintModes(); render() });
   document.addEventListener("click", (e) => { const b = e.target.closest("[data-dvlang]"); if (!b) return; const t = document.getElementById(b.dataset.dvlang === "en" ? "lEn" : "lVi"); if (t) t.click() });
   window.addEventListener("keydown", (e) => { const zz = $("#dvZoom"), sh = $("#dvSheet"); if (e.key === "Escape" && zz && !zz.hidden && (!sh || sh.hidden)) { e.preventDefault(); e.stopPropagation(); zoomClose() } }, true);
