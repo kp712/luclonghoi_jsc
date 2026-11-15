@@ -250,7 +250,15 @@ const Home = (() => {
   const chrome = () => Array.from(document.body.children).filter((n) => n.id !== "home" && n.id !== "modal" && n.id !== "toast" && n.tagName !== "SCRIPT");
   function setInert(on) { chrome().forEach((n) => { if (on) { if (!n.inert) { n.inert = true; n.dataset.homeInert = "1" } } else if (n.dataset.homeInert) { n.inert = false; delete n.dataset.homeInert } }) }
   let shown = false;
+  /* Fraunces (the home page's display face) is fetched only when the home page opens; the dashboard never needs it */
+  function displayFont() {
+    if (document.getElementById("hmFont")) return;
+    const l = document.createElement("link"); l.id = "hmFont"; l.rel = "stylesheet";
+    l.href = "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400..600&display=swap";
+    document.head.appendChild(l);
+  }
   function show() {
+    displayFont();
     const b = document.body;
     shown = true; b.classList.add("home-on"); b.classList.remove("home-off"); setInert(true);
     render();

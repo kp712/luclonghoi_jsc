@@ -753,3 +753,13 @@ body.lang-vi .brand-tag, body.lang-vi .rail-tags { letter-spacing: 0 }
 .boot-wait { position:fixed; z-index:99990; left:50%; top:50%; transform:translate(-50%, -50%); margin:0; padding:12px 18px; border-radius:14px; background:var(--panel-solid, #13201a); color:var(--ink, #e8efea); font:600 1rem/1.4 var(--font, system-ui, sans-serif); box-shadow:0 6px 24px rgb(0 0 0 / .25) }
 .boot-wait span[lang="en"] { display:block; font-weight:400; font-size:.875rem; opacity:.75 }
 .d-body:focus-visible { outline-offset:-3px }
+
+/* phone feel: no grey tap flash, no font inflation in landscape, no double-tap delay on controls, no pull-to-refresh
+   tug on the app shell (inner panels keep their own contained scrolling) */
+html { -webkit-tap-highlight-color:transparent; -webkit-text-size-adjust:100%; text-size-adjust:100% }
+button, a, [role="button"], input[type="range"], summary, label { touch-action:manipulation }
+body.dv-on { overscroll-behavior:none }
+/* dashboard page changes: a short crossfade of the panel only; bars and nav stay put */
+#dvPanel { view-transition-name:dv-panel }
+::view-transition-old(dv-panel), ::view-transition-new(dv-panel) { animation-duration:.18s; animation-timing-function:cubic-bezier(.2,.8,.2,1) }
+::view-transition-old(root), ::view-transition-new(root) { animation:none }

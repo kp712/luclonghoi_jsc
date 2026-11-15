@@ -53,6 +53,7 @@ Open, not confirmed as fixed:
 - Name: **Mekong Rotation Explorer**, by Team Lục Long Hội.
 - Voice: plain words a farmer would use; honest about uncertainty.
 - Visual theme, binding by @kp712's decision (11 Nov 2026): **Aurora**, the blue "Gateway" direction, with a bright tangerine accent used as highlights only. System fonts. A dark theme that follows the phone setting.
+- Current build (16 Nov 2026): the live dashboard has moved to a green/gold "living paddy" look with Be Vietnam Pro (chosen for Vietnamese readability) and leaf-shaped cards; DESIGN.md records it. @kp712 to confirm this replaces the Aurora line above.
 
 ## Evidence on Hand
 

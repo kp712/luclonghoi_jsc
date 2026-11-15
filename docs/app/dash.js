@@ -298,7 +298,7 @@ const Dash = (() => {
   }
   /* salt (river and field) as lines, rain as bars; each month column is a button that puts that month in view */
   function lineChart(f, big) {
-    const nino = isNino(f), s = siteOf(f.site), rain = (nino && s.el && s.el.rain) || s.rain || [], W0 = 320, H0 = big ? 170 : 150, pl = 26, pr = 26, pt = 12, pb = 20, m0 = mv();
+    const nino = isNino(f), s = siteOf(f.site), rain = (nino && s.el && s.el.rain) || s.rain || [], W0 = 320, H0 = big ? 170 : 150, pl = 30, pr = 34, pt = 12, pb = 20, m0 = mv();
     const rv = [...Array(12)].map((_, m) => riverSalt(f.site, m, nino)), fv = [...Array(12)].map((_, m) => fieldSalt(f.site, m, nino));
     const mx = Math.max(2, ...rv) * 1.1, rmx = Math.max(100, ...rain) * 1.1, X = (m) => pl + m * (W0 - pl - pr) / 11, Y = (v) => pt + (H0 - pt - pb) * (1 - v / mx), YR = (v) => H0 - pb - (H0 - pt - pb) * v / rmx;
     const line = (a) => a.map((v, m) => `${m ? "L" : "M"}${X(m).toFixed(1)} ${Y(v).toFixed(1)}`).join(" ");
@@ -311,7 +311,7 @@ const Dash = (() => {
       <path class="lr" d="${line(rv)}"/><path class="lf" d="${line(fv)}"/>
       ${fv.map((v, m) => `<circle class="pf ${level(v)}" cx="${X(m).toFixed(1)}" cy="${Y(v).toFixed(1)}" r="${m === m0 ? 4.5 : 2.4}"/>`).join("")}
       <line class="nowl" x1="${X(CM).toFixed(1)}" x2="${X(CM).toFixed(1)}" y1="${pt}" y2="${H0 - pb}"/>
-      ${MS().map((t, m) => `<text class="ax${m === m0 ? " on" : ""}" x="${X(m).toFixed(1)}" y="${H0 - 6}" text-anchor="middle">${t}</text>`).join("")}
+      ${MS().map((t, m) => `<text class="ax${m === m0 ? " on" : ""}${m % 2 ? " alt" : ""}" x="${X(m).toFixed(1)}" y="${H0 - 6}" text-anchor="middle">${t}</text>`).join("")}
       ${[...Array(12)].map((_, m) => `<rect class="hit" data-dvsel="${m}" aria-hidden="true" data-l="${esc(MLONG(m))}" x="${(X(m) - cw / 2).toFixed(1)}" y="0" width="${cw.toFixed(1)}" height="${H0}"/>`).join("")}</svg>
       <p class="a-key"><span><i class="k lf"></i>${esc(T("field"))} ‰</span><span><i class="k lr"></i>${esc(T("river"))} ‰</span><span><i class="k rn"></i>${esc(T("rainM"))} mm</span><span><i class="k th"></i>2‰</span></p>`;
   }
@@ -1365,12 +1365,33 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
     if (e.shiftKey && (a === first || a === box.querySelector("#dvShH"))) { e.preventDefault(); last.focus() } else if (!e.shiftKey && a === last) { e.preventDefault(); first.focus() }
   });
   let lastSite = null, lastName = null;
+  /* patch: update the panel in place, touching only what changed. Unchanged nodes stay (focus, scroll, typed values and
+     running animations such as the swaying rice keep going); changed attributes are set on the same node, so CSS
+     transitions (progress bars, colours) glide instead of jumping; a different structure is replaced outright. */
+  function patch(live, next, depth) {
+    const A = [...live.childNodes], B = [...next.childNodes];
+    if (A.length !== B.length || depth > 8) { live.replaceChildren(...B); return }
+    for (let i = 0; i < A.length; i++) {
+      const x = A[i], y = B[i];
+      if (x.nodeType !== y.nodeType || x.nodeName !== y.nodeName) { live.replaceChild(y, x); continue }
+      if (x.nodeType === 3 || x.nodeType === 8) { if (x.data !== y.data) x.data = y.data; continue }
+      if (x.nodeType !== 1 || x.isEqualNode(y)) continue;
+      for (const at of [...x.attributes]) if (!y.hasAttribute(at.name)) x.removeAttribute(at.name);
+      for (const at of [...y.attributes]) if (x.getAttribute(at.name) !== at.value) x.setAttribute(at.name, at.value);
+      patch(x, y, depth + 1);
+    }
+  }
+  const tpl = document.createElement("template");
+  function setPanel(p, html) {
+    if (!p.firstChild) { p.innerHTML = html; return }
+    tpl.innerHTML = html; patch(p, tpl.content, 0); tpl.innerHTML = "";
+  }
   function render() {
     if (!$("#dv")) return;
     const p = $("#dvPanel"), y = p.scrollTop;
     const f = fieldSel();
     if (!f && view !== "fields") view = "dash";
-    p.innerHTML = view === "plan" ? panelPlan() : view === "season" ? seasonPage(f) : view === "data" ? `${pageHead()}${fieldTabs()}${advPage(f)}` : view === "fields" ? fieldsPage() : panelDash();
+    setPanel(p, view === "plan" ? panelPlan() : view === "season" ? seasonPage(f) : view === "data" ? `${pageHead()}${fieldTabs()}${advPage(f)}` : view === "fields" ? fieldsPage() : panelDash());
     p.scrollTop = view === "plan" ? 0 : y;
     paintNav(); paintClock();
     document.body.classList.toggle("dv-simple", !adv()); document.body.classList.toggle("dv-nofield", !fieldSel());
@@ -1379,7 +1400,12 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
     const tb = p.querySelector('.dv-ftabs [aria-selected="true"]'); if (tb) { const bar = tb.parentNode; bar.scrollLeft = Math.max(0, tb.offsetLeft - (bar.clientWidth - tb.offsetWidth) / 2) }
   }
   document.addEventListener("change", (e) => { if (e.target.closest && e.target.closest(".dv-fbf")) { const er = document.getElementById("fbErr"); if (er) er.textContent = "" } });
-  function go(v) { view = v; closeSheet(); render(); $("#dvPanel").scrollTop = 0 }
+  /* page changes crossfade (View Transitions, where the browser has it and motion is not reduced); otherwise instant */
+  function go(v) {
+    const changed = v !== view; view = v; closeSheet();   /* the latest tap always wins, even while a crossfade is running */
+    const run = () => { render(); $("#dvPanel").scrollTop = 0 };
+    if (changed && document.startViewTransition && !matchMedia("(prefers-reduced-motion: reduce)").matches) { const vt = document.startViewTransition(run); [vt.ready, vt.finished, vt.updateCallbackDone].forEach((p) => p && p.catch(() => {})) } else run();   /* a crossfade cut short (window resized) is harmless */
+  }
 
   document.addEventListener("click", (e) => {
     if (e.target.closest("#dvBack")) return backToDash();
