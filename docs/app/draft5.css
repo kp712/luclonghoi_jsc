@@ -168,3 +168,46 @@ body.has-site #d5Month { right: auto; left: calc(var(--rail-w) + 20px) }
 
 /* the salt month bar belongs to the map only: never over the dashboard, home or a full-screen panel */
 body.dv-on #d5Month, body.home-on #d5Month { display: none !important }
+
+/* ---------- step 4: repeats removed in both views ---------- */
+#v4 > #planFor, #v4 > #talk { display: none }   /* plan name is in the "Your plan is" card; the talk line repeats the disclaimer */
+
+/* ---------- step 4, Simple: one season path instead of five boxes ---------- */
+body.ui-advanced #s4 { display: none }
+body.ui-simple #v4 > #d5Pred, body.ui-simple #v4 > #d5W4, body.ui-simple #v4 > #d5Cost, body.ui-simple #v4 > #calendar,
+body.ui-simple #v4 > #planView, body.ui-simple #v4 > .pv-list, body.ui-simple #v4 > #strip, body.ui-simple #v4 > #stripKey,
+body.ui-simple #v4 > h3[data-t="planNeed"], body.ui-simple #v4 > #congNote, body.ui-simple #v4 > #needs,
+body.ui-simple .plan-ok .po-where, body.ui-simple .plan-ok .po-cal, body.ui-simple .plan-ok .po-next { display: none }
+.s4 { margin: 12px 0; display: grid; gap: 10px }
+.s4-h { margin: 0; font-size: 1.125rem; font-weight: 800; line-height: 1.25 }
+/* one card, one even row per stage: icon · what to do · when */
+.s4-path { list-style: none; margin: 0; padding: 0; border-radius: 14px; border: 1px solid var(--line); background: var(--panel-solid); overflow: hidden }
+.s4-st { display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; gap: 10px; align-items: center; min-height: 64px; padding: 10px 12px; border-left: 4px solid transparent }
+.s4-st + .s4-st { border-top: 1px solid var(--line) }
+.s4-st.now { border-left-color: var(--gold); background: var(--gold-soft) }
+.s4-ico { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; color: var(--ink-2); background: color-mix(in srgb, var(--ink) 6%, transparent) }
+.s4k-R .s4-ico { color: var(--rice); background: color-mix(in srgb, var(--rice) 16%, transparent) }
+.s4k-S .s4-ico { color: var(--water); background: color-mix(in srgb, var(--water) 16%, transparent) }
+.s4k-U .s4-ico { color: var(--gold); background: color-mix(in srgb, var(--gold) 16%, transparent) }
+.s4-b { min-width: 0; display: grid; gap: 1px }
+.s4-what { font-size: 1rem; font-weight: 700; line-height: 1.3; color: var(--ink) }
+.s4-act { font-size: .875rem; line-height: 1.35; color: var(--ink-2) }
+.s4-salt { display: inline-flex; align-items: center; gap: 3px; font-size: .8125rem; font-weight: 600; color: var(--risk) }
+.s4-when { min-width: 56px; white-space: nowrap; display: grid; justify-items: end; text-align: right; font-variant-numeric: tabular-nums }
+.s4-when b { font-size: .9375rem; font-weight: 700 } .s4-when small { font-size: .6875rem; color: var(--ink-3) }
+.s4-st.now .s4-when small { color: var(--gold); font-weight: 700 }
+.s4-money { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px; padding: 12px; border-radius: 14px; border: 1px solid var(--line); background: var(--panel-solid) }
+.s4-money span { display: block; font-size: .8125rem; color: var(--ink-2) }
+.s4-money b { font-size: 1.125rem; font-weight: 800; font-variant-numeric: tabular-nums } .s4-money .c b { color: var(--risk) } .s4-money .p b { color: var(--ok) }
+.s4-est { grid-column: 1 / -1; margin: 2px 0 0; font-size: .75rem; line-height: 1.4; color: var(--ink-3) }
+.s4-need { border-radius: 14px; border: 1px solid var(--line); background: var(--panel-solid); padding: 0 12px }
+.s4-need summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; font-size: .9375rem; font-weight: 600; color: var(--ink) }
+.s4-need ul { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 8px }
+.s4-need li { display: grid; gap: 2px; font-size: .875rem; line-height: 1.4; color: var(--ink-2) } .s4-need li b { color: var(--ink) }
+.s4-l1 { display: flex; align-items: center; gap: 8px; min-width: 0 }
+.s4-what, .s4-act { white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.s4-salt { flex: none; padding: 1px 7px; border-radius: 99px; background: color-mix(in srgb, var(--risk) 14%, transparent); font-size: .75rem; white-space: nowrap }
+.s4-st { height: 64px; min-height: 0 }
+.s4-b { align-content: center }
+/* step 1, Simple: the area chart already shows the 12 months; the rotation wheel waits for Advanced and step 4 */
+body.ui-simple #v1 > #d5W1 { display: none }

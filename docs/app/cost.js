@@ -189,5 +189,5 @@ const Cost = (() => {
     new MutationObserver(() => { if (!host.querySelector(".card:not(:has(.cs-box))")) return; cards() }).observe(host, { childList: true });
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
-  return { cards, plan: (c) => { lastPlan = c; plan(c) }, refresh, calc, covers, machNote: () => L(T.machS), machNo: () => L(T.machNo) };
+  return { cards, plan: (c) => { lastPlan = c; plan(c) }, refresh, calc, covers, money, ha: () => getHa().ha, machNote: () => L(T.machS), machNo: () => L(T.machNo) };
 })();
