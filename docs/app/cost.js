@@ -37,7 +37,17 @@ const Cost = (() => {
     planD: { vi: "Vốn cần có trước khi bắt đầu mỗi vụ.", en: "The cost to have ready before each crop starts." },
     before: { vi: (m) => `Trước ${m}`, en: (m) => `Before ${m}` },
     total: { vi: "Cả năm", en: "Whole year" },
-    perYear: { vi: "mỗi năm", en: "a year" }
+    perYear: { vi: "mỗi năm", en: "a year" },
+    /* what a cost figure counts: machine hire and labour (from each figure's "covers" note in costs.json) */
+    machS: { vi: "Phần lớn số liệu không ghi rõ có tính tiền thuê máy (cày, gặt) và tiền công hay không.",
+             en: "Most cost figures do not say whether machine hire (ploughing, harvest) or labour is counted." },
+    machH: { vi: "Số vốn này tính máy và công thế nào", en: "What this cost counts: machines and labour" },
+    machL: { vi: "Máy", en: "Machines" }, labL: { vi: "Công", en: "Labour" },
+    mach: { excluded: { vi: "không tính thuê máy", en: "machine hire left out" }, not_stated: { vi: "không ghi rõ", en: "not stated" } },
+    lab: { family: { vi: "chỉ tính công nhà", en: "family labour only" }, included: { vi: "có tính tiền công", en: "labour counted" }, not_stated: { vi: "không ghi rõ", en: "not stated" } },
+    of: { vi: (a, b) => `${a}/${b} số liệu`, en: (a, b) => `${a} of ${b} figures` },
+    machNo: { vi: "Chưa có số liệu nào ghi là đã tính tiền thuê máy. Nếu bạn thuê máy cày, máy gặt, tiền vốn thật có thể cao hơn.",
+              en: "No figure says it includes machine hire. If you hire a tractor or harvester, your real cost can be higher." }
   };
   const MON = { vi: ["tháng 1", "tháng 2", "tháng 3", "tháng 4", "tháng 5", "tháng 6", "tháng 7", "tháng 8", "tháng 9", "tháng 10", "tháng 11", "tháng 12"],
                 en: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] };
@@ -88,6 +98,17 @@ const Cost = (() => {
     return { crops, cost, lo, hi, partial: have.length < crops.length, profit: pr ? pr.mid : null, plo: pr ? pr.lo : null, phi: pr ? pr.hi : null };
   }
 
+  /* machine and labour coverage of one crop's figures: "machine hire left out 1/3 · not stated 2/3" */
+  function covers(cost) {
+    const fs = cost ? cost.figs : [], n = fs.length, line = (fld, dict) => Object.keys(dict).map((k) => [k, fs.filter((f) => (f[fld] || "not_stated") === k).length]).filter((x) => x[1])
+      .map(([k, c]) => `${L(dict[k])} (${L(T.of)(c, n)})`).join(" · ");
+    return n ? { m: line("machines", T.mach), l: line("labour", T.lab) } : null;
+  }
+  function machBlock(crops) {
+    const rows = crops.filter((x) => x.cost).map((x) => { const v = covers(x.cost); return `<li><b>${esc(words(x.key))}</b><span>${esc(L(T.machL))}: ${esc(v.m)}</span><span>${esc(L(T.labL))}: ${esc(v.l)}</span></li>` }).join("");
+    return rows ? `<div class="cs-mach"><p class="cs-mach-h">${esc(L(T.machH))}</p><ul>${rows}</ul><p class="cs-note">${esc(L(T.machNo))}</p></div>` : "";
+  }
+
   /* ---------- step 3: one box per card ---------- */
   function haInput() {
     const { ha, field } = getHa();
@@ -109,13 +130,14 @@ const Cost = (() => {
       <p class="cs-h">${esc(L(T.h))} <span>· ${esc(head)}</span></p>
       <div class="cs-grid">${cells.join("")}</div>
       ${r.partial ? `<p class="cs-warn">${esc(L(T.partial))}</p>` : ""}
+      ${simple ? `<p class="cs-note">${esc(L(T.machS))}</p>` : machBlock(r.crops)}
       ${simple ? "" : `<details class="cs-more"><summary>${esc(L(T.src))}</summary><p class="cs-note">${esc(L(T.note))}</p>${srcList(r.crops)}</details>`}
     </div>`;
   }
   function srcList(crops) {
     const fs = []; crops.forEach((x) => x.cost && x.cost.figs.forEach((f) => { if (!fs.includes(f)) fs.push(f) }));
     if (!fs.length) return "";
-    return `<p class="cs-src-h">${esc(L(T.src))}</p><ol class="cs-src">${fs.map((f) => `<li>${esc(words(f.key))}: ${esc(money(f.cost))}/ha${f.unit === "year" ? "/" + esc(L(T.perYear)) : ""} · ${esc(f.place || "")} ${f.year || ""}. <a href="${esc(f.source.url)}" target="_blank" rel="noopener">${esc(f.source.title)}</a>${f.source.quote ? ` <q lang="vi">${esc(f.source.quote)}</q>` : ""}</li>`).join("")}</ol>`;
+    return `<p class="cs-src-h">${esc(L(T.src))}</p><ol class="cs-src">${fs.map((f) => `<li>${esc(words(f.key))}: ${esc(money(f.cost))}/ha${f.unit === "year" ? "/" + esc(L(T.perYear)) : ""} · ${esc(f.place || "")} ${f.year || ""} · ${esc(L(T.machL))}: ${esc(L(T.mach[f.machines || "not_stated"]))}, ${esc(L(T.labL))}: ${esc(L(T.lab[f.labour || "not_stated"]))}. <a href="${esc(f.source.url)}" target="_blank" rel="noopener">${esc(f.source.title)}</a>${f.source.quote ? ` <q lang="vi">${esc(f.source.quote)}</q>` : ""}</li>`).join("")}</ol>`;
   }
   function cards() {
     const host = $("#cards"); if (!host || typeof App === "undefined" || !App.ranked) return;
@@ -145,7 +167,8 @@ const Cost = (() => {
       ${haInput()}<p class="cs-note">${esc(L(T.planD))}</p><ol class="cs-plan">${rows}</ol>
       <div class="cs-row c"><span>${esc(L(T.total))}</span><b>${esc(money(r.cost * k))}</b></div>
       ${r.profit != null ? `<div class="cs-row p"><span>${esc(L(T.profit))}</span><b>${esc(money(r.profit * k))}</b></div>` : ""}
-      ${r.partial ? `<p class="cs-warn">${esc(L(T.partial))}</p>` : ""}<p class="cs-note">${esc(L(T.note))}</p>`;
+      ${r.partial ? `<p class="cs-warn">${esc(L(T.partial))}</p>` : ""}<p class="cs-note">${esc(L(T.note))}</p>
+      ${document.body.classList.contains("ui-simple") ? `<p class="cs-note">${esc(L(T.machS))}</p>` : machBlock(r.crops)}`;
   }
 
   /* ---------- wiring ---------- */
@@ -166,5 +189,5 @@ const Cost = (() => {
     new MutationObserver(() => { if (!host.querySelector(".card:not(:has(.cs-box))")) return; cards() }).observe(host, { childList: true });
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
-  return { cards, plan: (c) => { lastPlan = c; plan(c) }, refresh, calc };
+  return { cards, plan: (c) => { lastPlan = c; plan(c) }, refresh, calc, covers, machNote: () => L(T.machS), machNo: () => L(T.machNo) };
 })();

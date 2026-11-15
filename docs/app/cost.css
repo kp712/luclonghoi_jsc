@@ -57,3 +57,10 @@
 .cs-cell.k .cs-crops { grid-template-columns: minmax(0, 1fr) }
 .cs-cell.k .cs-crops li { display: grid; gap: 0 }
 .cs-cell.k .cs-crops b { white-space: nowrap; color: var(--ink) }
+
+/* what a cost figure counts: machines and labour */
+.cs-mach { margin-top: 8px; padding: 10px 12px; border-radius: 12px; border: 1px dashed var(--line); background: var(--panel-solid) }
+.cs-mach-h { margin: 0 0 6px; font-size: .8125rem; font-weight: 700; color: var(--ink) }
+.cs-mach ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px }
+.cs-mach li { display: grid; gap: 1px; font-size: .8125rem; line-height: 1.4; color: var(--ink-2) }
+.cs-mach li b { color: var(--ink); font-weight: 600 }
