@@ -216,13 +216,13 @@ const Dash = (() => {
   function shell() {
     if ($("#dv")) return;
     const d = document.createElement("div"); d.id = "dv";
-    d.innerHTML = `<div id="dvClock" class="dv-clock"><div class="ck-in">
+    d.innerHTML = `<section id="dvClock" class="dv-clock" aria-labelledby="ckDate"><div class="ck-in">
         <div class="ck-row"><button type="button" id="ckPlay" class="ck-play"></button>
           <div class="ck-d"><b id="ckDate"></b><small id="ckSub" class="ck-sub"></small></div>
           <div id="ckHz" class="ck-hz" role="group"><button type="button" data-hz="1"></button><button type="button" data-hz="2"></button><button type="button" data-hz="3"></button></div></div>
         <div class="ck-row2"><div class="ck-track"><div id="ckMap" class="ck-map" aria-hidden="true"></div><div id="ckYrs" class="ck-yrs" aria-hidden="true"></div><input id="ckRange" class="ck-range" type="range" min="0" max="52" step="1" value="0"></div>
           <button type="button" id="ckReset" class="ck-reset" hidden>${ic("back", 16)}<span></span></button></div>
-        <p id="ckNote" class="ck-note" hidden></p></div><p id="ckFlash" class="ck-flash" role="status" aria-live="polite"></p></div>
+        <p id="ckNote" class="ck-note" hidden></p></div><p id="ckFlash" class="ck-flash" role="status" aria-live="polite"></p></section>
       <main id="dvPanel" class="dv-page" aria-labelledby="dvH"></main>
       <nav id="dvNav" class="dv-nav"></nav>
       <div id="dvSheet" class="dv-sheet" hidden><div class="dv-scrim" data-dv="close"></div><div class="dv-sh" role="dialog" aria-modal="true"><div class="dv-grab" aria-hidden="true"></div><div id="dvShBody"></div></div></div>
@@ -832,6 +832,31 @@ const Dash = (() => {
   });
 
   /* ---------- Today ---------- */
+  /* a small drawn paddy at the top of the crop card: the sky follows this month's rain (GPM) against crop need (POWER),
+     the water turns amber in salty months (estimate), and the plants grow with the season (seedling → tillers → panicle → ripe) */
+  function scene(k, frac, wet, salty) {
+    const W = 640, G = 84, n = 22, out = [], fx = (v) => v.toFixed(1);
+    const sky = wet ? `<g class="sc-cloud"><path d="M422 30a12 12 0 0 1 23-4 9 9 0 0 1 15 7h1a7 7 0 0 1 0 14h-38a9 9 0 0 1-1-17z"/>${[0, 1, 2, 3].map((i) => `<path class="sc-drop" style="--d:${i * .35}s" d="M${430 + i * 9} 52l-2 6"/>`).join("")}</g>`
+      : `<g class="sc-sun"><circle cx="440" cy="30" r="11"/>${[...Array(8)].map((_, i) => { const a = (i * Math.PI) / 4; return `<path d="M${fx(440 + 15 * Math.cos(a))} ${fx(30 + 15 * Math.sin(a))}L${fx(440 + 20 * Math.cos(a))} ${fx(30 + 20 * Math.sin(a))}"/>` }).join("")}</g>`;
+    for (let i = 0; i < n; i++) {
+      const x = 14 + i * ((W - 28) / (n - 1)), d = `style="--d:${(i % 4) * .4}s"`, j = (i % 3) - 1;
+      if (k === "R") {
+        const h = 8 + Math.min(1, frac) * 42, ripe = frac >= .8, blades = frac < .25 ? 2 : frac < .55 ? 4 : 5, cls = ripe ? "sc-pl ripe" : "sc-pl";
+        let p = ""; for (let b = 0; b < blades; b++) { const s2 = (b - (blades - 1) / 2) * (4 + frac * 5); p += `<path d="M${fx(x)} ${G}q${fx(s2 * .4)} ${fx(-h * .5)} ${fx(s2)} ${fx(-h * (.75 + .25 * ((b + i) % 2)))}"/>` }
+        if (frac >= .55) p += ripe ? `<path class="sc-pan" d="M${fx(x)} ${G}q1 ${fx(-h)} ${fx(8 + j)} ${fx(-h * .78)}"/>` : `<path class="sc-pan" d="M${fx(x)} ${G}v${fx(-h - 4)}"/>`;
+        out.push(`<g class="${cls}" ${d}>${p}</g>`);
+      } else if (k === "U") { const r = 3 + Math.min(1, frac) * 9;
+        out.push(`<g class="sc-pl" ${d}><path d="M${fx(x)} ${G}v${fx(-r)}"/><circle class="sc-bush" cx="${fx(x)}" cy="${fx(G - r - r * .6)}" r="${fx(r)}"/>${frac > .7 ? `<circle class="sc-fruit" cx="${fx(x + r * .4)}" cy="${fx(G - r - r * .3)}" r="2.2"/>` : ""}</g>`);
+      } else if (k === "S") { if (i % 2) out.push(`<path class="sc-shrimp" ${d} d="M${fx(x - 6)} ${G - 4 + j * 2}q6 -7 12 0q-4 4 -9 2"/>`) }
+      else out.push(`<path class="sc-stub" d="M${fx(x - 3)} ${G}l1 -5M${fx(x)} ${G}v-6M${fx(x + 3)} ${G}l-1 -5"/>`);
+    }
+    const water = k === "R" || k === "S" ? `<path class="sc-water${salty ? " salty" : ""}" d="M0 ${G - (k === "S" ? 16 : 6)}q20 -3 40 0t40 0t40 0t40 0t40 0t40 0t40 0t40 0t40 0t40 0t40 0t40 0t40 0t40 0t40 0t40 0V${G + 4}H0z"/>` : "";
+    return `<svg class="hx-scene${wet ? " wet" : " dry"}" viewBox="0 0 ${W} 104" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+      <rect class="sc-sky" width="${W}" height="104"/>${sky}<path class="sc-hill" d="M0 70q130 -18 270 -6t370 -10V104H0z"/>${water}${k === "S" ? out.join("") : ""}
+      <path class="sc-soil" d="M0 ${G}q160 -3 320 0t320 0V104H0z"/>${k === "S" ? "" : out.join("")}</svg>`;
+  }
+  const sceneFor = (f, c, k, frac) => { const s = siteOf(f.site), nino = isNino(f), m = CM, ra = (nino && s.el && s.el.rain) || s.rain || [], ea = (nino && s.el && s.el.et0) || s.et0 || [];
+    return scene(k, frac, ra[m] != null && ea[m] != null ? ra[m] >= ea[m] : true, level(fieldSalt(f.site, m, nino)) === "man") };
   function hero(f, c) {
     const d = Season.now(), a = Season.at(c, d);
     if (a.run) {
@@ -841,7 +866,7 @@ const Dash = (() => {
       const rest = gapB >= gapA ? T("afterRest")(fRg(c.a0 + gapA, c.a0 + gapB)) : "";
       const then = after ? T("afterL")((rest ? rest + " → " : "") + runName(c, after.code) + (after.late ? ` (${T("lateTag")})` : ""), fDs(after.sow)) : T("afterNone");
       const known = !(r.cur && k !== "R");   /* shrimp or an upland crop already in the field: we know when it ends, not when it began */
-      return `<section class="hx hk-${k}" aria-labelledby="hxH">
+      return `<section class="hx hk-${k}" aria-labelledby="hxH">${sceneFor(f, c, k, a.frac)}
         <div class="hx-hd"><h3 id="hxH"><span class="hx-ic" aria-hidden="true">${ic(KI[k], 20)}</span><span>${esc(n)}</span></h3>${known ? `<span class="hx-pill">${esc(T("dayOf")(Math.min(a.day, r.len), r.len))}</span>` : ""}</div>
         <p class="hx-big"><b>${a.left}</b><span>${esc(T("daysTo")[k])}</span></p>
         <div class="hx-bar" role="progressbar" aria-valuemin="0" aria-valuemax="${r.len}" aria-valuenow="${Math.min(a.day, r.len)}" aria-label="${esc(n)}: ${a.left} ${esc(T("daysTo")[k])}"><span class="hx-fill" style="width:${pct(a.frac)}%"></span>${ticks}<span class="hx-dot" style="left:${pct(a.frac)}%"></span></div>
@@ -853,7 +878,7 @@ const Dash = (() => {
     }
     const nx = a.next, prev = [...c.runs].reverse().find((x) => +x.har < +d), from = prev ? prev.har : Season.mStart(c.a0), to = nx ? nx.sow : Season.mEnd(c.a0 + 11);
     const frac = Math.min(1, Math.max(0, (d - from) / (to - from || 1))), pct = (frac * 100).toFixed(1);
-    return `<section class="hx hk-rest" aria-labelledby="hxH">
+    return `<section class="hx hk-rest" aria-labelledby="hxH">${sceneFor(f, c, "-", 0)}
       <div class="hx-hd"><h3 id="hxH"><span class="hx-ic" aria-hidden="true">${ic("fallow", 20)}</span><span>${esc(T("heroRest"))}</span></h3></div>
       ${nx ? `<p class="hx-big"><b>${a.wait}</b><span>${esc(T("daysSow")(nx.k, cropName(c, nx.code)))}</span></p>` : `<p class="hx-big sm"><span>${esc(T("restEnd"))}</span></p>`}
       <div class="hx-bar" aria-hidden="true"><span class="hx-fill" style="width:${pct}%"></span><span class="hx-dot" style="left:${pct}%"></span></div>
@@ -874,11 +899,12 @@ const Dash = (() => {
   function tiles(f, x) {
     const { s, nino } = x, m = CM, rainA = (nino && s.el && s.el.rain) || s.rain || [], et0A = (nino && s.el && s.el.et0) || s.et0 || [], nd = (nino && s.el && s.el.ndvi) || s.ndvi || [];
     const r = rainA[m], e = et0A[m], g = nd[m], short = e != null && r != null ? Math.round(e - r) : null;
-    const tl = (ico, h, v, u, sub, src, cls) => `<div class="t-tile ${cls || ""}"><span class="t-th">${esc(h)}</span><b class="t-tv">${v}<small>${esc(u)}</small></b><span class="t-ts">${esc(sub)}</span><span class="t-src">${esc(src)}</span></div>`;
+    const meter = (p, cls) => `<span class="t-meter ${cls}" aria-hidden="true"><i style="width:${Math.round(Math.min(1, Math.max(0, p)) * 100)}%"></i></span>`;
+    const tl = (ico, h, v, u, sub, src, cls, mt) => `<div class="t-tile ${cls || ""}"><span class="t-th"><span class="t-tic" aria-hidden="true">${ic(ico, 14)}</span>${esc(h)}</span><b class="t-tv">${v}<small>${esc(u)}</small></b>${mt || ""}<span class="t-ts">${esc(sub)}</span><span class="t-src">${esc(src)}</span></div>`;
     return `<section class="t-card t-tiles" aria-labelledby="tTlH"><h3 class="t-k" id="tTlH">${ic("drop", 18)}<span>${esc(T("tilesH"))} · ${esc(MLONG(m))}</span></h3>
-      <div class="t-grid">${r != null ? tl("drop", T("tRain"), big(r), "mm", short > 0 ? T("tShort")(short) : T("tOk"), "NASA GPM IMERG", short > 0 ? "dry" : "wet") : ""}
-        ${e != null ? tl("sun", T("tNeed"), big(e), "mm", "ET₀", "NASA POWER") : ""}
-        ${g != null ? tl("rice", T("tGreen"), nf(g, 2), "", T("tNd"), "NASA MODIS NDVI") : ""}</div>
+      <div class="t-grid">${r != null ? tl("drop", T("tRain"), big(r), "mm", short > 0 ? T("tShort")(short) : T("tOk"), "NASA GPM IMERG", short > 0 ? "dry" : "wet", meter(e ? r / e : 1, "m-rain")) : ""}
+        ${e != null ? tl("sun", T("tNeed"), big(e), "mm", "ET₀", "NASA POWER", "need", meter(1, "m-sun")) : ""}
+        ${g != null ? tl("rice", T("tGreen"), nf(g, 2), "", T("tNd"), "NASA MODIS NDVI", "green", meter(g, "m-green")) : ""}</div>
       <p class="t-note">${esc(T("tAvg")(nino))}</p></section>`;
   }
   function moneyCard(f, x) {
@@ -895,12 +921,12 @@ const Dash = (() => {
       <div class="t-chips"><button type="button" class="t-field" data-dv="fields"><span class="t-fi" aria-hidden="true">${ic("pin", 16)}</span><b>${esc(f.name)}</b><span class="t-fs">${esc(f.size ? haS(f.size) + " ha" : short(x.s))}</span>${ic("chev", 14)}</button>
         <span class="t-stat lv-${x.lv}"><i aria-hidden="true"></i>${esc(T("waterW")(T("lv")[x.lv]))}</span></div>
       <p class="t-plan"><span>${esc(T("planL"))}:</span> <b>${esc(L(c.name))}</b></p>
-      ${planNo(f)}${ask}${hero(f, c)}${todo(f, x)}
+      ${planNo(f)}${ask}<div class="t-cols">${hero(f, c)}${todo(f, x)}
       <div class="s-card s-salt lv-${x.lv}"><span class="s-k">${ic("drop", 18)}${esc(T("waterNow"))}</span>
         <div class="s-row"><span class="s-drop" aria-hidden="true">${ic("drop", 46)}</span><div><b class="s-word">${esc(T("lv")[x.lv])}${adv() ? ` <small>${nf(x.g, 1)}‰</small>` : ""}</b>
         <span class="s-light" aria-hidden="true"><i class="ngot"></i><i class="lo"></i><i class="man"></i></span></div></div>
         <span class="s-sub">${esc(x.sl.txt)}</span><small>${esc(T("est"))}</small></div>
-      ${tiles(f, x)}${remindCard(f)}${moneyCard(f, x)}
+      ${tiles(f, x)}${remindCard(f)}${moneyCard(f, x)}</div>
       <button type="button" class="s-card s-cal" data-dv="season"><span class="s-k">${ic("cal", 18)}${esc(T("ribbonH"))}</span>${ribbon(f, c)}<span class="dv-more">${esc(T("tapPlan"))} ${ic("chev", 14)}</span></button>
       <p class="sd-note s-ask">${esc(T("ask"))}</p></div>`;
   }

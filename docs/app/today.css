@@ -217,19 +217,128 @@ body.dv-on .dv-page { top:calc(var(--top-h) + var(--ck-h)); padding-bottom:calc(
 body.dv-on #toast { bottom:calc(var(--nav-h) + 16px + env(safe-area-inset-bottom, 0px)) }
 @media (min-width:760px) { body.dv-on #toast { bottom:calc(var(--nav-h) + 36px) } }
 
-/* ---------- laptop and desktop: Today is a two-column dashboard; the date bar lines up with the page under it ---------- */
+.t-cols { display:grid; grid-template-columns:minmax(0, 1fr); gap:14px }
+
+/* ---------- laptop and desktop: the dashboard fills the whole screen ----------
+   no side margins; Today packs its cards in 2 or 3 columns at their own height (no empty space inside a card) */
 @media (min-width:1000px) {
-  .dv-page[data-view="dash"] > * { max-width:1120px }
-  body[data-dv-view="dash"] .ck-in { max-width:1120px }
-  .dv-page[data-view="dash"] .t-page { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:16px; align-items:stretch }
-  .dv-page[data-view="dash"] .t-page > :is(.sr, .t-chips, .t-plan, .t-ask, .dv-planno, .s-cal, .s-ask) { grid-column:1 / -1 }
+  body.dv-on .dv-page { padding-left:32px; padding-right:32px }
+  body.dv-on .dv-page > *, body.dv-on .dv-page.is-simple > *, body.dv-on .dv-page[data-view] > * { max-width:none }
+  body.dv-on .ck-in { max-width:none; padding-left:32px; padding-right:32px }
+  .t-cols { display:block; columns:2; column-gap:16px }
+  .t-cols > * { display:grid; width:100%; break-inside:avoid; margin:0 0 16px }
+  .t-cols > .dv-rm { display:block }
+  .t-page { gap:16px }
   .dv-page[data-view="dash"] .t-page > .t-ask { grid-template-columns:48px minmax(0, 1fr) auto; align-items:center }
   .dv-page[data-view="dash"] .t-page > .t-ask .btn { grid-column:auto; min-width:180px }
-  .dv-page[data-view="dash"] .hx-big b { font-size:3.5rem }
+  .dv-page[data-view="dash"] .t-cols { margin-bottom:-16px }
+  .hx-big b { font-size:3.5rem }
   .ck-d b { font-size:1.125rem }
+  /* Season: the 12 months as a grid of season cards across the screen */
+  .ss-tl { grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:16px }
+  .ss-tl::before { display:none }
+  .ss-st { grid-template-columns:minmax(0, 1fr); gap:0 }
+  .ss-dot { position:absolute; top:14px; right:14px; margin:0; width:32px; height:32px }
+  .ss-card { height:100%; padding-right:56px } .ss-st.st-now .ss-card { padding-right:55px }
+  .ss-l1 { flex-wrap:wrap; justify-content:flex-start }
+  /* Fields: list and cards side by side */
+  .fl-list { grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)) }
+  .dv-page[data-view="fields"] .t-page { grid-template-columns:repeat(2, minmax(0, 1fr)); align-items:start }
+  .dv-page[data-view="fields"] .t-page > :is(.ss-hd, .fl-list, .t-wide) { grid-column:1 / -1 }
+  .dv-page[data-view="fields"] .t-wide { justify-self:start; width:auto; padding:0 28px }
 }
+@media (min-width:1500px) { .t-cols { columns:3 } }
+
 /* empty dashboard: create a field, or try the sample one */
 .dv-wbtns { display:grid; gap:10px; margin-top:20px }
 .dv-wbtns .btn { width:100%; min-height:52px; justify-content:center; gap:8px }
 .dv-welcome .dv-demop { margin-top:10px !important }
 @media (min-width:560px) { .dv-wbtns { grid-template-columns:1fr 1fr } }
+
+/* ---------- nature touches: a drawn paddy, leaf-shaped badges, meters ---------- */
+/* leaf badge: one organic shape for every small icon holder */
+.hx-ic, .t-ti, .t-fi, .t-aki, .nw-ki, .t-tic { border-radius:62% 14% 62% 14% / 62% 14% 62% 14% !important }
+.ss-dot { border-radius:62% 14% 62% 14% / 62% 14% 62% 14% }
+.ss-st.st-now .ss-dot { box-shadow:0 0 0 5px var(--gold-soft) }
+
+/* the paddy scene at the top of the crop card */
+.hx { padding-top:0 }
+.hx-scene { display:block; justify-self:stretch; width:auto; max-width:none; height:104px; margin:0 calc(-1 * var(--hx-p, 20px)) 4px; border-bottom:1px solid var(--line) }
+.hx-scene .sc-sky { fill:color-mix(in srgb, var(--water) 22%, var(--panel-solid)) }
+.hx-scene.dry .sc-sky { fill:color-mix(in srgb, var(--gold) 20%, var(--panel-solid)) }
+.hx-scene .sc-sun circle { fill:var(--gold) } .hx-scene .sc-sun path { stroke:var(--gold); stroke-width:2.2; stroke-linecap:round }
+.hx-scene .sc-cloud > path:first-child { fill:color-mix(in srgb, var(--ink) 18%, var(--panel-solid)) }
+.hx-scene .sc-drop { stroke:var(--water); stroke-width:2; stroke-linecap:round; animation:scDrop 1.4s linear infinite; animation-delay:var(--d) }
+@keyframes scDrop { 0% { transform:translateY(-4px); opacity:0 } 30% { opacity:1 } 100% { transform:translateY(8px); opacity:0 } }
+.hx-scene .sc-hill { fill:color-mix(in srgb, var(--rice) 22%, var(--panel-solid)) }
+.hx-scene .sc-soil { fill:color-mix(in srgb, #8a6a3d 45%, var(--panel-solid)) }
+.hx-scene .sc-water { fill:color-mix(in srgb, var(--water) 55%, var(--panel-solid)); opacity:.9 }
+.hx-scene .sc-water.salty { fill:color-mix(in srgb, var(--gold) 45%, var(--risk) 25%) }
+.hx-scene .sc-pl { fill:none; stroke:var(--rice); stroke-width:2.2; stroke-linecap:round; transform-box:fill-box; transform-origin:50% 100%; animation:scSway 4.5s ease-in-out infinite alternate; animation-delay:var(--d) }
+.hx-scene .sc-pl.ripe { stroke:color-mix(in srgb, var(--rice) 45%, var(--gold)) }
+.hx-scene .sc-pan { stroke:var(--gold); stroke-width:3 }
+.hx-scene .sc-bush { fill:var(--rice); stroke:none } .hx-scene .sc-fruit { fill:var(--gold); stroke:none }
+.hx-scene .sc-shrimp { fill:none; stroke:#f0a08a; stroke-width:2.4; stroke-linecap:round; animation:scSwim 3s ease-in-out infinite alternate; animation-delay:var(--d) }
+.hx-scene .sc-stub { stroke:color-mix(in srgb, var(--gold) 60%, #8a6a3d); stroke-width:1.6; stroke-linecap:round }
+@keyframes scSway { from { transform:rotate(-2.5deg) } to { transform:rotate(2.5deg) } }
+@keyframes scSwim { from { transform:translateX(-4px) } to { transform:translateX(4px) } }
+.hx > .hx-hd { margin-top:4px }
+
+/* NASA tiles: a leaf badge above the label and a meter under the number */
+.t-th { display:grid; gap:6px; justify-items:start }
+.t-tic { display:grid; place-items:center; width:26px; height:26px; background:color-mix(in srgb, var(--water) 18%, transparent); color:var(--water) }
+.t-tile.need .t-tic { background:var(--gold-soft); color:var(--gold) } .t-tile.green .t-tic { background:color-mix(in srgb, var(--rice) 18%, transparent); color:var(--rice) }
+.t-meter { display:block; height:6px; border-radius:3px; background:color-mix(in srgb, var(--ink) 10%, transparent); overflow:hidden }
+.t-meter i { display:block; height:100%; border-radius:3px }
+.t-meter.m-rain i { background:var(--water) } .t-meter.m-sun i { background:linear-gradient(90deg, var(--gold), color-mix(in srgb, var(--gold) 50%, var(--risk))) } .t-meter.m-green i { background:linear-gradient(90deg, color-mix(in srgb, var(--rice) 40%, var(--gold)), var(--rice)) }
+.t-tile { grid-template-rows:auto auto auto 1fr auto }
+
+@media (prefers-reduced-motion:reduce) { .hx-scene .sc-pl, .hx-scene .sc-drop, .hx-scene .sc-shrimp { animation:none } }
+@media (min-width:1000px) { .hx-scene { height:120px } }
+
+/* ---------- bold and big: leaf-cut cards, thick outlines, large icons (easy to see in the field) ---------- */
+:root { --card-r:28px 10px 28px 10px; --leaf:62% 14% 62% 14% / 62% 14% 62% 14% }
+.t-card, .hx, .dv-rm, .ss-card, .fl-it { border-width:2px !important; border-radius:var(--card-r) !important }
+.t-card { border-color:color-mix(in srgb, var(--rice) 28%, var(--line-2)) }
+.hx { border-color:color-mix(in srgb, var(--kc) 55%, var(--line-2)) }
+/* card titles: a big leaf badge in front of every title */
+.t-k { gap:12px; font-size:1.125rem; font-weight:700; color:var(--ink) }
+.t-k > .dv-i { width:40px; height:40px; padding:9px; border-radius:var(--leaf); background:var(--gold-soft); color:var(--gold); stroke-width:2 }
+.hx-hd h3 { font-size:1.25rem; gap:12px }
+.hx-ic { width:52px !important; height:52px !important }
+.hx-ic .dv-i { width:28px; height:28px; stroke-width:1.9 }
+.hx-big b { font-size:3.5rem }
+.hx-row { grid-template-columns:36px minmax(0, 1fr); gap:12px; align-items:center }
+.hx-row > .dv-i { width:36px; height:36px; padding:8px; margin:0; border-radius:var(--leaf); background:var(--gold-soft) }
+.hx-bar { height:14px }
+/* to-do list */
+.t-list li { grid-template-columns:52px minmax(0, 1fr); gap:14px; align-items:center; padding:14px 0 }
+.t-ti { width:52px; height:52px } .t-ti .dv-i { width:26px; height:26px; stroke-width:1.9 }
+.t-tx b { font-size:1.0625rem }
+/* NASA tiles: outlined, larger numbers, bigger badge */
+.t-grid { gap:10px }
+.t-tile { padding:14px 12px; border:2px solid color-mix(in srgb, var(--water) 30%, transparent); border-radius:18px 6px 18px 6px }
+.t-tile.need { border-color:color-mix(in srgb, var(--gold) 35%, transparent) } .t-tile.green { border-color:color-mix(in srgb, var(--rice) 35%, transparent) }
+.t-tic { width:40px !important; height:40px !important } .t-tic .dv-i { width:22px; height:22px; stroke-width:1.9 }
+.t-tv { font-size:1.875rem }
+.t-meter { height:8px; border-radius:4px } .t-meter i { border-radius:4px }
+/* other badges */
+.t-fi { width:44px; height:44px } .t-fi .dv-i { width:24px; height:24px }
+.t-aki { width:64px; height:64px } .t-aki .dv-i { width:32px; height:32px }
+.nw-ki { width:56px; height:56px } .nw-ki .dv-i { width:30px; height:30px }
+/* bottom bar: larger icons */
+.nv-i .dv-i { width:24px; height:24px; stroke-width:1.9 }
+.nv-l { font-size:.8125rem }
+@media (max-width:420px) { .t-tv { font-size:1.5rem } .t-tic { width:34px !important; height:34px !important } .t-tile { padding:12px 8px } .hx-big b { font-size:3rem } }
+.t-field b { flex:0 1 auto; min-width:4ch; max-width:none; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+.t-field .t-fs { flex:0 1000 auto; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+/* the older summary cards (water now, profit, season ribbon) take the same leaf cut and big title badge on the dashboard */
+body.dv-on .s-card { border-width:2px; border-radius:var(--card-r); border-color:color-mix(in srgb, var(--rice) 28%, var(--line-2)) }
+body.dv-on .s-k { gap:12px; font-size:1.125rem; font-weight:700; color:var(--ink) }
+body.dv-on .s-k > .dv-i { flex:none; width:40px; height:40px; padding:9px; border-radius:var(--leaf); background:var(--gold-soft); color:var(--gold); stroke-width:2 }
+body.dv-on .s-drop, body.dv-on .s-coin, body.dv-on .s-ico { border-radius:var(--leaf) }
+body.dv-on .dv-rm h3 { gap:12px; font-size:1.125rem }
+body.dv-on .dv-rm h3 > .dv-i { flex:none; width:40px; height:40px; padding:9px; border-radius:var(--leaf); background:var(--gold-soft); color:var(--gold); stroke-width:2 }
+body.dv-on .rm-ic { border-radius:var(--leaf) }
+/* tiles share the row evenly, so a missing tile never leaves an empty slot */
+.t-grid { grid-template-columns:none; grid-auto-flow:column; grid-auto-columns:minmax(0, 1fr) }
