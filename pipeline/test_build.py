@@ -214,9 +214,23 @@ def test_confidence():
 def test_soil_score():
     rots = {r["id"]: r for r in json.loads((build.HERE / "rotations.json").read_text(encoding="utf-8"))["rotations"]}
     assert {k: build.score_soil(r)[0] for k, r in rots.items()} == {
-        "rice3": 1.5, "rice2": 2.0, "rice_shrimp": 2.5, "rice_upland": 4.0, "salt_tolerant": 2.5}
-    assert build.score_soil(dict(rots["rice3"], months=["-"] * 12))[0] == 2.0   # rest alone caps at +1
+        "rice3": 1.0, "rice2": 1.0, "rice_shrimp": 1.0, "rice_upland": 2.0, "salt_tolerant": 1.5}
+    assert build.score_soil(dict(rots["rice_upland"], legume_codes=["U"]))[0] == 2.0   # mung bean variant
+    assert build.score_soil(dict(rots["rice3"], months=["-"] * 12))[0] == 1.0          # rest is now a Pests term
     assert build.score_soil(rots["rice_upland"])[1] == dict(rest=2, nonrice=3, legume=3, cover=False, brackish=False)
+
+
+def test_pests_score():
+    rots = {r["id"]: r for r in build.ROTATIONS}
+    flat = dict(tmean_c=[27.0] * 12, hot_days=[0.0] * 12, cold_days=[0.0] * 12)
+    assert build.rice_pressure(27.0) == 1 and build.rice_pressure(32.5) == 0.5 and build.rice_pressure(20.0) == 0 and build.rice_pressure(36) == 0
+    got = {k: build.score_pests(r, flat)[0] for k, r in rots.items()}
+    assert got == {"rice3": 1.8, "rice2": 3.0, "rice_shrimp": 3.3, "rice_upland": 2.8, "salt_tolerant": 3.0}, got
+    assert build.score_pests(dict(rots["rice3"], months=["-"] * 12), flat)[0] == 5.0
+    hot = dict(flat, hot_days=[31.0] * 12)                       # every shrimp day risky -> shrimp months count 1
+    assert build.score_pests(rots["rice_shrimp"], hot)[0] < got["rice_shrimp"]
+    el = dict(flat, tmean_c=[33.0] * 12)                         # hotter (El Nino-like) months lower rice pressure
+    assert build.score_pests(rots["rice3"], el)[0] > got["rice3"]
 
 
 def test_income_score():

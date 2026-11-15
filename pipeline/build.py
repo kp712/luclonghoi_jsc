@@ -425,14 +425,54 @@ def score_weather_salt(rot, clim, sal):
 
 
 def score_soil(rot):
-    """Soil health 1.0-5.0 from the 12-month calendar: 1 + rest + non-rice + legume + cover - brackish.
-    Each of the first three is min(months / 2, 1); cover is half of that for rest months that may be a cover crop."""
+    """Soil health 1.0-5.0 from the 12-month calendar: 1 + legume + cover - brackish.
+    Legume is min(months / 2, 1); cover is half of the rest-month credit (min(rest / 2, 1)) for rest months that may be a
+    cover crop. Rest and non-rice breaks no longer count here: they are the pest-cycle break in score_pests."""
     m = [c[0] for c in rot["months"]]
     rest, nonrice = m.count("-"), sum(c in "US" for c in m)
     legume = sum(c in rot.get("legume_codes", []) for c in m)
     cover, brackish = bool(rot.get("cover_optional")), "S" in m
-    x = 1 + min(rest / 2, 1) + min(nonrice / 2, 1) + min(legume / 2, 1) + (0.5 * min(rest / 2, 1) if cover else 0) - (BRACKISH_SOIL if brackish else 0)
+    x = 1 + min(legume / 2, 1) + (0.5 * min(rest / 2, 1) if cover else 0) - (BRACKISH_SOIL if brackish else 0)
     return round(min(max(x, 1), 5), 1), dict(rest=rest, nonrice=nonrice, legume=legume, cover=cover, brackish=brackish)
+
+
+def rice_pressure(t):
+    """Rice pest pressure 0-1 at mean temperature t (deg C): linear over PESTS["rice"]["points"], 0 outside them."""
+    pts = PESTS["rice"]["points"]
+    if not pts[0][0] <= t <= pts[-1][0]:
+        return 0.0
+    for (t0, p0), (t1, p1) in zip(pts, pts[1:]):
+        if t <= t1:
+            return p0 + (p1 - p0) * (t - t0) / (t1 - t0)
+
+
+def pest_pressure(rot, clim):
+    """12 monthly pest pressures 0-1: rice from mean temperature, upland 1, shrimp from hot+cold days, rest 0."""
+    floor, out = PESTS["shrimp"]["floor"], []
+    for i, c in enumerate(rot["months"]):
+        k = c[0]
+        if k == "R":
+            out.append(rice_pressure(clim["tmean_c"][i]))
+        elif k == "U":
+            out.append(1.0)
+        elif k == "S":
+            out.append(floor + (1 - floor) * min((clim["hot_days"][i] + clim["cold_days"][i]) / MONTH_DAYS[i], 1))
+        else:
+            out.append(0.0)
+    return out
+
+
+def score_pests(rot, clim):
+    """Pests 1.0-5.0 = 1 + 4 x (1 - risk). Risk is the mean monthly pressure; rice months are cut by break_weight x the
+    pest-cycle break (half from rest months, half from non-rice months, each min(n / 2, 1))."""
+    m, p = [c[0] for c in rot["months"]], pest_pressure(rot, clim)
+    rest, nonrice = m.count("-"), sum(c in "US" for c in m)
+    brk = 0.5 * min(rest / 2, 1) + 0.5 * min(nonrice / 2, 1)
+    rice_p = [x for x, k in zip(p, m) if k == "R"]
+    risk = (sum(rice_p) * (1 - PESTS["break_weight"] * brk) + sum(x for x, k in zip(p, m) if k != "R")) / 12
+    info = dict(rice=len(rice_p), upland=m.count("U"), shrimp=m.count("S"), rest=rest, nonrice=nonrice,
+                rice_p_min=round(min(rice_p), 2) if rice_p else 0, rice_p_max=round(max(rice_p), 2) if rice_p else 0)
+    return round(min(max(1 + 4 * (1 - risk), 1), 5), 1), info
 
 
 def used_figures(key):
