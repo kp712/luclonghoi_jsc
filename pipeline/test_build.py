@@ -136,7 +136,7 @@ def test_appeears_pin_finder():
 
 def test_card_with_ndvi_and_low_salinity():
     rot = next(r for r in json.loads((build.HERE / "rotations.json").read_text(encoding="utf-8"))["rotations"] if r["id"] == "rice_shrimp")
-    clim = {"rain_mm": [10] * 12, "et0_mm": [100] * 12, "hot_days": [0] * 12}
+    clim = {"rain_mm": [10] * 12, "et0_mm": [100] * 12, "hot_days": [0] * 12, "cold_days": [0] * 12, "tmean_c": [27.0] * 12}
     nd = {"crops_per_year": 2.9, "bare_months": [3]}
     c = build.make_card(rot, clim, nd, {"level": "low", "months": [3], "station_ppt": 2.0, "max_ppt": 2.0, "seasons": 9, "last_year": 2024})
     assert c["scores"]["income"] < build.make_card(rot, clim, nd, {"level": "high", "months": [3], "station_ppt": 20.0, "max_ppt": 20.0, "seasons": 9, "last_year": 2024})["scores"]["income"] and c["not_here"]
@@ -163,7 +163,7 @@ def test_soilgrids_topsoil():
 
 def test_score_rules():
     rots = {r["id"]: r for r in json.loads((build.HERE / "rotations.json").read_text(encoding="utf-8"))["rotations"]}
-    clim = lambda et0: {"rain_mm": [0] * 12, "et0_mm": [et0] * 12, "hot_days": [0] * 12}  # Dec-Apr need = 5 x 1.1 x et0
+    clim = lambda et0: {"rain_mm": [0] * 12, "et0_mm": [et0] * 12, "hot_days": [0] * 12, "cold_days": [0] * 12, "tmean_c": [27.0] * 12}  # Dec-Apr need = 5 x 1.1 x et0
     assert build.effective_rain(100) == 55 and build.effective_rain(50) == 20 and build.effective_rain(10) == 0  # FAO Manual 3
     # FAO Manual 3 section 4.4 worked example (April): ET0 180 mm, Kc 1.1, seepage 150 mm, water layer 100 mm, effective rain 135 mm -> 313 mm
     assert build.month_need(180, 1.1, 200, perc=150, wl=100) == 313
@@ -188,16 +188,17 @@ def test_confidence():
     L = build.LEVELS
     def lvl(r, nd=nd, sal=good, nh=False, el=False):
         return build.confidence(rots[r], nd, sal, nh, el)[0]
-    assert lvl("rice2") == "high" and lvl("rice3") == "medium"   # rice3: autumn–winter rice has only fallback figures
-    assert lvl("rice2", None) == "medium" and lvl("rice2", sal=dict(good, last_year=2022)) == "medium"   # no MODIS; Khanh Hoa-style gap
-    assert lvl("rice2", sal=dict(good, seasons=4)) == "medium"
+    # every card with a rest month carries the pest break-credit team estimate (one level); rice3's autumn–winter rice has only fallback figures
+    assert lvl("rice2") == "medium" and lvl("rice3") == "low"
+    assert lvl("rice2", None) == "low" and lvl("rice2", sal=dict(good, last_year=2022)) == "low"   # no MODIS; Khanh Hoa-style gap
+    assert lvl("rice2", sal=dict(good, seasons=4)) == "low"
     assert lvl("rice_shrimp", nh=True) == "low"                       # fallback income + not here
     assert L.index(lvl("salt_tolerant")) > L.index(lvl("salt_tolerant", dict(nd, bare_months=[10])))  # MODIS bare-window bonus
-    assert lvl("rice_upland", dict(nd, bare_months=[10])) == "medium"                              # autumn–winter rice income rests on fallbacks
+    assert lvl("rice_upland", dict(nd, bare_months=[10])) == "low"                                 # autumn–winter rice income rests on fallbacks
     assert lvl("rice_upland") == "medium"                             # thin income caps at medium, even with the bare-window bonus
     # team estimates cost one level in total, and a loss estimate counts only where it applies
     why = lambda r, el, sal=good: [w["en"] for w in build.confidence(rots[r], nd, sal, False, el)[1] if w["en"].startswith("Uses team estimates")]
-    assert why("rice2", True) == []
+    assert why("rice2", True) == ["Uses team estimates: break credit for pests."]   # no El Niño loss share on rice2
     w = why("salt_tolerant", True, dict(good, months=[1]))
     assert len(w) == 1 and "salt-tolerant rice" in w[0] and "crop-loss share" in w[0] and "salt left" not in w[0]
     assert "crop-loss share" not in why("salt_tolerant", True, good)[0]   # good: salt in March, no tolerant-rice month
@@ -207,7 +208,8 @@ def test_confidence():
     allr = build.confidence(rots["rice_upland"], None, dict(good, seasons=3), True)[1] + build.confidence(rots["rice_shrimp"], None, good, True, True)[1]
     assert all(" and " not in x["vi"] for x in allr)                     # Vietnamese reasons use "và"
     assert [x["en"] for x in build.confidence(rots["rice_shrimp"], nd, good, True)[1]].count("Inland freshwater area: brackish water is not normally available here.") == 1
-    site = build.make_card(rots["rice3"], {"rain_mm": [0] * 12, "et0_mm": [100] * 12, "hot_days": [0] * 12}, None, good)
+    site = build.make_card(rots["rice3"], {"rain_mm": [0] * 12, "et0_mm": [100] * 12, "hot_days": [0] * 12, "cold_days": [0] * 12, "tmean_c": [27.0] * 12}, None, good)
+    assert site["scores"]["pests"] is not None and any("break credit for pests" in r["en"] for r in site["risks"])
     assert all(1 <= v <= 5 for v in site["scores"].values())          # no NDVI still scores
 
 
@@ -215,7 +217,7 @@ def test_soil_score():
     rots = {r["id"]: r for r in json.loads((build.HERE / "rotations.json").read_text(encoding="utf-8"))["rotations"]}
     assert {k: build.score_soil(r)[0] for k, r in rots.items()} == {
         "rice3": 1.0, "rice2": 1.0, "rice_shrimp": 1.0, "rice_upland": 2.0, "salt_tolerant": 1.5}
-    assert build.score_soil(dict(rots["rice_upland"], legume_codes=["U"]))[0] == 2.0   # mung bean variant
+    assert build.score_soil(dict(rots["rice_upland"], legume_codes=[]))[0] == 1.0      # maize / watermelon variant
     assert build.score_soil(dict(rots["rice3"], months=["-"] * 12))[0] == 1.0          # rest is now a Pests term
     assert build.score_soil(rots["rice_upland"])[1] == dict(rest=2, nonrice=3, legume=3, cover=False, brackish=False)
 
@@ -280,7 +282,7 @@ def test_rotation_calendars():
 
 def test_clay_note():
     rot = next(r for r in json.loads((build.HERE / "rotations.json").read_text(encoding="utf-8"))["rotations"] if r["id"] == "rice_upland")
-    clim = {"rain_mm": [0] * 12, "et0_mm": [100] * 12, "hot_days": [0] * 12}
+    clim = {"rain_mm": [0] * 12, "et0_mm": [100] * 12, "hot_days": [0] * 12, "cold_days": [0] * 12, "tmean_c": [27.0] * 12}
     med = {"level": "medium", "months": [3], "station_ppt": 8.0, "max_ppt": 8.0, "seasons": 9, "last_year": 2024}
     c = build.card(rot, clim, None, med, soil={"clay_pct": 40.6})
     gaps = [g["en"] for g in c["variants"][c["crop_default"]]["gaps"]]
@@ -290,7 +292,7 @@ def test_clay_note():
 
 def test_weather_salt():
     rots = {r["id"]: r for r in json.loads((build.HERE / "rotations.json").read_text(encoding="utf-8"))["rotations"]}
-    clim = {"rain_mm": [0] * 12, "et0_mm": [100] * 12, "hot_days": [0, 0, 0, 15] + [0] * 8}
+    clim = {"rain_mm": [0] * 12, "et0_mm": [100] * 12, "hot_days": [0, 0, 0, 15] + [0] * 8, "cold_days": [0] * 12, "tmean_c": [27.0] * 12}
     sal = {"months": [1, 2], "station_ppt": 15.0, "max_ppt": 15.0, "seasons": 9, "last_year": 2024, "level": "high"}
     ws = lambda r, s=sal: build.score_weather_salt(rots[r], clim, s)
     assert ws("rice2")[1]["parts"] == {"salt": 1.0, "heat": 3.0, "canal": 1.0} and ws("rice2")[0] == 1.4   # Jan-Feb rice, 15 hot days in Apr (R2)
@@ -439,10 +441,18 @@ def test_sites_json_contract():
                 assert bool(salty) == any("stored fresh water" in r["en"] for r in c["variants"]["maize"]["risks"]), s["id"]
         for c in flat(s):
             assert all(1 <= v <= 5 for v in c["scores"].values() if v is not None), c["scores"]
+            assert c["scores"]["pests"] is not None and any(x["en"].startswith("Pests ") for x in c["why"]), c["id"]
+            if c["id"] == "rice_upland":  # the crop's named pest, once
+                assert sum("in every month it is in the field" in x["en"] for x in c["risks"]) == 1
             assert c["scores"]["income"] is not None or c["crop"] == "mungbean", c["id"]  # only mung bean has no figure
             for k in ("why", "benefits", "gaps", "risks", "src", "cal_src"):
                 assert c[k], (s["id"], c["id"], k)
             assert all(x["en"] and x["vi"] for k in ("why", "benefits", "gaps", "risks") for x in c[k])
+    assert d["pest_rule"] == {"rice_points": build.PESTS["rice"]["points"], "break_weight": 0.5, "shrimp_floor": 0.5, "cold_drop_c": 4.2, "hot_c": 35, "upland_pressure": 1}
+    for s in d["sites"]:
+        if s["id"] == "my_xuyen":
+            pe = lambda v: next(c for c in v["cards"] if c["id"] == "rice3")["scores"]["pests"]
+            assert pe(s["elnino"]) >= pe(s)  # El Niño months are hotter: less planthopper pressure
     assert d["outlook"]["text"]["en"].startswith("NOAA") and d["outlook"]["text"]["vi"]
     # Wikipedia-style sources: one numbered list; every "src" points into it; every input source is in it exactly once
     S = d["sources"]
@@ -453,7 +463,7 @@ def test_sites_json_contract():
     assert refs and all(0 <= i < len(S) for i in refs) and set(refs) == set(range(len(S))), "every source cited, every citation real"
     rot_file = json.loads((build.HERE / "rotations.json").read_text(encoding="utf-8"))
     inputs = [x for r in rot_file["rotations"] for x in r["sources"] + r["calendar_sources"]] + [x for r in rot_file["rotations"] for v in r.get("local", {}).values() for x in v["sources"]] + [x for h in rot_file["soil_help"] for x in h["sources"]] \
-        + [x for r in build.RESOURCES.values() for x in r["sources"]] + build.SALINITY["sources"] \
+        + [x for r in build.RESOURCES.values() for x in r["sources"]] + build.SALINITY["sources"] + [build.PESTS["rice"]["source"]] + build.PESTS["shrimp"]["sources"] + [v["source"] for v in build.PESTS["upland"].values()] \
         + [build.POWER_SRC, build.GPM_SRC, build.MODIS_SRC, build.HEAT_SRC, build.SOIL_SRC, build.ONI_SRC, build.OUTLOOK["source"], build.FAO29_SRC, build.FAO48_SRC]
     assert {x["title"] for x in inputs} <= set(titles), {x["title"] for x in inputs} - set(titles)
     assert "url" not in json.dumps(d["sites"]) and "data_sources" not in d   # no source lists left anywhere else

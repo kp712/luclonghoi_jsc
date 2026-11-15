@@ -677,6 +677,13 @@ def confidence(rot, nd, sal, not_here, elnino=False):
         est.append(("salt-tolerant rice counted as half a rice month in salt months", "lúa chịu mặn được tính bằng nửa tháng lúa trong các tháng mặn"))
     if BRACKISH_ESTIMATE and "S" in [c[0] for c in rot["months"]]:
         est.append(("salt left by the shrimp phase", "muối còn lại sau vụ tôm"))
+    m = [c[0] for c in rot["months"]]
+    if "-" in m or "U" in m or "S" in m:
+        est.append(("break credit for pests", "mức giảm sâu bệnh nhờ cắt vụ"))
+    if "U" in m:
+        est.append(("pest timing for upland crops", "thời điểm sâu hại cây màu"))
+    if "S" in m:
+        est.append(("shrimp disease floor and cold-snap rule", "mức rủi ro bệnh tôm tối thiểu và quy tắc trời lạnh đột ngột"))
     for l in PROFITS["loss"]:
         months = {i + 1 for code, key in rot["profit"].items() if key == l["key"] for i, m in enumerate(rot["months"]) if m == code}
         if l["estimate"] and l["view"] in views and months and (l["applies"] == "all" or months & set(sal["months"])):
@@ -729,6 +736,20 @@ def make_card(rot, clim, nd, sal, elnino=False):
     cv, br = o["cover"], o["brackish"]
     why.append(line(f"Soil {x}: {mo(o['rest'])} rest, {mo(o['nonrice'])} without rice, {o['legume']} legume month{'' if o['legume'] == 1 else 's'}{'; cover crop optional: more if you sow one' if cv else ''}{'; brackish months leave salt in the soil' if br else ''}.",
                     f"Đất {vi_num(x)}: {o['rest']} tháng nghỉ, {o['nonrice']} tháng không trồng lúa, {o['legume']} tháng cây họ đậu{'; cây che phủ không bắt buộc: điểm cao hơn nếu bạn gieo' if cv else ''}{'; các tháng nước lợ để lại muối trong đất' if br else ''}."))
+
+    # Pests: rice planthopper pressure from NASA POWER temperature, upland and shrimp pests named, rest months break the cycle
+    x, o = score_pests(rot, clim)
+    s["pests"] = x
+    why.append(sourced(line(f"Pests {x}: rice in {o['rice']} months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; {o['rest']} rest month(s).",
+                            f"Sâu bệnh {vi_num(x)}: có lúa trong {o['rice']} tháng; nhiệt độ NASA POWER ở đây thuận lợi cho rầy nâu quanh năm (Horgan và cộng sự 2020), nên các tháng nghỉ cắt vòng đời rầy là quan trọng nhất; {o['rest']} tháng nghỉ."), POWER_SRC, PESTS["rice"]["source"]))
+    if o["upland"] and rot.get("crop") in PESTS["upland"]:
+        up = PESTS["upland"][rot["crop"]]
+        cen, cvi = {"watermelon": ("watermelon", "dưa hấu"), "maize": ("maize", "bắp"), "mungbean": ("mung bean", "đậu xanh")}[rot["crop"]]
+        risks.append(sourced(line(f"{cen.capitalize()} here faces {up['pest']['en']} in every month it is in the field: no Mekong Delta source gives its timing, so each of those months counts fully in the Pests score.",
+                                  f"{cvi.capitalize()} ở đây bị {up['pest']['vi']} gây hại trong mọi tháng cây đang trên ruộng: chưa có nguồn nào ở Đồng bằng sông Cửu Long cho biết thời điểm, nên mỗi tháng đó được tính đầy đủ trong điểm Sâu bệnh."), up["source"]))
+    if o["shrimp"]:
+        risks.append(sourced(line("Shrimp months count as at least half the pest risk of a rice month (white spot disease recurs), and more with days at or above 35 °C or a sudden cold night (NASA POWER).",
+                                  "Các tháng nuôi tôm được tính ít nhất bằng một nửa rủi ro sâu bệnh của tháng lúa (bệnh đốm trắng hay tái phát), và cao hơn khi có ngày từ 35 °C trở lên hoặc đêm lạnh đột ngột (NASA POWER)."), POWER_SRC, PESTS["shrimp"]["sources"]))
 
     # MODIS NDVI evidence: bare windows (confidence itself is computed in confidence())
     if nd and nd["bare_months"] and rot["id"] in ("rice_upland", "salt_tolerant"):
@@ -787,6 +808,8 @@ def build():
     SOURCES.clear()
     area = {"chart_src": cite(POWER_SRC, GPM_SRC, FAO_SRCS, SALINITY["sources"], MODIS_SRC), "salt_src": cite(SALINITY["sources"]),
             "soil_src": cite(SOIL_SRC)}
+    pest_rule = {"rice_points": PESTS["rice"]["points"], "break_weight": PESTS["break_weight"], "shrimp_floor": PESTS["shrimp"]["floor"],
+                 "cold_drop_c": PESTS["shrimp"]["cold_drop_c"], "hot_c": PESTS["shrimp"]["hot_c"], "upland_pressure": 1}
     outlook_src, area["elnino_src"] = cite(OUTLOOK["source"]), cite(ONI_SRC)  # area-wide first: numbers climb down the page
     gpm = json.loads((RAW / "gpm.json").read_text(encoding="utf-8"))
     sites = []
@@ -822,7 +845,7 @@ def build():
     soil_help = [dict({k: v for k, v in h.items() if k != "sources"}, src=cite(h["sources"])) for h in rot_file["soil_help"]]
     resources = {k: dict({a: b for a, b in r.items() if a != "sources"}, src=cite(r["sources"])) for k, r in RESOURCES.items()}
     OUT.write_text(json.dumps({"generated": date.today().isoformat(), "soil_help": soil_help,
-                               "outlook": dict({k: OUTLOOK[k] for k in ("elnino", "text")}, src=outlook_src), "resources": resources,
+                               "outlook": dict({k: OUTLOOK[k] for k in ("elnino", "text")}, src=outlook_src), "resources": resources, "pest_rule": pest_rule,
                                **area, "sources": [v for _, v in sorted(SOURCES.values(), key=lambda x: x[0])], "sites": sites}, ensure_ascii=False, indent=1), encoding="utf-8")
     print("wrote", OUT, len(sites), "sites")
 
