@@ -148,7 +148,7 @@ const Cost = (() => {
       const it = list.find((x) => x.c.id === el.dataset.id); if (!it) return;
       const old = el.querySelector(".cs-box"); const html = box(it.c);
       if (old) { if (old.outerHTML !== html) { const open = old.querySelector("details[open]"); old.outerHTML = html; if (open) { const n = el.querySelector(".cs-box details"); if (n) n.open = true } } return }
-      const anchor = el.querySelector(".mini") || el.querySelector(".cal");
+      const anchor = el.querySelector(".ic15-key") || el.querySelector(".mini") || el.querySelector(".cal");
       if (anchor) anchor.insertAdjacentHTML("afterend", html); else el.insertAdjacentHTML("beforeend", html);
     });
   }

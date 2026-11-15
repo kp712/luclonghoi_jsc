@@ -298,6 +298,10 @@ body.ui-simple .card h3 { font-size: 1.25rem }
 .ic15 { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px }
 .ic15-m { display: grid; gap: 3px; text-align: center; font: 500 .75rem/1 var(--font); color: var(--ink-2) }
 .ic15-m i { display: block; height: 22px; border-radius: 2px }
+.ic15-m b { display: block; height: 4px; border-radius: 2px }                 /* Advanced: rainy or dry month, under its tile */
+.ic15.has-w { row-gap: 8px }
+.ic15-key .sep { width: 1px; height: 12px; background: var(--line-2); align-self: center }
+.ic15-key .sep ~ span i { width: 16px; height: 4px; border-radius: 2px }   /* rain swatches are bars, like the bar under each month, so "Mưa" is not mistaken for "Tôm" */
 .ic15-m.k-R i { background: var(--rice) } .ic15-m.k-U i { background: var(--gold-2) } .ic15-m.k-S i { background: var(--water) } .ic15-m.k-F i { background: var(--line-2) }
 .ic15-m.k-R, .ic15-m.k-U, .ic15-m.k-S, .ic15-m.k-F { background: none }
 .crop-pick { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem }

@@ -716,12 +716,13 @@ const fmt = x => Math.round(x / 10) * 10 >= 1000 ? (Math.round(x / 100) * 100).t
 const dh = f && f.ha ? +f.ha : parseFloat(load("d5-ha") || "");  /* draft5: the size typed above the cards counts too */
 return dh > 0 ? t("fieldHa")(num(dh), fmt(wt[0] * 10 * dh)) : t("fieldPer")(fmt(wt[0] * 10));
 }
-/* part 17: the 12 months as a strip (Simple) */
-function strip15(months) {
+/* part 17: the 12 months as numbered tiles, coloured by crop (both views).
+   water (Advanced only): one "wet" / "dry" per month, drawn as a thin bar under that month's tile */
+function strip15(months, water) {
 const salt = V(site).salt, MS = t("months"), used = [...new Set(months.map(m => m[0] === "T" ? "R" : m[0]))];
-return `<div class="ic15" role="img" aria-label="${esc(months.map((m, i) => `${t("monthsLong")[i]}: ${t("ic15")[m[0]] || ""}${salt.includes(i + 1) ? ", " + t("ic15salt") : ""}`).join("; "))}">
-${months.map((m, i) => `<div class="ic15-m k-${m[0] === "-" ? "F" : m[0] === "T" ? "R" : m[0]}${salt.includes(i + 1) ? " salt" : ""}"><span>${MS[i]}</span><i></i></div>`).join("")}</div>
-<div class="ic15-key" aria-hidden="true">${used.map(k => `<span><i class="k-${k === "-" ? "F" : k}"></i>${esc(t("ic15")[k] || "")}</span>`).join("")}${salt.length ? `<span><i class="ic15-s"></i>${esc(t("ic15salt"))}</span>` : ""}</div>`;
+return `<div class="ic15${water ? " has-w" : ""}" role="img" aria-label="${esc(months.map((m, i) => `${t("monthsLong")[i]}: ${t("ic15")[m[0]] || ""}${salt.includes(i + 1) ? ", " + t("ic15salt") : ""}${water ? ", " + t(water[i] === "wet" ? "kWet" : "kDry") : ""}`).join("; "))}">
+${months.map((m, i) => `<div class="ic15-m k-${m[0] === "-" ? "F" : m[0] === "T" ? "R" : m[0]}${salt.includes(i + 1) ? " salt" : ""}"><span>${MS[i]}</span><i></i>${water ? `<b class="w-${water[i]}"></b>` : ""}</div>`).join("")}</div>
+<div class="ic15-key" aria-hidden="true">${used.map(k => `<span><i class="k-${k === "-" ? "F" : k}"></i>${esc(t("ic15")[k] || "")}</span>`).join("")}${salt.length ? `<span><i class="ic15-s"></i>${esc(t("ic15salt"))}</span>` : ""}${water ? `<span class="sep"></span><span><i class="w-wet"></i>${t("kWet")}</span><span><i class="w-dry"></i>${t("kDry")}</span>` : ""}</div>`;
 }
 const prevScore = {}; let lastBest = null, speaking = null;
 function countUp(el, a, b, d = 420) {
@@ -750,12 +751,7 @@ return `<article data-plan="${c.id}" class="card ${i === 0 && !c.not_here ? "bes
 <div class="c-top"><span class="rank">#${i + 1}</span>${i === 0 && !c.not_here ? `<span class="ribbon">${t("best")}</span>` : ""}<span class="c-tags">${c.id === cur ? `<span class="tag now">${t("yourNow")}</span>` : ""}${c.not_here ? `<span class="tag warn">${t("notHere")}</span>` : ""}</span></div>
 <h3>${esc(pick(c.name))}</h3>
 <p class="cal">${esc(pick(c.calendar))}</p>
-${ui === "simple" ? strip15(c.months) : ""}
-<div class="mini" aria-hidden="true">${c.months.map((m, j) => `<i class="m-${m[0]}${v.salt.includes(j + 1) ? " salt" : ""}" title="${t("monthsLong")[j]}"></i>`).join("")}</div>
-<div class="mini-w" aria-hidden="true">${vw.rain.map((r, j) => `<i class="${vw.salt.includes(j + 1) ? "salt" : r >= vw.et0[j] ? "wet" : "dry"}"></i>`).join("")}</div>
-<div class="mini-m" aria-hidden="true">${t("months").map(m => `<span>${m}</span>`).join("")}</div>
-<div class="mini-key" aria-hidden="true"><span><i class="m-R"></i>${t("kR")}</span>${c.months.some(m => m[0] === "U") ? `<span><i class="m-U"></i>${t("kU")}</span>` : ""}${c.months.some(m => m[0] === "S") ? `<span><i class="m-S"></i>${t("kS")}</span>` : ""}${c.months.some(m => m[0] === "-") ? `<span><i class="m--"></i>${t("kRest")}</span>` : ""}
-<span class="sep"></span><span><i class="w-wet"></i>${t("kWet")}</span><span><i class="w-dry"></i>${t("kDry")}</span><span><i class="w-salt"></i>${t("kSalt")}</span></div>
+${strip15(c.months, ui === "simple" ? null : vw.rain.map((r, j) => r >= vw.et0[j] ? "wet" : "dry"))}
 ${pickCrop}
 <div class="match">${ring(sc)}<div class="match-txt"><span>${t("match")}</span>${meter(sc)}</div></div>
 <ul class="subs adv">${KEYS.map(x => `<li><span>${t("scoreNames")[x]}</span>${c.scores[x] == null ? `<span class="dots">${t("noScore")}</span>` : dots(c.scores[x])}</li>`).join("")}</ul>
@@ -803,7 +799,7 @@ const n = V(site).salt.length, rec = [];
 if (n >= 4 && w.salt < 2) rec.push(t("recSalt")(n));
 if (c.id !== cur) rec.push(t("recTalk"));
 el.innerHTML = `<div class="bn-head">${ring(Math.max(0, top.s), "lg")}
-<div><span class="bn-badge">${t("bestNow")}</span><h3>${esc(pick(c.name))}</h3><p class="bn-cal">${esc(pick(c.calendar))}</p>${ui === "simple" ? strip15(c.months) : ""}</div></div>
+<div><span class="bn-badge">${t("bestNow")}</span><h3>${esc(pick(c.name))}</h3><p class="bn-cal">${esc(pick(c.calendar))}</p>${strip15(c.months)}</div></div>
 <p class="bn-why">${t("bestWhy")(why)}</p>${rec.length ? `<ul class="bn-rec">${rec.map(r => `<li>${esc(r)}</li>`).join("")}</ul>` : ""}
 <div class="bn-act"><button type="button" class="go-btn" data-best="${c.id}">${t("planBtn")}</button><button type="button" class="ghost-btn" data-go="3">${t("seeAll")}</button></div>`;
 const bx = el.querySelector(".ring b"), v = Math.max(0, top.s);
