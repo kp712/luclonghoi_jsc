@@ -121,7 +121,7 @@ img, svg { max-width: 100% }
 }
 .seg button {
   display: inline-flex; align-items: center; justify-content: center; gap: .4rem;
-  min-height: 38px; min-width: 40px; padding: .3rem .75rem; border-radius: 2px;
+  min-height: 38px; min-width: 40px; padding: .3rem .75rem; border-radius: calc(var(--r) - 3px);   /* outline radius minus 2px padding and 1px border, so the fill follows the outline */
   font: 500 .8125rem/1.2 var(--font); color: var(--ink-2);
   transition: background .2s, color .2s;
 }
@@ -737,3 +737,7 @@ body.lang-vi .brand-tag, body.lang-vi .rail-tags { letter-spacing: 0 }
   body.dv-off:not(.has-site) #hero { top: calc(var(--top-h) + 64px) }
   #setPanel { padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px)) }
 }
+
+/* one size for every top-bar label; a segment keeps its weight when chosen, so its width never jumps */
+.seg button, .seg button[aria-pressed="true"] { font-weight: 600 }
+#topbar .seg button, #topbar #lEn, #topbar #lVi, #topbar #hubBtn span, #topbar #gearBtn span, #topbar #uiSw span { font: 600 .8125rem/1.2 var(--font); letter-spacing: 0 }
