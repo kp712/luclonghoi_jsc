@@ -117,7 +117,7 @@ const Dash = (() => {
     shrimp: '<path d="M4 16c.8-6 5.6-10 11.5-9.2 3.2.4 4 3.4 2 5.2-1.8 1.7-4.6 1-5.8 3.2L9 20"/><path d="M4 16l3 1"/><circle cx="16" cy="9.5" r=".6"/>',
     upland: '<path d="M12 21v-8"/><path d="M12 13c-4.2 0-6.2-3-6.2-7 4.2 0 6.2 3 6.2 7Z"/><path d="M12 15c0-4 2-6 6-6 0 4-2 6-6 6Z"/>',
     fallow: '<path d="M4 12h3"/><path d="M10.5 12h3"/><path d="M17 12h3"/>',
-    warn: '<path d="M12 3.5 21.5 20h-19L12 3.5Z"/><path d="M12 10v4.5"/><path d="M12 17.4v.1"/>', check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+    warn: '<path d="M12 3.5 21.5 20h-19L12 3.5Z"/><path d="M12 10v4.5"/><path d="M12 17.4v.1"/>', check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>', bell: '<path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15L6 16Z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>', basket: '<path d="M3.5 10h17l-2 9.5h-13L3.5 10Z"/><path d="M8 10l3-6M16 10l-3-6M9 14v2.5M12 14v2.5M15 14v2.5"/>',
     coin: '<circle cx="12" cy="12" r="9"/><path d="M12 7v10"/><path d="M14.6 9.2c-.4-.9-1.3-1.4-2.6-1.4-1.6 0-2.6.7-2.6 1.8 0 2.6 5.2 1.2 5.2 3.8 0 1.1-1.1 1.8-2.6 1.8-1.3 0-2.2-.6-2.6-1.5"/>',
     star: '<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z"/>',
     plus: '<path d="M12 5v14M5 12h14"/>', cal: '<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>', print: '<path d="M6 9V3h12v6M6 18H4v-7h16v7h-2"/><path d="M6 14h12v7H6z"/>',
@@ -207,10 +207,11 @@ const Dash = (() => {
     return `<div class="dv-ftabs" role="tablist" aria-label="${esc(T("brand"))}">${st.fields.map((f) => { const sel = !!(f0 && f.id === f0.id), lv = areaLv(f.site);
       return `<button type="button" role="tab" data-dvf="${f.id}" aria-selected="${sel}"><i class="sd-dot lv-${lv}" aria-hidden="true"></i><b>${esc(f.name)}</b><small>${esc(short(siteOf(f.site)))}</small></button>` }).join("")}</div>`;
   }
+  /* the page title is the chosen field's own name, big, so a farmer sees at once which field this is */
   function pageHead() {
-    const seg = `<div class="seg dv-mode" role="group" aria-label="${esc(T("modeL"))}"><button type="button" data-dvui="simple" aria-pressed="${!adv()}">${esc(T("simple"))}</button><button type="button" data-dvui="advanced" aria-pressed="${adv()}">${esc(T("adv"))}</button></div>`;
-    return `<header class="dv-top"><div class="dv-tt"><p class="sd-eyebrow">${esc(T("eyebrow"))}</p><h2 id="dvH">${esc(T("brand"))}</h2></div>
-      <div class="dv-tr">${st.fields.length ? seg : ""}<button type="button" class="btn gold dv-addtop" data-dv="add">${ic("plus", 18)}<span>${esc(T("addShort"))}</span></button></div></header>`;
+    const f = fieldSel(), eb = f ? `${T("brand")} · ${short(siteOf(f.site))}` : T("eyebrow");
+    return `<header class="dv-top${f ? " has-f" : ""}"><div class="dv-tt"><p class="sd-eyebrow">${esc(eb)}</p><h2 id="dvH" class="dv-name" data-k="${f ? esc(f.id) : ""}">${esc(f ? f.name : T("brand"))}</h2></div>
+      <div class="dv-tr"><button type="button" class="btn gold dv-addtop" data-dv="add">${ic("plus", 18)}<span>${esc(T("addShort"))}</span></button></div></header>`;
   }
   function welcome() {
     return `<section class="dv-welcome"><div class="dv-wi">${ic("rice", 40)}</div><h3>${esc(T("welcome"))}</h3><p>${esc(T("welcomeP"))}</p>
@@ -230,7 +231,8 @@ const Dash = (() => {
   function simplePage(f) {
     const x = facts(f), { c } = x, mon = shownMoney(f, x), k0 = c.months[CM][0];
     return `<div class="dv-s">
-      <div class="dv-splan"><div><span>${esc(f.name)} · ${esc(short(x.s))}</span><b>${esc(L(c.name))}</b></div><button type="button" class="dv-deltop" data-dv="delask" aria-label="${esc(T("delThis"))}: ${esc(f.name)}" title="${esc(T("delThis"))}">${ic("trash", 20)}</button></div>
+      <div class="dv-splan"><div><span>${esc(T("yourPlan"))}</span><b>${esc(L(c.name))}</b></div><button type="button" class="dv-deltop" data-dv="delask" aria-label="${esc(T("delThis"))}: ${esc(f.name)}" title="${esc(T("delThis"))}">${ic("trash", 20)}</button></div>
+      ${remindCard(f)}
       ${progressCard(f)}
       ${suggestions(f)}
       <button type="button" class="s-card s-job" data-dv="plan"><span class="s-k">${ic("cal", 18)}${esc(T("monthOn")(CM + 1))}</span>
@@ -315,7 +317,8 @@ const Dash = (() => {
     const d = advData(f), { c, s, nino, m } = d, best = d.r.find((y) => !y.no);
     const rain = d.rainA.reduce((a, b) => a + b, 0), et0 = d.et0A.reduce((a, b) => a + b, 0), cropM = c.months[m][0] === "R" || c.months[m][0] === "U";
     return `<div class="dv-a">
-      <div class="a-bar"><div><span class="a-mut">${esc(f.name)} · ${esc(short(s))}</span><b>${esc(L(c.name))}</b></div><span class="a-bar-r"><span class="a-pill${nino ? " hot" : ""}">${esc(nino ? T("years").elnino : T("years").typical)}</span><button type="button" class="dv-deltop" data-dv="delask" aria-label="${esc(T("delThis"))}: ${esc(f.name)}" title="${esc(T("delThis"))}">${ic("trash", 20)}</button></span></div>
+      <div class="a-bar"><div><span class="a-mut">${esc(T("yourPlan"))}</span><b>${esc(L(c.name))}</b></div><span class="a-bar-r"><span class="a-pill${nino ? " hot" : ""}">${esc(nino ? T("years").elnino : T("years").typical)}</span><button type="button" class="dv-deltop" data-dv="delask" aria-label="${esc(T("delThis"))}: ${esc(f.name)}" title="${esc(T("delThis"))}">${ic("trash", 20)}</button></span></div>
+      ${remindCard(f)}
       <div class="a-duo">${progressCard(f)}${suggestions(f)}</div>
       ${monthStrip(f, c)}
       <p class="a-tip">${ic("expand", 14)}${esc(T("tapTile"))}</p>
@@ -444,10 +447,16 @@ const Dash = (() => {
     sgClash: (ms) => `Cây trồng gặp nước mặn vào ${ms}. Xem cách trồng chịu mặn hơn.`, sgBetter: (n) => `Cách trồng hợp hơn với ưu tiên của bạn: ${n}`,
     sgNino: "Năm El Niño: mặn có thể về sớm và sâu hơn. Theo dõi bản tin độ mặn của tỉnh trên Zalo, đài và loa xã.",
     sgSize: "Nhập diện tích ruộng để xem tiền vốn và tiền lời cho cả ruộng.", sgSrc: "Theo khuyến cáo của ngành nông nghiệp Sóc Trăng (báo Nhân Dân 20/5/2024; Nông nghiệp và Môi trường 23/2/2024). Độ mặn là ước tính.",
-    sgGo: "Xem", sgOpen: "Đổi cách trồng", sgEdit: "Sửa ruộng",
+    sgGo: "Xem", sgOpen: "Đổi cách trồng", sgEdit: "Sửa ruộng", sgPrev: "Gợi ý trước", sgNext: "Gợi ý sau",
     pgH: "Tiến độ 12 tháng", pgOf: (n) => `${n}/12 tháng xong`, pgD: "Tháng đã qua được đánh dấu tự động. Chạm một tháng để đánh dấu hoặc bỏ đánh dấu.",
     pgTick: (m) => `Xong việc tháng ${m}`, pgDone: (m) => `Đã xong tháng ${m}`, pgAuto: "tự động", pgFuture: "chưa tới",
     pgStart: (m, y) => `Bắt đầu: tháng ${m}/${y}`, pgAt: (k) => `Tháng ${k}/12`,
+    yourPlan: "Kế hoạch của bạn", pgLeft: (n) => (n ? `Còn ${n} tháng nữa` : "Đã đi hết 12 tháng"), pgToday: "Hôm nay", pgDoneL: "Đã qua", pgNextL: "Sắp tới",
+    rmH: "Nhắc việc gieo và thu hoạch", rmSow: "Gieo sạ", rmStock: "Thả giống", rmHar: "Thu hoạch",
+    rmNow: "Ngay tháng này!", rmNext: "Tháng sau", rmIn: (n) => `Còn ${n} tháng`, rmNone: "Không có vụ gieo hay thu hoạch trong 12 tháng tới.",
+    rmSalt: "Lúc đó nước có thể mặn: đo độ mặn trước khi lấy nước vào ruộng.",
+    rmCal: "Thêm nhắc nhở vào lịch điện thoại", rmCalD: "Điện thoại sẽ báo trước 3 ngày. Tháng là gần đúng, hãy theo lịch xuống giống của địa phương.",
+    rmCalOk: "Đã tải tệp lịch. Mở tệp để thêm vào lịch điện thoại.", rmFile: "nhac-gieo-thu-hoach.ics",
     fbAsk: "Đã hết 12 tháng! Kế hoạch có giúp được bạn không? Cho chúng tôi biết nhé.", fbBtn: "Góp ý về kế hoạch", fbEarly: "Góp ý sớm",
     fbH: "Góp ý về kế hoạch 12 tháng", fbRate: "Kế hoạch giúp bạn thế nào?", fbRates: ["Không giúp", "Ít", "Tạm được", "Tốt", "Rất tốt"],
     fbCrop: "Mùa vụ năm nay", fbCrops: { good: "Được mùa", ok: "Bình thường", bad: "Mất mùa" },
@@ -464,10 +473,16 @@ const Dash = (() => {
     sgClash: (ms) => `Your crops meet salty water in ${ms}. Look at a more salt-tolerant plan.`, sgBetter: (n) => `A better fit for your priorities: ${n}`,
     sgNino: "El Niño year: salt may come earlier and go further inland. Follow the province's salt bulletins on Zalo, radio and commune speakers.",
     sgSize: "Enter your field size to see cost and profit for the whole field.", sgSrc: "From Sóc Trăng farm-sector advice (Nhân Dân 20 May 2024; Nông nghiệp và Môi trường 23 Feb 2024). Salt is an estimate.",
-    sgGo: "See", sgOpen: "Change plan", sgEdit: "Edit field",
+    sgGo: "See", sgOpen: "Change plan", sgEdit: "Edit field", sgPrev: "Previous tip", sgNext: "Next tip",
     pgH: "12-month progress", pgOf: (n) => `${n} of 12 months done`, pgD: "Months that have passed are ticked for you. Tap a month to tick or untick it.",
     pgTick: (m) => `Month ${m} done`, pgDone: (m) => `Month ${m} is done`, pgAuto: "auto", pgFuture: "not yet",
     pgStart: (m, y) => `Started: ${m}/${y}`, pgAt: (k) => `Month ${k} of 12`,
+    yourPlan: "Your plan", pgLeft: (n) => (n ? `${n} months to go` : "All 12 months done"), pgToday: "Today", pgDoneL: "Passed", pgNextL: "Coming",
+    rmH: "Sowing and harvest reminders", rmSow: "Sow", rmStock: "Stock", rmHar: "Harvest",
+    rmNow: "This month!", rmNext: "Next month", rmIn: (n) => `In ${n} months`, rmNone: "No sowing or harvest in the next 12 months.",
+    rmSalt: "The water may be salty then: measure salt before letting water in.",
+    rmCal: "Add reminders to my phone calendar", rmCalD: "Your phone will remind you 3 days before. Months are approximate: follow your local sowing calendar.",
+    rmCalOk: "Calendar file downloaded. Open it to add it to your phone calendar.", rmFile: "sow-harvest-reminders.ics",
     fbAsk: "Your 12 months are over! Did the plan help? Please tell us.", fbBtn: "Give feedback on the plan", fbEarly: "Give feedback now",
     fbH: "Feedback on your 12-month plan", fbRate: "How much did the plan help?", fbRates: ["Not at all", "A little", "Okay", "Good", "Very good"],
     fbCrop: "This year's harvest", fbCrops: { good: "Good", ok: "Normal", bad: "Lost" },
@@ -485,18 +500,60 @@ const Dash = (() => {
   }
   /* a month that is over counts as done unless the farmer unticked it (false) */
   function autoTick(f) { f.done = f.done || {}; let ch = false; months12(f).forEach((x) => { if (x.past && f.done[x.key] === undefined) { f.done[x.key] = "auto"; ch = true } }); if (ch) save() }
+  /* sow / harvest moments in the plan: a crop starts (sow or stock) and ends (harvest) */
+  function moments(c) {
+    const out = [], y0 = new Date().getFullYear();
+    for (let i = 0; i < 12; i++) { const m = (CM + i) % 12, code = c.months[m]; if (code === "-") continue;
+      const y = y0 + Math.floor((CM + i) / 12);
+      if (c.months[(m + 11) % 12] !== code) out.push({ k: "sow", m, i, y, code });
+      if (c.months[(m + 1) % 12] !== code) out.push({ k: "har", m, i, y, code }) }
+    return out;
+  }
+  const momLabel = (x) => (x.k === "har" ? T("rmHar") : x.code[0] === "S" ? T("rmStock") : T("rmSow"));
+  const momWhen = (i) => (i === 0 ? T("rmNow") : i === 1 ? T("rmNext") : T("rmIn")(i));
+  /* "notification" card at the top: the next sowing and the next harvest, with a countdown and a phone-calendar reminder */
+  function remindCard(f) {
+    const c = cardOf(f), ms = moments(c), nino = isNino(f), pick = ["sow", "har"].map((k) => ms.find((x) => x.k === k)).filter(Boolean).sort((a, b) => a.i - b.i);
+    if (!pick.length) return `<section class="dv-rm" aria-labelledby="dvRmH"><h3 id="dvRmH">${ic("bell", 18)}${esc(T("rmH"))}</h3><p class="rm-none">${esc(T("rmNone"))}</p></section>`;
+    return `<section class="dv-rm${pick.some((x) => x.i === 0) ? " hot" : ""}" aria-labelledby="dvRmH"><h3 id="dvRmH">${ic("bell", 18)}${esc(T("rmH"))}</h3>
+      <ul class="rm-list">${pick.map((x) => { const salty = x.k === "sow" && x.code[0] !== "S" && level(fieldSalt(f.site, x.m, nino)) === "man";
+        return `<li class="rm-it k-${x.k}${x.i === 0 ? " now" : ""}"><span class="rm-ic" aria-hidden="true">${ic(x.k === "har" ? "basket" : "seed", 26)}</span>
+        <div class="rm-tx"><span class="rm-k">${esc(momLabel(x))}<em class="rm-when">${esc(momWhen(x.i))}</em></span><b>${esc(cropName(c, x.code))}</b><span class="rm-d">${esc(MLONG(x.m))} ${x.y}</span>${salty ? `<span class="rm-salt">${ic("warn", 14)}${esc(T("rmSalt"))}</span>` : ""}</div></li>` }).join("")}</ul>
+      <button type="button" class="btn rm-cal" data-dvrm="ics">${ic("cal", 18)}<span>${esc(T("rmCal"))}</span></button><p class="rm-note">${esc(T("rmCalD"))} ${esc(T("est"))}</p></section>`;
+  }
+  /* a .ics file with every sowing and harvest of the next 12 months; the phone's own calendar does the reminding */
+  function icsDownload() {
+    const f = fieldSel(); if (!f) return; const c = cardOf(f), p2 = (n) => String(n).padStart(2, "0"), now = new Date();
+    const stamp = `${now.getUTCFullYear()}${p2(now.getUTCMonth() + 1)}${p2(now.getUTCDate())}T${p2(now.getUTCHours())}${p2(now.getUTCMinutes())}00Z`;
+    const escI = (t) => String(t).replace(/[\\;,]/g, (m) => "\\" + m).replace(/\n/g, "\\n");
+    const ev = moments(c).map((x, n) => { const d0 = `${x.y}${p2(x.m + 1)}01`, nx = new Date(x.y, x.m, 2), d1 = `${nx.getFullYear()}${p2(nx.getMonth() + 1)}${p2(nx.getDate())}`, ttl = `${momLabel(x)}: ${cropName(c, x.code)} (${f.name})`;
+      return ["BEGIN:VEVENT", `UID:${f.id}-${x.y}-${x.m}-${x.k}-${n}@mekong-rotation`, `DTSTAMP:${stamp}`, `DTSTART;VALUE=DATE:${d0}`, `DTEND;VALUE=DATE:${d1}`, `SUMMARY:${escI(ttl)}`,
+        `DESCRIPTION:${escI(`${jobAt(c, x.m)}. ${T("sgSow")} ${T("est")}.`)}`, "BEGIN:VALARM", "ACTION:DISPLAY", `DESCRIPTION:${escI(ttl)}`, "TRIGGER:-P3D", "END:VALARM", "END:VEVENT"].join("\r\n") });
+    const ics = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Mekong Rotation Explorer//EN", "CALSCALE:GREGORIAN", ...ev, "END:VCALENDAR"].join("\r\n");
+    const url = URL.createObjectURL(new Blob([ics], { type: "text/calendar;charset=utf-8" })), a = document.createElement("a");
+    a.href = url; a.download = T("rmFile"); document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 4000);
+    try { window.App && App.toast && App.toast(T("rmCalOk")) } catch (e) {}
+  }
   function progressCard(f) {
-    /* progress since the plan started: passed months are done, the current month fills by day (no ticking) */
+    /* the season path: 12 months as a road coloured by crop; a marker walks along it to today; seed flags = sowing, basket flags = harvest */
     const ms = months12(f), past = ms.filter((x) => x.past).length, now = ms.find((x) => x.cur), over = ms[11].past, s0 = startOf(f), c = cardOf(f);
     const d = new Date(), part = now ? (d.getDate() - 1) / new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate() : 0, frac = over ? 1 : Math.min(1, (past + part) / 12);
-    const k = over ? 12 : now ? past + 1 : 0;
+    const k = over ? 12 : now ? past + 1 : 0, code0 = now ? c.months[now.m] : "-", deg = (frac * 360).toFixed(1);
     curSite = f.site; curNino = isNino(f);
     const fbDone = !!f.feedback;
-    return `<section class="dv-prog${over ? " over" : ""}" aria-labelledby="dvPgH"><div class="pg-top"><h3 id="dvPgH">${ic("cal", 18)}${esc(T("pgH"))}</h3><b class="pg-n">${esc(T("pgAt")(k))}</b></div>
-      <div class="pg-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(frac * 100)}" aria-label="${esc(T("pgH"))}"><i style="transform:scaleX(${frac.toFixed(3)})"></i></div>
-      <ol class="pg-ms">${ms.map((x) => `<li class="pg-m${x.past ? " done" : ""}${x.cur ? " cur" : ""}${x.future ? " fut" : ""}" aria-label="${esc(MLONG(x.m))}: ${esc(x.future ? T("pgFuture") : jobAt(c, x.m))}${x.cur ? " " + esc(T("nowTag")) : ""}">
-        <span class="pg-ck" aria-hidden="true">${x.past ? ic("check", 14) : x.cur ? '<i class="pg-dot"></i>' : ""}</span><span class="pg-l">${esc(MNUM(x.m))}</span></li>`).join("")}</ol>
-      <p class="pg-d">${esc(T("pgStart")(s0.m + 1, s0.y))}${now ? ` · ${esc(jobAt(c, now.m))}` : ""}</p>
+    const seg = ms.map((x) => { const code = c.months[x.m], kk = code === "-" ? "rest" : code[0], sow = code !== "-" && c.months[(x.m + 11) % 12] !== code, har = code !== "-" && c.months[(x.m + 1) % 12] !== code;
+      return `<li class="pg-s pk-${kk}${x.past ? " done" : ""}${x.cur ? " cur" : ""}"${x.cur ? ` style="--p:${Math.max(8, Math.round(part * 100))}%"` : ""} aria-label="${esc(MLONG(x.m))}: ${esc(cropName(c, code))}${sow ? ", " + esc(momLabel({ k: "sow", code })) : ""}${har ? ", " + esc(T("rmHar")) : ""}">
+        <span class="pg-fl" aria-hidden="true">${sow ? `<i class="fl sow">${ic("seed", 13)}</i>` : ""}${har ? `<i class="fl har">${ic("basket", 13)}</i>` : ""}</span><i class="pg-bk"></i><span class="pg-l">${esc(MNUM(x.m))}</span></li>` }).join("");
+    const kinds = ["R", "S", "U", "-"].filter((q) => c.months.some((x) => x[0] === q));
+    return `<section class="dv-prog${over ? " over" : ""}" aria-labelledby="dvPgH">
+      <div class="pg-hd"><div class="pg-ring" style="--deg:${deg}deg" aria-hidden="true"><span><b>${k}</b><small>/12</small></span></div>
+        <div class="pg-ht"><h3 id="dvPgH">${esc(T("pgH"))}</h3><b class="pg-n">${esc(T("pgAt")(k))}</b><span class="pg-left">${esc(T("pgLeft")(12 - k))}</span></div></div>
+      <div class="pg-path" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(frac * 100)}" aria-label="${esc(T("pgH"))}: ${esc(T("pgAt")(k))}">
+        <ol class="pg-segs">${seg}</ol>
+        ${over ? "" : `<span class="pg-walk" style="left:${Math.min(96, Math.max(4, frac * 100)).toFixed(2)}%" aria-hidden="true"><em>${esc(T("pgToday"))}</em><span class="pg-tok">${iconOf(code0)}</span></span>`}
+      </div>
+      <p class="pg-key">${kinds.map((q) => `<span><i class="sw pk-${q === "-" ? "rest" : q}"></i>${esc(T("crop")[q])}</span>`).join("")}<span>${ic("seed", 13)}${esc(T("rmSow"))}</span><span>${ic("basket", 13)}${esc(T("rmHar"))}</span></p>
+      <p class="pg-d">${esc(T("pgStart")(s0.m + 1, s0.y))}${now ? ` · <b>${esc(jobAt(c, now.m))}</b>` : ""}</p>
       ${over && !fbDone ? `<div class="pg-fb"><p>${esc(T("fbAsk"))}</p><button type="button" class="btn gold" data-dvfb="open">${ic("star", 18)}<span>${esc(T("fbBtn"))}</span></button></div>` : ""}
       ${fbDone ? `<div class="pg-fb ok"><p><b>${esc(T("fbThanks"))}</b> <span class="pg-stars" aria-label="${f.feedback.rate}/5">${"★".repeat(f.feedback.rate)}${"☆".repeat(5 - f.feedback.rate)}</span></p><div class="pg-fba"><button type="button" class="btn" data-dvfb="open">${esc(T("fbEdit"))}</button>${over ? `<button type="button" class="btn gold" data-dvfb="newask">${esc(T("fbNew"))}</button>` : ""}</div></div>` : ""}
       ${!over && !fbDone ? `<button type="button" class="dv-link pg-early" data-dvfb="open">${esc(T("fbEarly"))}</button>` : ""}</section>`;
@@ -530,7 +587,7 @@ const Dash = (() => {
     if (a === "new") { closeSheet(); (f.history = f.history || []).push({ startAt: f.startAt || f.savedAt, done: f.done, feedback: f.feedback }); f.startAt = Date.now(); f.done = {}; f.feedback = null; save(); render() }
   }
   function tickMonth(key) { const f = fieldSel(); if (!f) return; f.done = f.done || {}; const x = months12(f).find((y) => y.key === key); if (!x || x.future) return; f.done[key] = x.done ? false : true; save(); render() }
-  let sgOpen = -1;
+  let sgOpen = 0;   /* the tip deck always shows one tip; warnings come first */
   function suggestions(f) {
     const x = facts(f), { c } = x, out = [], nino = x.nino;
     out.push({ i: "cal", t: T("sgJob")(CM + 1, x.job) });
@@ -542,18 +599,23 @@ const Dash = (() => {
     else if (best && best.c.id !== c.id) out.push({ i: "star", t: T("sgBetter")(L(best.c.name)), a: "choose", al: T("sgOpen") });
     if (nino) out.push({ i: "sun", t: T("sgNino") });
     if (!f.size) out.push({ i: "coin", t: T("sgSize"), a: "editmap", al: T("sgEdit") });
-    const xs = out.slice(0, 5); if (sgOpen >= xs.length) sgOpen = -1;
-    return `<section class="dv-sug" aria-labelledby="dvSgH"><h3 id="dvSgH">${ic("star", 18)}${esc(T("sgH"))}<span class="sg-n" aria-hidden="true">${xs.length}</span></h3>
-      <div class="sg-row" role="group" aria-labelledby="dvSgH">${xs.map((y, i) => `<button type="button" class="sg-c${y.w ? " warn" : ""}${i === sgOpen ? " on" : ""}" data-dvsg="${i}" aria-expanded="${i === sgOpen}" aria-controls="dvSgP${i}" aria-label="${esc(y.t)}" title="${esc(y.t)}">${ic(y.i, 22)}</button>`).join("")}</div>
-      ${xs.map((y, i) => `<div class="sg-p${y.w ? " warn" : ""}" id="dvSgP${i}" ${i === sgOpen ? "" : "hidden"}><p>${esc(y.t)}</p>${y.a ? `<button type="button" class="btn sg-a" data-dv="${y.a}">${esc(y.al)}${ic("chev", 14)}</button>` : ""}<p class="a-src">${esc(T("sgSrc"))}</p></div>`).join("")}</section>`;
+    const xs = out.slice(0, 5).map((y, i) => ({ ...y, o: i })).sort((p, q) => (q.w || 0) - (p.w || 0) || p.o - q.o); if (sgOpen >= xs.length || sgOpen < 0) sgOpen = 0;
+    const n = xs.length, prev = (sgOpen + n - 1) % n, next = (sgOpen + 1) % n;
+    /* a deck of tip cards: one tip open as a big card, the rest peek out behind it; icons are tabs, arrows flip */
+    return `<section class="dv-sug deck" aria-labelledby="dvSgH" style="--left:${Math.min(2, n - 1)}"><h3 id="dvSgH">${ic("star", 18)}${esc(T("sgH"))}<span class="sg-n">${sgOpen + 1} / ${n}</span></h3>
+      <div class="sg-stack">${xs.map((y, i) => `<div class="sg-p${y.w ? " warn" : ""}" id="dvSgP${i}" role="tabpanel" aria-live="polite" ${i === sgOpen ? "" : "hidden"}><span class="sg-big" aria-hidden="true">${ic(y.i, 30)}</span><p class="sg-t">${esc(y.t)}</p>${y.a ? `<button type="button" class="btn sg-a" data-dv="${y.a}">${esc(y.al)}${ic("chev", 14)}</button>` : ""}<p class="a-src">${esc(T("sgSrc"))}</p></div>`).join("")}</div>
+      <div class="sg-nav">${n > 1 ? `<button type="button" class="sg-arr" data-dvsg="${prev}" aria-label="${esc(T("sgPrev"))}">${ic("back", 18)}</button>` : ""}
+        <div class="sg-row" role="tablist" aria-labelledby="dvSgH">${xs.map((y, i) => `<button type="button" role="tab" class="sg-c${y.w ? " warn" : ""}${i === sgOpen ? " on" : ""}" data-dvsg="${i}" aria-selected="${i === sgOpen}" aria-controls="dvSgP${i}" aria-label="${esc(y.t)}" title="${esc(y.t)}">${ic(y.i, 18)}</button>`).join("")}</div>
+        ${n > 1 ? `<button type="button" class="sg-arr nx" data-dvsg="${next}" aria-label="${esc(T("sgNext"))}">${ic("chev", 18)}</button>` : ""}</div></section>`;
   }
   document.addEventListener("click", (e) => {
     if (!e.target.closest("#dv")) return;
     const t = e.target.closest("[data-dvtick]"); if (t) { e.stopPropagation(); return tickMonth(t.dataset.dvtick) }
-    const g = e.target.closest("[data-dvsg]"); if (g) { e.stopPropagation(); const i = +g.dataset.dvsg, box = g.closest(".dv-sug"); sgOpen = sgOpen === i ? -1 : i;
-      box.querySelectorAll("[data-dvsg]").forEach((c) => { const on = +c.dataset.dvsg === sgOpen; c.classList.toggle("on", on); c.setAttribute("aria-expanded", on) });
-      box.querySelectorAll(".sg-p").forEach((p, k) => { p.hidden = k !== sgOpen }); return }
+    const g = e.target.closest("[data-dvsg]"); if (g) { e.stopPropagation(); const box = g.closest(".dv-sug"), fwd = g.classList.contains("nx") || +g.dataset.dvsg > sgOpen; sgOpen = +g.dataset.dvsg;
+      const ref = document.createElement("div"); ref.innerHTML = suggestions(fieldSel()); const nb = ref.firstElementChild; nb.classList.add(fwd ? "flip-f" : "flip-b"); box.replaceWith(nb);
+      const fc = nb.querySelector(g.classList.contains("sg-arr") ? (g.classList.contains("nx") ? ".sg-arr.nx" : ".sg-arr:not(.nx)") : ".sg-c.on"); fc && fc.focus({ preventScroll: true }); return }
     const b = e.target.closest("[data-dvfb]"); if (b) { e.stopPropagation(); return fbAction(b.dataset.dvfb) }
+    if (e.target.closest("[data-dvrm]")) { e.stopPropagation(); return icsDownload() }
   }, true);
 
   function panelDash() {
@@ -766,7 +828,7 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
   let shT = 0;   /* a sheet opened right after another one closed must not be hidden by the old close timer */
   function sheet(html, wide) { clearTimeout(shT); const sh = $("#dvSheet"); $("#dvShBody").innerHTML = html; sh.classList.toggle("wide", !!wide); sh.hidden = false; requestAnimationFrame(() => sh.classList.add("on")) }
   function closeSheet() { const sh = $("#dvSheet"); if (!sh) return; sh.classList.remove("on"); clearTimeout(shT); shT = setTimeout(() => (sh.hidden = true), 220) }
-  let lastSite = null;
+  let lastSite = null, lastName = null;
   function render() {
     if (!$("#dv")) return;
     const p = $("#dvPanel"), y = p.scrollTop;
@@ -775,6 +837,7 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
     p.scrollTop = view === "plan" ? 0 : y;
     document.body.classList.toggle("dv-simple", !adv());
     p.classList.toggle("is-adv", adv() && view !== "plan" && !!fieldSel()); p.classList.toggle("is-simple", !adv() || view === "plan" || !fieldSel());
+    const hn = p.querySelector("#dvH.dv-name"); if (hn) { if (lastName !== null && hn.dataset.k !== lastName) hn.classList.add("in"); lastName = hn.dataset.k }
     const tb = p.querySelector('.dv-ftabs [aria-selected="true"]'); if (tb) { const bar = tb.parentNode; bar.scrollLeft = Math.max(0, tb.offsetLeft - (bar.clientWidth - tb.offsetWidth) / 2) }
   }
   document.addEventListener("change", (e) => { if (e.target.closest && e.target.closest(".dv-fbf")) { const er = document.getElementById("fbErr"); if (er) er.textContent = "" } });
@@ -826,8 +889,12 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
   function paintModes() {
     const sb = document.getElementById("setBody");
     if (sb) { let x = sb.querySelector(".dv-setmode"); const h = modeSeg("dv-setmode"); if (!x) sb.insertAdjacentHTML("afterbegin", h); else x.outerHTML = h }
-    const db = document.querySelector("#drawer .d-body");
-    if (db) { let x = db.querySelector(":scope > .dv-modebar"); const h = modeSeg("dv-modebar"); if (!x) db.insertAdjacentHTML("afterbegin", h); else x.outerHTML = h }
+    /* the switch lives in the top bar, next to EN / VI; the old copy inside the planner drawer is removed */
+    const db = document.querySelector("#drawer .d-body"), old = db && db.querySelector(":scope > .dv-modebar"); if (old) old.remove();
+    const tools = document.querySelector("#topbar .tools, .tools"), ls = document.getElementById("langSeg");
+    if (tools && ls) { const h = `<div class="seg" id="uiSeg" role="group" aria-label="${esc(T("modeH"))}"><button type="button" data-dvmode="simple" aria-pressed="${!adv()}">${esc(T("simple"))}</button><button type="button" data-dvmode="advanced" aria-pressed="${adv()}">${esc(T("adv"))}</button></div><button type="button" id="uiSw" role="switch" aria-checked="${adv()}" data-dvmode="${adv() ? "simple" : "advanced"}"><span>${esc(T("adv"))}</span><i aria-hidden="true"></i></button>`;
+      const sw = document.getElementById("uiSw"); if (sw) sw.remove();
+      const x = document.getElementById("uiSeg"); if (x) x.outerHTML = h; else ls.insertAdjacentHTML("afterend", h) }
     document.body.classList.toggle("dv-simple", !adv()); document.body.classList.toggle("dv-adv", adv());
     /* the planner (app.js) has its own detail switch: keep it the same, so Simple really shows less in the rotation cards */
     try { if (window.App && App.setUi) App.setUi(adv() ? "advanced" : "simple"); if (typeof Cost !== "undefined") Cost.cards() } catch (e) {}
@@ -839,7 +906,7 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
     setTimeout(paintModes, 0); document.addEventListener("click", (e) => { if (e.target.closest("#lEn, #lVi, #gearBtn")) setTimeout(paintModes, 40) });
     /* Settings and the drawer are re-drawn by app.js: put the switch back whenever it goes missing */
     let mq = 0; new MutationObserver(() => { if (mq) return; mq = setTimeout(() => { mq = 0; const sb = document.getElementById("setBody"), db = document.querySelector("#drawer .d-body");
-      if ((sb && !sb.querySelector(".dv-setmode")) || (db && !db.querySelector(":scope > .dv-modebar"))) paintModes() }, 50) }).observe(document.body, { childList: true, subtree: true });
+      if ((sb && !sb.querySelector(".dv-setmode")) || (db && db.querySelector(":scope > .dv-modebar")) || !document.getElementById("uiSeg")) paintModes() }, 50) }).observe(document.body, { childList: true, subtree: true });
     let hq = 0; new MutationObserver(() => { if (!hq) hq = setTimeout(() => { hq = 0; hookPlanOk() }, 30) }).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["class"] });
     document.body.classList.toggle("dv-simple", !adv());
     if (location.hash === "#plan-lab") { document.body.classList.add("dv-off"); $("#dvBack").hidden = false; backLabel(); return }
