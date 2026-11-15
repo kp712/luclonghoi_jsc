@@ -330,7 +330,7 @@ body.dv-on #toast { bottom:calc(var(--nav-h) + 16px + env(safe-area-inset-bottom
 .nv-i .dv-i { width:24px; height:24px; stroke-width:1.9 }
 .nv-l { font-size:.8125rem }
 @media (max-width:420px) { .t-tv { font-size:1.5rem } .t-tic { width:34px !important; height:34px !important } .t-tile { padding:12px 8px } .hx-big b { font-size:3rem } }
-.t-field b { flex:0 1 auto; min-width:4ch; max-width:none; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+.t-field b { flex:0 1 auto; min-width:0; max-width:none; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
 .t-field .t-fs { flex:0 1000 auto; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
 /* the older summary cards (water now, profit, season ribbon) take the same leaf cut and big title badge on the dashboard */
 body.dv-on .s-card { border-width:2px; border-radius:var(--card-r); border-color:color-mix(in srgb, var(--rice) 28%, var(--line-2)) }
@@ -351,3 +351,7 @@ body.dv-on .rm-ic { border-radius:var(--leaf) }
 body.dv-on .dv-page :is(.btn, .t-field, .ss-card, .fl-it, .nw-k, .nw-o, .s-cal, .hx-edit) { transition:transform .16s cubic-bezier(.2,.8,.2,1), background-color .16s, border-color .16s }
 body.dv-on .dv-page :is(.btn, .t-field, .ss-card, .fl-it, .nw-k, .nw-o, .s-cal, .hx-edit):active { transform:scale(.98) }
 @media (prefers-reduced-motion:reduce) { body.dv-on .dv-page :is(.btn, .t-field, .ss-card, .fl-it, .nw-k, .nw-o, .s-cal, .hx-edit) { transition:none } }
+/* field chip: the badge sits inside the outline, with the name right next to it */
+.t-field { gap:10px; min-height:52px; padding:5px 14px 5px 5px; border-width:2px; border-radius:22px 8px 22px 8px; text-align:left }
+.t-field .t-fi { width:40px; height:40px } .t-field .t-fi .dv-i { width:22px; height:22px }
+.t-field b { text-align:left }
