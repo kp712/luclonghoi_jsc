@@ -592,7 +592,7 @@ const Dash = (() => {
   }
   /* a .ics file with every sowing and harvest of the next 12 months; the phone's own calendar does the reminding */
   function icsDownload() {
-    const f = fieldSel(); if (!f) return; if (Season.simOn()) Sim.stop(); const c = planOf(f), p2 = (n) => String(n).padStart(2, "0"), now = new Date();
+    const f = fieldSel(); if (!f) return; Sim.reset(); const c = planOf(f), p2 = (n) => String(n).padStart(2, "0"), now = new Date();
     const stamp = `${now.getUTCFullYear()}${p2(now.getUTCMonth() + 1)}${p2(now.getUTCDate())}T${p2(now.getUTCHours())}${p2(now.getUTCMinutes())}00Z`;
     const escI = (t) => String(t).replace(/[\\;,]/g, (m) => "\\" + m).replace(/\n/g, "\\n");
     const ev = moments(c).map((x, n) => { const dd = x.date || new Date(x.y, x.m, 1), d0 = `${dd.getFullYear()}${p2(dd.getMonth() + 1)}${p2(dd.getDate())}`, nx = new Date(dd.getFullYear(), dd.getMonth(), dd.getDate() + 1), d1 = `${nx.getFullYear()}${p2(nx.getMonth() + 1)}${p2(nx.getDate())}`, ttl = `${momLabel(x)}: ${cropName(c, x.code)} (${f.name})`;
@@ -696,7 +696,7 @@ const Dash = (() => {
     hzH: "Xem thử bao xa", hzL: (y) => `${y} năm`,
     clkNote: (y2) => `Đang xem thử: không lưu gì. Mưa, nước và độ mặn là trung bình nhiều năm, không phải dự báo.${y2 ? " Năm 2–3 dùng năm điển hình (dự báo El Niño chỉ cho mùa này)." : ""}`,
     heroRest: "Ruộng đang nghỉ", dayOf: (a, b) => `ngày ${a}/${b}`, daysTo: { R: "ngày nữa gặt", S: "ngày nữa thu tôm", U: "ngày nữa thu hoạch" }, daysSow: (k, n) => `ngày nữa ${k === "S" ? "thả" : "sạ"} ${n}`,
-    sowA: (d) => `sạ ≈ ${d}`, stockA: (d) => `thả ≈ ${d}`, harA: (d) => `thu ≈ ${d}`, restEnd: "Nghỉ đến hết 12 tháng", nextMark: "Việc sắp tới",
+    enteredA: (d) => `nhập ngày ${d}`, sowA: (d) => `sạ ≈ ${d}`, stockA: (d) => `thả ≈ ${d}`, harA: (d) => `thu ≈ ${d}`, restEnd: "Nghỉ đến hết 12 tháng", nextMark: "Việc sắp tới",
     afterL: (n, d) => `Sau đó: ${n}, bắt đầu ≈ ${d}`, afterRest: (r) => `nghỉ ${r}`, afterNone: "Sau đó: cho ruộng nghỉ", restFrom: (d) => `nghỉ từ ${d}`,
     heroSrc: "Ngày là ước tính từ lịch vụ và số tuần bạn nhập. Lúa 90–100 ngày; bón thúc 7–10, 18–22, 38–42 ngày sau sạ; rút nước 7–15 ngày trước gặt (hướng dẫn kỹ thuật).",
     mk: { top1: "Bón thúc lần 1", top2: "Bón thúc lần 2", top3: "Bón thúc lần 3", drain: "Rút nước trước khi gặt" },
@@ -729,7 +729,7 @@ const Dash = (() => {
     hzH: "How far to preview", hzL: (y) => `${y} yr`,
     clkNote: (y2) => `Preview only: nothing is saved. Rain, water and salt are long-term averages, not a forecast.${y2 ? " Years 2–3 use the typical year (the El Niño outlook covers this season only)." : ""}`,
     heroRest: "Field is resting", dayOf: (a, b) => `day ${a}/${b}`, daysTo: { R: "days to harvest", S: "days to shrimp harvest", U: "days to harvest" }, daysSow: (k, n) => `days to ${k === "S" ? "stock" : "sow"} ${n}`,
-    sowA: (d) => `sow ≈ ${d}`, stockA: (d) => `stock ≈ ${d}`, harA: (d) => `harvest ≈ ${d}`, restEnd: "Rests to the end of the 12 months", nextMark: "Next step",
+    enteredA: (d) => `entered ${d}`, sowA: (d) => `sow ≈ ${d}`, stockA: (d) => `stock ≈ ${d}`, harA: (d) => `harvest ≈ ${d}`, restEnd: "Rests to the end of the 12 months", nextMark: "Next step",
     afterL: (n, d) => `Then: ${n}, starting ≈ ${d}`, afterRest: (r) => `rest ${r}`, afterNone: "Then: the field rests", restFrom: (d) => `rest from ${d}`,
     heroSrc: "Dates are estimates from the crop calendar and the weeks you entered. Rice takes 90–100 days; top-dress at 7–10, 18–22 and 38–42 days after sowing; drain 7–15 days before harvest (technical guide).",
     mk: { top1: "First top-dressing", top2: "Second top-dressing", top3: "Third top-dressing", drain: "Drain before harvest" },
@@ -760,7 +760,7 @@ const Dash = (() => {
   const KI = { R: "rice", S: "shrimp", U: "upland", "-": "fallow" };
   const fD = (d) => (lang() === "vi" ? `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}` : d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }));
   const fDs = (d) => (lang() === "vi" ? `${d.getDate()}/${d.getMonth() + 1}` : d.toLocaleDateString("en-GB", { day: "numeric", month: "short" }));
-  const fMY = (idx) => `${MNUM(((idx % 12) + 12) % 12)}/${Math.floor(idx / 12)}`;
+  const fMY = (idx) => `${MNUM(((idx % 12) + 12) % 12)}${lang() === "vi" ? "/" : " "}${Math.floor(idx / 12)}`;
   const fRg = (a, b) => (a === b ? fMY(a) : Math.floor(a / 12) === Math.floor(b / 12) ? `${MNUM(a % 12)}–${fMY(b)}` : `${fMY(a)} – ${fMY(b)}`);
   const runName = (c, code) => cap(cropName(c, code));
 
@@ -836,11 +836,12 @@ const Dash = (() => {
       const after = c.runs.find((x) => +x.sow > +r.har), gapA = r.to + 1, gapB = after ? after.from - 1 : 11;
       const rest = gapB >= gapA ? T("afterRest")(fRg(c.a0 + gapA, c.a0 + gapB)) : "";
       const then = after ? T("afterL")((rest ? rest + " → " : "") + runName(c, after.code) + (after.late ? ` (${T("lateTag")})` : ""), fDs(after.sow)) : T("afterNone");
+      const known = !(r.cur && k !== "R");   /* shrimp or an upland crop already in the field: we know when it ends, not when it began */
       return `<section class="hx hk-${k}" aria-labelledby="hxH">
-        <div class="hx-hd"><h3 id="hxH"><span class="hx-ic" aria-hidden="true">${ic(KI[k], 20)}</span><span>${esc(n)}</span></h3><span class="hx-pill">${esc(T("dayOf")(Math.min(a.day, r.len), r.len))}</span></div>
+        <div class="hx-hd"><h3 id="hxH"><span class="hx-ic" aria-hidden="true">${ic(KI[k], 20)}</span><span>${esc(n)}</span></h3>${known ? `<span class="hx-pill">${esc(T("dayOf")(Math.min(a.day, r.len), r.len))}</span>` : ""}</div>
         <p class="hx-big"><b>${a.left}</b><span>${esc(T("daysTo")[k])}</span></p>
-        <div class="hx-bar" role="progressbar" aria-valuemin="0" aria-valuemax="${r.len}" aria-valuenow="${Math.min(a.day, r.len)}" aria-label="${esc(n)}: ${esc(T("dayOf")(Math.min(a.day, r.len), r.len))}"><span class="hx-fill" style="width:${pct(a.frac)}%"></span>${ticks}<span class="hx-dot" style="left:${pct(a.frac)}%"></span></div>
-        <p class="hx-ends"><span>${esc(T(k === "S" ? "stockA" : "sowA")(fDs(r.sow)))}</span><span>${esc(T("harA")(fDs(r.har)))}</span></p>
+        <div class="hx-bar" role="progressbar" aria-valuemin="0" aria-valuemax="${r.len}" aria-valuenow="${Math.min(a.day, r.len)}" aria-label="${esc(n)}: ${a.left} ${esc(T("daysTo")[k])}"><span class="hx-fill" style="width:${pct(a.frac)}%"></span>${ticks}<span class="hx-dot" style="left:${pct(a.frac)}%"></span></div>
+        <p class="hx-ends"><span>${esc(known ? T(k === "S" ? "stockA" : "sowA")(fDs(r.sow)) : T("enteredA")(fDs(r.sow)))}</span><span>${esc(T("harA")(fDs(r.har)))}</span></p>
         ${nx ? `<p class="hx-row">${ic("cal", 18)}<span><small>${esc(T("nextMark"))}</small><b>${esc(T("mk")[nx.k])} · ${esc(fDs(nx.date))}</b></span></p>` : ""}
         <p class="hx-row">${ic("chev", 18)}<span><b>${esc(then)}</b></span></p>
         ${r.cur ? `<button type="button" class="btn hx-edit" data-dv="nownow">${ic("edit", 16)}<span>${esc(T("nowEdit"))}</span></button>` : ""}
@@ -963,8 +964,9 @@ const Dash = (() => {
   function paintMap(f) {
     const box = $("#ckMap"); if (!box) return; const a0 = Season.absOf(Season.real()), n = 12 * hz(), key = `${f.id}|${f.rot}|${JSON.stringify(f.now || null)}|${n}|${lang()}|${a0}|${f.year}|${f.crop}`;
     if (key === mapKey) return; mapKey = key;
-    const ws = [...Array(hz())].map((_, y) => Season.windowOf(cardOf(f, y ? "typical" : yr(f)), f.now, Season.mStart(a0 + 12 * y)));
-    const nino0 = f.year ? f.year === "elnino" : true, sp = Season.span(hz()), t0 = +sp.from, t1 = +sp.to;
+    const nino0 = f.year ? f.year === "elnino" : true;
+    const ws = [...Array(hz())].map((_, y) => Season.windowOf(cardOf(f, y || !nino0 ? "typical" : "elnino"), f.now, Season.mStart(a0 + 12 * y)));
+    const sp = Season.span(hz()), t0 = +sp.from, t1 = +sp.to;
     const pos = (d) => Math.min(100, Math.max(0, ((+d - t0) / (t1 - t0)) * 100));
     box.innerHTML = [...Array(n)].map((_, i) => { const y = Math.floor(i / 12), x = ws[y].cells[i % 12], k = x.code === "-" ? "rest" : x.code[0];
       const s0 = Math.max(t0, +Season.mStart(a0 + i)), s1 = Math.min(t1, +Season.mEnd(a0 + i) + Season.DAY), lv = level(fieldSalt(f.site, x.m, y ? false : nino0));
@@ -988,7 +990,7 @@ const Dash = (() => {
   }
   /* the real clock keeps running: the minutes update, and a new day or month re-draws the page */
   let lastDay = Season.real().toDateString();
-  setInterval(() => { if (!on) return; const r = Season.real(); if (r.toDateString() !== lastDay) { lastDay = r.toDateString(); if (!Season.simOn()) { CM = r.getMonth(); render() } } paintClock() }, 15000);
+  setInterval(() => { if (!on) return; try { const r = Season.real(); if (r.toDateString() !== lastDay) { lastDay = r.toDateString(); if (!Season.simOn()) { CM = r.getMonth(); render() } } paintClock() } catch (e) {} }, 15000);
   /* what happens between two dates of the preview: sow, harvest, rice steps, salt coming and going */
   function eventsIn(f, w, a, b) {
     const out = [], inR = (x) => +x > +a && +x <= +b, nino = isNino(f);
@@ -1152,6 +1154,7 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
 @media (max-width:600px){.boxes{grid-template-columns:1fr}.paper{padding:12px}.ph{flex-direction:column}}
 @media print{.paper{padding:0;max-width:none}@page{size:A4;margin:12mm}.mb.now{border-width:1.5px}}`;
   function paperSheet() {
+    Sim.reset();   /* the printed plan is always from today, never from a preview date */
     const doc = `<!doctype html><html><head><meta charset="utf-8"><style>${PAPER_CSS}</style></head><body>${paperHTML()}</body></html>`;
     sheet(`<h2>${esc(T("preview"))}</h2><p class="sd-note">${esc(T("printHint"))}</p><iframe class="paper-frame" title="${esc(T("preview"))}" srcdoc="${esc(doc)}"></iframe>
       <div class="dv-acts"><button type="button" class="btn gold" data-dv="doprint">${ic("print", 16)}<span>${esc(T("doPrint"))}</span></button><button type="button" class="btn" data-dv="savefile"><span>${esc(T("save"))}</span></button></div><p class="sd-note" id="dvSaveMsg" role="status"></p>`, true);
@@ -1338,7 +1341,7 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
       case "opts": return optsSheet();
       case "close": return closeSheet();
       case "savefile": return saveFile();
-      case "doprint": { const w = document.createElement("iframe"); w.style.cssText = "position:fixed;width:0;height:0;border:0"; document.body.appendChild(w); w.srcdoc = `<html><head><meta charset="utf-8"><style>${PAPER_CSS}</style></head><body>${paperHTML()}</body></html>`; w.onload = () => { try { w.contentWindow.print() } catch (er) { saveFile() } setTimeout(() => w.remove(), 4000) }; return }
+      case "doprint": { Sim.reset(); const w = document.createElement("iframe"); w.style.cssText = "position:fixed;width:0;height:0;border:0"; document.body.appendChild(w); w.srcdoc = `<html><head><meta charset="utf-8"><style>${PAPER_CSS}</style></head><body>${paperHTML()}</body></html>`; w.onload = () => { try { w.contentWindow.print() } catch (er) { saveFile() } setTimeout(() => w.remove(), 4000) }; return }
       case "delask": { const f = fieldSel(); if (!f) return; sheet(`<div class="dv-delq"><span class="dv-delico">${ic("trash", 30)}</span><h2>${esc(T("delH")(f.name))}</h2><p class="sd-note">${esc(T("delP"))}</p>
         <div class="dv-acts"><button type="button" class="btn dv-delyes" data-dv="del">${ic("trash", 16)}<span>${esc(T("delYes"))}</span></button><button type="button" class="btn gold" data-dv="close"><span>${esc(T("cancel"))}</span></button></div></div>`); return }
       case "del": { const f = fieldSel(); if (f) { st.fields = st.fields.filter((x) => x.id !== f.id);
