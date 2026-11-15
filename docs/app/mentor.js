@@ -45,7 +45,7 @@ const Hub = (() => {
     verified: { vi: "đã kiểm tra", en: "checked" }, unverified: { vi: "chưa kiểm tra", en: "not checked" },
     quote: { vi: "Trích", en: "Quote" }, open: { vi: "Mở nguồn", en: "Open source" },
     srcLead: { vi: "Mỗi phần dữ liệu có nguồn riêng. Chạm vào để mở trang gốc và đọc đúng câu trích.", en: "Every data part has its own sources. Open the page and read the quoted line yourself." },
-    gaps: { vi: "Chưa kiểm chứng được", en: "Could not verify" },
+    conf: { low: { vi: "Mức chắc chắn: thấp", en: "Confidence: low" }, medium: { vi: "Mức chắc chắn: trung bình", en: "Confidence: medium" }, high: { vi: "Mức chắc chắn: cao", en: "Confidence: high" } },
     colLead: { vi: "Mỗi màu trong ứng dụng có một nghĩa.", en: "Each colour in the app has one meaning." },
     fbLead: { vi: "Bạn đã thử kế hoạch? Cho chúng tôi biết kết quả để dự báo gần ruộng bạn hơn. Dữ liệu ở lại trên máy bạn.", en: "Tried the plan? Tell us what happened so the forecast fits fields like yours. Your data stays on this device." },
     q1: { vi: "Vụ này ruộng bạn bị thiệt hại do mặn bao nhiêu?", en: "How much did salt cost you this crop?" },
@@ -163,13 +163,12 @@ const Hub = (() => {
         ${where ? `<p><span class="hb-k">${L(T.grown)}</span> ${esc(where)}</p>` : ""}
         <p class="hb-k">${L(T.tol)}</p><ul>${tol}</ul>${v["notes_" + lang()] ? `<p>${esc(v["notes_" + lang()])}</p>` : ""}</details>`;
     };
-    const areaCards = (V.areas || []).map((a) => `<details class="hb-card"><summary><b>${esc(L({ vi: a.area_vi, en: a.area_en }))}</b><small>${esc((a.varieties || []).join(", ") || L(T.anyVar))}</small>${a.confidence ? `<small class="cf-${esc(a.confidence)}">${esc(a.confidence)}</small>` : ""}</summary>
+    const areaCards = (V.areas || []).map((a) => `<details class="hb-card"><summary><b>${esc(L({ vi: a.area_vi, en: a.area_en }))}</b><small>${esc((a.varieties || []).join(", ") || L(T.anyVar))}</small>${a.confidence ? `<small class="cf-${esc(a.confidence)}">${T.conf[a.confidence] ? L(T.conf[a.confidence]) : esc(a.confidence)}</small>` : ""}</summary>
       <p>${esc(L({ vi: a.summary_vi, en: a.summary_en }))}</p>${srcList(a.sources)}</details>`).join("");
-    return `<p class="hb-lead">${L(T.varNote)}</p>${vs.length ? vs.map(row).join("") : `<p class="ph">${L(T.noFig)}</p>`}<h3>${L({ vi: "Theo khu vực", en: "By area" })}</h3>${areaCards}${gapList(V.gaps)}`;
+    return `<p class="hb-lead">${L(T.varNote)}</p>${vs.length ? vs.map(row).join("") : `<p class="ph">${L(T.noFig)}</p>`}<h3>${L({ vi: "Theo khu vực", en: "By area" })}</h3>${areaCards}`;
   }
   const badge = (v) => ` <span class="hb-b ${v ? "ok" : "no"}">${L(v ? T.verified : T.unverified)}</span>`;
   const srcList = (arr) => (arr && arr.length ? `<ul class="hb-src">${arr.map((s) => `<li><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title || s.publisher || s.url)}</a>${badge(s.verified)}<small>${esc([s.publisher, s.date].filter(Boolean).join(" · "))}</small>${s.quote ? `<q>${esc(s.quote)}</q>` : ""}</li>`).join("")}</ul>` : "");
-  const gapList = (g) => (g && g.length ? `<h3>${L(T.gaps)}</h3><ul class="hb-gap">${g.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>` : "");
 
   /* ----- tab: check sources ----- */
   function sourcesHTML() {
@@ -248,7 +247,7 @@ const Hub = (() => {
     return `<p class="hb-lead">${L(T.liveLead)}</p><div id="hbLive" class="hb-card open"><p class="ph">${L(T.fetching)}</p></div>
       ${(LIVE().bulletins || []).length ? `<h3>${L(T.bull)}</h3>${srcList(LIVE().bulletins)}` : ""}
       ${snap.fetched_at ? `<p class="hb-note">${L({ vi: "Số liệu lưu sẵn:", en: "Saved snapshot:" })} ${esc(snap.fetched_at)}</p>` : ""}
-      <p class="hb-note">${L(T.saltNote)}</p>${gapList(LIVE().gaps)}`;
+      <p class="hb-note">${L(T.saltNote)}</p>`;
   }
   async function wireLive() {
     const s = site(), host = $("#hbLive"); if (!s || !host) return;

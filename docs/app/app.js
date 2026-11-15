@@ -220,15 +220,15 @@ const SIMPLE = {
 en: {
 wRain: (a, b) => a === b ? "All of its rice grows in the rainy months, so rain does most of the watering." : a * 2 >= b ? "Most of its rice grows in the rainy months." : "Most of its rice grows in the dry months, so it needs canal water.",
 wWater: (mm, p) => p ? "It uses less canal water than three rice crops a year." : "It needs about as much canal water as rice usually does.",
-wCrops: n => n >= 2.5 ? "Fields here usually grow three crops a year." : n >= 1.5 ? "Fields here usually grow two crops a year." : "Fields here usually grow one crop a year.",
-crops: n => n >= 2.5 ? "Fields here usually grow three crops a year." : n >= 1.5 ? "Fields here usually grow two crops a year." : "Fields here usually grow one crop a year.",
+wCrops: n => (n = parseFloat(String(n).replace(",", "."))) >= 2.5 ? "Fields here usually grow three crops a year." : n >= 1.5 ? "Fields here usually grow two crops a year." : "Fields here usually grow one crop a year.",
+crops: n => (n = parseFloat(String(n).replace(",", "."))) >= 2.5 ? "Fields here usually grow three crops a year." : n >= 1.5 ? "Fields here usually grow two crops a year." : "Fields here usually grow one crop a year.",
 recSalt: n => `Salty water often comes here in the dry season. If salt has hurt your crops before, raise "Lower weather & salt risk".`
 },
 vi: {
 wRain: (a, b) => a === b ? "Toàn bộ vụ lúa nằm trong các tháng mưa, nên nước mưa tưới gần hết." : a * 2 >= b ? "Phần lớn vụ lúa nằm trong các tháng mưa." : "Phần lớn vụ lúa nằm trong các tháng khô, nên cần nước kênh.",
 wWater: (mm, p) => p ? "Dùng ít nước kênh hơn ba vụ lúa mỗi năm." : "Cần lượng nước kênh tương đương trồng lúa.",
-wCrops: n => n >= 2.5 ? "Ruộng ở đây thường làm ba vụ mỗi năm." : n >= 1.5 ? "Ruộng ở đây thường làm hai vụ mỗi năm." : "Ruộng ở đây thường làm một vụ mỗi năm.",
-crops: n => n >= 2.5 ? "Ruộng ở đây thường làm ba vụ mỗi năm." : n >= 1.5 ? "Ruộng ở đây thường làm hai vụ mỗi năm." : "Ruộng ở đây thường làm một vụ mỗi năm.",
+wCrops: n => (n = parseFloat(String(n).replace(",", "."))) >= 2.5 ? "Ruộng ở đây thường làm ba vụ mỗi năm." : n >= 1.5 ? "Ruộng ở đây thường làm hai vụ mỗi năm." : "Ruộng ở đây thường làm một vụ mỗi năm.",
+crops: n => (n = parseFloat(String(n).replace(",", "."))) >= 2.5 ? "Ruộng ở đây thường làm ba vụ mỗi năm." : n >= 1.5 ? "Ruộng ở đây thường làm hai vụ mỗi năm." : "Ruộng ở đây thường làm một vụ mỗi năm.",
 recSalt: n => `Nước mặn thường vào đây trong mùa khô. Nếu mặn từng làm hại cây trồng, hãy tăng mục "Giảm rủi ro thời tiết & mặn".`
 }
 };

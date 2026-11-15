@@ -687,3 +687,29 @@ body.dv-zoomed { overflow:hidden }
 }
 @keyframes bmPing { 0% { transform:scale(.5); opacity:.9 } 70%, 100% { transform:scale(1.6); opacity:0 } }
 @media (prefers-reduced-motion:reduce) { .bm-dot::after { animation:none; opacity:.5 } .dv-backmap .bm-ic { transition:none } }
+
+/* ---------- Simple view: less on the page, clearer calendar (critique 15 Nov) ---------- */
+body.dv-simple #hubBtn { display:none }                                  /* Tools is an Advanced feature */
+.s-cal .rb .mo { color:var(--ink) }
+body.lang-vi .s-cal .rb .mo, body.lang-vi .z-panel .rb:not(.sm) .mo { font-size:.9375rem; line-height:1.15 }   /* plain month numbers, readable outdoors */
+.rb li.now .mo { color:var(--gold) }
+.rb-now { display:block; margin:-4px 0 10px; font-size:.875rem; font-weight:700; color:var(--gold) }            /* sits under the first, gold-ringed month */
+.rb-key .rb-kh { flex-basis:100%; font-weight:600; color:var(--ink) }
+.s-cal .rb-key { font-size:.875rem; gap:6px 14px }
+.s-sub.s-yr { display:block }
+.s-acts .btn:last-child:nth-child(odd) { grid-column:1 / -1 }
+.dv-s > .s-ask { font-size:1rem; color:var(--ink) }
+.dv-delrow { justify-self:start; min-height:48px; gap:8px; padding:0 16px; color:var(--risk); background:transparent; border-color:color-mix(in srgb, var(--risk) 40%, var(--line-2)) }
+.dv-delrow:hover, .dv-delrow:focus-visible { background:color-mix(in srgb, var(--risk) 14%, transparent) }
+.dv-shx { flex:none; width:44px; height:44px; display:grid; place-items:center; border-radius:12px; border:1px solid var(--line-2); background:transparent; color:var(--ink); cursor:pointer }
+.dv-shx:hover, .dv-shx:focus-visible { border-color:var(--gold) }
+.dv-sheet .sd-note.dv-askline { margin:10px 0; font-size:1rem; color:var(--ink) }
+.dv-setlang { margin-top:14px }
+@media (min-width:761px) {
+  .s-acts { grid-template-columns:repeat(3, 1fr) } .s-acts .btn:last-child:nth-child(odd) { grid-column:auto }
+  .dv-s > .s-salt, .dv-s > .dv-delrow { grid-column:1 / -1 }
+}
+@media (max-width:760px) {
+  body.dv-on:not(.dv-nofield) #topbar #langSeg { display:none }          /* language lives in Settings once a field exists */
+  body.dv-on:not(.dv-nofield) #uiSw { height:44px; padding:0 10px; gap:8px; font-size:.875rem }
+}

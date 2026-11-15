@@ -27,8 +27,8 @@ const Dash = (() => {
       peakH: "Mặn cao nhất ở trạm", saltMs: "Tháng mặn", rainCmp: "Mưa từng tháng: năm thường và năm El Niño",
       delThis: "Xoá ruộng này", delH: (n) => `Xoá "${n}"?`, delP: "Kế hoạch của ruộng này sẽ bị xoá khỏi máy. Không lấy lại được.", delYes: "Xoá ruộng", cancel: "Không xoá", deleted: "Đã xoá ruộng",
       modeH: "Giao diện", modeS: "Đơn giản: ít chữ, chỉ điều cần làm", modeA: "Nâng cao: thêm số liệu, thanh kéo và nguồn",
-      sNow: "Nước tháng này", sMoney: "Tiền lãi", sTodo: "Việc tháng này",
-      modeL: "Chế độ", addShort: "Thêm ruộng", welcome: "Chào mừng! Hãy tạo ruộng đầu tiên", welcomeP: "Bạn chưa có ruộng nào. Tạo ruộng để xem lịch làm, nước mặn và tiền lãi của ruộng mình.",
+      sNow: "Nước tháng này", sMoney: "Tiền lời", sTodo: "Việc tháng này",
+      modeL: "Chế độ", addShort: "Thêm ruộng", welcome: "Chào mừng! Hãy tạo ruộng đầu tiên", welcomeP: "Bạn chưa có ruộng nào. Tạo ruộng để xem lịch làm, nước mặn và tiền lời của ruộng mình.",
       wsteps: ["Chọn khu vực của bạn trên bản đồ", "Trả lời vài câu về ruộng", "Chọn cách trồng và lưu lại"], create: "Tạo ruộng",
       waterNow: "Nước trong ruộng tháng này", perCong: "triệu đồng mỗi công mỗi năm", perCongS: "tr/công", tapPlanS: "Kế hoạch 12 tháng", ninoShort: "Năm nay có thể hạn mặn (El Niño). Mặn có thể đến sớm hơn.",
       saltNowA: "Độ mặn trong ruộng, tháng này", chartH: "Mặn và mưa trong 12 tháng", chartL: "Biểu đồ độ mặn và lượng mưa theo tháng", rainM: "Mưa", safeH: "Tháng có cây trồng an toàn mặn", safeL: "tháng",
@@ -42,7 +42,9 @@ const Dash = (() => {
       lvD: { ngot: "dưới 1‰: lúa an toàn", lo: "1–2‰: lúa bắt đầu yếu", man: "trên 2‰: lúa giảm năng suất (FAO)" },
       clash: (xs) => `Chú ý: lúa gặp nước mặn ở ${xs.join(", ")}. Đo độ mặn trước khi sạ, nước còn mặn thì chờ mưa.`, noClash: "Tốt: lịch này tránh được tháng nước mặn",
       ninoNote: "Năm nay nhiều khả năng là năm hạn mặn (El Niño, NOAA dự báo trên 83%). Mặn có thể đến sớm hơn và mặn hơn.", thisYr: "Năm nay", years: { typical: "Năm thường", elnino: "Năm El Niño" },
-      moneyH: "Tiền lãi ước tính", money: (a, b) => `Năm nay khoảng <b>${b}</b> triệu/công. Năm bình thường: ${a} triệu/công.`, money1: (a) => `Khoảng <b>${a}</b> triệu/công mỗi năm.`,
+      moneyYr: "Năm nay, có thể hạn mặn.", moneyTyp: (a) => `Năm bình thường: ${a} triệu/công.`, moneySrcS: "Lấy số giữa của các số liệu lợi nhuận đã công bố · 1 công = 1.000 m²",
+      rbKey: "Số = tháng · Thanh màu = nước trong kênh", rbNow: "Tháng này", usedT: (n) => `Đã đổi sang: ${n}`, editField: "Sửa ruộng", langH: "Ngôn ngữ · Language",
+      moneyH: "Tiền lời ước tính", money: (a, b) => `Năm nay khoảng <b>${b}</b> triệu/công. Năm bình thường: ${a} triệu/công.`, money1: (a) => `Khoảng <b>${a}</b> triệu/công mỗi năm.`,
       tot: (h, v) => `Cả ruộng ${h} ha: khoảng ${v} triệu.`, noMoney: "Chưa đủ số liệu lợi nhuận cho cách trồng này", moneySrc: "Trung vị lợi nhuận đã công bố · 1 công = 1.000 m²",
       whyH: "Vì sao chọn cách này", riskH: "Cần lưu ý", scoreH: "Điểm của cách trồng (1–5)", sc: { salt: "An toàn mặn", water: "Tiết kiệm nước", soil: "Tốt cho đất", income: "Thu nhập" },
       print: "In / lưu file", change: "Đổi cách trồng", editMap: "Sửa trên bản đồ", sources: "Nguồn dữ liệu NASA", back: "Quay lại", close: "Đóng",
@@ -95,6 +97,8 @@ const Dash = (() => {
       lvD: { ngot: "under 1‰: rice is safe", lo: "1–2‰: rice starts to suffer", man: "over 2‰: rice loses yield (FAO)" },
       clash: (xs) => `Careful: crops meet salty water in ${xs.join(", ")}. Measure salt before sowing; wait for rain if it is still salty.`, noClash: "Good: this plan avoids the salty months",
       ninoNote: "This is likely a drought-and-salt year (El Niño, NOAA: over 83%). Salt may come earlier and stronger.", thisYr: "This year", years: { typical: "Typical year", elnino: "El Niño year" },
+      moneyYr: "This year, a possible drought-and-salt year.", moneyTyp: (a) => `Typical year: ${a} M₫/công.`, moneySrcS: "Middle value of the published profit figures · 1 công = 1,000 m²",
+      rbKey: "Coloured bar = canal water", rbNow: "This month", usedT: (n) => `Changed to: ${n}`, editField: "Edit field", langH: "Language · Ngôn ngữ",
       moneyH: "Estimated profit", money: (a, b) => `This year about <b>${b}</b> M₫/công. Typical year: ${a} M₫/công.`, money1: (a) => `About <b>${a}</b> M₫/công a year.`,
       tot: (h, v) => `Whole field ${h} ha: about ${v} M₫.`, noMoney: "Not enough profit data for this plan yet", moneySrc: "Median of published profit figures · 1 công = 1,000 m²",
       whyH: "Why this plan", riskH: "Watch out for", scoreH: "Plan scores (1–5)", sc: { salt: "Salt safety", water: "Saves water", soil: "Better soil", income: "Income" },
@@ -212,13 +216,16 @@ const Dash = (() => {
   /* ---------------- dashboard page: tiles ---------------- */
   const MS = () => (lang() === "vi" ? ["T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12"] : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]);
   function ribbon(f, c, small) {
-    const nino = isNino(f), order = [...Array(12)].map((_, i) => (CM + i) % 12);
+    const nino = isNino(f), order = [...Array(12)].map((_, i) => (CM + i) % 12), lvs = order.map((m) => level(fieldSalt(f.site, m, nino)));
     const crops = ["R", "S", "U", "-"].filter((k) => c.months.some((x) => x[0] === k));
-    return `<ol class="rb${small ? " sm" : ""}">${order.map((m) => { const code = c.months[m]; return `<li class="${code[0] === "-" ? "rest" : code[0]}${m === CM ? " now" : ""}" title="${esc(cropName(c, code))}">${iconOf(code)}<span class="mo">${MS()[m]}</span><i class="sb ${level(fieldSalt(f.site, m, nino))}"></i></li>` }).join("")}</ol>
-      <span class="rb-key">${crops.map((k) => `<span>${iconOf(k)}${esc(T("crop")[k])}</span>`).join("")}${["ngot", "lo", "man"].map((k) => `<span><i class="sb ${k}"></i>${esc(T("lv")[k])}</span>`).join("")}</span>`;
+    /* the big strip (Simple, zoom) shows plain month numbers in Vietnamese, names the bar and marks this month in words */
+    const mo = (m) => (!small && lang() === "vi" ? String(m + 1) : MS()[m]);
+    return `<ol class="rb${small ? " sm" : ""}">${order.map((m, i) => { const code = c.months[m]; return `<li class="${code[0] === "-" ? "rest" : code[0]}${m === CM ? " now" : ""}" title="${esc(cropName(c, code))}">${iconOf(code)}<span class="mo">${mo(m)}</span><i class="sb ${lvs[i]}"></i></li>` }).join("")}</ol>
+      ${small ? "" : `<span class="rb-now">${esc(T("rbNow"))}</span>`}
+      <span class="rb-key">${small ? "" : `<span class="rb-kh">${esc(T("rbKey"))}</span>`}${crops.map((k) => `<span>${iconOf(k)}${esc(T("crop")[k])}</span>`).join("")}${["ngot", "lo", "man"].filter((k) => small || lvs.includes(k)).map((k) => `<span><i class="sb ${k}"></i>${esc(T("lv")[k])}</span>`).join("")}</span>`;
   }
   function fieldTabs() {
-    const f0 = fieldSel();
+    const f0 = fieldSel(); if (!adv() && st.fields.length < 2) return "";
     return `<div class="dv-ftabs" role="tablist" aria-label="${esc(T("brand"))}">${st.fields.map((f) => { const sel = !!(f0 && f.id === f0.id), lv = areaLv(f.site);
       return `<button type="button" role="tab" data-dvf="${f.id}" aria-selected="${sel}"><i class="sd-dot lv-${lv}" aria-hidden="true"></i><b>${esc(f.name)}</b><small>${esc(short(siteOf(f.site)))}</small></button>` }).join("")}</div>`;
   }
@@ -227,7 +234,7 @@ const Dash = (() => {
     const f = fieldSel(), eb = f ? T("brand") : T("eyebrow");
     const nm = f ? `<span class="dv-nm">${esc(f.name)}</span><small class="dv-area">${ic("pin", 16)}${esc(short(siteOf(f.site)))}</small>` : esc(T("brand"));
     return `<header class="dv-top${f ? " has-f" : ""}"><div class="dv-tt"><p class="sd-eyebrow">${esc(eb)}</p><h2 id="dvH" class="dv-name" data-k="${f ? esc(f.id) : ""}">${nm}</h2></div>
-      <div class="dv-tr"><button type="button" class="btn gold dv-addtop" data-dv="add">${ic("plus", 18)}<span>${esc(T("addShort"))}</span></button></div></header>`;
+      <div class="dv-tr"><button type="button" class="btn${f ? "" : " gold"} dv-addtop" data-dv="add">${ic("plus", 18)}<span>${esc(T("addShort"))}</span></button></div></header>`;
   }
   function welcome() {
     return `<section class="dv-welcome"><div class="dv-wi">${ic("rice", 40)}</div><h3>${esc(T("welcome"))}</h3><p>${esc(T("welcomeP"))}</p>
@@ -238,20 +245,21 @@ const Dash = (() => {
   function facts(f) {
     const c = cardOf(f), s = siteOf(f.site), nino = isNino(f); curSite = f.site; curNino = nino;
     const job = jobAt(c, CM); let nk = 1; while (nk < 12 && jobAt(c, (CM + nk) % 12) === job) nk++;
-    const p = profit(c), pe = profit(cardOf(f, "elnino")), shown = pe || p;
+    const p = profit(c), pe = profit(cardOf(f, "elnino")), pt = profit(cardOf(f, "typical")), shown = pe || p;
     const g = fieldSalt(f.site, CM, nino);
-    return { c, s, nino, job, nm: (CM + nk) % 12, p, pe, shown, g, lv: level(g), sl: saltLine(f), clash: clashOf(f, c) };
+    return { c, s, nino, job, nm: (CM + nk) % 12, p, pe, pt, shown, g, lv: level(g), sl: saltLine(f), clash: clashOf(f, c) };
   }
 
   /* SIMPLE: few big cards, plain words, one big icon and one number each */
   function simplePage(f) {
     const x = facts(f), { c } = x, mon = shownMoney(f, x), k0 = c.months[CM][0];
+    /* this year and a normal year side by side, so the figure agrees with the one shown when the plan was chosen */
+    const two = mon && x.pe && x.pt && nf(x.pe.mid / 10, 1) !== nf(x.pt.mid / 10, 1);
+    const totOf = (m) => (f.size ? " " + T("tot")(haS(f.size), big(m.mid * f.size)) : "");
+    /* order: what to do now, the water, the warning; then dates, money and the year; rare actions last */
     return `<div class="dv-s">
-      <div class="dv-splan"><div><span>${esc(T("yourPlan"))}</span><b>${esc(L(c.name))}</b></div><button type="button" class="dv-deltop" data-dv="delask" aria-label="${esc(T("delThis"))}: ${esc(f.name)}" title="${esc(T("delThis"))}">${ic("trash", 20)}</button></div>
+      <div class="dv-splan"><div><span>${esc(T("yourPlan"))}</span><b>${esc(L(c.name))}</b></div></div>
       ${planNo(f)}
-      ${remindCard(f)}
-      ${progressCard(f)}
-      ${suggestions(f)}
       <button type="button" class="s-card s-job" data-dv="plan"><span class="s-k">${ic("cal", 18)}${esc(T("monthOn")(CM + 1))}</span>
         <span class="s-big"><span class="s-ico k-${k0 === "-" ? "rest" : k0}">${ic({ R: "rice", S: "shrimp", U: "upland" }[k0] || "fallow", 34)}</span><b>${esc(x.job)}</b></span>
         <span class="s-sub">${ic("chev", 14)}${esc(T("nextM")(x.nm + 1))}: ${esc(jobAt(c, x.nm))}</span></button>
@@ -259,14 +267,16 @@ const Dash = (() => {
         <div class="s-row"><span class="s-drop" aria-hidden="true">${ic("drop", 46)}</span><div><b class="s-word">${esc(T("lv")[x.lv])}</b>
         <span class="s-light" aria-hidden="true"><i class="ngot"></i><i class="lo"></i><i class="man"></i></span></div></div>
         <span class="s-sub">${esc(x.sl.txt)}</span><small>${esc(T("est"))}</small></div>
-      <div class="s-card s-money"><span class="s-k">${ic("coin", 18)}${esc(T("moneyH"))}</span>
-        ${mon ? `<div class="s-row"><span class="s-coin" aria-hidden="true">${ic("coin", 46)}</span><div><b class="s-num">${mon.per}</b><span class="s-unit">${esc(T("perCong"))}</span></div></div>${mon.tot ? `<span class="s-sub">${esc(mon.tot)}</span>` : ""}` : `<span class="s-sub">${esc(T("noMoney"))}</span>`}
-        <small>${esc(T("moneySrc"))}</small></div>
       ${x.clash.length ? `<div class="s-card s-warn">${ic("warn", 30)}<div><b>${esc(T("clash")(x.clash))}</b>${x.nino ? `<p>${ic("sun", 16)}${esc(T("ninoShort"))}</p>` : ""}</div></div>` : x.nino ? `<div class="s-card s-warn s-ok">${ic("check", 30)}<div><b>${esc(T("noClash"))}</b></div></div>` : ""}
+      ${remindCard(f)}
+      <div class="s-card s-money"><span class="s-k">${ic("coin", 18)}${esc(T("moneyH"))}</span>
+        ${mon ? `<div class="s-row"><span class="s-coin" aria-hidden="true">${ic("coin", 46)}</span><div><b class="s-num">${mon.per}</b><span class="s-unit">${esc(T("perCong"))}</span></div></div>${two ? `<span class="s-sub s-yr">${esc(T("moneyYr"))}${esc(totOf(x.shown))}</span><span class="s-sub s-yr">${esc(T("moneyTyp")(nf(x.pt.mid / 10, 1)))}${esc(totOf(x.pt))}</span>` : mon.tot ? `<span class="s-sub">${esc(mon.tot)}</span>` : ""}` : `<span class="s-sub">${esc(T("noMoney"))}</span>`}
+        <small>${esc(T("moneySrcS"))}</small></div>
       <button type="button" class="s-card s-cal" data-dv="plan"><span class="s-k">${ic("cal", 18)}${esc(T("ribbonH"))}</span>${ribbon(f, c)}<span class="dv-more">${esc(T("tapPlan"))} ${ic("chev", 14)}</span></button>
-      <div class="dv-acts s-acts"><button type="button" class="btn gold" data-dv="plan">${ic("cal", 18)}<span>${esc(T("tapPlanS"))}</span></button><button type="button" class="btn" data-dv="paper">${ic("print", 18)}<span>${esc(T("print"))}</span></button>
-        <button type="button" class="btn" data-dv="choose">${ic("swap", 18)}<span>${esc(T("change"))}</span></button><button type="button" class="btn" data-dv="editmap">${ic("map", 18)}<span>${esc(T("editMap"))}</span></button></div>
-      <p class="sd-note">${esc(T("ask"))}</p></div>`;
+      <div class="dv-acts s-acts"><button type="button" class="btn" data-dv="paper">${ic("print", 18)}<span>${esc(T("print"))}</span></button>
+        <button type="button" class="btn" data-dv="choose">${ic("swap", 18)}<span>${esc(T("change"))}</span></button><button type="button" class="btn" data-dv="editmap">${ic("edit", 18)}<span>${esc(T("editField"))}</span></button></div>
+      <p class="sd-note s-ask">${esc(T("ask"))}</p>
+      <button type="button" class="btn dv-delrow" data-dv="delask">${ic("trash", 18)}<span>${esc(T("delThis"))}</span></button></div>`;
   }
   const planNo = (f) => { const id = cardOf(f).id, r = rank(f).find((y) => y.c.id === id); return r && r.no ? `<div class="s-card s-warn dv-planno" role="alert">${ic("warn", 30)}<div><b>${esc(T("planNo"))}</b></div><button type="button" class="btn gold" data-dv="choose">${ic("swap", 18)}<span>${esc(T("change"))}</span></button></div>` : "" };
   function shownMoney(f, x) {
@@ -708,7 +718,7 @@ const Dash = (() => {
   const PW = {
     vi: { title: "Lịch làm ruộng 12 tháng", year: "Cả năm nhìn nhanh", legend: "Ký hiệu", water: "Nước", job: "Việc chính", seed: "Giống", fert: "Phân bón", steps: "Các bước", done: "Đã làm", note: "Ghi chú",
       k: { sow: "Gieo / thả giống", tend: "Chăm sóc", harvest: "Thu hoạch", rest: "Nghỉ đất", wait: "Đo mặn, chờ mưa" }, size: "Diện tích", made: "In ngày", start: "Bắt đầu vụ", tip: "Mỗi tháng làm xong, đánh dấu vào ô ☐. Mang tờ này khi gặp cán bộ khuyến nông.",
-      money: "Tiền lãi ước tính", fresh: "Nước ngọt", brack: "Hơi mặn", salty: "Mặn" },
+      money: "Tiền lời ước tính", fresh: "Nước ngọt", brack: "Hơi mặn", salty: "Mặn" },
     en: { title: "12-month farm calendar", year: "The year at a glance", legend: "Key", water: "Water", job: "Main job", seed: "Seed", fert: "Fertiliser", steps: "Steps", done: "Done", note: "Notes",
       k: { sow: "Sow / stock", tend: "Look after", harvest: "Harvest", rest: "Rest the field", wait: "Measure salt, wait for rain" }, size: "Size", made: "Printed", start: "Season starts", tip: "Tick the box ☐ when a month's work is done. Bring this sheet to your extension officer.",
       money: "Estimated profit", fresh: "Fresh", brack: "Brackish", salty: "Salty" }
@@ -802,8 +812,8 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
     return `<details class="dv-whyfit"><summary>${esc(T("why"))} ${nf(scoreOf(c, f), 1)}?</summary><pre class="dv-math">${esc(ks.map((k) => `${T("sc")[k].padEnd(15)} ${nf(c.scores[k], 1)} × ${w[k]}`).join("\n") + `\n= ${nf(ks.reduce((a, k) => a + w[k] * c.scores[k], 0), 1)} ÷ ${tw}${pen ? " − " + nf(pen, 1) : ""} = ${nf(scoreOf(c, f), 2)}`)}</pre></details>`;
   }
   function chooseSheet() {
-    const f = fieldSel(), r = rank(f), best = r.find((x) => !x.no);
-    sheet(`<h2>${esc(T("chooseH"))}</h2>${best && best.c.id !== f.rot ? `<p class="dv-best">${esc(T("bestFor")(L(best.c.name)))}</p>` : ""}<p class="sd-note">${esc(T("chooseP"))}</p>
+    const f = fieldSel(), r = rank(f), best = r.find((x) => !x.no), cur = r.find((x) => x.c.id === f.rot);
+    sheet(`<div class="dv-sheethead"><h2>${esc(T("chooseH"))}</h2><button type="button" class="dv-shx" data-dv="close" aria-label="${esc(T("close"))}">${ic("x", 22)}</button></div><p class="sd-note dv-askline">${esc(T("ask"))}</p>${best && best.c.id !== f.rot && (!cur || nf(best.s, 1) !== nf(cur.s, 1)) ? `<p class="dv-best">${esc(T("bestFor")(L(best.c.name)))}</p>` : ""}<p class="sd-note">${esc(T("chooseP"))}</p>
       <div class="dv-opts-list">${r.map(({ c, s, no }) => `<div class="dv-optc${c.id === f.rot ? " cur" : ""}${no ? " no" : ""}"><div class="dv-optt"><b>${esc(L(c.name))}</b>${no ? `<small class="a-no">${esc(T("notHere"))}</small>` : ""}<small>${esc(L(c.calendar))}</small><span class="sd-chip">${esc(T("fit"))} ${nf(s, 1)}/5</span>${adv() ? whyFit(c, f) : ""}</div>
         ${c.id === f.rot ? `<span class="sd-chip lv-low">${esc(T("current"))}</span>` : `<button type="button" class="btn gold" data-use="${c.id}">${esc(T("use"))}</button>`}</div>`).join("")}</div>`);
   }
@@ -925,7 +935,7 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
     if (view === "plan" && !fieldSel()) view = "dash";
     p.innerHTML = view === "plan" ? panelPlan() : panelDash();
     p.scrollTop = view === "plan" ? 0 : y;
-    document.body.classList.toggle("dv-simple", !adv());
+    document.body.classList.toggle("dv-simple", !adv()); document.body.classList.toggle("dv-nofield", !fieldSel());
     p.classList.toggle("is-adv", adv() && view !== "plan" && !!fieldSel()); p.classList.toggle("is-simple", !adv() || view === "plan" || !fieldSel());
     const hn = p.querySelector("#dvH.dv-name"); if (hn) { if (lastName !== null && hn.dataset.k !== lastName) hn.classList.add("in"); lastName = hn.dataset.k }
     const tb = p.querySelector('.dv-ftabs [aria-selected="true"]'); if (tb) { const bar = tb.parentNode; bar.scrollLeft = Math.max(0, tb.offsetLeft - (bar.clientWidth - tb.offsetWidth) / 2) }
@@ -945,7 +955,8 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
     const d = a.dataset;
     if (d.dvui) { st.ui = d.dvui; save(); paintModes(); return render() }
     if (d.dvf) { st.sel = d.dvf; save(); view = "dash"; selM = null; render(); $("#dvPanel").scrollTop = 0; return }
-    if (d.use) { const f = fieldSel(); f.rot = d.use; f.savedAt = Date.now(); save(); closeSheet(); render(); if (zoomKey) { const p = $("#dvZP"); p.innerHTML = zoomHTML(f) } return }
+    if (d.use) { const f = fieldSel(); f.rot = d.use; f.savedAt = Date.now(); save(); closeSheet(); render(); if (!zoomKey) $("#dvPanel").scrollTop = 0;
+      try { window.App && App.toast && App.toast(T("usedT")(L(cardOf(f).name))) } catch (e) {} if (zoomKey) { const p = $("#dvZP"); p.innerHTML = zoomHTML(f) } return }
     if (d.tab) { tab = d.tab; return render() }
     if (d.opt) { setOpt(d.opt, d.v); render(); return optsSheet() }
     if (d.dvm != null) return monthSheet(+d.dvm);
@@ -985,7 +996,9 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
   const modeSeg = (cls) => `<div class="${cls}"><p class="dv-ml">${esc(T("modeH"))}</p><div class="seg" role="group" aria-label="${esc(T("modeH"))}"><button type="button" data-dvmode="simple" aria-pressed="${!adv()}">${esc(T("simple"))}</button><button type="button" data-dvmode="advanced" aria-pressed="${adv()}">${esc(T("adv"))}</button></div><p class="dv-mh">${esc(adv() ? T("modeA") : T("modeS"))}</p></div>`;
   function paintModes() {
     const sb = document.getElementById("setBody");
-    if (sb) { let x = sb.querySelector(".dv-setmode"); const h = modeSeg("dv-setmode"); if (!x) sb.insertAdjacentHTML("afterbegin", h); else x.outerHTML = h }
+    if (sb) { let x = sb.querySelector(".dv-setmode"); const h = modeSeg("dv-setmode"); if (!x) sb.insertAdjacentHTML("afterbegin", h); else x.outerHTML = h;
+      const lg = sb.querySelector(".dv-setlang"), lh = `<div class="dv-setlang"><p class="dv-ml">${esc(T("langH"))}</p><div class="seg" role="group" aria-label="${esc(T("langH"))}"><button type="button" data-dvlang="vi" lang="vi" aria-pressed="${lang() === "vi"}">Tiếng Việt</button><button type="button" data-dvlang="en" lang="en" aria-pressed="${lang() === "en"}">English</button></div></div>`;
+      if (lg) lg.outerHTML = lh; else sb.querySelector(".dv-setmode").insertAdjacentHTML("afterend", lh) }
     /* the switch lives in the top bar, next to EN / VI; the old copy inside the planner drawer is removed */
     const db = document.querySelector("#drawer .d-body"), old = db && db.querySelector(":scope > .dv-modebar"); if (old) old.remove();
     const tools = document.querySelector("#topbar .tools, .tools"), ls = document.getElementById("langSeg");
@@ -997,6 +1010,7 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
     try { if (window.App && App.setUi) App.setUi(adv() ? "advanced" : "simple"); if (typeof Cost !== "undefined") Cost.cards() } catch (e) {}
   }
   document.addEventListener("click", (e) => { const b = e.target.closest("[data-dvmode]"); if (!b) return; st.ui = b.dataset.dvmode; save(); paintModes(); render() });
+  document.addEventListener("click", (e) => { const b = e.target.closest("[data-dvlang]"); if (!b) return; const t = document.getElementById(b.dataset.dvlang === "en" ? "lEn" : "lVi"); if (t) t.click() });
   window.addEventListener("keydown", (e) => { const zz = $("#dvZoom"), sh = $("#dvSheet"); if (e.key === "Escape" && zz && !zz.hidden && (!sh || sh.hidden)) { e.preventDefault(); e.stopPropagation(); zoomClose() } }, true);
   function init() {
     shell();
