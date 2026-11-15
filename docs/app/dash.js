@@ -255,8 +255,10 @@ const Dash = (() => {
   }
   function welcome() {
     return `<section class="dv-welcome"><div class="dv-wi">${ic("rice", 40)}</div><h3>${esc(T("welcome"))}</h3><p>${esc(T("welcomeP"))}</p>
+      <div class="dv-wbtns"><button type="button" class="btn gold dv-addbig" data-dv="add">${ic("plus", 20)}<span>${esc(T("create"))}</span></button>
+      <button type="button" class="btn dv-addbig dv-demo" data-dv="demo">${ic("rice", 20)}<span>${esc(T("demoB"))}</span></button></div>
+      <p class="sd-note dv-demop">${esc(T("demoP"))}</p>
       <ol class="dv-wsteps">${T("wsteps").map((x, i) => `<li><b>${i + 1}</b><span>${esc(x)}</span></li>`).join("")}</ol>
-      <button type="button" class="btn gold dv-addbig" data-dv="add">${ic("plus", 20)}<span>${esc(T("create"))}</span></button>
       <p class="sd-note"><button type="button" class="dv-link" data-open="sources">${esc(T("sources"))}</button></p></section>`;
   }
   function facts(f) {
@@ -691,6 +693,7 @@ const Dash = (() => {
      Bottom bar: Hôm nay · Mùa vụ · (Kế hoạch: the create-plan flow) · Số liệu · Ruộng. Top date bar: play the 12 months week by week.
      The simulation only changes the date on show; it never saves, ticks months or writes files (Season.real() is used for those). */
   Object.assign(W.vi, {
+    demoB: "Xem thử với ruộng mẫu", demoP: "Ruộng mẫu ở khu vực Mỹ Xuyên, đang có lúa còn 6 tuần nữa gặt. Xoá được bất cứ lúc nào.", demoN: "Ruộng mẫu",
     navLabel: "Các trang", waterW: (w) => `Nước ${w.toLowerCase()}`, navToday: "Hôm nay", navSeason: "Mùa vụ", navPlan: "Kế hoạch", navData: "Số liệu", navFields: "Ruộng",
     clkToday: "Bây giờ", clkNow: "Bây giờ", clkSim: (y) => `Xem thử năm ${y}`, clkPlay: (y) => `Chạy thử ${y} năm tới`, clkPause: "Tạm dừng", clkReset: "Về hôm nay", clkSlider: (y) => `Kéo để xem thử một ngày trong ${y} năm tới`,
     hzH: "Xem thử bao xa", hzL: (y) => `${y} năm`,
@@ -724,6 +727,7 @@ const Dash = (() => {
     evSow: (n) => `Sạ ${n}`, evStock: (n) => `Thả ${n}`, evHar: (n) => `Thu hoạch ${n}`, evSaltIn: "Nước bắt đầu mặn (ước tính)", evSaltOut: "Hết mặn, nước ngọt trở lại (ước tính)", evSaltHit: (n) => `Mặn vào khi ${n} còn trên ruộng: đo mặn, giữ nước ngọt`, evSowSalt: (n) => `Đến lúc sạ ${n} nhưng nước còn mặn: đo mặn, chờ mưa rửa mặn`
   });
   Object.assign(W.en, {
+    demoB: "Try a sample field", demoP: "A sample field in the Mỹ Xuyên area, with rice 6 weeks from harvest. You can delete it any time.", demoN: "Sample field",
     navLabel: "Pages", waterW: (w) => `${w} water`, navToday: "Today", navSeason: "Season", navPlan: "Plan", navData: "Data", navFields: "Fields",
     clkToday: "Now", clkNow: "Now", clkSim: (y) => `Preview · year ${y}`, clkPlay: (y) => `Play the next ${y} year${y > 1 ? "s" : ""}`, clkPause: "Pause", clkReset: "Back to today", clkSlider: (y) => `Drag to preview a day in the next ${y} year${y > 1 ? "s" : ""}`,
     hzH: "How far to preview", hzL: (y) => `${y} yr`,
@@ -1302,7 +1306,7 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
     p.scrollTop = view === "plan" ? 0 : y;
     paintNav(); paintClock();
     document.body.classList.toggle("dv-simple", !adv()); document.body.classList.toggle("dv-nofield", !fieldSel());
-    p.classList.toggle("is-adv", view === "data" && !!fieldSel()); p.classList.toggle("is-simple", view !== "data" || !fieldSel()); p.dataset.view = view;
+    p.classList.toggle("is-adv", view === "data" && !!fieldSel()); p.classList.toggle("is-simple", view !== "data" || !fieldSel()); p.dataset.view = view; document.body.dataset.dvView = view;
     const hn = p.querySelector("#dvH.dv-name"); if (hn) { if (lastName !== null && hn.dataset.k !== lastName) hn.classList.add("in"); lastName = hn.dataset.k }
     const tb = p.querySelector('.dv-ftabs [aria-selected="true"]'); if (tb) { const bar = tb.parentNode; bar.scrollLeft = Math.max(0, tb.offsetLeft - (bar.clientWidth - tb.offsetWidth) / 2) }
   }
@@ -1332,6 +1336,8 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
       case "fields": return go("fields");
       case "data": return go("data");
       case "nownow": return nowSheet(true);
+      case "demo": { if (!st.fields.some((x) => x.demo)) st.fields.push({ id: "fdemo", demo: true, name: T("demoN"), site: "my_xuyen", size: 1.5, seasons: ["R", "R", "R"], rot: "rice3", now: { k: "R", weeks: 6, choice: "keep", at: Date.now() }, startAt: Date.now(), savedAt: Date.now() });
+        st.sel = (st.fields.find((x) => x.demo) || st.fields[0]).id; save(); mapKey = ""; go("dash"); return }
       case "nwsave": { const f = fieldSel(); if (!f || !shNow || !shNow.k) return; f.now = { k: shNow.k, weeks: shNow.k === "-" ? 0 : shNow.weeks, choice: shNow.choice || "keep", at: Date.now() }; save(); closeSheet(); mapKey = ""; render(); try { window.App && App.toast && App.toast(T("nowSaved")) } catch (e) {} return }
       case "plan": return go("plan");
       case "add": return toMap(null);
@@ -1398,9 +1404,22 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
     let hq = 0; new MutationObserver(() => { if (!hq) hq = setTimeout(() => { hq = 0; hookPlanOk() }, 30) }).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["class"] });
     document.body.classList.toggle("dv-simple", !adv());
     if (location.hash === "#plan-lab") { document.body.classList.remove("dv-on"); document.body.classList.add("dv-off"); $("#dvBack").hidden = false; backLabel(); return }
-    on = true; document.body.classList.add("dv-on"); render();
+    importPlanner(); on = true; document.body.classList.add("dv-on"); render();
     const ck = $("#dvClock"), setH = () => document.documentElement.style.setProperty("--ck-h", `${ck && !document.body.classList.contains("dv-noclock") ? ck.offsetHeight : 0}px`);
     try { new ResizeObserver(setH).observe(ck) } catch (e) {} setH(); new MutationObserver(setH).observe(document.body, { attributes: true, attributeFilter: ["class"] });
+  }
+  /* fields saved only in the planner list (app.js "mre-fields") also appear here, so the dashboard is never empty by mistake;
+     their plan is the rotation they grow now (the planner's season boxes) until the farmer picks another */
+  function importPlanner() {
+    let afs = []; try { afs = (window.App && App.fields && App.fields()) || [] } catch (e) {}
+    let n = 0;
+    afs.forEach((a) => {
+      if (!a || !a.site || !sites().some((x) => x.id === a.site) || st.fields.some((f) => f.appId === a.id || (!f.appId && f.site === a.site && f.name === a.name))) return;
+      const f = { id: "f" + a.id, appId: a.id, name: a.name || T("fieldN")(st.fields.length + 1), size: a.ha > 0 ? a.ha : null, site: a.site, seasons: Array.isArray(a.seasons) ? a.seasons : SEAS_OF[a.cur] || ["R", "R", "R"], startAt: Date.now(), savedAt: Date.now() };
+      const cs = cardsFor(siteOf(a.site), "typical", null); f.rot = cs.some((c) => c.id === a.cur) ? a.cur : rank(f)[0].c.id;
+      st.fields.push(f); n++;
+    });
+    if (n) { if (!st.fields.some((f) => f.id === st.sel)) st.sel = st.fields[0].id; save() }
   }
   /* a field deleted in the planner list leaves the dashboard too */
   function unlink(id, site, name) {

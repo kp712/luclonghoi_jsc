@@ -216,3 +216,20 @@ body.dv-on .dv-page { top:calc(var(--top-h) + var(--ck-h)); padding-bottom:calc(
 /* toasts sit above the bottom bar */
 body.dv-on #toast { bottom:calc(var(--nav-h) + 16px + env(safe-area-inset-bottom, 0px)) }
 @media (min-width:760px) { body.dv-on #toast { bottom:calc(var(--nav-h) + 36px) } }
+
+/* ---------- laptop and desktop: Today is a two-column dashboard; the date bar lines up with the page under it ---------- */
+@media (min-width:1000px) {
+  .dv-page[data-view="dash"] > * { max-width:1120px }
+  body[data-dv-view="dash"] .ck-in { max-width:1120px }
+  .dv-page[data-view="dash"] .t-page { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:16px; align-items:stretch }
+  .dv-page[data-view="dash"] .t-page > :is(.sr, .t-chips, .t-plan, .t-ask, .dv-planno, .s-cal, .s-ask) { grid-column:1 / -1 }
+  .dv-page[data-view="dash"] .t-page > .t-ask { grid-template-columns:48px minmax(0, 1fr) auto; align-items:center }
+  .dv-page[data-view="dash"] .t-page > .t-ask .btn { grid-column:auto; min-width:180px }
+  .dv-page[data-view="dash"] .hx-big b { font-size:3.5rem }
+  .ck-d b { font-size:1.125rem }
+}
+/* empty dashboard: create a field, or try the sample one */
+.dv-wbtns { display:grid; gap:10px; margin-top:20px }
+.dv-wbtns .btn { width:100%; min-height:52px; justify-content:center; gap:8px }
+.dv-welcome .dv-demop { margin-top:10px !important }
+@media (min-width:560px) { .dv-wbtns { grid-template-columns:1fr 1fr } }
