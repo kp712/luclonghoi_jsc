@@ -262,7 +262,7 @@ button.s-card { cursor:pointer } button.s-card:hover { border-color:var(--gold) 
 }
 @media (max-width:760px) {
   .dv-page { padding:14px 12px calc(28px + env(safe-area-inset-bottom)) }
-  .dv-top h2 { font-size:1.375rem } .dv-tr { width:100%; justify-content:space-between } .dv-addtop { padding:0 14px }
+  .dv-top h2 { font-size:1.375rem } .dv-tr { width:100%; justify-content:flex-start } .dv-addtop { margin-left:0; padding:0 14px }   /* phones: "Add field" starts on the left, under the title */
   .a-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:10px }
   .a-t { padding:13px }
   .a-g1, .a-g3, .a-g4, .a-g10 { grid-column:span 1 } .a-g2, .a-g5, .a-g6, .a-g7, .a-g8, .a-g9, .a-grid:not(:has(.a-g10)) .a-g9 { grid-column:span 2 }
@@ -660,3 +660,30 @@ body.dv-zoomed { overflow:hidden }
 .a-no { display:block; font-size:.75rem; font-weight:600; color:var(--risk) }
 .dv-planno { margin-bottom:12px } .dv-planno .btn { grid-column:1 / -1; justify-self:start }
 .a-kpi dd .a-kn { display:block; font-size:.6875rem; font-weight:400; color:var(--ink-3) }
+
+/* dashboard field answers: why a size was not taken */
+.o-err { display:block; margin-top:4px; font-size:.8125rem; font-weight:600; color:var(--risk) }
+.dv-sh [tabindex="-1"]:focus { outline:none }
+
+/* back to My fields from the map. Desktop: the gold pill. Phone: a strip docked under the top bar,
+   so it never sits on the map labels, with a hint for what to do next */
+.dv-backmap .bm-ic { display:inline-flex }
+.dv-backmap .bm-h { display:none }
+.dv-backmap:focus-visible { outline:2px solid var(--ink); outline-offset:2px }
+@media (max-width:760px) {
+  .dv-backmap { left:0; right:0; top:var(--top-h); width:100%; min-height:60px; padding:8px 16px 8px 12px; gap:12px; justify-content:flex-start; text-align:left;
+    border-radius:0; background:var(--panel); -webkit-backdrop-filter:var(--blur); backdrop-filter:var(--blur); color:var(--ink);
+    border-bottom:1px solid var(--line-2); box-shadow:0 10px 24px rgba(0,0,0,.18) }
+  .dv-backmap:focus-visible { outline-offset:-3px; outline-color:var(--gold) }
+  .dv-backmap .bm-ic { flex:none; width:40px; height:40px; border-radius:50%; align-items:center; justify-content:center; background:var(--gold); color:#14110A;
+    box-shadow:0 0 0 4px var(--gold-soft); transition:transform .18s var(--ease) }
+  .dv-backmap:active .bm-ic { transform:translateX(-3px) scale(.96) }
+  .dv-backmap .bm-tx { display:flex; flex-direction:column; min-width:0; gap:2px; line-height:1.25 }
+  .dv-backmap .bm-t { font-weight:700; font-size:.9375rem }
+  .dv-backmap .bm-h { display:flex; align-items:center; gap:8px; min-width:0; font-weight:500; font-size:.8125rem; color:var(--ink-2) }
+  .dv-backmap .bm-h > span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
+  .bm-dot { flex:none; position:relative; width:8px; height:8px; border-radius:50%; background:var(--gold) }
+  .bm-dot::after { content:""; position:absolute; inset:-4px; border-radius:50%; border:1.5px solid var(--gold); opacity:0; animation:bmPing 2.4s var(--ease) infinite }
+}
+@keyframes bmPing { 0% { transform:scale(.5); opacity:.9 } 70%, 100% { transform:scale(1.6); opacity:0 } }
+@media (prefers-reduced-motion:reduce) { .bm-dot::after { animation:none; opacity:.5 } .dv-backmap .bm-ic { transition:none } }

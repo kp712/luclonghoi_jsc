@@ -53,7 +53,7 @@ const Dash = (() => {
       tMonth: "Tháng", tJob: "Việc chính", tSalt: "Nước", seed: "Giống", fert: "Phân bón", steps: "Các bước chính", tapMonth: "Chạm vào một tháng để xem giống, phân bón và các bước.",
       preview: "Bản in", save: "Lưu file", doPrint: "In", printHint: "Bản in khổ A4. Lưu file rồi mở để in hoặc lưu PDF.", saved: "Đã lưu",
       ask: "Hỏi cán bộ khuyến nông trước khi đổi cách canh tác.", chooseH: "Đổi cách trồng", chooseP: "Các cách trồng xếp theo độ hợp với ruộng của bạn:", bestFor: (n) => `Hợp nhất với ruộng bạn: ${n}`,
-      use: "Dùng cách này", current: "Đang dùng", fit: "Hợp", optsH: "Câu trả lời về ruộng", editAns: "Sửa câu trả lời", notHere: "Không làm được ở ruộng này", planNo: "Ruộng bạn không lấy được nước lợ, nên cách trồng này không làm được ở đây. Hãy chọn cách trồng khác.",
+      use: "Dùng cách này", current: "Đang dùng", fit: "Hợp", optsH: "Câu trả lời về ruộng", editAns: "Sửa câu trả lời", sizeErr: "Hãy nhập diện tích lớn hơn 0 và dưới 1.000 ha (1 ha = 10 công).", notHere: "Không làm được ở ruộng này", planNo: "Ruộng bạn không lấy được nước lợ, nên cách trồng này không làm được ở đây. Hãy chọn cách trồng khác.",
       yrsH: "Kế hoạch nhiều năm", yrsN: (n) => `${n} năm`, yrsP: "Mỗi năm chọn một cách trồng và năm thường hay năm El Niño. Năm 1 theo dự báo NOAA; các năm sau là giả định để so sánh.",
       yrN: (i) => `Năm ${i}`, yrPick: (i) => `Cách trồng năm ${i}`, yrType: (i) => `Loại năm ${i}`, yrProfit: "Lời", yrCost: "Vốn", yrNoFig: "chưa có số liệu",
       yrClash: (n) => `${n} tháng cây gặp mặn`, yrSafe: "Cây không gặp mặn", yrSum: (n) => `Cộng ${n} năm`, yrSumP: "Tổng lời", yrSumC: "Tổng vốn",
@@ -64,7 +64,7 @@ const Dash = (() => {
       people: "Người làm trong nhà", machines: "Máy móc", pv: ["Ít", "Vừa", "Nhiều"], mv: ["Không có", "Thuê được", "Có sẵn"], brack: "Ruộng không lấy được nước lợ",
       goal: "Điều quan trọng nhất", goals: { salt: "Tránh mặn", profit: "Lãi nhiều", water: "Ít nước" }, year: "Tính theo", size: "Diện tích (ha)", name: "Tên ruộng",
       better: (n) => `Với câu trả lời mới, cách trồng hợp hơn: ${n}`, del: "Xoá ruộng", delQ: "Xoá ruộng này?", fieldN: (i) => `Ruộng ${i}`,
-      saveField: "Lưu vào Ruộng của tôi", updField: "Cập nhật ruộng này", savedT: "Đã lưu vào Ruộng của tôi", toDash: "Ruộng của tôi",
+      saveField: "Lưu vào Ruộng của tôi", updField: "Cập nhật ruộng này", savedT: "Đã lưu vào Ruộng của tôi", toDash: "Ruộng của tôi", mapHint: "Chạm vào khu vực có ruộng của bạn", mapEdit: "Đang sửa: {n}",
       tabs: { salt: "Mặn", money: "Tiền", soil: "Đất & nước" }, river: "Sông (trạm đo)", field: "Trong ruộng (ước tính)",
       seen: (n) => `Vệ tinh NASA MODIS thấy khoảng ${n} vụ/năm`, rain: (n) => `Mưa cả năm khoảng ${n} mm (NASA GPM IMERG)`, clay: "Đất sét", range: (a, b, c) => `${a}–${c} triệu/công (giữa ${b})`,
       areaSalt: { high: "Mặn cao", medium: "Mặn vừa", low: "Mặn thấp" }, conf: "Độ tin cậy", confL: { high: "cao", medium: "vừa", low: "thấp" },
@@ -106,7 +106,7 @@ const Dash = (() => {
       tMonth: "Month", tJob: "Main job", tSalt: "Water", seed: "Seed", fert: "Fertiliser", steps: "Key steps", tapMonth: "Tap a month to see seed, fertiliser and steps.",
       preview: "Print view", save: "Save file", doPrint: "Print", printHint: "A4 print view. Save the file, then open it to print or save as PDF.", saved: "Saved",
       ask: "Talk to your extension officer before you change how you farm.", chooseH: "Change plan", chooseP: "Plans ranked by how well they fit your field:", bestFor: (n) => `Best fit for your field: ${n}`,
-      use: "Use this plan", current: "In use", fit: "Fit", optsH: "About your field", editAns: "Change my answers", notHere: "Not possible on this field", planNo: "No brackish water reaches your field, so this plan cannot work here. Please pick another plan.",
+      use: "Use this plan", current: "In use", fit: "Fit", optsH: "About your field", editAns: "Change my answers", sizeErr: "Enter a size above 0 and under 1,000 ha (1 ha = 10 công).", notHere: "Not possible on this field", planNo: "No brackish water reaches your field, so this plan cannot work here. Please pick another plan.",
       yrsH: "Plan over several years", yrsN: (n) => (n === 1 ? "1 year" : `${n} years`), yrsP: "Pick a plan for each year, and a typical or El Niño year. Year 1 follows the NOAA forecast; later years are what-ifs to compare.",
       yrN: (i) => `Year ${i}`, yrPick: (i) => `Plan for year ${i}`, yrType: (i) => `Kind of year ${i}`, yrProfit: "Profit", yrCost: "Cost", yrNoFig: "no figure yet",
       yrClash: (n) => (n === 1 ? "1 crop month meets salt" : `${n} crop months meet salt`), yrSafe: "Crops stay clear of salt", yrSum: (n) => (n === 1 ? "1 year" : `${n} years together`), yrSumP: "Total profit", yrSumC: "Total cost",
@@ -117,7 +117,7 @@ const Dash = (() => {
       people: "People at home", machines: "Machines", pv: ["Few", "Some", "Many"], mv: ["None", "Can hire", "Own"], brack: "No brackish water reaches the field",
       goal: "What matters most", goals: { salt: "Avoid salt", profit: "More profit", water: "Less water" }, year: "Based on", size: "Size (ha)", name: "Field name",
       better: (n) => `With your new answers, a better fit: ${n}`, del: "Delete field", delQ: "Delete this field?", fieldN: (i) => `Field ${i}`,
-      saveField: "Save to My fields", updField: "Update this field", savedT: "Saved to My fields", toDash: "My fields",
+      saveField: "Save to My fields", updField: "Update this field", savedT: "Saved to My fields", toDash: "My fields", mapHint: "Tap the area where your field is", mapEdit: "Editing: {n}",
       tabs: { salt: "Salt", money: "Money", soil: "Soil & water" }, river: "River (station)", field: "In the field (estimate)",
       seen: (n) => `NASA MODIS sees about ${n} crops a year`, rain: (n) => `Rain about ${n} mm a year (NASA GPM IMERG)`, clay: "Clay", range: (a, b, c) => `${a}–${c} M₫/công (middle ${b})`,
       areaSalt: { high: "High salt", medium: "Medium salt", low: "Low salt" }, conf: "Confidence", confL: { high: "high", medium: "medium", low: "low" },
@@ -197,7 +197,7 @@ const Dash = (() => {
   const save = () => put(KEY, st);
   const fieldSel = () => st.fields.find((f) => f.id === st.sel) || st.fields[0] || null;
   const adv = () => st.ui === "advanced";
-  let view = "dash", tab = "salt", editing = null, on = false;
+  let view = "dash", tab = "salt", editing = null, on = false, sizeErr = "";
 
   /* ---------------- panel ---------------- */
   function shell() {
@@ -817,7 +817,7 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
       <div class="o-g"><span>${esc(T("machines"))}</span><div class="seg o-seg">${[0, 1, 2].map((v) => opt("wfM", String(v), String(f.wfM ?? 0), T("mv")[v])).join("")}</div></div>
       <label class="o-chk"><input type="checkbox" data-opt="noBrackish" ${f.noBrackish ? "checked" : ""}> ${esc(T("brack"))}</label>
       <div class="o-g"><span>${esc(T("year"))}</span><div class="seg o-seg">${["typical", "elnino"].map((y) => opt("year", y, yr(f), T("years")[y])).join("")}</div></div>
-      <label class="o-g"><span>${esc(T("size"))}</span><input type="text" inputmode="decimal" data-opt="size" value="${f.size ? nf(f.size, 2).replace(/[,.]?0+$/, "") : ""}" placeholder="1,5"></label>
+      <label class="o-g"><span>${esc(T("size"))}</span><input type="text" inputmode="decimal" data-opt="size" value="${f.size ? nf(f.size, 2).replace(/[,.]?0+$/, "") : ""}" placeholder="1,5"${sizeErr ? ' aria-invalid="true" aria-describedby="dvSizeErr"' : ""}>${sizeErr ? `<small id="dvSizeErr" class="o-err" role="alert">${esc(sizeErr)}</small>` : ""}</label>
       <label class="o-g"><span>${esc(T("name"))}</span><input type="text" data-opt="name" maxlength="30" value="${esc(f.name)}"></label>
       ${top && top.c.id !== f.rot && !top.no ? `<div class="dv-better"><p>${esc(T("better")(L(top.c.name)))}</p><button type="button" class="btn gold" data-use="${top.c.id}">${esc(T("use"))}</button></div>` : ""}</div>`);
   }
@@ -835,13 +835,18 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
     else if (k === "wfP" || k === "wfM") f[k] = +v;
     else if (k === "year") f.year = v;
     else if (k === "noBrackish") f.noBrackish = !!v;
-    else if (k === "size") { const n = parseFloat(String(v).replace(",", ".")); f.size = n > 0 && n < 1000 ? n : null; syncSize(f) }
+    else if (k === "size") { const raw = String(v).trim(), n = parseFloat(raw.replace(",", "."));
+      if (!raw) { f.size = null; sizeErr = "" } else if (n > 0 && n < 1000) { f.size = n; sizeErr = "" } else { sizeErr = T("sizeErr"); save(); return }   /* keep the old size and say why */
+      syncSize(f) }
     else if (k === "name") f.name = String(v).trim() || f.name;
     save();
   }
 
   /* ---------------- map flow: add / edit a field, save the chosen plan back ---------------- */
-  const backLabel = () => { const b = $("#dvBack"); if (b) b.innerHTML = `${ic("back", 16)}<span>${esc(T("toDash"))}</span>` };
+  /* phone: a strip under the top bar that says where you are going back to and what to do on the map */
+  const backLabel = () => { const b = $("#dvBack"); if (!b) return; const f = editing && st.fields.find((x) => x.id === editing);
+    const hint = f ? T("mapEdit").replace("{n}", f.name) : T("mapHint");
+    b.innerHTML = `<span class="bm-ic">${ic("back", 18)}</span><span class="bm-tx"><span class="bm-t">${esc(T("toDash"))}</span> <span class="bm-h"><i class="bm-dot" aria-hidden="true"></i><span>${esc(hint)}</span></span></span>` };
   function toMap(field) {
     try { zoomClose() } catch (e) {}
     editing = field ? field.id : null; on = false;
@@ -890,8 +895,29 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
   }
   /* ---------------- sheet + render ---------------- */
   let shT = 0;   /* a sheet opened right after another one closed must not be hidden by the old close timer */
-  function sheet(html, wide) { clearTimeout(shT); const sh = $("#dvSheet"); $("#dvShBody").innerHTML = html; sh.classList.toggle("wide", !!wide); sh.hidden = false; requestAnimationFrame(() => sh.classList.add("on")) }
-  function closeSheet() { const sh = $("#dvSheet"); if (!sh) return; sh.classList.remove("on"); clearTimeout(shT); shT = setTimeout(() => (sh.hidden = true), 220) }
+  /* a sheet is a real dialog: named by its heading, focus moves in and stays in, and goes back to the opener on close.
+     A sheet re-drawn while open (an answer changed) keeps focus on the same control. */
+  let shOpener = null;
+  const shFocusables = (root) => [...root.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')].filter((e) => !e.disabled && e.offsetParent !== null);
+  function sheet(html, wide) {
+    clearTimeout(shT); const sh = $("#dvSheet"), box = sh.querySelector(".dv-sh"), body = $("#dvShBody"), wasOpen = !sh.hidden && sh.classList.contains("on");
+    const a = document.activeElement, inside = !!(a && body.contains(a)), key = inside ? (a.dataset.opt ? `[data-opt="${a.dataset.opt}"]${a.dataset.v != null ? `[data-v="${a.dataset.v}"]` : ""}` : a.id ? `#${a.id}` : a.dataset.dv ? `[data-dv="${a.dataset.dv}"]` : null) : null;
+    if (!wasOpen && !inside && a && a !== document.body && !sh.contains(a)) shOpener = a;
+    body.innerHTML = html; sh.classList.toggle("wide", !!wide); sh.hidden = false;
+    const h = body.querySelector("h2, h3");
+    if (h) { h.id = h.id || "dvShH"; h.setAttribute("tabindex", "-1"); box.setAttribute("aria-labelledby", h.id); box.removeAttribute("aria-label") } else { box.removeAttribute("aria-labelledby"); box.setAttribute("aria-label", T("brand")) }
+    requestAnimationFrame(() => sh.classList.add("on"));
+    setTimeout(() => { const back = key && body.querySelector(key); (back || h || shFocusables(body)[0] || box).focus({ preventScroll: !!back }) }, 0);
+  }
+  function closeSheet() { const sh = $("#dvSheet"); if (!sh) return; const had = !sh.hidden; sh.classList.remove("on"); clearTimeout(shT); shT = setTimeout(() => (sh.hidden = true), 220);
+    if (had && shOpener && document.contains(shOpener) && sh.contains(document.activeElement)) { try { shOpener.focus({ preventScroll: true }) } catch (e) {} } shOpener = null }
+  /* Tab stays inside an open sheet */
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Tab") return; const sh = $("#dvSheet"); if (!sh || sh.hidden) return; const box = sh.querySelector(".dv-sh"), fs = shFocusables(box); if (!fs.length) return;
+    const first = fs[0], last = fs[fs.length - 1], a = document.activeElement;
+    if (!box.contains(a)) { e.preventDefault(); first.focus(); return }
+    if (e.shiftKey && (a === first || a === box.querySelector("#dvShH"))) { e.preventDefault(); last.focus() } else if (!e.shiftKey && a === last) { e.preventDefault(); first.focus() }
+  });
   let lastSite = null, lastName = null;
   function render() {
     if (!$("#dv")) return;
@@ -988,6 +1014,12 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
     const n = st.fields.length; st.fields = st.fields.filter((f) => !(f.appId === id || (!f.appId && f.site === site && f.name === name)));
     if (st.fields.length === n) return; if (!st.fields.some((f) => f.id === st.sel)) st.sel = st.fields[0] ? st.fields[0].id : null; selM = null; save(); render();
   }
-  return { init, render, unlink, get state() { return st } };
+  /* a field edited in the planner form: same name, area and size here */
+  function syncField(af, old) {
+    let ch = false;
+    st.fields.forEach((f) => { if (f.appId === af.id || (!f.appId && f.site === old.site && f.name === old.name)) { f.appId = af.id; f.name = af.name; f.site = af.site; f.size = af.ha || null; ch = true } });
+    if (ch) { save(); render() }
+  }
+  return { init, render, unlink, syncField, get state() { return st } };
 })();
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", () => setTimeout(Dash.init, 0)); else setTimeout(Dash.init, 0);
