@@ -910,7 +910,7 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
       if ((sb && !sb.querySelector(".dv-setmode")) || (db && db.querySelector(":scope > .dv-modebar")) || !document.getElementById("uiSeg")) paintModes() }, 50) }).observe(document.body, { childList: true, subtree: true });
     let hq = 0; new MutationObserver(() => { if (!hq) hq = setTimeout(() => { hq = 0; hookPlanOk() }, 30) }).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["class"] });
     document.body.classList.toggle("dv-simple", !adv());
-    if (location.hash === "#plan-lab") { document.body.classList.add("dv-off"); $("#dvBack").hidden = false; backLabel(); return }
+    if (location.hash === "#plan-lab") { document.body.classList.remove("dv-on"); document.body.classList.add("dv-off"); $("#dvBack").hidden = false; backLabel(); return }
     on = true; document.body.classList.add("dv-on"); render();
   }
   return { init, render, get state() { return st } };
