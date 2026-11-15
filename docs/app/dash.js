@@ -117,7 +117,7 @@ const Dash = (() => {
     shrimp: '<path d="M4 16c.8-6 5.6-10 11.5-9.2 3.2.4 4 3.4 2 5.2-1.8 1.7-4.6 1-5.8 3.2L9 20"/><path d="M4 16l3 1"/><circle cx="16" cy="9.5" r=".6"/>',
     upland: '<path d="M12 21v-8"/><path d="M12 13c-4.2 0-6.2-3-6.2-7 4.2 0 6.2 3 6.2 7Z"/><path d="M12 15c0-4 2-6 6-6 0 4-2 6-6 6Z"/>',
     fallow: '<path d="M4 12h3"/><path d="M10.5 12h3"/><path d="M17 12h3"/>',
-    warn: '<path d="M12 3.5 21.5 20h-19L12 3.5Z"/><path d="M12 10v4.5"/><path d="M12 17.4v.1"/>', check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>', bell: '<path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15L6 16Z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>', basket: '<path d="M3.5 10h17l-2 9.5h-13L3.5 10Z"/><path d="M8 10l3-6M16 10l-3-6M9 14v2.5M12 14v2.5M15 14v2.5"/>',
+    warn: '<path d="M12 3.5 21.5 20h-19L12 3.5Z"/><path d="M12 10v4.5"/><path d="M12 17.4v.1"/>', check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>', pin: '<path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11Z"/><circle cx="12" cy="10" r="2.3"/>', bell: '<path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15L6 16Z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>', basket: '<path d="M3.5 10h17l-2 9.5h-13L3.5 10Z"/><path d="M8 10l3-6M16 10l-3-6M9 14v2.5M12 14v2.5M15 14v2.5"/>',
     coin: '<circle cx="12" cy="12" r="9"/><path d="M12 7v10"/><path d="M14.6 9.2c-.4-.9-1.3-1.4-2.6-1.4-1.6 0-2.6.7-2.6 1.8 0 2.6 5.2 1.2 5.2 3.8 0 1.1-1.1 1.8-2.6 1.8-1.3 0-2.2-.6-2.6-1.5"/>',
     star: '<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z"/>',
     plus: '<path d="M12 5v14M5 12h14"/>', cal: '<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>', print: '<path d="M6 9V3h12v6M6 18H4v-7h16v7h-2"/><path d="M6 14h12v7H6z"/>',
@@ -209,8 +209,9 @@ const Dash = (() => {
   }
   /* the page title is the chosen field's own name, big, so a farmer sees at once which field this is */
   function pageHead() {
-    const f = fieldSel(), eb = f ? `${T("brand")} · ${short(siteOf(f.site))}` : T("eyebrow");
-    return `<header class="dv-top${f ? " has-f" : ""}"><div class="dv-tt"><p class="sd-eyebrow">${esc(eb)}</p><h2 id="dvH" class="dv-name" data-k="${f ? esc(f.id) : ""}">${esc(f ? f.name : T("brand"))}</h2></div>
+    const f = fieldSel(), eb = f ? T("brand") : T("eyebrow");
+    const nm = f ? `<span class="dv-nm">${esc(f.name)}</span><small class="dv-area">${ic("pin", 16)}${esc(short(siteOf(f.site)))}</small>` : esc(T("brand"));
+    return `<header class="dv-top${f ? " has-f" : ""}"><div class="dv-tt"><p class="sd-eyebrow">${esc(eb)}</p><h2 id="dvH" class="dv-name" data-k="${f ? esc(f.id) : ""}">${nm}</h2></div>
       <div class="dv-tr"><button type="button" class="btn gold dv-addtop" data-dv="add">${ic("plus", 18)}<span>${esc(T("addShort"))}</span></button></div></header>`;
   }
   function welcome() {

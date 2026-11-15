@@ -500,7 +500,7 @@ body.dv-zoomed { overflow:hidden }
 @media (min-width:761px) { .dv-s > .dv-rm { grid-column:1 / -1 } .dv-rm .rm-list { grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)) } }
 
 /* the chosen field's name is the page title, big */
-.dv-page .dv-top h2.dv-name { font-size:clamp(2.125rem, 1.4rem + 2.6vw, 3.25rem); font-weight:800; line-height:1.05; letter-spacing:-.015em; overflow-wrap:anywhere }
+.dv-page .dv-top h2.dv-name { display:flex; flex-wrap:wrap; align-items:baseline; column-gap:14px; row-gap:2px; font-size:clamp(2.75rem, 1.9rem + 3.4vw, 4.25rem); font-weight:800; line-height:1.05; letter-spacing:-.015em; overflow-wrap:anywhere }
 .dv-page .dv-top.has-f .sd-eyebrow { color:var(--gold) }
 .dv-name.in { animation:dvNameIn .32s cubic-bezier(.22, 1, .36, 1) }
 @keyframes dvNameIn { from { opacity:0; transform:translateY(8px) } to { opacity:1; transform:none } }
@@ -618,3 +618,7 @@ body.dv-zoomed { overflow:hidden }
 .sg-arr { display:grid; place-items:center; flex:none; width:44px; height:44px; border-radius:50%; border:1px solid var(--line-2); background:var(--panel-solid); color:var(--ink); cursor:pointer }
 .sg-arr:hover { border-color:var(--gold) } .sg-arr:focus-visible { outline:3px solid var(--water); outline-offset:2px }
 @media (prefers-reduced-motion: reduce) { .dv-sug.flip-f .sg-p, .dv-sug.flip-b .sg-p { animation:none !important } }
+
+.dv-name .dv-nm { min-width:0 }
+.dv-name .dv-area { display:inline-flex; align-items:center; gap:4px; font-size:1rem; font-weight:600; letter-spacing:0; line-height:1.2; color:var(--ink-2); white-space:nowrap }
+.dv-name .dv-area .dv-i { color:var(--gold) }
