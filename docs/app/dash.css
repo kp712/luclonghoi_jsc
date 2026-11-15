@@ -713,3 +713,11 @@ body.lang-vi .s-cal .rb .mo, body.lang-vi .z-panel .rb:not(.sm) .mo { font-size:
   body.dv-on:not(.dv-nofield) #topbar #langSeg { display:none }          /* language lives in Settings once a field exists */
   body.dv-on:not(.dv-nofield) #uiSw { height:44px; padding:0 10px; gap:8px; font-size:.875rem }
 }
+
+/* ---------- Advanced view: job first, and the same month / colour / "this month" explanations as Simple ---------- */
+.a-mkey { margin:8px 0 0; font-size:.8125rem }
+.a-nowdot { display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--gold) }
+.a-rib .rb-now { margin:-4px 0 8px; font-size:.75rem }
+.a-rib .rb-key { font-size:.75rem }
+.dv-a > .a-warn { grid-template-columns:auto minmax(0, 1fr); align-items:start; padding:14px 16px }
+@media (max-width:760px) { .a-grid .a-g5 { order:0 } }

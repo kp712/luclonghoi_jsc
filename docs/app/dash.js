@@ -43,7 +43,7 @@ const Dash = (() => {
       clash: (xs) => `Chú ý: lúa gặp nước mặn ở ${xs.join(", ")}. Đo độ mặn trước khi sạ, nước còn mặn thì chờ mưa.`, noClash: "Tốt: lịch này tránh được tháng nước mặn",
       ninoNote: "Năm nay nhiều khả năng là năm hạn mặn (El Niño, NOAA dự báo trên 83%). Mặn có thể đến sớm hơn và mặn hơn.", thisYr: "Năm nay", years: { typical: "Năm thường", elnino: "Năm El Niño" },
       moneyYr: "Năm nay, có thể hạn mặn.", moneyTyp: (a) => `Năm bình thường: ${a} triệu/công.`, moneySrcS: "Lấy số giữa của các số liệu lợi nhuận đã công bố · 1 công = 1.000 m²",
-      rbKey: "Số = tháng · Thanh màu = nước trong kênh", rbNow: "Tháng này", usedT: (n) => `Đã đổi sang: ${n}`, editField: "Sửa ruộng", langH: "Ngôn ngữ · Language",
+      rbKey: "Số = tháng · Thanh màu = nước trong kênh", rbNow: "Tháng này", rbKeyA: "T1–T12 = tháng 1–12 · Thanh màu = nước trong kênh", usedT: (n) => `Đã đổi sang: ${n}`, editField: "Sửa ruộng", langH: "Ngôn ngữ · Language",
       moneyH: "Tiền lời ước tính", money: (a, b) => `Năm nay khoảng <b>${b}</b> triệu/công. Năm bình thường: ${a} triệu/công.`, money1: (a) => `Khoảng <b>${a}</b> triệu/công mỗi năm.`,
       tot: (h, v) => `Cả ruộng ${h} ha: khoảng ${v} triệu.`, noMoney: "Chưa đủ số liệu lợi nhuận cho cách trồng này", moneySrc: "Trung vị lợi nhuận đã công bố · 1 công = 1.000 m²",
       whyH: "Vì sao chọn cách này", riskH: "Cần lưu ý", scoreH: "Điểm của cách trồng (1–5)", sc: { salt: "An toàn mặn", water: "Tiết kiệm nước", soil: "Tốt cho đất", income: "Thu nhập" },
@@ -98,7 +98,7 @@ const Dash = (() => {
       clash: (xs) => `Careful: crops meet salty water in ${xs.join(", ")}. Measure salt before sowing; wait for rain if it is still salty.`, noClash: "Good: this plan avoids the salty months",
       ninoNote: "This is likely a drought-and-salt year (El Niño, NOAA: over 83%). Salt may come earlier and stronger.", thisYr: "This year", years: { typical: "Typical year", elnino: "El Niño year" },
       moneyYr: "This year, a possible drought-and-salt year.", moneyTyp: (a) => `Typical year: ${a} M₫/công.`, moneySrcS: "Middle value of the published profit figures · 1 công = 1,000 m²",
-      rbKey: "Coloured bar = canal water", rbNow: "This month", usedT: (n) => `Changed to: ${n}`, editField: "Edit field", langH: "Language · Ngôn ngữ",
+      rbKey: "Coloured bar = canal water", rbNow: "This month", rbKeyA: "Coloured bar = canal water", usedT: (n) => `Changed to: ${n}`, editField: "Edit field", langH: "Language · Ngôn ngữ",
       moneyH: "Estimated profit", money: (a, b) => `This year about <b>${b}</b> M₫/công. Typical year: ${a} M₫/công.`, money1: (a) => `About <b>${a}</b> M₫/công a year.`,
       tot: (h, v) => `Whole field ${h} ha: about ${v} M₫.`, noMoney: "Not enough profit data for this plan yet", moneySrc: "Median of published profit figures · 1 công = 1,000 m²",
       whyH: "Why this plan", riskH: "Watch out for", scoreH: "Plan scores (1–5)", sc: { salt: "Salt safety", water: "Saves water", soil: "Better soil", income: "Income" },
@@ -221,8 +221,8 @@ const Dash = (() => {
     /* the big strip (Simple, zoom) shows plain month numbers in Vietnamese, names the bar and marks this month in words */
     const mo = (m) => (!small && lang() === "vi" ? String(m + 1) : MS()[m]);
     return `<ol class="rb${small ? " sm" : ""}">${order.map((m, i) => { const code = c.months[m]; return `<li class="${code[0] === "-" ? "rest" : code[0]}${m === CM ? " now" : ""}" title="${esc(cropName(c, code))}">${iconOf(code)}<span class="mo">${mo(m)}</span><i class="sb ${lvs[i]}"></i></li>` }).join("")}</ol>
-      ${small ? "" : `<span class="rb-now">${esc(T("rbNow"))}</span>`}
-      <span class="rb-key">${small ? "" : `<span class="rb-kh">${esc(T("rbKey"))}</span>`}${crops.map((k) => `<span>${iconOf(k)}${esc(T("crop")[k])}</span>`).join("")}${["ngot", "lo", "man"].filter((k) => small || lvs.includes(k)).map((k) => `<span><i class="sb ${k}"></i>${esc(T("lv")[k])}</span>`).join("")}</span>`;
+      <span class="rb-now">${esc(T("rbNow"))}</span>
+      <span class="rb-key"><span class="rb-kh">${esc(T(small ? "rbKeyA" : "rbKey"))}</span>${crops.map((k) => `<span>${iconOf(k)}${esc(T("crop")[k])}</span>`).join("")}${["ngot", "lo", "man"].filter((k) => lvs.includes(k)).map((k) => `<span><i class="sb ${k}"></i>${esc(T("lv")[k])}</span>`).join("")}</span>`;
   }
   function fieldTabs() {
     const f0 = fieldSel(); if (!adv() && st.fields.length < 2) return "";
@@ -253,9 +253,7 @@ const Dash = (() => {
   /* SIMPLE: few big cards, plain words, one big icon and one number each */
   function simplePage(f) {
     const x = facts(f), { c } = x, mon = shownMoney(f, x), k0 = c.months[CM][0];
-    /* this year and a normal year side by side, so the figure agrees with the one shown when the plan was chosen */
-    const two = mon && x.pe && x.pt && nf(x.pe.mid / 10, 1) !== nf(x.pt.mid / 10, 1);
-    const totOf = (m) => (f.size ? " " + T("tot")(haS(f.size), big(m.mid * f.size)) : "");
+    const two = mon && moneyYears(f, x);
     /* order: what to do now, the water, the warning; then dates, money and the year; rare actions last */
     return `<div class="dv-s">
       <div class="dv-splan"><div><span>${esc(T("yourPlan"))}</span><b>${esc(L(c.name))}</b></div></div>
@@ -270,7 +268,7 @@ const Dash = (() => {
       ${x.clash.length ? `<div class="s-card s-warn">${ic("warn", 30)}<div><b>${esc(T("clash")(x.clash))}</b>${x.nino ? `<p>${ic("sun", 16)}${esc(T("ninoShort"))}</p>` : ""}</div></div>` : x.nino ? `<div class="s-card s-warn s-ok">${ic("check", 30)}<div><b>${esc(T("noClash"))}</b></div></div>` : ""}
       ${remindCard(f)}
       <div class="s-card s-money"><span class="s-k">${ic("coin", 18)}${esc(T("moneyH"))}</span>
-        ${mon ? `<div class="s-row"><span class="s-coin" aria-hidden="true">${ic("coin", 46)}</span><div><b class="s-num">${mon.per}</b><span class="s-unit">${esc(T("perCong"))}</span></div></div>${two ? `<span class="s-sub s-yr">${esc(T("moneyYr"))}${esc(totOf(x.shown))}</span><span class="s-sub s-yr">${esc(T("moneyTyp")(nf(x.pt.mid / 10, 1)))}${esc(totOf(x.pt))}</span>` : mon.tot ? `<span class="s-sub">${esc(mon.tot)}</span>` : ""}` : `<span class="s-sub">${esc(T("noMoney"))}</span>`}
+        ${mon ? `<div class="s-row"><span class="s-coin" aria-hidden="true">${ic("coin", 46)}</span><div><b class="s-num">${mon.per}</b><span class="s-unit">${esc(T("perCong"))}</span></div></div>${two ? two.map((t) => `<span class="s-sub s-yr">${esc(t)}</span>`).join("") : mon.tot ? `<span class="s-sub">${esc(mon.tot)}</span>` : ""}` : `<span class="s-sub">${esc(T("noMoney"))}</span>`}
         <small>${esc(T("moneySrcS"))}</small></div>
       <button type="button" class="s-card s-cal" data-dv="plan"><span class="s-k">${ic("cal", 18)}${esc(T("ribbonH"))}</span>${ribbon(f, c)}<span class="dv-more">${esc(T("tapPlan"))} ${ic("chev", 14)}</span></button>
       <div class="dv-acts s-acts"><button type="button" class="btn" data-dv="paper">${ic("print", 18)}<span>${esc(T("print"))}</span></button>
@@ -279,6 +277,12 @@ const Dash = (() => {
       <button type="button" class="btn dv-delrow" data-dv="delask">${ic("trash", 18)}<span>${esc(T("delThis"))}</span></button></div>`;
   }
   const planNo = (f) => { const id = cardOf(f).id, r = rank(f).find((y) => y.c.id === id); return r && r.no ? `<div class="s-card s-warn dv-planno" role="alert">${ic("warn", 30)}<div><b>${esc(T("planNo"))}</b></div><button type="button" class="btn gold" data-dv="choose">${ic("swap", 18)}<span>${esc(T("change"))}</span></button></div>` : "" };
+  /* this year and a normal year side by side, so the figure agrees with the one shown when the plan was chosen */
+  function moneyYears(f, x) {
+    if (!(x.shown && x.pe && x.pt) || nf(x.pe.mid / 10, 1) === nf(x.pt.mid / 10, 1)) return null;
+    const totOf = (m) => (f.size ? " " + T("tot")(haS(f.size), big(m.mid * f.size)) : "");
+    return [T("moneyYr") + totOf(x.shown), T("moneyTyp")(nf(x.pt.mid / 10, 1)) + totOf(x.pt)];
+  }
   function shownMoney(f, x) {
     const m = x.shown; if (!m) return null;
     return { per: nf(m.mid / 10, 1), tot: f.size ? T("tot")(haS(f.size), big(m.mid * f.size)) : "" };
@@ -328,7 +332,8 @@ const Dash = (() => {
     return `<div class="a-months"><div class="a-mhead"><span class="a-mut">${esc(T("viewing"))}</span><b>${esc(MLONG(m0))}${m0 === CM ? ` <em>${esc(T("nowTag"))}</em>` : ""}</b>
         ${m0 !== CM ? `<button type="button" class="a-reset" data-dvsel="now">${ic("back", 14)}<span>${esc(T("resetM"))}</span></button>` : ""}</div>
       <div class="a-mstrip" role="group" aria-label="${esc(T("pickM"))}">${[...Array(12)].map((_, m) => { const lv = level(fieldSalt(f.site, m, nino)), code = c.months[m];
-        return `<button type="button" class="lv-${lv}${m === m0 ? " on" : ""}${m === CM ? " now" : ""}" data-dvsel="${m}" aria-pressed="${m === m0}" aria-label="${esc(MLONG(m))}: ${esc(T("lv")[lv])}, ${esc(cropName(c, code))}">${iconOf(code)}<span>${MS()[m]}</span><i></i></button>` }).join("")}</div></div>`;
+        return `<button type="button" class="lv-${lv}${m === m0 ? " on" : ""}${m === CM ? " now" : ""}" data-dvsel="${m}" aria-pressed="${m === m0}" aria-label="${esc(MLONG(m))}: ${esc(T("lv")[lv])}, ${esc(cropName(c, code))}">${iconOf(code)}<span>${MS()[m]}</span><i></i></button>` }).join("")}</div>
+      <p class="rb-key a-mkey"><span class="rb-kh">${esc(T("rbKeyA"))}</span>${["ngot", "lo", "man"].filter((k) => [...Array(12)].some((_, m) => level(fieldSalt(f.site, m, nino)) === k)).map((k) => `<span><i class="sb ${k}"></i>${esc(T("lv")[k])}</span>`).join("")}<span><i class="a-nowdot"></i>${esc(T("rbNow"))}</span></p></div>`;
   }
   function advData(f) {
     const x = facts(f), { c, s, nino } = x, m = mv(), g = fieldSalt(f.site, m, nino), lv = level(g);
@@ -341,30 +346,31 @@ const Dash = (() => {
     return { ...x, m, g, lv, crop, safe, t, k, rainA, et0A, job, nm: (m + nk) % 12, mon: shownMoney(f, x), r: rank(f) };
   }
   function advPage(f) {
-    const d = advData(f), { c, s, nino, m } = d, best = d.r.find((y) => !y.no);
+    const d = advData(f), { c, s, nino, m } = d, best = d.r.find((y) => !y.no), cur = d.r.find((y) => y.c.id === f.rot), two = d.mon && moneyYears(f, d);
     const rain = d.rainA.reduce((a, b) => a + b, 0), et0 = d.et0A.reduce((a, b) => a + b, 0), cropM = c.months[m][0] === "R" || c.months[m][0] === "U";
     return `<div class="dv-a">
       <div class="a-bar"><div><span class="a-mut">${esc(T("yourPlan"))}</span><b>${esc(L(c.name))}</b></div><span class="a-bar-r"><span class="a-pill${nino ? " hot" : ""}">${esc(nino ? T("years").elnino : T("years").typical)}</span><button type="button" class="dv-deltop" data-dv="delask" aria-label="${esc(T("delThis"))}: ${esc(f.name)}" title="${esc(T("delThis"))}">${ic("trash", 20)}</button></span></div>
       ${planNo(f)}
-      ${remindCard(f)}
-      <div class="a-duo">${progressCard(f)}${suggestions(f)}</div>
       ${monthStrip(f, c)}
+      ${d.clash.length ? `<div class="s-card s-warn a-warn">${ic("warn", 26)}<div><b>${esc(T("clash")(d.clash))}</b></div></div>` : ""}
       <p class="a-tip">${ic("expand", 14)}${esc(T("tapTile"))}</p>
       <div class="a-grid">
+        ${tile("job", "a-g5", esc(T("monthOn")(m + 1)), `<p class="a-job">${iconOf(c.months[m])}<b>${esc(d.job)}</b></p><p class="a-mut">${esc(T("nextM")(d.nm + 1))}: ${esc(jobAt(c, d.nm))}</p>`, "")}
         ${tile("salt", "a-g1", `${esc(T("saltA"))} · ${esc(MS()[m])}`, `${gauge(d.g)}<p class="a-num">${nf(d.g, 1)}<small>‰</small></p><p class="a-mut lv-${d.lv}">${esc(T("lv")[d.lv])} · ${esc(T("lvD")[d.lv])}</p>`, T("est"))}
         ${tile("chart", "a-g2", esc(T("chartH")), lineChart(f), lang() === "vi" ? "Mặn: trạm đo + NASA POWER (ước tính) · Mưa: NASA GPM IMERG · chạm một tháng để xem" : "Salt: stations + NASA POWER (estimate) · Rain: NASA GPM IMERG · tap a month to view it")}
         ${tile("safe", "a-g3", esc(T("safeH")), `${donut(d.safe, d.crop.length, T("safeL"))}<p class="a-mut">${cropM ? esc((level(fieldSalt(f.site, m, nino)) === "man" ? T("mBad") : T("mOk"))(MS()[m])) : esc(T("mRest")(MS()[m]))}</p>`, T("est"))}
-        ${tile("money", "a-g4", esc(T("moneyH")), d.mon ? `<p class="a-num big">${d.mon.per}<small> ${esc(T("perCongS"))}</small></p>${d.shown ? rangeBar(d.shown) : ""}${d.mon.tot ? `<p class="a-mut">${esc(d.mon.tot)}</p>` : ""}` : `<p class="a-mut">${esc(T("noMoney"))}</p>`, T("moneySrc"))}
-        ${tile("job", "a-g5", esc(T("monthOn")(m + 1)), `<p class="a-job">${iconOf(c.months[m])}<b>${esc(d.job)}</b></p><p class="a-mut">${esc(T("nextM")(d.nm + 1))}: ${esc(jobAt(c, d.nm))}</p>`, "")}
+        ${tile("money", "a-g4", esc(T("moneyH")), d.mon ? `<p class="a-num big">${d.mon.per}<small> ${esc(T("perCongS"))}</small></p>${d.shown ? rangeBar(d.shown) : ""}${two ? two.map((t) => `<p class="a-mut">${esc(t)}</p>`).join("") : d.mon.tot ? `<p class="a-mut">${esc(d.mon.tot)}</p>` : ""}` : `<p class="a-mut">${esc(T("noMoney"))}</p>`, T("moneySrc"))}
         ${tile("scores", "a-g6", esc(T("scoreH")), `<div class="a-bars">${["salt", "water", "soil", "income"].map((q) => { const v = c.scores[q]; return `<div><span>${esc(T("sc")[q])}</span><i><b style="width:${v == null ? 0 : (v - 1) / 4 * 100}%"></b></i><em>${v == null ? "–" : nf(v, 1)}</em></div>` }).join("")}</div>${c.confidence ? `<p class="a-mut">${esc(T("conf"))}: ${esc(T("confL")[c.confidence] || c.confidence)}</p>` : ""}`, T("scSrc"))}
         ${tile("nums", "a-g7", `${esc(T("nums"))} · ${esc(MS()[m])}`, `<dl class="a-kpi"><div><dt>${esc(T("rainMo"))}</dt><dd>${nf(Math.round(d.rainA[m] || 0), 0)}<small> mm</small><small class="a-kn">NASA GPM IMERG</small></dd></div>
           <div><dt>${esc(T("needMo"))}</dt><dd>${nf(Math.round(d.et0A[m] || 0), 0)}<small> mm</small><small class="a-kn">NASA POWER</small></dd></div>
           <div><dt>${esc(T("cropsY"))}</dt><dd>${typeof s.crops === "number" ? nf(s.crops, 1) : "–"}<small class="a-kn">NASA MODIS NDVI</small></dd></div>
           <div><dt>${esc(T("rainY"))}</dt><dd>${nf(Math.round(rain), 0)}<small> mm</small><small class="a-kn">${esc(T("needY"))}: ${nf(Math.round(et0), 0)} mm</small></dd></div></dl>`, "")}
-        ${tile("rank", "a-g8", esc(T("rankH")), `<ol class="a-rank">${d.r.slice(0, 5).map(({ c: y, s: sc, no }) => `<li class="${y.id === f.rot ? "cur" : ""}${no ? " no" : ""}"><span>${esc(L(y.name))}${no ? `<small class="a-no">${esc(T("notHere"))}</small>` : ""}</span><i><b style="width:${((sc - 1) / 4 * 100).toFixed(0)}%"></b></i><em>${nf(sc, 1)}</em></li>`).join("")}</ol>${best && best.c.id !== f.rot ? `<p class="a-mut">${esc(T("bestFor")(L(best.c.name)))}</p>` : ""}`, T("rankSrc"))}
+        ${tile("rank", "a-g8", esc(T("rankH")), `<ol class="a-rank">${d.r.slice(0, 5).map(({ c: y, s: sc, no }) => `<li class="${y.id === f.rot ? "cur" : ""}${no ? " no" : ""}"><span>${esc(L(y.name))}${no ? `<small class="a-no">${esc(T("notHere"))}</small>` : ""}</span><i><b style="width:${((sc - 1) / 4 * 100).toFixed(0)}%"></b></i><em>${nf(sc, 1)}</em></li>`).join("")}</ol>${best && best.c.id !== f.rot && (!cur || nf(best.s, 1) !== nf(cur.s, 1)) ? `<p class="a-mut">${esc(T("bestFor")(L(best.c.name)))}</p>` : ""}`, T("rankSrc"))}
         ${tile("rib", "a-g9", `${ic("cal", 14)}${esc(T("ribbonH"))}`, `<div class="a-rib">${ribbon(f, c, true)}</div>`, T("est"))}
         ${nino ? tile("nino", "a-g10 hot", esc(T("ninoH")), `<p class="a-num">&gt;83<small>%</small></p><p class="a-mut">${esc(T("ninoNote"))}</p>`, "NOAA CPC") : ""}
       </div>
+      ${remindCard(f)}
+      <div class="a-duo">${progressCard(f)}${suggestions(f)}</div>
       ${yearsBlock(f)}
       <div class="dv-acts a-acts"><button type="button" class="btn gold" data-dv="choose">${ic("swap", 16)}<span>${esc(T("change"))}</span></button><button type="button" class="btn" data-dv="plan">${ic("cal", 16)}<span>${esc(T("tapPlanS"))}</span></button><button type="button" class="btn" data-dv="paper">${ic("print", 16)}<span>${esc(T("print"))}</span></button>
         <button type="button" class="btn" data-dv="editmap">${ic("map", 16)}<span>${esc(T("editMap"))}</span></button><button type="button" class="btn" data-dv="opts">${ic("edit", 16)}<span>${esc(T("editAns"))}</span></button><button type="button" class="btn" data-open="sources"><span>${esc(T("sources"))}</span></button></div>
