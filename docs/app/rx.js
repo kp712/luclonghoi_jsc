@@ -9,11 +9,11 @@ const Core = (() => {
   const subs = [];
   const L = (o) => (o == null ? "" : typeof o === "string" ? o : o[lang] || o.en || "");
   const setLang = (l) => { lang = l; try { localStorage.setItem("mre-lang", l); } catch (e) {} document.documentElement.lang = l; subs.forEach((f) => f(l)); };
-  const KEYS = ["salt", "water", "soil", "income"];
+  const KEYS = ["salt", "water", "soil", "income", "pests"];
   const UI = {
     score: { water: { vi: "Tiết kiệm nước", en: "Saves water" }, salt: { vi: "An toàn mặn", en: "Salt safety" },
-             soil: { vi: "Tốt cho đất", en: "Better soil" }, income: { vi: "Thu nhập", en: "Income" } },
-    scoreShort: { water: { vi: "Nước", en: "Water" }, salt: { vi: "Mặn", en: "Salt" }, soil: { vi: "Đất", en: "Soil" }, income: { vi: "Thu nhập", en: "Income" } },
+             soil: { vi: "Tốt cho đất", en: "Better soil" }, income: { vi: "Thu nhập", en: "Income" }, pests: { vi: "Ít sâu bệnh", en: "Fewer pests" } },
+    scoreShort: { water: { vi: "Nước", en: "Water" }, salt: { vi: "Mặn", en: "Salt" }, soil: { vi: "Đất", en: "Soil" }, income: { vi: "Thu nhập", en: "Income" }, pests: { vi: "Sâu bệnh", en: "Pests" } },
     levels: [{ vi: "Không quan trọng", en: "Not important" }, { vi: "Hơi quan trọng", en: "A little" }, { vi: "Quan trọng", en: "Important" }, { vi: "Rất quan trọng", en: "Very important" }],
     salt: { high: { vi: "Mặn cao", en: "High salt" }, medium: { vi: "Mặn vừa", en: "Medium salt" }, low: { vi: "Mặn thấp", en: "Low salt" } },
     conf: { high: { vi: "Tin cậy cao", en: "High confidence" }, medium: { vi: "Tin cậy vừa", en: "Medium confidence" }, low: { vi: "Tin cậy thấp", en: "Low confidence" } },

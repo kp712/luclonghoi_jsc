@@ -16,7 +16,7 @@ ppEye: "Your 12-month plan", ppScore: "Plan score", ppOf: "out of 100", ppGrade:
 ppGradeA: "Very good fit for this area and what matters to you.", ppGradeB: "Good fit. A few months could be better.", ppGradeC: "It works, with clear risks. Try a change.", ppGradeD: "Risky here. Try changing the plan.",
 ppKeep: "Keep this plan", ppChange: "Change this plan", ppHint: "Change the months yourself, and the score updates as you go.",
 ppRev: "See my plan's score, or change it", ppNoScore: "No score for this area yet.",
-ppK: { income: "Income", salt: "Weather & salt", water: "Water", soil: "Soil" }, ppLeg: { R: "Rice", T: "Salt-tolerant rice", S: "Shrimp", U: "Upland crop", "-": "Rest" },
+ppK: { income: "Income", salt: "Weather & salt", water: "Water", soil: "Soil", pests: "Pests" }, ppLeg: { R: "Rice", T: "Salt-tolerant rice", S: "Shrimp", U: "Upland crop", "-": "Rest" },
 plGuideBtn: "How to use this page", gdOf: (a, b) => `Step ${a} of ${b}`, gdNext: "Next", gdBack: "Back", gdDone: "Got it", gdSkip: "Skip",
 gd: [["Pick your area", "Tap the area where your field is. The label under each name shows how salty it gets."],
 ["Choose how to start", "Start from an empty year, or from one of our plans for this area, then change it."],
@@ -32,7 +32,7 @@ ppEye: "Kế hoạch 12 tháng của bạn", ppScore: "Điểm kế hoạch", pp
 ppGradeA: "Rất hợp với khu vực này và điều bạn quan tâm.", ppGradeB: "Khá hợp. Vài tháng có thể tốt hơn.", ppGradeC: "Làm được, nhưng có rủi ro rõ. Hãy thử thay đổi.", ppGradeD: "Rủi ro ở đây. Hãy thử đổi kế hoạch.",
 ppKeep: "Giữ kế hoạch này", ppChange: "Thay đổi kế hoạch này", ppHint: "Tự đổi các tháng, điểm sẽ cập nhật ngay.",
 ppRev: "Xem điểm kế hoạch, hoặc thay đổi", ppNoScore: "Chưa có điểm cho khu vực này.",
-ppK: { income: "Thu nhập", salt: "Thời tiết & mặn", water: "Nước", soil: "Đất" }, ppLeg: { R: "Lúa", T: "Lúa chịu mặn", S: "Tôm", U: "Cây màu", "-": "Nghỉ" },
+ppK: { income: "Thu nhập", salt: "Thời tiết & mặn", water: "Nước", soil: "Đất", pests: "Sâu bệnh" }, ppLeg: { R: "Lúa", T: "Lúa chịu mặn", S: "Tôm", U: "Cây màu", "-": "Nghỉ" },
 plGuideBtn: "Cách dùng trang này", gdOf: (a, b) => `Bước ${a} / ${b}`, gdNext: "Tiếp", gdBack: "Quay lại", gdDone: "Đã hiểu", gdSkip: "Bỏ qua",
 gd: [["Chọn khu vực", "Bấm vào khu vực có ruộng của bạn. Nhãn dưới mỗi tên cho biết mức mặn."],
 ["Chọn cách bắt đầu", "Bắt đầu từ một năm trống, hoặc từ một kế hoạch của chúng tôi cho khu vực này, rồi sửa lại."],
@@ -76,14 +76,14 @@ Object.assign(STR.en, {
 step1hintTap: "Tap an area on the map to see its typical year and open everything about it.",
 planAuto: "Shown in the plan for now. Tap to choose it",
 curDefault: "Guessed from satellite. Tap to change",
-wDefault: "Starting point: all four count the same. Tap a goal or change a level to set your own.",
+wDefault: "Starting point: all five count the same. Tap a goal or change a level to set your own.",
 congNote: "1 công = 1,000 m² = 1/10 ha. Figures per công are the per-ha figures divided by 10."
 });
 Object.assign(STR.vi, {
 step1hintTap: "Chạm vào một khu vực trên bản đồ để xem một năm điển hình và mở mọi thông tin của khu vực đó.",
 planAuto: "Kế hoạch đang tạm theo phương án này. Chạm để chọn",
 curDefault: "Tạm đoán theo ảnh vệ tinh. Chạm để đổi",
-wDefault: "Đang để sẵn: bốn mục quan trọng như nhau. Chạm một mục tiêu hoặc đổi mức để chọn theo ý bà con.",
+wDefault: "Đang để sẵn: năm mục quan trọng như nhau. Chạm một mục tiêu hoặc đổi mức để chọn theo ý bà con.",
 congNote: "1 công = 1.000 m² = 1/10 ha. Số cho mỗi công là số mỗi ha chia 10."
 });
 Object.assign(STR.en, {
@@ -131,8 +131,8 @@ const PL = () => (typeof Lab !== "undefined" ? Lab : null) || window.PlanLab || 
 /* ---------- state (same names and defaults as Draft 3) ---------- */
 let lang = load("mre-lang") === "en" ? "en" : "vi", ui = "simple", mode = "typical", site = null, cur = "rice3", planId = null, upCrop = null;
 ui = "advanced";   /* one mode only: full detail (Simple view removed) */
-const KEYS = ["water", "income", "soil", "salt"];
-const w = { water: 2, income: 2, soil: 2, salt: 2 };
+const KEYS = ["water", "income", "soil", "salt", "pests"];
+const w = { water: 2, income: 2, soil: 2, salt: 2, pests: 2 };
 let step = 1, cmp = [], exOn = false, exGo = false, curPicked = false, wPicked = false;
 let fields = []; try { fields = JSON.parse(load("mre-fields") || "[]").filter(f => DATA.sites.some(s => s.id === f.site)) } catch (e) { fields = [] }
 let fieldId = null, editId = null, month = new Date().getMonth(), planText = [];
@@ -278,12 +278,12 @@ const ABOUT = {
 en: [["What it is", "A phone-first tool for rice farmers in coastal Sóc Trăng (Mekong Delta). It compares the farmer's current rotation with local alternatives (rice–shrimp, rice with a dry-season upland crop, salt-tolerant rice with a rest), ranks them by what the farmer cares about, and turns the chosen one into a 12-month plan. English and Vietnamese."],
 ["NASA data in the app", "Rain: NASA GPM IMERG monthly (~10 km, Dec 2000 – Nov 2024). Water demand (ET₀): FAO-56 Penman–Monteith from NASA POWER temperature, humidity, wind and sunlight. Field greenness and crops per year: NASA MODIS NDVI (MOD13Q1, 250 m) through NASA AppEEARS. Heat days: NASA POWER. The 7-day strip in the month panel reads NASA POWER daily data live."],
 ["Other data", "El Niño seasons and forecast: NOAA's Oceanic Niño Index and CPC outlook. Topsoil: SoilGrids 2.0 (ISRIC, not NASA). Salt: an estimate from provincial river-station records and public reports. Satellites cannot measure salt in rice fields."],
-["How the scores work", "Each option gets water, income, soil and weather & salt scores from 1.0 to 5.0, computed at each area from the data above and published profit figures. The sliders set the weights; the match is the weighted average. Full formulas are in the project README under \"How the scores are set\"."],
+["How the scores work", "Each option gets water, income, soil, pests and weather & salt scores from 1.0 to 5.0, computed at each area from the data above and published profit figures. Pests: rice pest pressure follows NASA POWER mean temperature (brown planthopper, Horgan et al. 2020), upland crop months count in full, shrimp months rise with hot and cold-snap days, and rest months and other crops break the rice pest cycle. The sliders set the weights; the match is the weighted average. Full formulas are in the project README under \"How the scores are set\"."],
 ["Limits", "The data describe the area, not one field, and the past, not a forecast. The plan is a starting point to talk over with a local agricultural extension officer."]],
 vi: [["Dự án là gì", "Công cụ ưu tiên điện thoại cho nông dân trồng lúa ven biển Sóc Trăng (Đồng bằng sông Cửu Long). Công cụ so sánh cách luân canh hiện tại với các lựa chọn tại chỗ (lúa – tôm, lúa luân canh với cây màu mùa khô, lúa chịu mặn có thời gian nghỉ), xếp hạng theo điều nông dân quan tâm và biến lựa chọn thành kế hoạch 12 tháng. Có tiếng Anh và tiếng Việt."],
 ["Dữ liệu NASA trong ứng dụng", "Mưa: NASA GPM IMERG theo tháng (~10 km, 12/2000 – 11/2024). Nhu cầu nước (ET₀): phương pháp Penman–Monteith FAO-56 từ nhiệt độ, độ ẩm, gió và nắng của NASA POWER. Độ xanh của ruộng và số vụ mỗi năm: NASA MODIS NDVI (MOD13Q1, 250 m) qua NASA AppEEARS. Số ngày nắng nóng: NASA POWER. Dải 7 ngày trong phần từng tháng đọc trực tiếp dữ liệu ngày của NASA POWER."],
 ["Dữ liệu khác", "Các mùa El Niño và dự báo: chỉ số ONI và bản tin CPC của NOAA. Đất mặt: SoilGrids 2.0 (ISRIC, không phải NASA). Độ mặn: ước tính từ số liệu trạm đo trên sông của tỉnh và báo cáo công khai. Vệ tinh không đo được độ mặn trong ruộng lúa."],
-["Cách tính điểm", "Mỗi lựa chọn có điểm nước, thu nhập, đất và thời tiết & mặn từ 1,0 đến 5,0, tính cho từng khu vực từ dữ liệu trên và số liệu lợi nhuận đã công bố. Thanh trượt đặt trọng số; mức hợp là trung bình có trọng số. Công thức đầy đủ có trong README của dự án, mục \"How the scores are set\"."],
+["Cách tính điểm", "Mỗi lựa chọn có điểm nước, thu nhập, đất, sâu bệnh và thời tiết & mặn từ 1,0 đến 5,0, tính cho từng khu vực từ dữ liệu trên và số liệu lợi nhuận đã công bố. Sâu bệnh: áp lực sâu hại lúa theo nhiệt độ trung bình của NASA POWER (rầy nâu, Horgan và cộng sự 2020), tháng trồng màu tính đủ, tháng nuôi tôm tăng theo số ngày nắng nóng và ngày lạnh đột ngột, còn tháng nghỉ và cây trồng khác cắt vòng đời sâu hại lúa. Thanh trượt đặt trọng số; mức hợp là trung bình có trọng số. Công thức đầy đủ có trong README của dự án, mục \"How the scores are set\"."],
 ["Giới hạn", "Dữ liệu mô tả cả khu vực, không phải một thửa ruộng, và mô tả quá khứ, không phải dự báo. Kế hoạch là điểm khởi đầu để trao đổi với cán bộ khuyến nông địa phương."]]
 };
 
@@ -628,7 +628,7 @@ fieldId = id; seasons = (f.seasons || SEAS_OF[f.cur] || SEAS_OF.rice3).slice(); 
 function restoreField() { const id = load("mre-last"); if (id && fields.some(f => f.id === id)) openField(id, true) }
 
 /* ---------- step 2: priorities (sliders, tap levels, quick goals, limits) ---------- */
-const GOALS = { salt: { salt: 3, water: 2, income: 1, soil: 1 }, profit: { income: 3, salt: 1, water: 1, soil: 1 }, water: { water: 3, salt: 2, income: 1, soil: 1 } };
+const GOALS = { salt: { salt: 3, water: 2, income: 1, soil: 1, pests: 1 }, profit: { income: 3, salt: 1, water: 1, soil: 1, pests: 1 }, water: { water: 3, salt: 2, income: 1, soil: 1, pests: 1 } };
 const GI = { salt: "salt", profit: "star", water: "drop" };
 function initSliders() {
 if (!has("#sliders")) return;

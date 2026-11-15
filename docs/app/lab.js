@@ -20,7 +20,7 @@ plLegRain: "Rainy month (rain ≥ crop water demand)", plLegDry: "Dry month", pl
 plUndo: "Undo", plReset: "Reset", plSeasons: "Seasons in your plan", plSeasonN: n => `Season ${n}`,
 plMonthsN: n => `${n} month${n === 1 ? "" : "s"}`, plNoHarvest: "too short to harvest", plNoPlant: "Nothing planted yet.",
 plYou: "Your plan", plBest: "Our best plan for these priorities", plLoadBest: "Load this plan", plOf100: "out of 100", plGrade: "Grade",
-plBarProfit: "Income", plBarSalt: "Weather & salt", plBarWater: "Water", plBarSoil: "Soil",
+plBarProfit: "Income", plBarSalt: "Weather & salt", plBarWater: "Water", plBarSoil: "Soil", plBarPests: "Pests",
 plBarNote: "Bars show the 1–5 card scores; longer is better (for Water: longer means less canal water).",
 plProfit: v => `≈ ${v} M ₫/ha a year`, plProfitNA: c => `not scored: no checked profit figure for ${c} yet`,
 plWater: v => `${v} mm canal water a year`, plSaltMonths: n => `${n} crop month${n === 1 ? "" : "s"} in salt months`,
@@ -38,11 +38,11 @@ plApply: n => `Apply suggested improvement (+${n} points)`,
 plSugFallow: (c, r) => `Rest the field in ${r} instead of ${c}`, plSugShrimp: (c, r) => `Raise shrimp in ${r} instead of ${c}`,
 plSugShift: (s, d) => `Start ${s} one month ${d < 0 ? "earlier" : "later"}`, plSugTol: s => `Use salt-tolerant rice for ${s}`,
 plSugCrop: (a, b) => `Grow ${b} instead of ${a}`, plSugShrimpSeason: r => `Raise one shrimp season in ${r}, over the salt months`,
-plPrio: "Scored with your priorities from Explorer:", plK: { water: "Water", income: "Income", soil: "Soil", salt: "Weather & salt" },
+plPrio: "Scored with your priorities from Explorer:", plK: { water: "Water", income: "Income", soil: "Soil", salt: "Weather & salt", pests: "Pests" },
 plView: { typical: "Typical year", elnino: "El Niño year" }, plLevel: { low: "Salt: low", medium: "Salt: medium", high: "Salt: high" },
 plHowH: "How this score works",
 plHow: [
-"The four scores are the app's published card rules (the same formulas as the rotation cards), applied to the calendar you paint. Your plan score is their average, weighted by your priorities, turned into 0–100 as (score − 1) ÷ 4 × 100. Grades: A from 80, B from 65, C from 50, D below 50.",
+"The five scores are the app's published card rules (the same formulas as the rotation cards), applied to the calendar you paint. Your plan score is their average, weighted by your priorities, turned into 0–100 as (score − 1) ÷ 4 × 100. Grades: A from 80, B from 65, C from 50, D below 50.",
 "Data: rain from NASA GPM IMERG; crop water demand (ET₀) and hot days from NASA POWER; salt months and salinity are estimates from public station reports, not satellite; profit is the median of published figures (2020–2025, million ₫ per ha).",
 "Each run of the same crop is one season. A season shorter than its crop needs earns no harvest: rice 3 months (90–100 days), upland crops 3 months and shrimp 6 months (the shortest seasons in the app's own calendars). Painted rice is matched to winter–spring, summer–autumn or autumn–winter rice by the month it starts.",
 "This is a planning aid, not advice for your exact field. Talk it over with your local extension officer before you change your calendar."
@@ -62,7 +62,7 @@ plLegRain: "Tháng mưa (mưa ≥ nhu cầu nước của cây)", plLegDry: "Th�
 plUndo: "Hoàn tác", plReset: "Đặt lại", plSeasons: "Các vụ trong kế hoạch", plSeasonN: n => `Vụ ${n}`,
 plMonthsN: n => `${n} tháng`, plNoHarvest: "quá ngắn để thu hoạch", plNoPlant: "Chưa trồng gì.",
 plYou: "Kế hoạch của bạn", plBest: "Kế hoạch tốt nhất của chúng tôi theo ưu tiên này", plLoadBest: "Dùng kế hoạch này", plOf100: "trên 100", plGrade: "Hạng",
-plBarProfit: "Thu nhập", plBarSalt: "Thời tiết & mặn", plBarWater: "Nước", plBarSoil: "Đất",
+plBarProfit: "Thu nhập", plBarSalt: "Thời tiết & mặn", plBarWater: "Nước", plBarSoil: "Đất", plBarPests: "Sâu bệnh",
 plBarNote: "Thanh thể hiện điểm thẻ từ 1 đến 5; càng dài càng tốt (với Nước: càng dài là càng ít nước kênh).",
 plProfit: v => `khoảng ${v} triệu đồng/ha/năm`, plProfitNA: c => `chưa chấm: chưa có số liệu lợi nhuận đã kiểm chứng cho ${c}`,
 plWater: v => `${v} mm nước tưới từ kênh mỗi năm`, plSaltMonths: n => `${n} tháng có cây trồng trong mùa mặn`,
@@ -80,11 +80,11 @@ plApply: n => `Áp dụng gợi ý cải thiện (+${n} điểm)`,
 plSugFallow: (c, r) => `Cho ruộng nghỉ vào ${r} thay vì ${c}`, plSugShrimp: (c, r) => `Nuôi tôm vào ${r} thay vì ${c}`,
 plSugShift: (s, d) => `Xuống giống ${s} ${d < 0 ? "sớm" : "muộn"} hơn một tháng`, plSugTol: s => `Dùng lúa chịu mặn cho ${s}`,
 plSugCrop: (a, b) => `Trồng ${b} thay vì ${a}`, plSugShrimpSeason: r => `Nuôi một vụ tôm vào ${r}, trùm qua các tháng mặn`,
-plPrio: "Chấm điểm theo ưu tiên của bạn ở phần Khám phá:", plK: { water: "Nước", income: "Thu nhập", soil: "Đất", salt: "Thời tiết & mặn" },
+plPrio: "Chấm điểm theo ưu tiên của bạn ở phần Khám phá:", plK: { water: "Nước", income: "Thu nhập", soil: "Đất", salt: "Thời tiết & mặn", pests: "Sâu bệnh" },
 plView: { typical: "Năm bình thường", elnino: "Năm El Niño" }, plLevel: { low: "Mặn: thấp", medium: "Mặn: trung bình", high: "Mặn: cao" },
 plHowH: "Cách tính điểm này",
 plHow: [
-"Bốn điểm số dùng đúng quy tắc chấm thẻ đã công bố của ứng dụng (cùng công thức với các thẻ luân canh), áp dụng cho lịch bạn tô. Điểm kế hoạch là trung bình của bốn điểm, có trọng số theo ưu tiên của bạn, đổi sang thang 0–100 bằng (điểm − 1) ÷ 4 × 100. Hạng: A từ 80, B từ 65, C từ 50, D dưới 50.",
+"Năm điểm số dùng đúng quy tắc chấm thẻ đã công bố của ứng dụng (cùng công thức với các thẻ luân canh), áp dụng cho lịch bạn tô. Điểm kế hoạch là trung bình của năm điểm, có trọng số theo ưu tiên của bạn, đổi sang thang 0–100 bằng (điểm − 1) ÷ 4 × 100. Hạng: A từ 80, B từ 65, C từ 50, D dưới 50.",
 "Dữ liệu: mưa từ NASA GPM IMERG; nhu cầu nước của cây (ET₀) và số ngày nắng nóng từ NASA POWER; tháng mặn và độ mặn là ước tính từ báo cáo công khai của các trạm đo, không đo bằng vệ tinh; lợi nhuận là mức giữa của các số liệu đã công bố (2020–2025, triệu đồng/ha).",
 "Mỗi chuỗi tháng liền nhau cùng một cây là một vụ. Vụ ngắn hơn thời gian cây cần thì không được tính thu hoạch: lúa 3 tháng (90–100 ngày), cây màu 3 tháng và tôm 6 tháng (các vụ ngắn nhất trong lịch của chính ứng dụng). Lúa bạn tô được xếp vào vụ Đông Xuân, Hè Thu hoặc Thu Đông theo tháng bắt đầu.",
 "Đây là công cụ hỗ trợ lập kế hoạch, không phải lời khuyên cho đúng thửa ruộng của bạn. Hãy trao đổi với cán bộ khuyến nông địa phương trước khi đổi lịch mùa vụ."
@@ -141,6 +141,24 @@ s.profit = med * (1 - loss); total += s.profit;
 }
 return { p: missing ? null : pyRound(total, 1), missing };
 }
+/* build.py rice_pressure / pest_pressure / score_pests, read live from sites.json (pest_rule and the site's climate) */
+const MONTH_DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+function ricePressure(t, pts) {
+if (!(pts[0][0] <= t && t <= pts[pts.length - 1][0])) return 0;
+for (let i = 1; i < pts.length; i++) if (t <= pts[i][0]) { const [t0, p0] = pts[i - 1], [t1, p1] = pts[i]; return p0 + (p1 - p0) * (t - t0) / (t1 - t0) }
+}
+function pestScore(siteId, view, months, rest, nonrice) {
+const R = SITES_JSON.pest_rule, s = SITES_JSON.sites.find(x => x.id === siteId), cl = view === "elnino" ? s.elnino.climate : s.climate;
+let rice = 0, other = 0;
+months.forEach((c, i) => {
+const k = c[0];
+if (isRice(k)) rice += ricePressure(cl.tmean_c[i], R.rice_points);  // T (salt-tolerant rice) is rice here too
+else if (k === "U") other += R.upland_pressure;
+else if (k === "S") other += R.shrimp_floor + (1 - R.shrimp_floor) * Math.min((cl.hot_days[i] + cl.cold_days[i]) / MONTH_DAYS[i], 1);
+});
+const brk = 0.5 * Math.min(rest / 2, 1) + 0.5 * Math.min(nonrice / 2, 1);
+return pyRound(clamp(1 + 4 * (1 - (rice * (1 - R.break_weight * brk) + other) / 12), 1, 5), 1);
+}
 function evaluate(siteId, view, months, crop) {
 const v = B.sites[siteId][view], salt = v.salt, saltIdx = salt.map(m => m - 1);
 const hasS = months.includes("S"), notHere = v.level === "low" && hasS;  // build.py make_card not_here
@@ -162,14 +180,14 @@ const parts = risk.map(r => 1 + 4 * (1 - r));
 const saltScore = pyRound(parts.reduce((a, p, i) => a + C.WS_W[i] * p, 0), 1);
 const rest = months.filter(c => c === "-").length, nonrice = months.filter(c => c[0] === "U" || c[0] === "S").length;
 const legume = B.legume.includes(crop) ? months.filter(c => c[0] === "U").length : 0, cover = months.some(c => c[0] === "T");
-const soil = pyRound(clamp(1 + Math.min(rest / 2, 1) + Math.min(nonrice / 2, 1) + Math.min(legume / 2, 1)
-+ (cover ? 0.5 * Math.min(rest / 2, 1) : 0) - (hasS ? C.BRACKISH_SOIL : 0), 1, 5), 1);
+const soil = pyRound(clamp(1 + Math.min(legume / 2, 1) + (cover ? 0.5 * Math.min(rest / 2, 1) : 0) - (hasS ? C.BRACKISH_SOIL : 0), 1, 5), 1);  // build.py score_soil
+const pests = pestScore(siteId, view, months, rest, nonrice);
 const P = profitOf(seasons, salt, view, notHere);
 const baseSeasons = runs(B.base).map(([code, idx]) => ({ code, idx, key: B.base_profit[code], short: false, allS: [] }));
 const P3 = profitOf(baseSeasons, salt, view, false).p;
 const income = P.p == null ? null : P.p <= 0 ? 1.0 : pyRound(clamp(3 + 2 * Math.log2(P.p / P3), 1, 5), 1);
 const exposed = saltIdx.filter(i => cls[i] > 0);
-return { scores: { water, income, soil, salt: saltScore }, profit: P.p, missing: P.missing, p3: P3, water_mm: need, needM,
+return { scores: { water, income, soil, salt: saltScore, pests }, profit: P.p, missing: P.missing, p3: P3, water_mm: need, needM,
 exposed, seasons, notHere, hasU: months.some(c => c[0] === "U"), view, siteId, months: months.slice(), crop };
 }
 const labPen = () => (typeof window !== "undefined" && window.labourPen ? window.labourPen() : 0);
@@ -283,7 +301,7 @@ const vi = L() === "vi", u = vi ? "triệu" : "M ₫";
 return txt.replace(cMoney, (all, a) => all + (vi ? `, khoảng ${cPer(a).map(cF).join("–")} ${u}/công` : ` (≈ ${cPer(a).map(cF).join("–")} ${u}/công)`));
 };
 /* app state, read from window.App when it offers it, otherwise from the shell's own controls (Draft 3 ids) */
-const KEYS = ["water", "income", "soil", "salt"];
+const KEYS = ["water", "income", "soil", "salt", "pests"];
 const mode = () => { const a = A(); if (typeof a.mode === "function") return a.mode();
 const b = document.querySelector('#modeSeg [data-mode][aria-pressed="true"], #modeSeg [data-mode].on, #year [data-mode][aria-pressed="true"]');
 return b ? b.dataset.mode : "typical" };
@@ -409,7 +427,7 @@ requestAnimationFrame(step);
 }
 function renderScore(ev, p, best, bp, bestCard) {
 const w = weights();
-const bars = [["plBarProfit", "income"], ["plBarSalt", "salt"], ["plBarWater", "water"], ["plBarSoil", "soil"]];
+const bars = [["plBarProfit", "income"], ["plBarSalt", "salt"], ["plBarWater", "water"], ["plBarSoil", "soil"], ["plBarPests", "pests"]];
 const bar = (x, cls) => x == null ? `<span class="pl-bar ${cls} na"><i style="width:0"></i><em>–</em></span>` : `<span class="pl-bar ${cls}"><i style="width:${(x / 5 * 100).toFixed(0)}%"></i><em>${num(x.toFixed(1))}</em></span>`;
 const prio = KEYS.map(k => `${esc(t("plK")[k])} ${"●".repeat(Math.round(w[k]))}${"○".repeat(3 - Math.round(w[k]))}`).join(" · ");
 $("#plScore").innerHTML = `<div class="pl-duo">

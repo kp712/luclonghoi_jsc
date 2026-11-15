@@ -46,7 +46,7 @@ const Dash = (() => {
       rbKey: "Số = tháng · Thanh màu = nước trong kênh", rbNow: "Tháng này", rbKeyA: "T1–T12 = tháng 1–12 · Thanh màu = nước trong kênh", usedT: (n) => `Đã đổi sang: ${n}`, editField: "Sửa ruộng", langH: "Ngôn ngữ · Language",
       moneyH: "Tiền lời ước tính", money: (a, b) => `Năm nay khoảng <b>${b}</b> triệu/công. Năm bình thường: ${a} triệu/công.`, money1: (a) => `Khoảng <b>${a}</b> triệu/công mỗi năm.`,
       tot: (h, v) => `Cả ruộng ${h} ha: khoảng ${v} triệu.`, noMoney: "Chưa đủ số liệu lợi nhuận cho cách trồng này", moneySrc: "Trung vị lợi nhuận đã công bố · 1 công = 1.000 m²",
-      whyH: "Vì sao chọn cách này", riskH: "Cần lưu ý", scoreH: "Điểm của cách trồng (1–5)", sc: { salt: "An toàn mặn", water: "Tiết kiệm nước", soil: "Tốt cho đất", income: "Thu nhập" },
+      whyH: "Vì sao chọn cách này", riskH: "Cần lưu ý", scoreH: "Điểm của cách trồng (1–5)", sc: { salt: "An toàn mặn", water: "Tiết kiệm nước", soil: "Tốt cho đất", income: "Thu nhập", pests: "Ít sâu bệnh" },
       print: "In / lưu file", change: "Đổi cách trồng", editMap: "Sửa trên bản đồ", sources: "Nguồn dữ liệu NASA", back: "Quay lại", close: "Đóng",
       crop: { R: "Lúa", S: "Tôm", U: "Cây màu", "-": "Nghỉ" },
       job: { restA: "Cho ruộng nghỉ, dọn rơm rạ", rest: "Ruộng nghỉ, chuẩn bị vụ sau", R0: (n) => `Làm đất, gieo sạ ${n}`, R1: (n) => `Thu hoạch ${n}`, R: (n) => `Chăm ${n}: bón phân, giữ nước`,
@@ -101,7 +101,7 @@ const Dash = (() => {
       rbKey: "Coloured bar = canal water", rbNow: "This month", rbKeyA: "Coloured bar = canal water", usedT: (n) => `Changed to: ${n}`, editField: "Edit field", langH: "Language · Ngôn ngữ",
       moneyH: "Estimated profit", money: (a, b) => `This year about <b>${b}</b> M₫/công. Typical year: ${a} M₫/công.`, money1: (a) => `About <b>${a}</b> M₫/công a year.`,
       tot: (h, v) => `Whole field ${h} ha: about ${v} M₫.`, noMoney: "Not enough profit data for this plan yet", moneySrc: "Median of published profit figures · 1 công = 1,000 m²",
-      whyH: "Why this plan", riskH: "Watch out for", scoreH: "Plan scores (1–5)", sc: { salt: "Salt safety", water: "Saves water", soil: "Better soil", income: "Income" },
+      whyH: "Why this plan", riskH: "Watch out for", scoreH: "Plan scores (1–5)", sc: { salt: "Salt safety", water: "Saves water", soil: "Better soil", income: "Income", pests: "Fewer pests" },
       print: "Print / save file", change: "Change plan", editMap: "Edit on the map", sources: "NASA data sources", back: "Back", close: "Close",
       crop: { R: "Rice", S: "Shrimp", U: "Upland crop", "-": "Rest" },
       job: { restA: "Rest the field, clear the straw", rest: "Field rests, prepare the next crop", R0: (n) => `Prepare the field, sow ${n}`, R1: (n) => `Harvest ${n}`, R: (n) => `Tend ${n}: fertilise, keep water`,
@@ -154,7 +154,8 @@ const Dash = (() => {
   const siteOf = (id) => sites().find((s) => s.id === id) || sites()[0];
   const short = (s) => { const m = lang() === "vi" ? L(s.name).match(/Khu vực (.+?) cũ/) : L(s.name).match(/Former (.+?) area/); return m ? m[1] : L(s.name).split(" (")[0] };
   const areaLv = (id) => { try { return (RX.DATA.sites.find((x) => x.id === id) || {}).level || "medium" } catch (e) { return "medium" } };
-  const GOALS = { salt: { salt: 3, water: 2, income: 1, soil: 1 }, profit: { income: 3, salt: 1, water: 1, soil: 1 }, water: { water: 3, salt: 2, income: 1, soil: 1 } };
+  const SK = ["salt", "water", "soil", "pests", "income"];   /* the five card scores, in the order the bars show them */
+  const GOALS = { salt: { salt: 3, water: 2, income: 1, soil: 1, pests: 1 }, profit: { income: 3, salt: 1, water: 1, soil: 1, pests: 1 }, water: { water: 3, salt: 2, income: 1, soil: 1, pests: 1 } };
   const PEN = [[0.5, 0.4, 0.3], [0, 0, 0], [0, 0, 0]];
   const SEAS_OF = { rice3: ["R", "R", "R"], rice2: ["R", "R", "-"], rice_shrimp: ["S", "S", "R"], rice_upland: ["U", "R", "R"] };
   const resolve = (c, crop) => { if (!c.variants) return c; const ks = Object.keys(c.variants); return { ...(c.variants[ks.includes(crop) ? crop : c.crop_default] || c.variants[ks[0]]), id: c.id } };
@@ -162,9 +163,9 @@ const Dash = (() => {
   const isNino = (f) => (f.year ? f.year === "elnino" : true);   /* default: this season, NOAA >83% El Niño */
   const yr = (f) => (isNino(f) ? "elnino" : "typical");
   const cardOf = (f, year) => { const cs = cardsFor(siteOf(f.site), year || yr(f), f.crop); return cs.find((c) => c.id === f.rot) || cs[0] };
-  const weightsOf = (f) => f.weights || GOALS[f.goal || "salt"];
+  const weightsOf = (f) => { const w = f.weights || GOALS[f.goal || "salt"]; return { ...w, pests: w.pests ?? 2 } };   /* fields saved before the Pests score have no pests weight */
   function scoreOf(c, f) {
-    const w = weightsOf(f), ks = ["water", "income", "soil", "salt"].filter((k) => c.scores[k] != null), tot = ks.reduce((a, k) => a + w[k], 0);
+    const w = weightsOf(f), ks = SK.filter((k) => c.scores[k] != null), tot = ks.reduce((a, k) => a + w[k], 0);
     let s = tot ? ks.reduce((a, k) => a + w[k] * c.scores[k], 0) / tot : ks.reduce((a, k) => a + c.scores[k], 0) / ks.length;
     if (c.upland) s -= PEN[f.wfP ?? 1][f.wfM ?? 0];
     return Math.max(1, s);
@@ -360,7 +361,7 @@ const Dash = (() => {
         ${tile("chart", "a-g2", esc(T("chartH")), lineChart(f), lang() === "vi" ? "Mặn: trạm đo + NASA POWER (ước tính) · Mưa: NASA GPM IMERG · chạm một tháng để xem" : "Salt: stations + NASA POWER (estimate) · Rain: NASA GPM IMERG · tap a month to view it")}
         ${tile("safe", "a-g3", esc(T("safeH")), `${donut(d.safe, d.crop.length, T("safeL"))}<p class="a-mut">${cropM ? esc((level(fieldSalt(f.site, m, nino)) === "man" ? T("mBad") : T("mOk"))(MS()[m])) : esc(T("mRest")(MS()[m]))}</p>`, T("est"))}
         ${tile("money", "a-g4", esc(T("moneyH")), d.mon ? `<p class="a-num big">${d.mon.per}<small> ${esc(T("perCongS"))}</small></p>${d.shown ? rangeBar(d.shown) : ""}${two ? two.map((t) => `<p class="a-mut">${esc(t)}</p>`).join("") : d.mon.tot ? `<p class="a-mut">${esc(d.mon.tot)}</p>` : ""}` : `<p class="a-mut">${esc(T("noMoney"))}</p>`, T("moneySrc"))}
-        ${tile("scores", "a-g6", esc(T("scoreH")), `<div class="a-bars">${["salt", "water", "soil", "income"].map((q) => { const v = c.scores[q]; return `<div><span>${esc(T("sc")[q])}</span><i><b style="width:${v == null ? 0 : (v - 1) / 4 * 100}%"></b></i><em>${v == null ? "–" : nf(v, 1)}</em></div>` }).join("")}</div>${c.confidence ? `<p class="a-mut">${esc(T("conf"))}: ${esc(T("confL")[c.confidence] || c.confidence)}</p>` : ""}`, T("scSrc"))}
+        ${tile("scores", "a-g6", esc(T("scoreH")), `<div class="a-bars">${SK.map((q) => { const v = c.scores[q]; return `<div><span>${esc(T("sc")[q])}</span><i><b style="width:${v == null ? 0 : (v - 1) / 4 * 100}%"></b></i><em>${v == null ? "–" : nf(v, 1)}</em></div>` }).join("")}</div>${c.confidence ? `<p class="a-mut">${esc(T("conf"))}: ${esc(T("confL")[c.confidence] || c.confidence)}</p>` : ""}`, T("scSrc"))}
         ${tile("nums", "a-g7", `${esc(T("nums"))} · ${esc(MS()[m])}`, `<dl class="a-kpi"><div><dt>${esc(T("rainMo"))}</dt><dd>${nf(Math.round(d.rainA[m] || 0), 0)}<small> mm</small><small class="a-kn">NASA GPM IMERG</small></dd></div>
           <div><dt>${esc(T("needMo"))}</dt><dd>${nf(Math.round(d.et0A[m] || 0), 0)}<small> mm</small><small class="a-kn">NASA POWER</small></dd></div>
           <div><dt>${esc(T("cropsY"))}</dt><dd>${typeof s.crops === "number" ? nf(s.crops, 1) : "–"}<small class="a-kn">NASA MODIS NDVI</small></dd></div>
@@ -451,7 +452,7 @@ const Dash = (() => {
         ${r ? `<dl class="z-dl"><div><dt>${ic("seed", 18)}${esc(T("seed"))}</dt><dd>${esc(L(r.seed))}</dd></div>${r.fertiliser && L(r.fertiliser) ? `<div><dt>${ic("drop", 18)}${esc(T("fert"))}</dt><dd>${esc(L(r.fertiliser))}</dd></div>` : ""}</dl>
           <h5 class="z-h">${esc(T("steps"))}</h5><ol class="z-steps">${(r.steps || []).map((x) => `<li>${esc(L(x))}</li>`).join("")}</ol>` : ""}
         <h5 class="z-h">${esc(T("nextM")(d.nm + 1))}</h5><p class="a-job sm">${iconOf(c.months[d.nm])}<span>${esc(jobAt(c, d.nm))}</span></p><p class="a-src">${esc(T("ask"))}</p>`; }
-      case "scores": return `<div class="a-bars z-sc">${["salt", "water", "soil", "income"].map((q) => { const v = c.scores[q]; return `<div><span>${esc(T("sc")[q])}</span><i><b style="width:${v == null ? 0 : (v - 1) / 4 * 100}%"></b></i><em>${v == null ? "–" : nf(v, 1)}</em></div>` }).join("")}</div>
+      case "scores": return `<div class="a-bars z-sc">${SK.map((q) => { const v = c.scores[q]; return `<div><span>${esc(T("sc")[q])}</span><i><b style="width:${v == null ? 0 : (v - 1) / 4 * 100}%"></b></i><em>${v == null ? "–" : nf(v, 1)}</em></div>` }).join("")}</div>
         <h5 class="z-h">${esc(T("whyScores"))}</h5><ul class="z-why">${(c.why || []).map((x) => `<li>${esc(L(x))}</li>`).join("")}</ul>${whyFit(c, f)}<p class="a-src">${esc(T("scSrc"))}</p>`;
       case "nums": { const nd = (nino && s.el && s.el.ndvi) || s.ndvi || [], mr = Math.max(1, ...d.rainA, ...d.et0A);
         return `<h5 class="z-h">${esc(T("rainNeed"))}</h5><div class="z-rn">${[...Array(12)].map((_, i) => `<button type="button" class="${i === m ? "on" : ""}" data-dvsel="${i}" aria-label="${esc(MLONG(i))}"><i class="r" style="height:${(d.rainA[i] / mr * 100).toFixed(0)}%"></i><i class="n" style="bottom:${(d.et0A[i] / mr * 100).toFixed(0)}%"></i><span>${MS()[i]}</span></button>`).join("")}</div>
@@ -814,7 +815,7 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
 
   /* ---------------- change plan / answers ---------------- */
   function whyFit(c, f) {
-    const w = weightsOf(f), ks = ["salt", "water", "soil", "income"].filter((k) => c.scores[k] != null), tw = ks.reduce((a, k) => a + w[k], 0), pen = c.upland ? PEN[f.wfP ?? 1][f.wfM ?? 0] : 0;
+    const w = weightsOf(f), ks = SK.filter((k) => c.scores[k] != null), tw = ks.reduce((a, k) => a + w[k], 0), pen = c.upland ? PEN[f.wfP ?? 1][f.wfM ?? 0] : 0;
     return `<details class="dv-whyfit"><summary>${esc(T("why"))} ${nf(scoreOf(c, f), 1)}?</summary><pre class="dv-math">${esc(ks.map((k) => `${T("sc")[k].padEnd(15)} ${nf(c.scores[k], 1)} × ${w[k]}`).join("\n") + `\n= ${nf(ks.reduce((a, k) => a + w[k] * c.scores[k], 0), 1)} ÷ ${tw}${pen ? " − " + nf(pen, 1) : ""} = ${nf(scoreOf(c, f), 2)}`)}</pre></details>`;
   }
   function chooseSheet() {
