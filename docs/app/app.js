@@ -1,8 +1,8 @@
 /* app.js: Mekong Explorer Draft 4 "Sigma". Draft 3 app logic (drafts/sigma/ref/draft3.html) ported into the dark map shell.
    Same scoring, wording (via t()) and numbers as Draft 3; only DOM targets, markup and class names changed. Illustrated scene code dropped. */
 /* field first: the plan steps (3 and 4) need the farmer's own field */
-Object.assign(STR.en, { needField: "Enter your field first to continue", needFieldP: "Your plan is made for your own field. Give it a name and its size, then continue.", needFieldB: "Enter my field", needName: "Please write a name for your field", needSize: "Please write the size of your field in ha (for example 1,5)", fieldReady: f => `Your field: ${f}` });
-Object.assign(STR.vi, { needField: "Hãy nhập ruộng của bạn trước để tiếp tục", needFieldP: "Kế hoạch được làm cho chính ruộng của bạn. Đặt tên và nhập diện tích ruộng rồi tiếp tục.", needFieldB: "Nhập ruộng của tôi", needName: "Hãy đặt tên cho ruộng", needSize: "Hãy nhập diện tích ruộng, tính bằng ha (ví dụ 1,5)", fieldReady: f => `Ruộng của bạn: ${f}` });
+Object.assign(STR.en, { needSizeMax: "That is too big for one field. Enter less than 1,000 ha (1 ha = 10 công).", needField: "Enter your field first to continue", needFieldP: "Your plan is made for your own field. Give it a name and its size, then continue.", needFieldB: "Enter my field", needName: "Please write a name for your field", needSize: "Please write the size of your field in ha (for example 1,5)", fieldReady: f => `Your field: ${f}` });
+Object.assign(STR.vi, { needSizeMax: "Số này quá lớn cho một ruộng. Hãy nhập dưới 1.000 ha (1 ha = 10 công).", needField: "Hãy nhập ruộng của bạn trước để tiếp tục", needFieldP: "Kế hoạch được làm cho chính ruộng của bạn. Đặt tên và nhập diện tích ruộng rồi tiếp tục.", needFieldB: "Nhập ruộng của tôi", needName: "Hãy đặt tên cho ruộng", needSize: "Hãy nhập diện tích ruộng, tính bằng ha (ví dụ 1,5)", fieldReady: f => `Ruộng của bạn: ${f}` });
 /* ---- Draft 3 text from later parts, copied verbatim (part 10, 11, 12, 15, 17, app fixes, draft 3, copy note) ---- */
 Object.assign(STR.en, {
 bn_home: "At home mode is on. Everything moves smoothly again.", bn_wet: "In the field mode is on. Big buttons, just tap.", bn_one: "One hand mode is on. Your controls are at the bottom."
@@ -135,7 +135,7 @@ const KEYS = ["water", "income", "soil", "salt"];
 const w = { water: 2, income: 2, soil: 2, salt: 2 };
 let step = 1, cmp = [], exOn = false, exGo = false, curPicked = false, wPicked = false;
 let fields = []; try { fields = JSON.parse(load("mre-fields") || "[]").filter(f => DATA.sites.some(s => s.id === f.site)) } catch (e) { fields = [] }
-let fieldId = null, editId = null, month = new Date().getMonth();
+let fieldId = null, editId = null, month = new Date().getMonth(), planText = [];
 let pv = load("mre-pv") === "list" ? "list" : "cal";
 let fm = "home";   /* one mode only: at home (field mode removed) */
 
@@ -860,6 +860,14 @@ const marks = [started ? t("planCont") : `${t(r.code === "S" ? "planStock" : "pl
 const name = pick(p.name);
 return `<li class="${r.code[0]}"><b>${span(r.from, r.to)}</b>${esc(name[0].toUpperCase() + name.slice(1))}<div class="hint">${marks.join(" · ")}</div>${saltLine}</li>`;
 });
+planText = runs.map(r => {
+  const sm = []; for (let i = r.from; i <= r.to; i++) if (isSalt(i)) { if (sm.length && sm[sm.length - 1][1] === i - 1) sm[sm.length - 1][1] = i; else sm.push([i, i]) }
+  const salt = sm.length ? ` (${t("planSalt")}: ${sm.map(([a, b]) => span(a, b)).join(", ")})` : "";
+  if (r.code === "-") return `${span(r.from, r.to)}: ${t("planRest")}.${salt}`;
+  const nm = pick(c.plan[r.code].name), started = r.from === 0 && code(-1) === r.code, ends = code(r.to + 1) !== r.code;
+  const marks = [started ? t("planCont") : `${t(r.code === "S" ? "planStock" : "planSow")}: ${lab(r.from)}`, ends ? `${t("planHarvest")}: ${lab(r.to)}` : ""].filter(Boolean).join(", ");
+  return `${span(r.from, r.to)}: ${nm[0].toUpperCase() + nm.slice(1)}. ${marks[0].toUpperCase() + marks.slice(1)}.${salt}`;
+});
 const first = ui === "simple" ? 2 : 12;
 $("#timeline").innerHTML = items.slice(0, first).join("");
 $("#timelineMore").innerHTML = items.slice(first).join("");
@@ -931,7 +939,7 @@ const setPv = v => { pv = v; $("#v4").dataset.pv = v; $$("#planView [data-pv]").
 /* print, share and read the plan aloud */
 function planLines() {
 const lines = [t("shareTitle"), $("#planFor").textContent, ""];
-$$("#timeline > li, #timelineMore > li").forEach(li => lines.push("• " + li.innerText.replace(/\s*\n+\s*/g, " — ")));
+planText.forEach(x => lines.push("• " + x));
 lines.push("", t("talk")); return lines;
 }
 async function sharePlan() {
@@ -1087,11 +1095,13 @@ const ha = parseFloat(String($("#fSize").value).replace(",", "."));
 const nm0 = String($("#fName").value || "").trim();
 if (!nm0) { fErr(t("needName")); $("#fName").setAttribute("aria-invalid", "true"); $("#fName").focus(); return }
 if (!(ha > 0)) { fErr(t("needSize")); $("#fSize").setAttribute("aria-invalid", "true"); $("#fSize").focus(); return }
+if (!(ha < MAX_HA)) { fErr(t("needSizeMax")); $("#fSize").setAttribute("aria-invalid", "true"); $("#fSize").focus(); return }
 $("#fName").removeAttribute("aria-invalid"); $("#fSize").removeAttribute("aria-invalid");
 const old = editId && fields.find(x => x.id === editId);
 const f = { id: old ? old.id : Date.now().toString(36), name: String($("#fName").value || "").trim() || (old ? old.name : `${t("fDefault")} ${fields.length + 1}`), site: $("#fArea").value, seasons: [0, 1, 2].map(i => (document.querySelector("#fS" + i) || {}).value || "R"), ha: ha > 0 ? Math.round(ha * 10) / 10 : null };
 f.cur = curFrom(f.seasons);
 if (old) fields[fields.indexOf(old)] = f; else fields.push(f);
+if (old) { try { typeof Dash !== "undefined" && Dash.syncField && Dash.syncField(f, old) } catch (e) {} }   /* same name, area and size on the dashboard */
 const goOn = pendingNext;
 saveFields(); closeModal(false); openField(f.id);
 if (goOn) { pendingNext = false; setTimeout(() => { go(2); setTimeout(() => { if (typeof Side !== "undefined" && Side.sub) Side.sub("b") }, 30) }, 80) } else renderNeedField();
@@ -1180,6 +1190,7 @@ const f = fields.find(x => x.site === site.id); if (f) { fieldId = f.id; save("m
 return false;
 }
 let pendingNext = false;
+const MAX_HA = 1000;   /* one field is under 1,000 ha; the dashboard uses the same limit */
 /* inline message in the field form (a toast would sit under the modal dialog) */
 function fErr(msg) {
 const fm = document.querySelector("#fieldForm"); if (!fm) return;
@@ -1591,3 +1602,14 @@ if (document.readyState === "loading") document.addEventListener("DOMContentLoad
 })();
 
 addEventListener("beforeprint", () => { document.querySelectorAll("#s4m details, #planMore").forEach(d => { d.open = true }) });
+
+/* Narrow phones (about 360px and less): the top bar wraps to two rows. --top-h then follows its real height,
+   so the dashboard, drawer and map controls start below it instead of under it. */
+(() => {
+  const tb = document.getElementById("topbar"); if (!tb) return;
+  const root = document.documentElement, phone = window.matchMedia ? matchMedia("(max-width: 760px)") : null;
+  const set = () => { const h = Math.round(tb.getBoundingClientRect().height);
+    if (phone && phone.matches && h > 57) root.style.setProperty("--top-h", h + "px"); else root.style.removeProperty("--top-h") };
+  if (window.ResizeObserver) new ResizeObserver(set).observe(tb);
+  addEventListener("resize", set); set();
+})();

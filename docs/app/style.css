@@ -741,3 +741,9 @@ body.lang-vi .brand-tag, body.lang-vi .rail-tags { letter-spacing: 0 }
 /* one size for every top-bar label; a segment keeps its weight when chosen, so its width never jumps */
 .seg button, .seg button[aria-pressed="true"] { font-weight: 600 }
 #topbar .seg button, #topbar #lEn, #topbar #lVi, #topbar #hubBtn span, #topbar #gearBtn span, #topbar #uiSw span { font: 600 .8125rem/1.2 var(--font); letter-spacing: 0 }
+@media (max-width: 760px) {   /* phones: the same one size, a step smaller, so the top bar stays on one row */
+  #topbar .seg button, #topbar #lEn, #topbar #lVi, #topbar #uiSw span { font-size: .75rem }
+}
+@media (max-width: 760px) {   /* the bar's row is 56px; --top-h follows the whole bar (app.js) when it wraps to two rows on narrow phones */
+  #topbar { min-height: 56px } #brand, .tools { height: 56px }
+}
