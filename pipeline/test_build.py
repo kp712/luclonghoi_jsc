@@ -671,6 +671,22 @@ def test_pest_sources():
     assert all(u["pest"]["en"] and u["pest"]["vi"] for u in P["upland"].values())
 
 
+def test_climate_pest_inputs():
+    ks = ("PRECTOTCORR", "T2M_MAX", "T2M_MIN", "RH2M", "WS2M", "ALLSKY_SFC_SW_DWN")
+    power = {"parameter": {k: {} for k in ks}}
+    day = date(2000, 12, 1)
+    while day <= date(2001, 11, 30):
+        d = day.strftime("%Y%m%d")
+        tmin = {date(2000, 12, 1): 10, date(2001, 1, 15): 19.5, date(2001, 1, 16): -999}.get(day, 24)
+        for k, v in zip(ks, (5, 30, tmin, 80, 2, 18)):
+            power["parameter"][k][d] = v
+        day += timedelta(days=1)
+    c = build.climate(power, 9.5)
+    assert c["tmean_c"][6] == 27.0                      # July: (30 + 24) / 2
+    assert c["cold_days"][0] == 1.0                     # 15 Jan only; the -999 day and its neighbour are not compared
+    assert c["cold_days"][11] == 0.0                    # first record day has no previous day
+
+
 if __name__ == "__main__":
     import sys
     # Windows uses cp1252 when output is redirected; Vietnamese text would crash print().

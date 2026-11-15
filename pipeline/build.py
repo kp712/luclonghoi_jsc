@@ -7,7 +7,7 @@ import pathlib
 import re
 import statistics
 from collections import defaultdict
-from datetime import date
+from datetime import date, timedelta
 
 import ndvi
 from sites import SITES
@@ -165,7 +165,8 @@ def climate(power, lat, keep=None, gpm=None):
     Rain comes from gpm ({"YYYY-MM": mm}, NASA GPM, 10 km) when given, else from NASA POWER (50 km)."""
     p = power["parameter"]
     sums = defaultdict(lambda: defaultdict(float))  # (year, month) -> totals
-    for d, rain in p["PRECTOTCORR"].items():
+    prev = None  # (day, T2M_MIN) of the last valid day; a cold snap needs it to be the day before
+    for d, rain in sorted(p["PRECTOTCORR"].items()):
         day = date(int(d[:4]), int(d[4:6]), int(d[6:]))
         if not in_period(day) or (keep and not keep(day)):
             continue
@@ -175,16 +176,20 @@ def climate(power, lat, keep=None, gpm=None):
         tmax, tmin, rh, u2, rs = (p[k][d] for k in ("T2M_MAX", "T2M_MIN", "RH2M", "WS2M", "ALLSKY_SFC_SW_DWN"))
         if -999 in (rain, tmax, tmin, rh, u2, rs):
             continue
+        cold = prev is not None and prev[0] == day - timedelta(days=1) and prev[1] - tmin >= PESTS["shrimp"]["cold_drop_c"]
+        prev = (day, tmin)
         s = sums[(day.year, day.month)]
         s["rain"] += rain
         s["et0"] += et0_penman(day, lat, tmax, tmin, rh, u2, rs)
         s["tmax"] += tmax
         s["hot"] += tmax >= 35
+        s["tmean"] += (tmax + tmin) / 2
+        s["cold"] += cold
         s["n"] += 1
     for (y, m), s in sums.items():
         if gpm is not None:
             s["rain"] = gpm[f"{y}-{m:02d}"]
-    out = {"rain_mm": [], "rain_min_mm": [], "rain_max_mm": [], "et0_mm": [], "tmax_c": [], "hot_days": []}
+    out = {"rain_mm": [], "rain_min_mm": [], "rain_max_mm": [], "et0_mm": [], "tmax_c": [], "hot_days": [], "tmean_c": [], "cold_days": []}
     for m in range(1, 13):
         ys = [v for (y, mm), v in sums.items() if mm == m]
         out["rain_mm"].append(round(sum(v["rain"] for v in ys) / len(ys)))
@@ -193,6 +198,8 @@ def climate(power, lat, keep=None, gpm=None):
         out["et0_mm"].append(round(sum(v["et0"] for v in ys) / len(ys)))
         out["tmax_c"].append(round(sum(v["tmax"] / v["n"] for v in ys) / len(ys), 1))
         out["hot_days"].append(round(sum(v["hot"] for v in ys) / len(ys), 1))
+        out["tmean_c"].append(round(sum(v["tmean"] / v["n"] for v in ys) / len(ys), 1))
+        out["cold_days"].append(round(sum(v["cold"] for v in ys) / len(ys), 1))
     return out
 
 
