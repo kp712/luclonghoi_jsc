@@ -1137,8 +1137,8 @@
        ]
       },
       {
-       "en": "Soil 1.0: 1 month rest, 0 months without rice, 0 legume months.",
-       "vi": "Đất 1,0: 1 tháng nghỉ, 0 tháng không trồng lúa, 0 tháng cây họ đậu."
+       "en": "Soil 1.0: 0 legume months.",
+       "vi": "Đất 1,0: 0 tháng cây họ đậu."
       },
       {
        "en": "Pests 1.8: rice in 11 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 1 rest month(s).",
@@ -1322,8 +1322,8 @@
        ]
       },
       {
-       "en": "Soil 1.0: 4 months rest, 0 months without rice, 0 legume months.",
-       "vi": "Đất 1,0: 4 tháng nghỉ, 0 tháng không trồng lúa, 0 tháng cây họ đậu."
+       "en": "Soil 1.0: 0 legume months.",
+       "vi": "Đất 1,0: 0 tháng cây họ đậu."
       },
       {
        "en": "Pests 3.0: rice in 8 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 4 rest month(s).",
@@ -1481,7 +1481,7 @@
      "scores": {
       "water": 4.2,
       "salt": 5.0,
-      "soil": 1,
+      "soil": 1.0,
       "pests": 3.3,
       "income": 2.8
      },
@@ -1518,8 +1518,8 @@
        ]
       },
       {
-       "en": "Soil 1: 2 months rest, 6 months without rice, 0 legume months; brackish months leave salt in the soil.",
-       "vi": "Đất 1: 2 tháng nghỉ, 6 tháng không trồng lúa, 0 tháng cây họ đậu; các tháng nước lợ để lại muối trong đất."
+       "en": "Soil 1.0: 0 legume months; brackish months leave salt in the soil.",
+       "vi": "Đất 1,0: 0 tháng cây họ đậu; các tháng nước lợ để lại muối trong đất."
       },
       {
        "en": "Pests 3.3: rice in 4 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -1745,8 +1745,8 @@
          ]
         },
         {
-         "en": "Soil 1.0: 2 months rest, 3 months without rice, 0 legume months.",
-         "vi": "Đất 1,0: 2 tháng nghỉ, 3 tháng không trồng lúa, 0 tháng cây họ đậu."
+         "en": "Soil 1.0: 0 legume months.",
+         "vi": "Đất 1,0: 0 tháng cây họ đậu."
         },
         {
          "en": "Pests 2.8: rice in 7 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -1972,8 +1972,8 @@
          ]
         },
         {
-         "en": "Soil 1.0: 2 months rest, 3 months without rice, 0 legume months.",
-         "vi": "Đất 1,0: 2 tháng nghỉ, 3 tháng không trồng lúa, 0 tháng cây họ đậu."
+         "en": "Soil 1.0: 0 legume months.",
+         "vi": "Đất 1,0: 0 tháng cây họ đậu."
         },
         {
          "en": "Pests 2.8: rice in 7 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -2156,7 +2156,7 @@
        "scores": {
         "water": 2.5,
         "salt": 2.5,
-        "soil": 2,
+        "soil": 2.0,
         "pests": 2.8,
         "income": null
        },
@@ -2193,8 +2193,8 @@
          ]
         },
         {
-         "en": "Soil 2: 2 months rest, 3 months without rice, 3 legume months.",
-         "vi": "Đất 2: 2 tháng nghỉ, 3 tháng không trồng lúa, 3 tháng cây họ đậu."
+         "en": "Soil 2.0: 3 legume months.",
+         "vi": "Đất 2,0: 3 tháng cây họ đậu."
         },
         {
          "en": "Pests 2.8: rice in 7 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -2371,8 +2371,8 @@
        ]
       },
       {
-       "en": "Soil 1.5: 4 months rest, 0 months without rice, 0 legume months; cover crop optional: more if you sow one.",
-       "vi": "Đất 1,5: 4 tháng nghỉ, 0 tháng không trồng lúa, 0 tháng cây họ đậu; cây che phủ không bắt buộc: điểm cao hơn nếu bạn gieo."
+       "en": "Soil 1.5: 0 legume months; cover crop optional: more if you sow one.",
+       "vi": "Đất 1,5: 0 tháng cây họ đậu; cây che phủ không bắt buộc: điểm cao hơn nếu bạn gieo."
       },
       {
        "en": "Pests 3.0: rice in 8 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 4 rest month(s).",
@@ -2796,8 +2796,8 @@
         ]
        },
        {
-        "en": "Soil 1.0: 1 month rest, 0 months without rice, 0 legume months.",
-        "vi": "Đất 1,0: 1 tháng nghỉ, 0 tháng không trồng lúa, 0 tháng cây họ đậu."
+        "en": "Soil 1.0: 0 legume months.",
+        "vi": "Đất 1,0: 0 tháng cây họ đậu."
        },
        {
         "en": "Pests 1.8: rice in 11 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 1 rest month(s).",
@@ -2981,8 +2981,8 @@
         ]
        },
        {
-        "en": "Soil 1.0: 4 months rest, 0 months without rice, 0 legume months.",
-        "vi": "Đất 1,0: 4 tháng nghỉ, 0 tháng không trồng lúa, 0 tháng cây họ đậu."
+        "en": "Soil 1.0: 0 legume months.",
+        "vi": "Đất 1,0: 0 tháng cây họ đậu."
        },
        {
         "en": "Pests 3.0: rice in 8 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 4 rest month(s).",
@@ -3140,7 +3140,7 @@
       "scores": {
        "water": 4.5,
        "salt": 5.0,
-       "soil": 1,
+       "soil": 1.0,
        "pests": 3.3,
        "income": 3.0
       },
@@ -3177,8 +3177,8 @@
         ]
        },
        {
-        "en": "Soil 1: 2 months rest, 6 months without rice, 0 legume months; brackish months leave salt in the soil.",
-        "vi": "Đất 1: 2 tháng nghỉ, 6 tháng không trồng lúa, 0 tháng cây họ đậu; các tháng nước lợ để lại muối trong đất."
+        "en": "Soil 1.0: 0 legume months; brackish months leave salt in the soil.",
+        "vi": "Đất 1,0: 0 tháng cây họ đậu; các tháng nước lợ để lại muối trong đất."
        },
        {
         "en": "Pests 3.3: rice in 4 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -3404,8 +3404,8 @@
           ]
          },
          {
-          "en": "Soil 1.0: 2 months rest, 3 months without rice, 0 legume months.",
-          "vi": "Đất 1,0: 2 tháng nghỉ, 3 tháng không trồng lúa, 0 tháng cây họ đậu."
+          "en": "Soil 1.0: 0 legume months.",
+          "vi": "Đất 1,0: 0 tháng cây họ đậu."
          },
          {
           "en": "Pests 2.8: rice in 7 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -3631,8 +3631,8 @@
           ]
          },
          {
-          "en": "Soil 1.0: 2 months rest, 3 months without rice, 0 legume months.",
-          "vi": "Đất 1,0: 2 tháng nghỉ, 3 tháng không trồng lúa, 0 tháng cây họ đậu."
+          "en": "Soil 1.0: 0 legume months.",
+          "vi": "Đất 1,0: 0 tháng cây họ đậu."
          },
          {
           "en": "Pests 2.8: rice in 7 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -3815,7 +3815,7 @@
         "scores": {
          "water": 2.5,
          "salt": 2.4,
-         "soil": 2,
+         "soil": 2.0,
          "pests": 2.8,
          "income": null
         },
@@ -3852,8 +3852,8 @@
           ]
          },
          {
-          "en": "Soil 2: 2 months rest, 3 months without rice, 3 legume months.",
-          "vi": "Đất 2: 2 tháng nghỉ, 3 tháng không trồng lúa, 3 tháng cây họ đậu."
+          "en": "Soil 2.0: 3 legume months.",
+          "vi": "Đất 2,0: 3 tháng cây họ đậu."
          },
          {
           "en": "Pests 2.8: rice in 7 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -4030,8 +4030,8 @@
         ]
        },
        {
-        "en": "Soil 1.5: 4 months rest, 0 months without rice, 0 legume months; cover crop optional: more if you sow one.",
-        "vi": "Đất 1,5: 4 tháng nghỉ, 0 tháng không trồng lúa, 0 tháng cây họ đậu; cây che phủ không bắt buộc: điểm cao hơn nếu bạn gieo."
+        "en": "Soil 1.5: 0 legume months; cover crop optional: more if you sow one.",
+        "vi": "Đất 1,5: 0 tháng cây họ đậu; cây che phủ không bắt buộc: điểm cao hơn nếu bạn gieo."
        },
        {
         "en": "Pests 3.0: rice in 8 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 4 rest month(s).",
@@ -4453,8 +4453,8 @@
        ]
       },
       {
-       "en": "Soil 1.0: 1 month rest, 0 months without rice, 0 legume months.",
-       "vi": "Đất 1,0: 1 tháng nghỉ, 0 tháng không trồng lúa, 0 tháng cây họ đậu."
+       "en": "Soil 1.0: 0 legume months.",
+       "vi": "Đất 1,0: 0 tháng cây họ đậu."
       },
       {
        "en": "Pests 1.8: rice in 11 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 1 rest month(s).",
@@ -4624,8 +4624,8 @@
        ]
       },
       {
-       "en": "Soil 1.0: 4 months rest, 0 months without rice, 0 legume months.",
-       "vi": "Đất 1,0: 4 tháng nghỉ, 0 tháng không trồng lúa, 0 tháng cây họ đậu."
+       "en": "Soil 1.0: 0 legume months.",
+       "vi": "Đất 1,0: 0 tháng cây họ đậu."
       },
       {
        "en": "Pests 3.0: rice in 8 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 4 rest month(s).",
@@ -4769,7 +4769,7 @@
      "scores": {
       "water": 4.2,
       "salt": 5.0,
-      "soil": 1,
+      "soil": 1.0,
       "pests": 3.3,
       "income": 2.8
      },
@@ -4806,8 +4806,8 @@
        ]
       },
       {
-       "en": "Soil 1: 2 months rest, 6 months without rice, 0 legume months; brackish months leave salt in the soil.",
-       "vi": "Đất 1: 2 tháng nghỉ, 6 tháng không trồng lúa, 0 tháng cây họ đậu; các tháng nước lợ để lại muối trong đất."
+       "en": "Soil 1.0: 0 legume months; brackish months leave salt in the soil.",
+       "vi": "Đất 1,0: 0 tháng cây họ đậu; các tháng nước lợ để lại muối trong đất."
       },
       {
        "en": "Pests 3.3: rice in 4 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -5020,8 +5020,8 @@
          ]
         },
         {
-         "en": "Soil 1.0: 2 months rest, 3 months without rice, 0 legume months.",
-         "vi": "Đất 1,0: 2 tháng nghỉ, 3 tháng không trồng lúa, 0 tháng cây họ đậu."
+         "en": "Soil 1.0: 0 legume months.",
+         "vi": "Đất 1,0: 0 tháng cây họ đậu."
         },
         {
          "en": "Pests 2.8: rice in 7 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -5241,8 +5241,8 @@
          ]
         },
         {
-         "en": "Soil 1.0: 2 months rest, 3 months without rice, 0 legume months.",
-         "vi": "Đất 1,0: 2 tháng nghỉ, 3 tháng không trồng lúa, 0 tháng cây họ đậu."
+         "en": "Soil 1.0: 0 legume months.",
+         "vi": "Đất 1,0: 0 tháng cây họ đậu."
         },
         {
          "en": "Pests 2.8: rice in 7 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -5411,7 +5411,7 @@
        "scores": {
         "water": 2.5,
         "salt": 2.5,
-        "soil": 2,
+        "soil": 2.0,
         "pests": 2.8,
         "income": null
        },
@@ -5456,8 +5456,8 @@
          ]
         },
         {
-         "en": "Soil 2: 2 months rest, 3 months without rice, 3 legume months.",
-         "vi": "Đất 2: 2 tháng nghỉ, 3 tháng không trồng lúa, 3 tháng cây họ đậu."
+         "en": "Soil 2.0: 3 legume months.",
+         "vi": "Đất 2,0: 3 tháng cây họ đậu."
         },
         {
          "en": "Pests 2.8: rice in 7 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -5627,8 +5627,8 @@
        ]
       },
       {
-       "en": "Soil 1.5: 4 months rest, 0 months without rice, 0 legume months; cover crop optional: more if you sow one.",
-       "vi": "Đất 1,5: 4 tháng nghỉ, 0 tháng không trồng lúa, 0 tháng cây họ đậu; cây che phủ không bắt buộc: điểm cao hơn nếu bạn gieo."
+       "en": "Soil 1.5: 0 legume months; cover crop optional: more if you sow one.",
+       "vi": "Đất 1,5: 0 tháng cây họ đậu; cây che phủ không bắt buộc: điểm cao hơn nếu bạn gieo."
       },
       {
        "en": "Pests 3.0: rice in 8 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 4 rest month(s).",
@@ -6044,8 +6044,8 @@
         ]
        },
        {
-        "en": "Soil 1.0: 1 month rest, 0 months without rice, 0 legume months.",
-        "vi": "Đất 1,0: 1 tháng nghỉ, 0 tháng không trồng lúa, 0 tháng cây họ đậu."
+        "en": "Soil 1.0: 0 legume months.",
+        "vi": "Đất 1,0: 0 tháng cây họ đậu."
        },
        {
         "en": "Pests 1.8: rice in 11 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 1 rest month(s).",
@@ -6215,8 +6215,8 @@
         ]
        },
        {
-        "en": "Soil 1.0: 4 months rest, 0 months without rice, 0 legume months.",
-        "vi": "Đất 1,0: 4 tháng nghỉ, 0 tháng không trồng lúa, 0 tháng cây họ đậu."
+        "en": "Soil 1.0: 0 legume months.",
+        "vi": "Đất 1,0: 0 tháng cây họ đậu."
        },
        {
         "en": "Pests 3.0: rice in 8 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 4 rest month(s).",
@@ -6360,7 +6360,7 @@
       "scores": {
        "water": 4.4,
        "salt": 5.0,
-       "soil": 1,
+       "soil": 1.0,
        "pests": 3.3,
        "income": 3.0
       },
@@ -6397,8 +6397,8 @@
         ]
        },
        {
-        "en": "Soil 1: 2 months rest, 6 months without rice, 0 legume months; brackish months leave salt in the soil.",
-        "vi": "Đất 1: 2 tháng nghỉ, 6 tháng không trồng lúa, 0 tháng cây họ đậu; các tháng nước lợ để lại muối trong đất."
+        "en": "Soil 1.0: 0 legume months; brackish months leave salt in the soil.",
+        "vi": "Đất 1,0: 0 tháng cây họ đậu; các tháng nước lợ để lại muối trong đất."
        },
        {
         "en": "Pests 3.3: rice in 4 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -6611,8 +6611,8 @@
           ]
          },
          {
-          "en": "Soil 1.0: 2 months rest, 3 months without rice, 0 legume months.",
-          "vi": "Đất 1,0: 2 tháng nghỉ, 3 tháng không trồng lúa, 0 tháng cây họ đậu."
+          "en": "Soil 1.0: 0 legume months.",
+          "vi": "Đất 1,0: 0 tháng cây họ đậu."
          },
          {
           "en": "Pests 2.8: rice in 7 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -6832,8 +6832,8 @@
           ]
          },
          {
-          "en": "Soil 1.0: 2 months rest, 3 months without rice, 0 legume months.",
-          "vi": "Đất 1,0: 2 tháng nghỉ, 3 tháng không trồng lúa, 0 tháng cây họ đậu."
+          "en": "Soil 1.0: 0 legume months.",
+          "vi": "Đất 1,0: 0 tháng cây họ đậu."
          },
          {
           "en": "Pests 2.8: rice in 7 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -7002,7 +7002,7 @@
         "scores": {
          "water": 2.4,
          "salt": 2.5,
-         "soil": 2,
+         "soil": 2.0,
          "pests": 2.8,
          "income": null
         },
@@ -7047,8 +7047,8 @@
           ]
          },
          {
-          "en": "Soil 2: 2 months rest, 3 months without rice, 3 legume months.",
-          "vi": "Đất 2: 2 tháng nghỉ, 3 tháng không trồng lúa, 3 tháng cây họ đậu."
+          "en": "Soil 2.0: 3 legume months.",
+          "vi": "Đất 2,0: 3 tháng cây họ đậu."
          },
          {
           "en": "Pests 2.8: rice in 7 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -7218,8 +7218,8 @@
         ]
        },
        {
-        "en": "Soil 1.5: 4 months rest, 0 months without rice, 0 legume months; cover crop optional: more if you sow one.",
-        "vi": "Đất 1,5: 4 tháng nghỉ, 0 tháng không trồng lúa, 0 tháng cây họ đậu; cây che phủ không bắt buộc: điểm cao hơn nếu bạn gieo."
+        "en": "Soil 1.5: 0 legume months; cover crop optional: more if you sow one.",
+        "vi": "Đất 1,5: 0 tháng cây họ đậu; cây che phủ không bắt buộc: điểm cao hơn nếu bạn gieo."
        },
        {
         "en": "Pests 3.0: rice in 8 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 4 rest month(s).",
@@ -7645,8 +7645,8 @@
        ]
       },
       {
-       "en": "Soil 1.0: 1 month rest, 0 months without rice, 0 legume months.",
-       "vi": "Đất 1,0: 1 tháng nghỉ, 0 tháng không trồng lúa, 0 tháng cây họ đậu."
+       "en": "Soil 1.0: 0 legume months.",
+       "vi": "Đất 1,0: 0 tháng cây họ đậu."
       },
       {
        "en": "Pests 1.8: rice in 11 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 1 rest month(s).",
@@ -7816,8 +7816,8 @@
        ]
       },
       {
-       "en": "Soil 1.0: 4 months rest, 0 months without rice, 0 legume months.",
-       "vi": "Đất 1,0: 4 tháng nghỉ, 0 tháng không trồng lúa, 0 tháng cây họ đậu."
+       "en": "Soil 1.0: 0 legume months.",
+       "vi": "Đất 1,0: 0 tháng cây họ đậu."
       },
       {
        "en": "Pests 3.0: rice in 8 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 4 rest month(s).",
@@ -7961,7 +7961,7 @@
      "scores": {
       "water": 4.4,
       "salt": 5.0,
-      "soil": 1,
+      "soil": 1.0,
       "pests": 3.2,
       "income": 2.8
      },
@@ -7998,8 +7998,8 @@
        ]
       },
       {
-       "en": "Soil 1: 2 months rest, 6 months without rice, 0 legume months; brackish months leave salt in the soil.",
-       "vi": "Đất 1: 2 tháng nghỉ, 6 tháng không trồng lúa, 0 tháng cây họ đậu; các tháng nước lợ để lại muối trong đất."
+       "en": "Soil 1.0: 0 legume months; brackish months leave salt in the soil.",
+       "vi": "Đất 1,0: 0 tháng cây họ đậu; các tháng nước lợ để lại muối trong đất."
       },
       {
        "en": "Pests 3.2: rice in 4 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -8198,8 +8198,8 @@
          ]
         },
         {
-         "en": "Soil 1.0: 2 months rest, 3 months without rice, 0 legume months.",
-         "vi": "Đất 1,0: 2 tháng nghỉ, 3 tháng không trồng lúa, 0 tháng cây họ đậu."
+         "en": "Soil 1.0: 0 legume months.",
+         "vi": "Đất 1,0: 0 tháng cây họ đậu."
         },
         {
          "en": "Pests 2.8: rice in 7 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -8419,8 +8419,8 @@
          ]
         },
         {
-         "en": "Soil 1.0: 2 months rest, 3 months without rice, 0 legume months.",
-         "vi": "Đất 1,0: 2 tháng nghỉ, 3 tháng không trồng lúa, 0 tháng cây họ đậu."
+         "en": "Soil 1.0: 0 legume months.",
+         "vi": "Đất 1,0: 0 tháng cây họ đậu."
         },
         {
          "en": "Pests 2.8: rice in 7 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -8589,7 +8589,7 @@
        "scores": {
         "water": 2.6,
         "salt": 3.1,
-        "soil": 2,
+        "soil": 2.0,
         "pests": 2.8,
         "income": null
        },
@@ -8634,8 +8634,8 @@
          ]
         },
         {
-         "en": "Soil 2: 2 months rest, 3 months without rice, 3 legume months.",
-         "vi": "Đất 2: 2 tháng nghỉ, 3 tháng không trồng lúa, 3 tháng cây họ đậu."
+         "en": "Soil 2.0: 3 legume months.",
+         "vi": "Đất 2,0: 3 tháng cây họ đậu."
         },
         {
          "en": "Pests 2.8: rice in 7 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -8805,8 +8805,8 @@
        ]
       },
       {
-       "en": "Soil 1.5: 4 months rest, 0 months without rice, 0 legume months; cover crop optional: more if you sow one.",
-       "vi": "Đất 1,5: 4 tháng nghỉ, 0 tháng không trồng lúa, 0 tháng cây họ đậu; cây che phủ không bắt buộc: điểm cao hơn nếu bạn gieo."
+       "en": "Soil 1.5: 0 legume months; cover crop optional: more if you sow one.",
+       "vi": "Đất 1,5: 0 tháng cây họ đậu; cây che phủ không bắt buộc: điểm cao hơn nếu bạn gieo."
       },
       {
        "en": "Pests 3.0: rice in 8 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 4 rest month(s).",
@@ -9222,8 +9222,8 @@
         ]
        },
        {
-        "en": "Soil 1.0: 1 month rest, 0 months without rice, 0 legume months.",
-        "vi": "Đất 1,0: 1 tháng nghỉ, 0 tháng không trồng lúa, 0 tháng cây họ đậu."
+        "en": "Soil 1.0: 0 legume months.",
+        "vi": "Đất 1,0: 0 tháng cây họ đậu."
        },
        {
         "en": "Pests 1.9: rice in 11 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 1 rest month(s).",
@@ -9393,8 +9393,8 @@
         ]
        },
        {
-        "en": "Soil 1.0: 4 months rest, 0 months without rice, 0 legume months.",
-        "vi": "Đất 1,0: 4 tháng nghỉ, 0 tháng không trồng lúa, 0 tháng cây họ đậu."
+        "en": "Soil 1.0: 0 legume months.",
+        "vi": "Đất 1,0: 0 tháng cây họ đậu."
        },
        {
         "en": "Pests 3.1: rice in 8 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 4 rest month(s).",
@@ -9538,7 +9538,7 @@
       "scores": {
        "water": 4.5,
        "salt": 5.0,
-       "soil": 1,
+       "soil": 1.0,
        "pests": 3.0,
        "income": 3.0
       },
@@ -9575,8 +9575,8 @@
         ]
        },
        {
-        "en": "Soil 1: 2 months rest, 6 months without rice, 0 legume months; brackish months leave salt in the soil.",
-        "vi": "Đất 1: 2 tháng nghỉ, 6 tháng không trồng lúa, 0 tháng cây họ đậu; các tháng nước lợ để lại muối trong đất."
+        "en": "Soil 1.0: 0 legume months; brackish months leave salt in the soil.",
+        "vi": "Đất 1,0: 0 tháng cây họ đậu; các tháng nước lợ để lại muối trong đất."
        },
        {
         "en": "Pests 3.0: rice in 4 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -9775,8 +9775,8 @@
           ]
          },
          {
-          "en": "Soil 1.0: 2 months rest, 3 months without rice, 0 legume months.",
-          "vi": "Đất 1,0: 2 tháng nghỉ, 3 tháng không trồng lúa, 0 tháng cây họ đậu."
+          "en": "Soil 1.0: 0 legume months.",
+          "vi": "Đất 1,0: 0 tháng cây họ đậu."
          },
          {
           "en": "Pests 2.9: rice in 7 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -9996,8 +9996,8 @@
           ]
          },
          {
-          "en": "Soil 1.0: 2 months rest, 3 months without rice, 0 legume months.",
-          "vi": "Đất 1,0: 2 tháng nghỉ, 3 tháng không trồng lúa, 0 tháng cây họ đậu."
+          "en": "Soil 1.0: 0 legume months.",
+          "vi": "Đất 1,0: 0 tháng cây họ đậu."
          },
          {
           "en": "Pests 2.9: rice in 7 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -10166,7 +10166,7 @@
         "scores": {
          "water": 2.5,
          "salt": 2.2,
-         "soil": 2,
+         "soil": 2.0,
          "pests": 2.9,
          "income": null
         },
@@ -10211,8 +10211,8 @@
           ]
          },
          {
-          "en": "Soil 2: 2 months rest, 3 months without rice, 3 legume months.",
-          "vi": "Đất 2: 2 tháng nghỉ, 3 tháng không trồng lúa, 3 tháng cây họ đậu."
+          "en": "Soil 2.0: 3 legume months.",
+          "vi": "Đất 2,0: 3 tháng cây họ đậu."
          },
          {
           "en": "Pests 2.9: rice in 7 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -10382,8 +10382,8 @@
         ]
        },
        {
-        "en": "Soil 1.5: 4 months rest, 0 months without rice, 0 legume months; cover crop optional: more if you sow one.",
-        "vi": "Đất 1,5: 4 tháng nghỉ, 0 tháng không trồng lúa, 0 tháng cây họ đậu; cây che phủ không bắt buộc: điểm cao hơn nếu bạn gieo."
+        "en": "Soil 1.5: 0 legume months; cover crop optional: more if you sow one.",
+        "vi": "Đất 1,5: 0 tháng cây họ đậu; cây che phủ không bắt buộc: điểm cao hơn nếu bạn gieo."
        },
        {
         "en": "Pests 3.0: rice in 8 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 4 rest month(s).",
@@ -10808,8 +10808,8 @@
        ]
       },
       {
-       "en": "Soil 1.0: 1 month rest, 0 months without rice, 0 legume months.",
-       "vi": "Đất 1,0: 1 tháng nghỉ, 0 tháng không trồng lúa, 0 tháng cây họ đậu."
+       "en": "Soil 1.0: 0 legume months.",
+       "vi": "Đất 1,0: 0 tháng cây họ đậu."
       },
       {
        "en": "Pests 1.8: rice in 11 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 1 rest month(s).",
@@ -10979,8 +10979,8 @@
        ]
       },
       {
-       "en": "Soil 1.0: 4 months rest, 0 months without rice, 0 legume months.",
-       "vi": "Đất 1,0: 4 tháng nghỉ, 0 tháng không trồng lúa, 0 tháng cây họ đậu."
+       "en": "Soil 1.0: 0 legume months.",
+       "vi": "Đất 1,0: 0 tháng cây họ đậu."
       },
       {
        "en": "Pests 3.0: rice in 8 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 4 rest month(s).",
@@ -11124,7 +11124,7 @@
      "scores": {
       "water": 4.2,
       "salt": 5.0,
-      "soil": 1,
+      "soil": 1.0,
       "pests": 3.3,
       "income": 2.8
      },
@@ -11161,8 +11161,8 @@
        ]
       },
       {
-       "en": "Soil 1: 2 months rest, 6 months without rice, 0 legume months; brackish months leave salt in the soil.",
-       "vi": "Đất 1: 2 tháng nghỉ, 6 tháng không trồng lúa, 0 tháng cây họ đậu; các tháng nước lợ để lại muối trong đất."
+       "en": "Soil 1.0: 0 legume months; brackish months leave salt in the soil.",
+       "vi": "Đất 1,0: 0 tháng cây họ đậu; các tháng nước lợ để lại muối trong đất."
       },
       {
        "en": "Pests 3.3: rice in 4 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -11374,8 +11374,8 @@
          ]
         },
         {
-         "en": "Soil 1.0: 2 months rest, 3 months without rice, 0 legume months.",
-         "vi": "Đất 1,0: 2 tháng nghỉ, 3 tháng không trồng lúa, 0 tháng cây họ đậu."
+         "en": "Soil 1.0: 0 legume months.",
+         "vi": "Đất 1,0: 0 tháng cây họ đậu."
         },
         {
          "en": "Pests 2.8: rice in 7 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -11594,8 +11594,8 @@
          ]
         },
         {
-         "en": "Soil 1.0: 2 months rest, 3 months without rice, 0 legume months.",
-         "vi": "Đất 1,0: 2 tháng nghỉ, 3 tháng không trồng lúa, 0 tháng cây họ đậu."
+         "en": "Soil 1.0: 0 legume months.",
+         "vi": "Đất 1,0: 0 tháng cây họ đậu."
         },
         {
          "en": "Pests 2.8: rice in 7 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -11764,7 +11764,7 @@
        "scores": {
         "water": 2.5,
         "salt": 2.8,
-        "soil": 2,
+        "soil": 2.0,
         "pests": 2.8,
         "income": null
        },
@@ -11808,8 +11808,8 @@
          ]
         },
         {
-         "en": "Soil 2: 2 months rest, 3 months without rice, 3 legume months.",
-         "vi": "Đất 2: 2 tháng nghỉ, 3 tháng không trồng lúa, 3 tháng cây họ đậu."
+         "en": "Soil 2.0: 3 legume months.",
+         "vi": "Đất 2,0: 3 tháng cây họ đậu."
         },
         {
          "en": "Pests 2.8: rice in 7 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -11979,8 +11979,8 @@
        ]
       },
       {
-       "en": "Soil 1.5: 4 months rest, 0 months without rice, 0 legume months; cover crop optional: more if you sow one.",
-       "vi": "Đất 1,5: 4 tháng nghỉ, 0 tháng không trồng lúa, 0 tháng cây họ đậu; cây che phủ không bắt buộc: điểm cao hơn nếu bạn gieo."
+       "en": "Soil 1.5: 0 legume months; cover crop optional: more if you sow one.",
+       "vi": "Đất 1,5: 0 tháng cây họ đậu; cây che phủ không bắt buộc: điểm cao hơn nếu bạn gieo."
       },
       {
        "en": "Pests 3.0: rice in 8 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 4 rest month(s).",
@@ -12395,8 +12395,8 @@
         ]
        },
        {
-        "en": "Soil 1.0: 1 month rest, 0 months without rice, 0 legume months.",
-        "vi": "Đất 1,0: 1 tháng nghỉ, 0 tháng không trồng lúa, 0 tháng cây họ đậu."
+        "en": "Soil 1.0: 0 legume months.",
+        "vi": "Đất 1,0: 0 tháng cây họ đậu."
        },
        {
         "en": "Pests 1.8: rice in 11 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 1 rest month(s).",
@@ -12566,8 +12566,8 @@
         ]
        },
        {
-        "en": "Soil 1.0: 4 months rest, 0 months without rice, 0 legume months.",
-        "vi": "Đất 1,0: 4 tháng nghỉ, 0 tháng không trồng lúa, 0 tháng cây họ đậu."
+        "en": "Soil 1.0: 0 legume months.",
+        "vi": "Đất 1,0: 0 tháng cây họ đậu."
        },
        {
         "en": "Pests 3.0: rice in 8 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 4 rest month(s).",
@@ -12711,7 +12711,7 @@
       "scores": {
        "water": 4.4,
        "salt": 5.0,
-       "soil": 1,
+       "soil": 1.0,
        "pests": 3.3,
        "income": 3.0
       },
@@ -12748,8 +12748,8 @@
         ]
        },
        {
-        "en": "Soil 1: 2 months rest, 6 months without rice, 0 legume months; brackish months leave salt in the soil.",
-        "vi": "Đất 1: 2 tháng nghỉ, 6 tháng không trồng lúa, 0 tháng cây họ đậu; các tháng nước lợ để lại muối trong đất."
+        "en": "Soil 1.0: 0 legume months; brackish months leave salt in the soil.",
+        "vi": "Đất 1,0: 0 tháng cây họ đậu; các tháng nước lợ để lại muối trong đất."
        },
        {
         "en": "Pests 3.3: rice in 4 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -12961,8 +12961,8 @@
           ]
          },
          {
-          "en": "Soil 1.0: 2 months rest, 3 months without rice, 0 legume months.",
-          "vi": "Đất 1,0: 2 tháng nghỉ, 3 tháng không trồng lúa, 0 tháng cây họ đậu."
+          "en": "Soil 1.0: 0 legume months.",
+          "vi": "Đất 1,0: 0 tháng cây họ đậu."
          },
          {
           "en": "Pests 2.8: rice in 7 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -13181,8 +13181,8 @@
           ]
          },
          {
-          "en": "Soil 1.0: 2 months rest, 3 months without rice, 0 legume months.",
-          "vi": "Đất 1,0: 2 tháng nghỉ, 3 tháng không trồng lúa, 0 tháng cây họ đậu."
+          "en": "Soil 1.0: 0 legume months.",
+          "vi": "Đất 1,0: 0 tháng cây họ đậu."
          },
          {
           "en": "Pests 2.8: rice in 7 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -13351,7 +13351,7 @@
         "scores": {
          "water": 2.4,
          "salt": 2.7,
-         "soil": 2,
+         "soil": 2.0,
          "pests": 2.8,
          "income": null
         },
@@ -13395,8 +13395,8 @@
           ]
          },
          {
-          "en": "Soil 2: 2 months rest, 3 months without rice, 3 legume months.",
-          "vi": "Đất 2: 2 tháng nghỉ, 3 tháng không trồng lúa, 3 tháng cây họ đậu."
+          "en": "Soil 2.0: 3 legume months.",
+          "vi": "Đất 2,0: 3 tháng cây họ đậu."
          },
          {
           "en": "Pests 2.8: rice in 7 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -13566,8 +13566,8 @@
         ]
        },
        {
-        "en": "Soil 1.5: 4 months rest, 0 months without rice, 0 legume months; cover crop optional: more if you sow one.",
-        "vi": "Đất 1,5: 4 tháng nghỉ, 0 tháng không trồng lúa, 0 tháng cây họ đậu; cây che phủ không bắt buộc: điểm cao hơn nếu bạn gieo."
+        "en": "Soil 1.5: 0 legume months; cover crop optional: more if you sow one.",
+        "vi": "Đất 1,5: 0 tháng cây họ đậu; cây che phủ không bắt buộc: điểm cao hơn nếu bạn gieo."
        },
        {
         "en": "Pests 3.0: rice in 8 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 4 rest month(s).",
@@ -13990,8 +13990,8 @@
        ]
       },
       {
-       "en": "Soil 1.0: 1 month rest, 0 months without rice, 0 legume months.",
-       "vi": "Đất 1,0: 1 tháng nghỉ, 0 tháng không trồng lúa, 0 tháng cây họ đậu."
+       "en": "Soil 1.0: 0 legume months.",
+       "vi": "Đất 1,0: 0 tháng cây họ đậu."
       },
       {
        "en": "Pests 1.8: rice in 11 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 1 rest month(s).",
@@ -14161,8 +14161,8 @@
        ]
       },
       {
-       "en": "Soil 1.0: 4 months rest, 0 months without rice, 0 legume months.",
-       "vi": "Đất 1,0: 4 tháng nghỉ, 0 tháng không trồng lúa, 0 tháng cây họ đậu."
+       "en": "Soil 1.0: 0 legume months.",
+       "vi": "Đất 1,0: 0 tháng cây họ đậu."
       },
       {
        "en": "Pests 3.0: rice in 8 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 4 rest month(s).",
@@ -14310,7 +14310,7 @@
      "scores": {
       "water": 4.4,
       "salt": 5.0,
-      "soil": 1,
+      "soil": 1.0,
       "pests": 3.2,
       "income": 1.0
      },
@@ -14347,8 +14347,8 @@
        ]
       },
       {
-       "en": "Soil 1: 2 months rest, 6 months without rice, 0 legume months; brackish months leave salt in the soil.",
-       "vi": "Đất 1: 2 tháng nghỉ, 6 tháng không trồng lúa, 0 tháng cây họ đậu; các tháng nước lợ để lại muối trong đất."
+       "en": "Soil 1.0: 0 legume months; brackish months leave salt in the soil.",
+       "vi": "Đất 1,0: 0 tháng cây họ đậu; các tháng nước lợ để lại muối trong đất."
       },
       {
        "en": "Pests 3.2: rice in 4 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -14532,8 +14532,8 @@
          ]
         },
         {
-         "en": "Soil 1.0: 2 months rest, 3 months without rice, 0 legume months.",
-         "vi": "Đất 1,0: 2 tháng nghỉ, 3 tháng không trồng lúa, 0 tháng cây họ đậu."
+         "en": "Soil 1.0: 0 legume months.",
+         "vi": "Đất 1,0: 0 tháng cây họ đậu."
         },
         {
          "en": "Pests 2.8: rice in 7 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -14733,8 +14733,8 @@
          ]
         },
         {
-         "en": "Soil 1.0: 2 months rest, 3 months without rice, 0 legume months.",
-         "vi": "Đất 1,0: 2 tháng nghỉ, 3 tháng không trồng lúa, 0 tháng cây họ đậu."
+         "en": "Soil 1.0: 0 legume months.",
+         "vi": "Đất 1,0: 0 tháng cây họ đậu."
         },
         {
          "en": "Pests 2.8: rice in 7 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -14884,7 +14884,7 @@
        "scores": {
         "water": 2.6,
         "salt": 3.3,
-        "soil": 2,
+        "soil": 2.0,
         "pests": 2.8,
         "income": null
        },
@@ -14928,8 +14928,8 @@
          ]
         },
         {
-         "en": "Soil 2: 2 months rest, 3 months without rice, 3 legume months.",
-         "vi": "Đất 2: 2 tháng nghỉ, 3 tháng không trồng lúa, 3 tháng cây họ đậu."
+         "en": "Soil 2.0: 3 legume months.",
+         "vi": "Đất 2,0: 3 tháng cây họ đậu."
         },
         {
          "en": "Pests 2.8: rice in 7 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -15092,8 +15092,8 @@
        ]
       },
       {
-       "en": "Soil 1.5: 4 months rest, 0 months without rice, 0 legume months; cover crop optional: more if you sow one.",
-       "vi": "Đất 1,5: 4 tháng nghỉ, 0 tháng không trồng lúa, 0 tháng cây họ đậu; cây che phủ không bắt buộc: điểm cao hơn nếu bạn gieo."
+       "en": "Soil 1.5: 0 legume months; cover crop optional: more if you sow one.",
+       "vi": "Đất 1,5: 0 tháng cây họ đậu; cây che phủ không bắt buộc: điểm cao hơn nếu bạn gieo."
       },
       {
        "en": "Pests 3.0: rice in 8 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 4 rest month(s).",
@@ -15501,8 +15501,8 @@
         ]
        },
        {
-        "en": "Soil 1.0: 1 month rest, 0 months without rice, 0 legume months.",
-        "vi": "Đất 1,0: 1 tháng nghỉ, 0 tháng không trồng lúa, 0 tháng cây họ đậu."
+        "en": "Soil 1.0: 0 legume months.",
+        "vi": "Đất 1,0: 0 tháng cây họ đậu."
        },
        {
         "en": "Pests 1.9: rice in 11 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 1 rest month(s).",
@@ -15672,8 +15672,8 @@
         ]
        },
        {
-        "en": "Soil 1.0: 4 months rest, 0 months without rice, 0 legume months.",
-        "vi": "Đất 1,0: 4 tháng nghỉ, 0 tháng không trồng lúa, 0 tháng cây họ đậu."
+        "en": "Soil 1.0: 0 legume months.",
+        "vi": "Đất 1,0: 0 tháng cây họ đậu."
        },
        {
         "en": "Pests 3.1: rice in 8 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 4 rest month(s).",
@@ -15821,7 +15821,7 @@
       "scores": {
        "water": 4.6,
        "salt": 5.0,
-       "soil": 1,
+       "soil": 1.0,
        "pests": 3.0,
        "income": 1.0
       },
@@ -15858,8 +15858,8 @@
         ]
        },
        {
-        "en": "Soil 1: 2 months rest, 6 months without rice, 0 legume months; brackish months leave salt in the soil.",
-        "vi": "Đất 1: 2 tháng nghỉ, 6 tháng không trồng lúa, 0 tháng cây họ đậu; các tháng nước lợ để lại muối trong đất."
+        "en": "Soil 1.0: 0 legume months; brackish months leave salt in the soil.",
+        "vi": "Đất 1,0: 0 tháng cây họ đậu; các tháng nước lợ để lại muối trong đất."
        },
        {
         "en": "Pests 3.0: rice in 4 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -16043,8 +16043,8 @@
           ]
          },
          {
-          "en": "Soil 1.0: 2 months rest, 3 months without rice, 0 legume months.",
-          "vi": "Đất 1,0: 2 tháng nghỉ, 3 tháng không trồng lúa, 0 tháng cây họ đậu."
+          "en": "Soil 1.0: 0 legume months.",
+          "vi": "Đất 1,0: 0 tháng cây họ đậu."
          },
          {
           "en": "Pests 2.9: rice in 7 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -16244,8 +16244,8 @@
           ]
          },
          {
-          "en": "Soil 1.0: 2 months rest, 3 months without rice, 0 legume months.",
-          "vi": "Đất 1,0: 2 tháng nghỉ, 3 tháng không trồng lúa, 0 tháng cây họ đậu."
+          "en": "Soil 1.0: 0 legume months.",
+          "vi": "Đất 1,0: 0 tháng cây họ đậu."
          },
          {
           "en": "Pests 2.9: rice in 7 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -16395,7 +16395,7 @@
         "scores": {
          "water": 2.4,
          "salt": 3.0,
-         "soil": 2,
+         "soil": 2.0,
          "pests": 2.9,
          "income": null
         },
@@ -16439,8 +16439,8 @@
           ]
          },
          {
-          "en": "Soil 2: 2 months rest, 3 months without rice, 3 legume months.",
-          "vi": "Đất 2: 2 tháng nghỉ, 3 tháng không trồng lúa, 3 tháng cây họ đậu."
+          "en": "Soil 2.0: 3 legume months.",
+          "vi": "Đất 2,0: 3 tháng cây họ đậu."
          },
          {
           "en": "Pests 2.9: rice in 7 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 2 rest month(s).",
@@ -16603,8 +16603,8 @@
         ]
        },
        {
-        "en": "Soil 1.5: 4 months rest, 0 months without rice, 0 legume months; cover crop optional: more if you sow one.",
-        "vi": "Đất 1,5: 4 tháng nghỉ, 0 tháng không trồng lúa, 0 tháng cây họ đậu; cây che phủ không bắt buộc: điểm cao hơn nếu bạn gieo."
+        "en": "Soil 1.5: 0 legume months; cover crop optional: more if you sow one.",
+        "vi": "Đất 1,5: 0 tháng cây họ đậu; cây che phủ không bắt buộc: điểm cao hơn nếu bạn gieo."
        },
        {
         "en": "Pests 3.0: rice in 8 months; NASA POWER temperatures here suit the brown planthopper all year (Horgan et al. 2020), so rest months that break its cycle matter most; 4 rest month(s).",
