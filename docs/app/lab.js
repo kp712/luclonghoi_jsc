@@ -180,7 +180,9 @@ const parts = risk.map(r => 1 + 4 * (1 - r));
 const saltScore = pyRound(parts.reduce((a, p, i) => a + C.WS_W[i] * p, 0), 1);
 const rest = months.filter(c => c === "-").length, nonrice = months.filter(c => c[0] === "U" || c[0] === "S").length;
 const legume = B.legume.includes(crop) ? months.filter(c => c[0] === "U").length : 0, cover = months.some(c => c[0] === "T");
-const soil = pyRound(clamp(1 + Math.min(legume / 2, 1) + (cover ? 0.5 * Math.min(rest / 2, 1) : 0) - (hasS ? C.BRACKISH_SOIL : 0), 1, 5), 1);  // build.py score_soil
+const up = months.filter(c => c[0] === "U").length, riceM = months.filter(isRice).length, SW = C.SOIL_W;  // build.py score_soil
+const soilGain = SW.legume * Math.min(legume / 2, 1) + SW.cover * (cover ? Math.min(rest / 2, 1) : 0) + SW.dry * Math.min((rest + up) / C.SOIL_DRY_MONTHS, 1) + SW.rice * (1 - riceM / 12);
+const soil = Math.floor(clamp(1 + 4 * soilGain - (hasS ? C.BRACKISH_SOIL : 0), 1, 5) * 10 + 0.5 + 1e-9) / 10;  // halves round up, as in build.py
 const pests = pestScore(siteId, view, months, rest, nonrice);
 const P = profitOf(seasons, salt, view, notHere);
 const baseSeasons = runs(B.base).map(([code, idx]) => ({ code, idx, key: B.base_profit[code], short: false, allS: [] }));

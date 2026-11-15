@@ -198,7 +198,7 @@ def test_confidence():
     assert lvl("rice_upland") == "medium"                             # thin income caps at medium, even with the bare-window bonus
     # team estimates cost one level in total, and a loss estimate counts only where it applies
     why = lambda r, el, sal=good: [w["en"] for w in build.confidence(rots[r], nd, sal, False, el)[1] if w["en"].startswith("Uses team estimates")]
-    assert why("rice2", True) == ["Uses team estimates: break credit for pests."]   # no El Niño loss share on rice2
+    assert why("rice2", True) == ["Uses team estimates: soil score weights and dry-break months; break credit for pests."]   # no El Niño loss share on rice2
     w = why("salt_tolerant", True, dict(good, months=[1]))
     assert len(w) == 1 and "salt-tolerant rice" in w[0] and "crop-loss share" in w[0] and "salt left" not in w[0]
     assert "crop-loss share" not in why("salt_tolerant", True, good)[0]   # good: salt in March, no tolerant-rice month
@@ -216,10 +216,15 @@ def test_confidence():
 def test_soil_score():
     rots = {r["id"]: r for r in json.loads((build.HERE / "rotations.json").read_text(encoding="utf-8"))["rotations"]}
     assert {k: build.score_soil(r)[0] for k, r in rots.items()} == {
-        "rice3": 1.0, "rice2": 1.0, "rice_shrimp": 1.0, "rice_upland": 2.0, "salt_tolerant": 1.5}
-    assert build.score_soil(dict(rots["rice_upland"], legume_codes=[]))[0] == 1.0      # maize / watermelon variant
-    assert build.score_soil(dict(rots["rice3"], months=["-"] * 12))[0] == 1.0          # rest is now a Pests term
-    assert build.score_soil(rots["rice_upland"])[1] == dict(rest=2, nonrice=3, legume=3, cover=False, brackish=False)
+        "rice3": 1.3, "rice2": 2.0, "rice_shrimp": 1.4, "rice_upland": 3.9, "salt_tolerant": 2.8}
+    assert build.score_soil(dict(rots["rice_upland"], legume_codes=[]))[0] == 2.1      # maize / watermelon variant
+    assert build.score_soil(dict(rots["rice3"], months=["R1"] * 12))[0] == 1.0         # rice all year: floor
+    assert build.score_soil(dict(rots["rice3"], months=["-"] * 12))[0] == 2.4          # bare all year: dry break + no rice, no legume
+    assert build.score_soil(dict(rots["rice2"], months=[*rots["rice2"]["months"][:7], "S", "S", "S", "-", "-"]))[0] < build.score_soil(rots["rice2"])[0]  # shrimp costs soil points
+    assert build.score_soil(rots["rice_upland"])[1] == dict(rest=2, nonrice=3, legume=3, cover=False, brackish=False, dry=5, rice=7)
+    assert abs(sum(build.SOIL_W.values()) - 1) < 1e-9                                  # gain stays 0-1, so the score uses the 1-5 scale
+    scores = [build.score_soil(r)[0] for r in rots.values()]
+    assert len(set(scores)) == len(scores)                                              # every rotation gets its own soil score
 
 
 def test_pests_score():
