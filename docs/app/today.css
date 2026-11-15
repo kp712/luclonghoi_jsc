@@ -380,3 +380,9 @@ body.dv-on .dv-page :is(.btn, .t-field, .ss-card, .fl-it, .nw-k, .nw-o, .s-cal, 
 .pb.now small { color:var(--ink); font-weight:700 } .pb.now i { box-shadow:0 0 0 2px var(--panel-solid), 0 0 0 4px var(--pc) }
 .ps-sc { display:grid; gap:2px; margin:0; font-size:.9375rem; line-height:1.4 } .ps-sc span { color:var(--ink-2); font-size:.875rem }
 @media (max-width:420px) { .ps-bars { gap:3px } .pb small { font-size:.625rem } }
+/* very narrow phones (320–359 px): the 1/2/3-year switch drops under the date and shares the full width, so nothing is cut */
+@media (max-width:359px) {
+  .ck-row { flex-wrap:wrap; row-gap:6px }
+  .ck-hz { flex:1 1 100%; order:3 } .ck-hz button { flex:1 1 0 }
+}
+body.dv-on #mapKey, body.dv-on #d5Month { display:none !important }   /* map legend and month slider belong to the map, which the full-width dashboard covers */

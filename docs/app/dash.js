@@ -217,7 +217,7 @@ const Dash = (() => {
   function shell() {
     if ($("#dv")) return;
     const d = document.createElement("div"); d.id = "dv";
-    d.innerHTML = `<section id="dvClock" class="dv-clock" aria-labelledby="ckDate"><div class="ck-in">
+    d.innerHTML = `<section id="dvClock" class="dv-clock" aria-labelledby="ckDate"><h1 class="sr">Mekong Rotation Explorer</h1><div class="ck-in">
         <div class="ck-row"><button type="button" id="ckPlay" class="ck-play"></button>
           <div class="ck-d"><b id="ckDate"></b><small id="ckSub" class="ck-sub"></small></div>
           <div id="ckHz" class="ck-hz" role="group"><button type="button" data-hz="1"></button><button type="button" data-hz="2"></button><button type="button" data-hz="3"></button></div></div>
@@ -1502,6 +1502,15 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
   }
   /* the create-plan flow (app.js) asks the same "what is in the field now" question and builds its plan from the answer */
   const nowBlock = () => `<section id="nowCrop" class="nw nw-flow" aria-labelledby="nfH">${nowForm(flowNow, flowCtx(), true)}</section>`;
+  /* the map lies under the dashboard: while the dashboard is on, it is inert, so keyboard and screen-reader focus never
+     lands on pins and zoom buttons nobody can see (home.js uses its own marker, so the two never undo each other) */
+  function syncInert() {
+    const on = document.body.classList.contains("dv-on");
+    ["map", "fx", "mapKey", "d5Month"].forEach((id) => { const n = document.getElementById(id); if (!n) return;
+      if (on) { if (!n.inert) { n.inert = true; n.dataset.dvInert = "1" } } else if (n.dataset.dvInert) { n.inert = false; delete n.dataset.dvInert } });
+  }
+  new MutationObserver(syncInert).observe(document.body, { attributes: true, attributeFilter: ["class"] });
+  syncInert();
   return { init, render, unlink, syncField, nowBlock, flowNow: () => flowNow, get state() { return st } };
 })();
-if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", () => setTimeout(Dash.init, 0)); else setTimeout(Dash.init, 0);
+if (document.readyState === "loading" || AppReady.waiting()) AppReady.on(() => setTimeout(Dash.init, 0)); else setTimeout(Dash.init, 0);

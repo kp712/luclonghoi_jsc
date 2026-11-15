@@ -1599,7 +1599,7 @@ const hash = () => { const h = location.hash; if (h === "#plan-lab") go("lab"); 
 addEventListener("hashchange", hash); hash();
 let rt = 0; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { const hc = document.querySelector("#hoverCard"); if (hc) hc.classList.remove("show") }, 120) });
 }
-if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
+if (document.readyState === "loading" || AppReady.waiting()) AppReady.on(start); else start();
 })();
 
 addEventListener("beforeprint", () => { document.querySelectorAll("#s4m details, #planMore").forEach(d => { d.open = true }) });

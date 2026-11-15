@@ -280,6 +280,6 @@ const Hub = (() => {
     if (window.RX && RX.Core.onLang) RX.Core.onLang(() => $("#hub").open ? show() : show());
     show();
   }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else setTimeout(init, 0);
+  if (document.readyState === "loading" || AppReady.waiting()) AppReady.on(init); else setTimeout(init, 0);
   return { open, show };
 })();

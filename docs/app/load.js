@@ -1,15 +1,10 @@
 /* load.js: the site's data comes only from docs/data/sites.json (built by pipeline/build.py).
-   It is read once, before the other scripts run, and reshaped into the two forms the app code uses:
+   It is fetched once without blocking the page; the app scripts (index.html, type="text/x-after-data") start, in order,
+   only after it has arrived, so every script still finds DATA ready. It is reshaped into the two forms the app code uses:
    DATA (map, cards, plan) and RX.DATA (salt model, dashboard). No numbers are added here.
    costs.json (published costs) and research.json (rice varieties, live-data feeds) sit next to this file. */
 const SiteData = (() => {
-  const get = (url) => {
-    const x = new XMLHttpRequest();
-    x.open("GET", url, false);   /* synchronous on purpose: every later script expects DATA to exist */
-    x.send(null);
-    if (x.status !== 200 && x.status !== 0) throw new Error("Could not load " + url + " (" + x.status + ")");
-    return JSON.parse(x.responseText);
-  };
+  const get = (url) => fetch(url, { credentials: "same-origin" }).then((r) => { if (!r.ok) throw new Error("Could not load " + url + " (" + r.status + ")"); return r.json() });
   const pick = (o, ks) => { const r = {}; ks.forEach((k) => { if (o[k] !== undefined) r[k] = o[k] }); return r };
   const map = (o, f) => Object.fromEntries(Object.entries(o || {}).map(([k, v]) => [k, f(v, k)]));
   const tx = (x) => (x && typeof x === "object" ? { en: x.en || "", vi: x.vi || "" } : x);
@@ -53,19 +48,42 @@ const SiteData = (() => {
   return { get, app, rx };
 })();
 let SITES_JSON, DATA, COSTS, RESEARCH;
-try {
-  SITES_JSON = SiteData.get("data/sites.json");
-  DATA = SiteData.app(SITES_JSON);
-  COSTS = SiteData.get("app/costs.json");
-  RESEARCH = SiteData.get("app/research.json");
-} catch (e) {
-  /* no data, no app: cover the page with a two-language message instead of a half-drawn, broken screen */
-  const box = document.createElement("div");
-  box.setAttribute("role", "alert");
-  box.style.cssText = "position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;justify-content:center;gap:12px;padding:24px;background:#f6f4ec;color:#1f2a1f;font:18px/1.5 system-ui,sans-serif";
-  box.innerHTML = '<p lang="vi" style="margin:0">Không tải được dữ liệu. Hãy kiểm tra kết nối mạng và tải lại trang.</p>'
-    + '<p lang="en" style="margin:0">Couldn\'t load the data. Check your connection and reload the page.</p>'
-    + '<button type="button" style="align-self:flex-start;min-height:44px;padding:8px 18px;font:inherit" onclick="location.reload()">Tải lại / Reload</button>';
-  document.body.appendChild(box);
-  throw e;
-}
+/* AppReady: the app scripts start "when the page is ready". They now arrive after the data, when the page is already
+   parsed, so their start functions are queued here and run, in the order they asked, once the last script has loaded:
+   the same order DOMContentLoaded gave them before. */
+const AppReady = (() => {
+  let q = [], open = false;
+  const on = (fn) => { if (open) { fn(); return } if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", () => q ? q.push(fn) : fn()); else q.push(fn) };
+  const flush = () => { open = true; const fs = q; q = null; fs.forEach((fn) => { try { fn() } catch (e) { console.error(e) } }) };
+  return { on, flush, waiting: () => !open };
+})();
+(function boot() {
+  /* a calm loading line while the data travels (slow phone connections), replaced by the app */
+  const wait = document.createElement("p");
+  wait.className = "boot-wait"; wait.setAttribute("role", "status");
+  wait.innerHTML = '<span lang="vi">Đang tải dữ liệu…</span> <span lang="en">Loading data…</span>';
+  document.body.appendChild(wait);
+  const fail = (e) => {
+    wait.remove();
+    /* no data, no app: cover the page with a two-language message instead of a half-drawn, broken screen */
+    const box = document.createElement("div");
+    box.setAttribute("role", "alert");
+    box.style.cssText = "position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;justify-content:center;gap:12px;padding:24px;background:#f6f4ec;color:#1f2a1f;font:18px/1.5 system-ui,sans-serif";
+    box.innerHTML = '<p lang="vi" style="margin:0">Không tải được dữ liệu. Hãy kiểm tra kết nối mạng và tải lại trang.</p>'
+      + '<p lang="en" style="margin:0">Couldn\'t load the data. Check your connection and reload the page.</p>'
+      + '<button type="button" style="align-self:flex-start;min-height:44px;padding:8px 18px;font:inherit" onclick="location.reload()">Tải lại / Reload</button>';
+    document.body.appendChild(box);
+    console.error(e);
+  };
+  /* the app scripts, in page order; async = false keeps their order while they download in parallel */
+  const start = () => {
+    const tags = [...document.querySelectorAll('script[type="text/x-after-data"]')];
+    let left = tags.length;
+    const done = () => { if (--left <= 0) { wait.remove(); AppReady.flush() } };
+    tags.forEach((t) => { const s = document.createElement("script"); s.src = t.dataset.src; s.async = false; s.onload = done; s.onerror = done; t.replaceWith(s) });
+    if (!left) { wait.remove(); AppReady.flush() }
+  };
+  Promise.all([SiteData.get("data/sites.json"), SiteData.get("app/costs.json"), SiteData.get("app/research.json")])
+    .then(([j, c, r]) => { SITES_JSON = j; DATA = SiteData.app(j); COSTS = c; RESEARCH = r; start() })
+    .catch(fail);
+})();
