@@ -1190,6 +1190,12 @@ p.textContent = msg || ""; p.hidden = !msg;
 function askField() { openFieldForm(site && site.id); pendingNext = true; const fm = document.querySelector("#fieldForm"); if (!fm) return;
 let n = fm.querySelector(".f-need"); if (!n) { n = document.createElement("p"); n.className = "f-need"; const h = fm.querySelector("h2"); h ? h.insertAdjacentElement("afterend", n) : fm.prepend(n) }
 n.textContent = t("needFieldP"); n.hidden = false }
+/* delete a field from the planner list; quiet = the dashboard asked, so don't call it back */
+function removeField(id, quiet) {
+const f = fields.find(x => x.id === id); if (!f) return;
+fields = fields.filter(x => x.id !== id); if (fieldId === id) { fieldId = null; drop("mre-last") } saveFields(); renderAll();
+if (!quiet) { try { typeof Dash !== "undefined" && Dash.unlink && Dash.unlink(id, f.site, f.name) } catch (e) {} }
+}
 function renderNeedField() {
 const v2 = document.querySelector("#v2"); if (!v2) return;
 let el = document.querySelector("#needField");
@@ -1519,7 +1525,7 @@ if (c("#ppRev")) { const a = document.querySelector("#cards .card.isplan"); if (
 if (c("[data-needfield]")) { askField(); return }
 if (c("#addField")) { openFieldForm(site && site.id); return }
 if ((b = c("[data-edit]"))) { openFieldForm(null, fields.find(f => f.id === b.dataset.edit)); return }
-if ((b = c("[data-del]"))) { fields = fields.filter(f => f.id !== b.dataset.del); if (fieldId === b.dataset.del) { fieldId = null; drop("mre-last") } saveFields(); renderAll(); return }
+if ((b = c("[data-del]"))) { removeField(b.dataset.del); return }
 if ((b = c("[data-field]"))) { exOn = false; const f = fields.find(x => x.id === b.dataset.field); openField(b.dataset.field); if (f) mv("focus", f.site); return }
 });
 document.addEventListener("change", e => {
@@ -1553,7 +1559,7 @@ document.addEventListener("dragstart", e => { if (!editable(e.target) && !(e.tar
 
 /* ---------- start ---------- */
 window.App = { refresh: () => renderAll(), fieldId: () => fieldId, cur: () => cur, ranked, planId: () => planId, V, t, lang: () => lang, site: () => site, go, toast, mode: () => mode, weights: () => ({ ...w }), upCrop: () => upCrop, guide, openPanel, closePanel, ui: () => ui, setUi: u => { if (u !== ui) setUi(u) }, hasField: () => hasField(), example: () => exOn, askField: () => askField(),
-  fields: () => fields.slice(), planDoc: () => planDocHTML(), openField: id => openField(id), openFieldForm: siteId => openFieldForm(siteId) };
+  fields: () => fields.slice(), removeField, planDoc: () => planDocHTML(), openField: id => openField(id), openFieldForm: siteId => openFieldForm(siteId) };
 function start() {
 ensureSkeleton(); buildExtras();
 document.body.appendChild(offChip);

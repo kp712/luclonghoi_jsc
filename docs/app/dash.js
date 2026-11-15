@@ -822,8 +822,10 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
       ${top && top.c.id !== f.rot && !top.no ? `<div class="dv-better"><p>${esc(T("better")(L(top.c.name)))}</p><button type="button" class="btn gold" data-use="${top.c.id}">${esc(T("use"))}</button></div>` : ""}</div>`);
   }
   /* the planner (app.js, "mre-fields", ha) keeps its own copy of the size, read by cost.js: keep the two equal */
+  /* the planner's copy of a field: by the saved link, or (older fields) by area and name */
+  const appFieldOf = (f, fs) => fs.find((x) => x.id === f.appId) || (!f.appId && fs.find((x) => x.site === f.site && x.name === f.name)) || null;
   function syncSize(f) {
-    try { const fs = window.App && App.fields ? App.fields() : [], af = fs.find((x) => x.id === f.appId) || (!f.appId && fs.filter((x) => x.site === f.site && x.name === f.name)[0]);
+    try { const fs = window.App && App.fields ? App.fields() : [], af = appFieldOf(f, fs);
       if (!af) return; af.ha = f.size || null; localStorage.setItem("mre-fields", JSON.stringify(fs)); if (typeof Cost !== "undefined") Cost.refresh() } catch (e) {}
   }
   function setOpt(k, v) {
@@ -934,7 +936,8 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
       case "doprint": { const w = document.createElement("iframe"); w.style.cssText = "position:fixed;width:0;height:0;border:0"; document.body.appendChild(w); w.srcdoc = `<html><head><meta charset="utf-8"><style>${PAPER_CSS}</style></head><body>${paperHTML()}</body></html>`; w.onload = () => { try { w.contentWindow.print() } catch (er) { saveFile() } setTimeout(() => w.remove(), 4000) }; return }
       case "delask": { const f = fieldSel(); if (!f) return; sheet(`<div class="dv-delq"><span class="dv-delico">${ic("trash", 30)}</span><h2>${esc(T("delH")(f.name))}</h2><p class="sd-note">${esc(T("delP"))}</p>
         <div class="dv-acts"><button type="button" class="btn dv-delyes" data-dv="del">${ic("trash", 16)}<span>${esc(T("delYes"))}</span></button><button type="button" class="btn gold" data-dv="close"><span>${esc(T("cancel"))}</span></button></div></div>`); return }
-      case "del": { const f = fieldSel(); if (f) { st.fields = st.fields.filter((x) => x.id !== f.id); st.sel = st.fields[0] ? st.fields[0].id : null; selM = null; save(); closeSheet(); try { zoomClose() } catch (e) {} render(); try { window.App && App.toast && App.toast(T("deleted")) } catch (e) {} } return }
+      case "del": { const f = fieldSel(); if (f) { st.fields = st.fields.filter((x) => x.id !== f.id);
+        try { const af = window.App && App.fields && appFieldOf(f, App.fields()); if (af && App.removeField) App.removeField(af.id, true) } catch (e) {}   /* the planner list too */ st.sel = st.fields[0] ? st.fields[0].id : null; selM = null; save(); closeSheet(); try { zoomClose() } catch (e) {} render(); try { window.App && App.toast && App.toast(T("deleted")) } catch (e) {} } return }
     }
   });
   const multiOf = (f) => { const Y = yearsOf(f); f.multi = { n: Y.n, yrs: Y.yrs }; return f.multi };
@@ -980,6 +983,11 @@ footer{margin-top:12px;font-size:10.5px;color:#444;border-top:1px solid #999;pad
     if (location.hash === "#plan-lab") { document.body.classList.remove("dv-on"); document.body.classList.add("dv-off"); $("#dvBack").hidden = false; backLabel(); return }
     on = true; document.body.classList.add("dv-on"); render();
   }
-  return { init, render, get state() { return st } };
+  /* a field deleted in the planner list leaves the dashboard too */
+  function unlink(id, site, name) {
+    const n = st.fields.length; st.fields = st.fields.filter((f) => !(f.appId === id || (!f.appId && f.site === site && f.name === name)));
+    if (st.fields.length === n) return; if (!st.fields.some((f) => f.id === st.sel)) st.sel = st.fields[0] ? st.fields[0].id : null; selM = null; save(); render();
+  }
+  return { init, render, unlink, get state() { return st } };
 })();
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", () => setTimeout(Dash.init, 0)); else setTimeout(Dash.init, 0);
