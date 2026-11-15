@@ -747,6 +747,7 @@ $("#cards").innerHTML = cards.map(({ c, s }, i) => {
 const pickCrop = c.choices && c.choices.length > 1 ? `<div class="crop-pick" role="group" aria-label="${t("cropPick")}"><span>${t("cropPick")}</span>${c.choices.map(x => `<button type="button" data-crop="${x}" aria-pressed="${x === c.crop}">${esc(pick(DATA.resources[x].name))}</button>`).join("")}</div>` : "";
 const risks = c.risks.concat(c.gaps).filter(x => !common.includes(pick(x)));
 const fl = fieldLine(c), sc = Math.max(0, s);
+const before = ui === "simple" && c.id === plan.id && risks.length;   // Simple hides Details: the plan card's risks and gaps show open, before its plan button
 return `<article data-plan="${c.id}" class="card ${i === 0 && !c.not_here ? "best" : ""} ${c.id === plan.id ? "isplan" : ""} ${c.not_here ? "nothere" : ""}" data-id="${c.id}">
 <div class="c-top"><span class="rank">#${i + 1}</span>${i === 0 && !c.not_here ? `<span class="ribbon">${t("best")}</span>` : ""}<span class="c-tags">${c.id === cur ? `<span class="tag now">${t("yourNow")}</span>` : ""}${c.not_here ? `<span class="tag warn">${t("notHere")}</span>` : ""}</span></div>
 <h3>${esc(pick(c.name))}</h3>
@@ -763,6 +764,7 @@ ${labour && c.upland ? `<span class="tag warn">${t("labourWarn")}</span>` : ""}
 <b>${t("why")}</b><ul>${c.id === cur ? `<li>${t("isNow")}</li>` : ""}${li(c.why)}</ul>
 <b>${t("benefits")}</b><ul>${li(c.benefits)}</ul>${risks.length ? `<b>${t("risks")}</b><ul>${li(risks)}</ul>` : ""}
 <p class="adv c-src">${t("cardSrc")}${cite(c.src)}</p></details>
+${before ? `<div class="before8"><b>${t("beforeChoose")}</b><ul>${li(risks)}</ul></div>` : ""}
 <div class="c-actions"><button type="button" class="plan-btn" data-plan="${c.id}" aria-pressed="${c.id === plan.id && planId === plan.id}">${t(c.id === plan.id ? (planId === plan.id ? "planOn" : "planAuto") : "planBtn")}</button>
 <button type="button" class="cmp-btn" data-cmp="${c.id}" aria-pressed="${cmp.includes(c.id)}">${ico("cmp")}<span>${t(cmp.includes(c.id) ? "cmpOn" : "cmpBtn")}</span></button>
 <button type="button" class="listen-btn" data-listen="${c.id}" aria-pressed="${speaking === c.id}">${ico("listen")}<span>${t(speaking === c.id ? "listenStop" : "listen")}</span></button></div>

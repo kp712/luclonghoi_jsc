@@ -319,6 +319,8 @@ body.ui-simple .card h3 { font-size: 1.25rem }
 .dots i { width: 6px; height: 6px; border-radius: 50%; border: 1px solid var(--ink-3) }
 .dots i.on { background: var(--gold); border-color: var(--gold) }
 .conf { font: 500 .8125rem/1.4 var(--font); letter-spacing: 0; text-transform: none; color: var(--ink-3) }
+.before8 { margin: .5rem 0; padding: .625rem .75rem; border-left: 3px solid var(--gold); border-radius: 8px; background: var(--panel-solid) }
+.before8 ul { margin: .25rem 0 0; padding-left: 1.1rem; list-style: disc } .before8 li + li { margin-top: .375rem }
 .field8 { display: flex; gap: .4rem; font-size: .8125rem; color: var(--ink-2) }
 .field8 .ico { color: var(--water); margin-top: .15em }
 .card details { border-top: 1px solid var(--line); padding-top: .2rem }
