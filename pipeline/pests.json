@@ -1,0 +1,67 @@
+{
+  "_readme": "Inputs for the Pests score (1.0-5.0, higher = less pest pressure). Rice: pressure is the brown planthopper (Nilaparvata lugens) temperature curve in `points` [temp_c, pressure 0-1], interpolated linearly: no development at 20 C or below, full pressure 25-30 C, none again at 35 C (Horgan et al. 2020, checked). Pressure is flat across the Mekong pins here (monthly means sit in the 25-30 C plateau), so rice does not separate sites; the score separates crops and months, and that is a decision, not an omission. Three constants have no numeric source and are team estimates (they cost one confidence level): shrimp `floor` (0.5, the lowest shrimp-phase pressure), shrimp `cold_drop_c` (4.2 C, from the 4.2-4.5 C pond swings in the Global Seafood Alliance review) and shrimp `hot_c` (35 C, from the Kien Giang reports); `break_weight` (0.5) is the share of the rice pest cycle credited to a break crop. Upland pests are named per crop, with no numeric curve.",
+  "rice": {
+    "points": [[20, 0], [25, 1], [30, 1], [35, 0]],
+    "source": {
+      "title": "Horgan, Arida, Ardestani, Almazan (2020), PLoS ONE 15(6): e0235506, brown planthopper (Nilaparvata lugens) development and reproduction by temperature",
+      "url": "https://doi.org/10.1371/journal.pone.0235506",
+      "note": "Checked 2026-11-15 against the article text. Colony from Laguna, Philippines, reared at IRRI on IR22. Quotes: \"did not develop to adults at 15 and 20°C\"; \"Nymphs failed to develop beyond the fourth instar at 35°C\"; \"egg-laying peaked at 30°C\"; \"the proportions of nymphs developing to adults before 15 days (0.87 ± 0.02)\" (pooled 25 and 30°C). Philippine colony, not a Mekong one: applied here as the best published temperature curve.",
+      "verified": true
+    }
+  },
+  "shrimp": {
+    "floor": 0.5,
+    "cold_drop_c": 4.2,
+    "hot_c": 35,
+    "sources": [
+      {
+        "title": "Nông nghiệp Việt Nam: Beware of white spot syndrome in shrimp when La Niña returns",
+        "url": "https://vietnamagriculture.nongnghiep.vn/beware-of-white-spot-syndrome-in-shrimp-when-la-nina-returns-d408103.html",
+        "note": "La Niña cool nights are linked to white spot outbreaks in shrimp. Not yet checked: quote the sentence and the temperatures it names.",
+        "verified": false
+      },
+      {
+        "title": "Nông nghiệp Việt Nam: Hot weather causes disease outbreaks on farmed shrimp",
+        "url": "https://vietnamagriculture.nongnghiep.vn/hot-weather-causes-disease-outbreaks-on-farmed-shrimp-d350105.html",
+        "note": "Rice-shrimp losses in Kiên Giang in heat above 35°C. Not yet checked: quote the sentence and the loss figure.",
+        "verified": false
+      },
+      {
+        "title": "Global Seafood Alliance: review of temperature and shrimp disease",
+        "url": "https://www.globalseafood.org/?p=54173",
+        "note": "Review reports 4.2-4.5 °C pond temperature swings after storms linked to outbreaks. Not yet checked: quote the sentence and confirm it concerns shrimp ponds.",
+        "verified": false
+      }
+    ]
+  },
+  "upland": {
+    "watermelon": {
+      "pest": {"en": "melon thrips", "vi": "bọ trĩ"},
+      "source": {
+        "title": "Melon thrips (Thrips palmi) on cucurbits, PMC4212862",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4212862/",
+        "note": "Names melon thrips as a pest of watermelon and other cucurbits. Not yet checked: quote the sentence and confirm watermelon is named.",
+        "verified": false
+      }
+    },
+    "maize": {
+      "pest": {"en": "fall armyworm", "vi": "sâu keo mùa thu"},
+      "source": {
+        "title": "Fall armyworm (Spodoptera frugiperda) on maize, PubMed 32272548",
+        "url": "https://www.pubmed.gov/32272548/",
+        "note": "Fall armyworm as a maize pest. Not yet checked: quote the sentence and confirm the region.",
+        "verified": false
+      }
+    },
+    "mungbean": {
+      "pest": {"en": "whitefly and pod borer", "vi": "bọ phấn trắng và sâu đục quả"},
+      "source": {
+        "title": "Whitefly and pod borer on mung bean, Bangladesh (Annals of Bangladesh Agriculture)",
+        "url": "https://www.banglajol.info/index.php/ABA/article/view/85392",
+        "note": "Whitefly and pod borer as mung bean pests. Not yet checked: quote the sentence and confirm both pests are named.",
+        "verified": false
+      }
+    }
+  },
+  "break_weight": 0.5
+}

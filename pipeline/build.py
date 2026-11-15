@@ -43,6 +43,7 @@ ROTATIONS = json.loads((HERE / "rotations.json").read_text(encoding="utf-8"))["r
 FAO_SRCS = list({s["title"]: s for r in ROTATIONS for s in r["sources"] if s["title"].startswith(("FAO Irrigation and Drainage Paper 56", "FAO (1986)"))}.values())
 RESOURCES = {c["id"]: c for c in json.loads((HERE / "resources.json").read_text(encoding="utf-8"))["crops"]}
 SALINITY = json.loads((HERE / "salinity.json").read_text(encoding="utf-8"))
+PESTS = json.loads((HERE / "pests.json").read_text(encoding="utf-8"))
 LEVELS = ["low", "medium", "high"]
 LEVEL_VI = {"low": "thấp", "medium": "trung bình", "high": "cao"}
 MONTHS = {"en": "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec".split(),

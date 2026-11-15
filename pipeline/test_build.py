@@ -660,6 +660,17 @@ def test_profit_range():
     assert r3["profit_range"]["mid"] == 95.4, r3["profit_range"]
 
 
+def test_pest_sources():
+    P = build.PESTS
+    assert P["rice"]["points"] == [[20, 0], [25, 1], [30, 1], [35, 0]]
+    assert P["shrimp"]["floor"] == 0.5 and P["shrimp"]["cold_drop_c"] == 4.2 and P["shrimp"]["hot_c"] == 35
+    assert P["break_weight"] == 0.5 and set(P["upland"]) == {"watermelon", "maize", "mungbean"}
+    srcs = [P["rice"]["source"], *P["shrimp"]["sources"], *(u["source"] for u in P["upland"].values())]
+    assert all(s["title"] and s["url"].startswith("http") and s["note"] for s in srcs)
+    assert P["rice"]["source"]["verified"]   # Horgan et al. 2020 was checked against its text
+    assert all(u["pest"]["en"] and u["pest"]["vi"] for u in P["upland"].values())
+
+
 if __name__ == "__main__":
     import sys
     # Windows uses cp1252 when output is redirected; Vietnamese text would crash print().
