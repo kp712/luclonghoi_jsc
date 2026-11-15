@@ -835,24 +835,28 @@ const Dash = (() => {
   /* a small drawn paddy at the top of the crop card: the sky follows this month's rain (GPM) against crop need (POWER),
      the water turns amber in salty months (estimate), and the plants grow with the season (seedling → tillers → panicle → ripe) */
   function scene(k, frac, wet, salty) {
-    const W = 640, G = 84, n = 22, out = [], fx = (v) => v.toFixed(1);
+    const W = 640, G = 84, n = 18, out = [], fx = (v) => v.toFixed(1);
     const sky = wet ? `<g class="sc-cloud"><path d="M422 30a12 12 0 0 1 23-4 9 9 0 0 1 15 7h1a7 7 0 0 1 0 14h-38a9 9 0 0 1-1-17z"/>${[0, 1, 2, 3].map((i) => `<path class="sc-drop" style="--d:${i * .35}s" d="M${430 + i * 9} 52l-2 6"/>`).join("")}</g>`
       : `<g class="sc-sun"><circle cx="440" cy="30" r="11"/>${[...Array(8)].map((_, i) => { const a = (i * Math.PI) / 4; return `<path d="M${fx(440 + 15 * Math.cos(a))} ${fx(30 + 15 * Math.sin(a))}L${fx(440 + 20 * Math.cos(a))} ${fx(30 + 20 * Math.sin(a))}"/>` }).join("")}</g>`;
     for (let i = 0; i < n; i++) {
       const x = 14 + i * ((W - 28) / (n - 1)), d = `style="--d:${(i % 4) * .4}s"`, j = (i % 3) - 1;
       if (k === "R") {
-        const h = 8 + Math.min(1, frac) * 42, ripe = frac >= .8, blades = frac < .25 ? 2 : frac < .55 ? 4 : 5, cls = ripe ? "sc-pl ripe" : "sc-pl";
-        let p = ""; for (let b = 0; b < blades; b++) { const s2 = (b - (blades - 1) / 2) * (4 + frac * 5); p += `<path d="M${fx(x)} ${G}q${fx(s2 * .4)} ${fx(-h * .5)} ${fx(s2)} ${fx(-h * (.75 + .25 * ((b + i) % 2)))}"/>` }
-        if (frac >= .55) p += ripe ? `<path class="sc-pan" d="M${fx(x)} ${G}q1 ${fx(-h)} ${fx(8 + j)} ${fx(-h * .78)}"/>` : `<path class="sc-pan" d="M${fx(x)} ${G}v${fx(-h - 4)}"/>`;
+        /* a rice clump: blades arch outward and droop at the tips; panicles bend over as the grain fills */
+        const g = Math.min(1, frac), h = (10 + g * 40) * (.9 + .1 * ((i * 7) % 3)), ripe = frac >= .8, nb = g < .25 ? 3 : 5, sp = 5 + g * 9, cls = ripe ? "sc-pl ripe" : "sc-pl";
+        let p = ""; for (let b = 0; b < nb; b++) { const t = (b - (nb - 1) / 2) / ((nb - 1) / 2 || 1), dx = t * sp, tip = h * (1 - .28 * Math.abs(t));
+          p += `<path d="M${fx(x)} ${G}C${fx(x + dx * .15)} ${fx(G - h * .55)} ${fx(x + dx * .55)} ${fx(G - h * .95)} ${fx(x + dx)} ${fx(G - tip)}"/>` }
+        if (frac >= .55) { const bend = ripe ? 9 : 5, top = G - h * 1.02; p += `<path class="sc-pan" d="M${fx(x)} ${fx(G - h * .45)}C${fx(x)} ${fx(top)} ${fx(x + bend * .6)} ${fx(top - 3)} ${fx(x + bend)} ${fx(top + (ripe ? 9 : 4))}"/>` }
         out.push(`<g class="${cls}" ${d}>${p}</g>`);
       } else if (k === "U") { const r = 3 + Math.min(1, frac) * 9;
         out.push(`<g class="sc-pl" ${d}><path d="M${fx(x)} ${G}v${fx(-r)}"/><circle class="sc-bush" cx="${fx(x)}" cy="${fx(G - r - r * .6)}" r="${fx(r)}"/>${frac > .7 ? `<circle class="sc-fruit" cx="${fx(x + r * .4)}" cy="${fx(G - r - r * .3)}" r="2.2"/>` : ""}</g>`);
       } else if (k === "S") { if (i % 2) out.push(`<path class="sc-shrimp" ${d} d="M${fx(x - 6)} ${G - 4 + j * 2}q6 -7 12 0q-4 4 -9 2"/>`) }
       else out.push(`<path class="sc-stub" d="M${fx(x - 3)} ${G}l1 -5M${fx(x)} ${G}v-6M${fx(x + 3)} ${G}l-1 -5"/>`);
     }
+    const back = k === "R" ? [...Array(24)].map((_, i) => { const x = 6 + i * 27 + (i % 2) * 6, h = (6 + Math.min(1, frac) * 22) * (.85 + .15 * (i % 3)), sp = 3 + Math.min(1, frac) * 5;
+      return `<path d="M${fx(x)} ${G - 7}c${fx(-sp * .2)} ${fx(-h * .6)} ${fx(-sp * .6)} ${fx(-h * .9)} ${fx(-sp)} ${fx(-h * .85)}M${fx(x)} ${G - 7}c0 ${fx(-h * .6)} 0 ${fx(-h * .9)} 1 ${fx(-h)}M${fx(x)} ${G - 7}c${fx(sp * .2)} ${fx(-h * .6)} ${fx(sp * .6)} ${fx(-h * .9)} ${fx(sp)} ${fx(-h * .85)}"/>` }).join("") : "";
     const water = k === "R" || k === "S" ? `<path class="sc-water${salty ? " salty" : ""}" d="M0 ${G - (k === "S" ? 16 : 6)}q20 -3 40 0t40 0t40 0t40 0t40 0t40 0t40 0t40 0t40 0t40 0t40 0t40 0t40 0t40 0t40 0t40 0V${G + 4}H0z"/>` : "";
     return `<svg class="hx-scene${wet ? " wet" : " dry"}" viewBox="0 0 ${W} 104" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
-      <rect class="sc-sky" width="${W}" height="104"/>${sky}<path class="sc-hill" d="M0 70q130 -18 270 -6t370 -10V104H0z"/>${water}${k === "S" ? out.join("") : ""}
+      <rect class="sc-sky" width="${W}" height="104"/>${sky}<path class="sc-hill" d="M0 70q130 -18 270 -6t370 -10V104H0z"/>${back ? `<g class="sc-back${frac >= .8 ? " ripe" : ""}">${back}</g>` : ""}${water}${k === "S" ? out.join("") : ""}
       <path class="sc-soil" d="M0 ${G}q160 -3 320 0t320 0V104H0z"/>${k === "S" ? "" : out.join("")}</svg>`;
   }
   const sceneFor = (f, c, k, frac) => { const s = siteOf(f.site), nino = isNino(f), m = CM, ra = (nino && s.el && s.el.rain) || s.rain || [], ea = (nino && s.el && s.el.et0) || s.et0 || [];
@@ -902,9 +906,9 @@ const Dash = (() => {
     const meter = (p, cls) => `<span class="t-meter ${cls}" aria-hidden="true"><i style="width:${Math.round(Math.min(1, Math.max(0, p)) * 100)}%"></i></span>`;
     const tl = (ico, h, v, u, sub, src, cls, mt) => `<div class="t-tile ${cls || ""}"><span class="t-th"><span class="t-tic" aria-hidden="true">${ic(ico, 14)}</span>${esc(h)}</span><b class="t-tv">${v}<small>${esc(u)}</small></b>${mt || ""}<span class="t-ts">${esc(sub)}</span><span class="t-src">${esc(src)}</span></div>`;
     return `<section class="t-card t-tiles" aria-labelledby="tTlH"><h3 class="t-k" id="tTlH">${ic("drop", 18)}<span>${esc(T("tilesH"))} · ${esc(MLONG(m))}</span></h3>
-      <div class="t-grid">${r != null ? tl("drop", T("tRain"), big(r), "mm", short > 0 ? T("tShort")(short) : T("tOk"), "NASA GPM IMERG", short > 0 ? "dry" : "wet", meter(e ? r / e : 1, "m-rain")) : ""}
-        ${e != null ? tl("sun", T("tNeed"), big(e), "mm", "ET₀", "NASA POWER", "need", meter(1, "m-sun")) : ""}
-        ${g != null ? tl("rice", T("tGreen"), nf(g, 2), "", T("tNd"), "NASA MODIS NDVI", "green", meter(g, "m-green")) : ""}</div>
+      <div class="t-grid">${r != null ? tl("drop", T("tRain"), big(r), "mm", short > 0 ? T("tShort")(short) : T("tOk"), "NASA GPM IMERG", short > 0 ? "tc-dry" : "tc-wet", meter(e ? r / e : 1, "m-rain")) : ""}
+        ${e != null ? tl("sun", T("tNeed"), big(e), "mm", "ET₀", "NASA POWER", "tc-need", meter(1, "m-sun")) : ""}
+        ${g != null ? tl("rice", T("tGreen"), nf(g, 2), "", T("tNd"), "NASA MODIS NDVI", "tc-green", meter(g, "m-green")) : ""}</div>
       <p class="t-note">${esc(T("tAvg")(nino))}</p></section>`;
   }
   function moneyCard(f, x) {

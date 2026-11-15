@@ -429,7 +429,7 @@ body.dv-zoomed { overflow:hidden }
 .dv-prog .pg-fb p { margin:0; font-size:.9375rem; color:var(--ink) }
 .dv-prog .pg-fb .btn { min-height:46px; justify-content:center; gap:6px }
 .dv-prog .pg-fba { display:flex; flex-wrap:wrap; gap:8px }
-.dv-prog .pg-early { justify-self:start; font-size:.875rem; background:none; border:0; cursor:pointer; min-height:40px }
+.dv-prog .pg-early { justify-self:start; font-size:.875rem; background:none; border:0; cursor:pointer; min-height:44px }
 .a-duo { display:grid; grid-template-columns:minmax(0, 1fr); gap:12px }
 /* 12-month progress on top, suggestions below it (stacked at every width) */
 .dv-fbf { display:grid; gap:12px }
