@@ -355,3 +355,28 @@ body.dv-on .dv-page :is(.btn, .t-field, .ss-card, .fl-it, .nw-k, .nw-o, .s-cal, 
 .t-field { gap:10px; min-height:52px; padding:5px 14px 5px 5px; border-width:2px; border-radius:22px 8px 22px 8px; text-align:left }
 .t-field .t-fi { width:40px; height:40px } .t-field .t-fi .dv-i { width:22px; height:22px }
 .t-field b { text-align:left }
+
+/* ---------- pests this month ---------- */
+.t-pest { --pc:var(--ok) } .t-pest.pl-mid { --pc:var(--gold) } .t-pest.pl-hi { --pc:var(--risk) }
+.t-pest .t-k > .dv-i { background:color-mix(in srgb, var(--pc) 18%, transparent); color:var(--pc) }
+.ps-now { display:grid; grid-template-columns:56px minmax(0, 1fr) auto; gap:14px; align-items:center }
+.ps-ic { display:grid; place-items:center; width:56px; height:56px; border-radius:var(--leaf); background:color-mix(in srgb, var(--pc) 16%, transparent); color:var(--pc) }
+.ps-ic .dv-i { width:30px; height:30px; stroke-width:1.8 }
+.ps-now > div { display:grid; gap:2px; min-width:0 }
+.ps-lv { font-size:1.75rem; font-weight:700; line-height:1.1; color:var(--pc) }
+.ps-who { font-size:1rem; font-weight:600; line-height:1.35 }
+.ps-gauge { display:grid; grid-template-rows:repeat(3, 10px); gap:4px; width:14px }
+.ps-gauge i { border-radius:3px; background:color-mix(in srgb, var(--ink) 12%, transparent) }
+.t-pest.pl-lo .g-lo, .t-pest.pl-mid .g-lo, .t-pest.pl-mid .g-mid, .t-pest.pl-hi .ps-gauge i { background:var(--pc) }
+.ps-gauge .g-hi { order:-1 } .ps-gauge .g-mid { order:0 } .ps-gauge .g-lo { order:1 }
+.ps-why { margin:0; font-size:.9375rem; line-height:1.45; color:var(--ink-2) }
+.ps-yr { display:grid; gap:8px; padding-top:12px; border-top:1px solid var(--line) }
+.ps-yh { font-size:.8125rem; font-weight:600; color:var(--ink-2) }
+.ps-bars { display:grid; grid-template-columns:repeat(12, minmax(0, 1fr)); gap:4px; align-items:end }
+.pb { display:grid; grid-template-rows:56px auto; gap:4px; justify-items:center; min-width:0 }
+.pb i { align-self:end; width:100%; border-radius:6px 2px 6px 2px; background:var(--ok) }
+.pb.pl-mid i { background:var(--gold) } .pb.pl-hi i { background:var(--risk) } .pb.pl-rest i { background:color-mix(in srgb, var(--ink) 18%, transparent) }
+.pb small { font-size:.6875rem; line-height:1; color:var(--ink-3); white-space:nowrap }
+.pb.now small { color:var(--ink); font-weight:700 } .pb.now i { box-shadow:0 0 0 2px var(--panel-solid), 0 0 0 4px var(--pc) }
+.ps-sc { display:grid; gap:2px; margin:0; font-size:.9375rem; line-height:1.4 } .ps-sc span { color:var(--ink-2); font-size:.875rem }
+@media (max-width:420px) { .ps-bars { gap:3px } .pb small { font-size:.625rem } }

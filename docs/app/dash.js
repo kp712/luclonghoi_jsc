@@ -132,6 +132,7 @@ const Dash = (() => {
 
   /* line icons, same set and stroke as the Plan Lab */
   const ICON = {
+    bug: '<ellipse cx="12" cy="14" rx="4.6" ry="5.8"/><path d="M12 8.2V20"/><path d="M9.4 6.4 8 4.5M14.6 6.4 16 4.5"/><path d="M7.4 11.5 4.5 10M7.4 15H4M7.8 18.2 5 20M16.6 11.5l2.9-1.5M16.6 15H20M16.2 18.2 19 20"/><circle cx="12" cy="7.6" r="2.2"/>',
     rice: '<path d="M12 21V8"/><path d="M12 8c-2.4-.6-3.6-2.4-3.6-5 2.4.6 3.6 2.4 3.6 5Z"/><path d="M12 8c2.4-.6 3.6-2.4 3.6-5-2.4.6-3.6 2.4-3.6 5Z"/><path d="M12 14c-2.4-.6-3.6-2.4-3.6-5"/><path d="M12 14c2.4-.6 3.6-2.4 3.6-5"/>',
     shrimp: '<path d="M4 16c.8-6 5.6-10 11.5-9.2 3.2.4 4 3.4 2 5.2-1.8 1.7-4.6 1-5.8 3.2L9 20"/><path d="M4 16l3 1"/><circle cx="16" cy="9.5" r=".6"/>',
     upland: '<path d="M12 21v-8"/><path d="M12 13c-4.2 0-6.2-3-6.2-7 4.2 0 6.2 3 6.2 7Z"/><path d="M12 15c0-4 2-6 6-6 0 4-2 6-6 6Z"/>',
@@ -704,6 +705,11 @@ const Dash = (() => {
     heroSrc: "Ngày là ước tính từ lịch vụ và số tuần bạn nhập. Lúa 90–100 ngày; bón thúc 7–10, 18–22, 38–42 ngày sau sạ; rút nước 7–15 ngày trước gặt (hướng dẫn kỹ thuật).",
     mk: { top1: "Bón thúc lần 1", top2: "Bón thúc lần 2", top3: "Bón thúc lần 3", drain: "Rút nước trước khi gặt" },
     todoH: "Việc cần làm", todoNow: (m) => `Tháng ${m}`, todoNext: (m) => `Tháng ${m}`, planL: "Kế hoạch",
+    pestH: "Sâu bệnh tháng này", pestLv: { lo: "Thấp", mid: "Vừa", hi: "Cao" }, pestWord: (l) => `Áp lực sâu bệnh: ${l}`,
+    pestWho: { R: "Rầy nâu trên lúa", S: "Bệnh tôm khi trời nóng hoặc lạnh", U: "Sâu hại cây màu", "-": "Ruộng nghỉ" },
+    pestWhy: { R: (t) => `Nhiệt độ trung bình ${t} °C. Rầy nâu phát triển đủ ở 25–30 °C, không lớn được ở 20 °C và 35 °C.`, S: (h, c) => `${h} ngày từ 35 °C trở lên, ${c} ngày lạnh đột ngột trong tháng. Không có ngày nào thì vẫn tính mức nền (ước tính của nhóm).`, U: "Chưa có số liệu sâu cây màu theo nhiệt độ, nên tính ở mức cao.", "-": "Không có lúa trong ruộng: vòng đời rầy nâu bị cắt." },
+    pestYr: "12 tháng tới", pestScore: (x) => `Điểm ít sâu bệnh của kế hoạch: ${x}/5`, pestBreak: (n) => `${n} tháng nghỉ hoặc cây khác cắt vòng đời rầy.`,
+    pestSrc: "Nhiệt độ: NASA POWER · đường cong rầy nâu: Horgan và cộng sự 2020 · trung bình nhiều năm, không phải dự báo.", pestSrcN: "Nhiệt độ: NASA POWER · đường cong rầy nâu: Horgan và cộng sự 2020 · năm El Niño.",
     tilesH: "Nước và cây tháng này", tRain: "Mưa", tNeed: "Cây cần", tGreen: "Độ xanh", tShort: (n) => `thiếu ${n} mm`, tOk: "mưa đủ", tNd: "0 đến 1, cao là xanh",
     tAvg: (y) => `Trung bình nhiều năm${y ? " · năm El Niño" : ""}. Không phải dự báo.`,
     nowQ: "Ruộng đang có gì bây giờ?", nowWhy: "Kế hoạch 12 tháng bắt đầu từ hôm nay và từ vụ đang có trên ruộng.",
@@ -738,6 +744,11 @@ const Dash = (() => {
     heroSrc: "Dates are estimates from the crop calendar and the weeks you entered. Rice takes 90–100 days; top-dress at 7–10, 18–22 and 38–42 days after sowing; drain 7–15 days before harvest (technical guide).",
     mk: { top1: "First top-dressing", top2: "Second top-dressing", top3: "Third top-dressing", drain: "Drain before harvest" },
     todoH: "What to do", todoNow: (m) => MLONG(m - 1), todoNext: (m) => MLONG(m - 1), planL: "Plan",
+    pestH: "Pests this month", pestLv: { lo: "Low", mid: "Medium", hi: "High" }, pestWord: (l) => `Pest pressure: ${l}`,
+    pestWho: { R: "Brown planthopper on rice", S: "Shrimp disease in hot or cold spells", U: "Upland crop pests", "-": "Field resting" },
+    pestWhy: { R: (t) => `Mean temperature ${t} °C. Brown planthoppers develop fully at 25–30 °C and fail to grow at 20 °C and 35 °C.`, S: (h, c) => `${h} days at or above 35 °C and ${c} sudden cold days this month. With none, a base level still counts (team estimate).`, U: "No temperature data for upland pests yet, so it counts as high.", "-": "No rice in the field: the brown planthopper cycle is broken." },
+    pestYr: "Next 12 months", pestScore: (x) => `Plan's fewer-pests score: ${x}/5`, pestBreak: (n) => `${n} rest or other-crop months break the planthopper cycle.`,
+    pestSrc: "Temperature: NASA POWER · planthopper curve: Horgan et al. 2020 · long-term average, not a forecast.", pestSrcN: "Temperature: NASA POWER · planthopper curve: Horgan et al. 2020 · El Niño year.",
     tilesH: "Water and crops this month", tRain: "Rain", tNeed: "Crops need", tGreen: "Greenness", tShort: (n) => `${n} mm short`, tOk: "rain is enough", tNd: "0 to 1, high is green",
     tAvg: (y) => `Long-term average${y ? " · El Niño year" : ""}. Not a forecast.`,
     nowQ: "What is in the field now?", nowWhy: "The 12-month plan starts today, from the crop in your field now.",
@@ -911,6 +922,33 @@ const Dash = (() => {
         ${g != null ? tl("rice", T("tGreen"), nf(g, 2), "", T("tNd"), "NASA MODIS NDVI", "tc-green", meter(g, "m-green")) : ""}</div>
       <p class="t-note">${esc(T("tAvg")(nino))}</p></section>`;
   }
+  /* pests: the same rule as build.py pest_pressure (pest_rule in sites.json, NASA POWER monthly climate), month by month on the plan window */
+  function pestAt(f, k, m) {
+    const J = typeof SITES_JSON !== "undefined" ? SITES_JSON : null, R = J && J.pest_rule, raw = J && J.sites.find((y) => y.id === f.site);
+    if (!R || !raw) return null;
+    const cl = (isNino(f) && raw.elnino && raw.elnino.climate) || raw.climate, t = cl.tmean_c[m], pts = R.rice_points;
+    if (k === "R" || k === "T") { let p = 0; if (pts[0][0] <= t && t <= pts[pts.length - 1][0]) for (let i = 1; i < pts.length; i++) if (t <= pts[i][0]) { const [t0, p0] = pts[i - 1], [t1, p1] = pts[i]; p = p0 + (p1 - p0) * (t - t0) / (t1 - t0); break }
+      return { p, t, k: "R" } }
+    if (k === "S") { const h = cl.hot_days[m] || 0, c = cl.cold_days[m] || 0; return { p: R.shrimp_floor + (1 - R.shrimp_floor) * Math.min((h + c) / new Date(2001, m + 1, 0).getDate(), 1), h, c, k: "S" } }
+    if (k === "U") return { p: R.upland_pressure, k: "U" };
+    return { p: 0, k: "-" };
+  }
+  const pestLv = (p) => (p >= 0.67 ? "hi" : p >= 0.34 ? "mid" : "lo");
+  function pestCard(f, x) {
+    const { c } = x, cells = c.cells || [], k0 = (c.months[CM] || "-")[0], now = pestAt(f, k0, CM);
+    if (!now) return "";
+    const lv = pestLv(now.p), why = T("pestWhy")[now.k], whyT = typeof why === "function" ? (now.k === "R" ? why(nf(now.t, 1)) : why(nf(now.h), nf(now.c))) : why;
+    const bars = cells.map((cl, i) => { const q = pestAt(f, cl.code[0], cl.m) || { p: 0 }, l = pestLv(q.p);
+      return `<span class="pb pl-${cl.code === "-" ? "rest" : l}${i === 0 ? " now" : ""}" title="${esc(MS()[cl.m])}: ${esc(T("pestLv")[l])}"><i style="height:${Math.max(6, Math.round(q.p * 100))}%"></i><small>${esc(MS()[cl.m])}</small></span>` }).join("");
+    const brk = cells.filter((cl) => cl.code === "-" || "SU".includes(cl.code[0])).length, sc = c.scores && c.scores.pests;
+    return `<section class="t-card t-pest pl-${lv}" aria-labelledby="tPsH"><h3 class="t-k" id="tPsH">${ic("bug", 18)}<span>${esc(T("pestH"))} · ${esc(MLONG(CM))}</span></h3>
+      <div class="ps-now"><span class="ps-ic" aria-hidden="true">${ic(KI[now.k] || "bug", 30)}</span><div><b class="ps-lv">${esc(T("pestLv")[lv])}</b><span class="ps-who">${esc(T("pestWho")[now.k])}</span></div>
+        <span class="ps-gauge" role="img" aria-label="${esc(T("pestWord")(T("pestLv")[lv]))}"><i class="g-lo"></i><i class="g-mid"></i><i class="g-hi"></i></span></div>
+      <p class="ps-why">${esc(whyT)}</p>
+      <div class="ps-yr"><span class="ps-yh">${esc(T("pestYr"))}</span><div class="ps-bars" aria-hidden="true">${bars}</div></div>
+      ${sc != null || brk ? `<p class="ps-sc">${sc != null ? `<b>${esc(T("pestScore")(nf(sc, 1)))}</b>` : ""}${brk ? `<span>${esc(T("pestBreak")(brk))}</span>` : ""}</p>` : ""}
+      <p class="t-note">${esc(T(isNino(f) ? "pestSrcN" : "pestSrc"))}</p></section>`;
+  }
   function moneyCard(f, x) {
     const mon = shownMoney(f, x), two = mon && moneyYears(f, x);
     return `<div class="s-card s-money"><span class="s-k">${ic("coin", 18)}${esc(T("moneyH"))}</span>
@@ -930,7 +968,7 @@ const Dash = (() => {
         <div class="s-row"><span class="s-drop" aria-hidden="true">${ic("drop", 46)}</span><div><b class="s-word">${esc(T("lv")[x.lv])}${adv() ? ` <small>${nf(x.g, 1)}‰</small>` : ""}</b>
         <span class="s-light" aria-hidden="true"><i class="ngot"></i><i class="lo"></i><i class="man"></i></span></div></div>
         <span class="s-sub">${esc(x.sl.txt)}</span><small>${esc(T("est"))}</small></div>
-      ${tiles(f, x)}${remindCard(f)}${moneyCard(f, x)}</div>
+      ${tiles(f, x)}${pestCard(f, x)}${remindCard(f)}${moneyCard(f, x)}</div>
       <button type="button" class="s-card s-cal" data-dv="season"><span class="s-k">${ic("cal", 18)}${esc(T("ribbonH"))}</span>${ribbon(f, c)}<span class="dv-more">${esc(T("tapPlan"))} ${ic("chev", 14)}</span></button>
       <p class="sd-note s-ask">${esc(T("ask"))}</p></div>`;
   }
