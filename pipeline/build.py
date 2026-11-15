@@ -35,6 +35,11 @@ TOL, TOL_ESTIMATE = 0.5, True
 HEAT_REF = 30             # days at or above 35 °C that take the heat part to 1.0: about a month of hot days (team choice)
 BRACKISH_SOIL = 0.5       # soil points lost where the calendar has shrimp months (team estimate: Ngoc et al. 2023 give salinity readings, no score)
 BRACKISH_ESTIMATE = True  # False once a source gives BRACKISH_SOIL as a number
+# Soil score parts (see score_soil). Legume months are sourced (Rahman et al. 2014); the weights, the 3 dry months for full
+# dry-break credit and the rice-month share have no numeric source: team estimates, listed on every card that uses them.
+SOIL_W = {"legume": 0.45, "cover": 0.2, "dry": 0.2, "rice": 0.15}
+SOIL_DRY_MONTHS = 3
+SOIL_ESTIMATE = True      # False once sources give the weights as numbers
 WS_W = (0.6, 0.2, 0.2)    # weights of the salt, heat and canal parts (team choice)
 # Income: published profit figures per crop key and loss shares (pipeline/profits.json, each quote checked in its source note)
 PROFITS = json.loads((HERE / "profits.json").read_text(encoding="utf-8"))
@@ -425,15 +430,21 @@ def score_weather_salt(rot, clim, sal):
 
 
 def score_soil(rot):
-    """Soil health 1.0-5.0 from the 12-month calendar: 1 + legume + cover - brackish.
-    Legume is min(months / 2, 1); cover is half of the rest-month credit (min(rest / 2, 1)) for rest months that may be a
-    cover crop. Rest and non-rice breaks no longer count here: they are the pest-cycle break in score_pests."""
+    """Soil health 1.0-5.0 = 1 + 4 x gain - brackish, kept between 1 and 5. gain (0-1) is the SOIL_W-weighted sum of:
+    legume min(legume months / 2, 1); cover min(rest / 2, 1) where the rest may be a cover crop; dry break
+    min((rest + upland months) / SOIL_DRY_MONTHS, 1), the months the flooded soil dries out; fewer rice months 1 - rice / 12.
+    Brackish takes BRACKISH_SOIL off where the calendar has shrimp months."""
     m = [c[0] for c in rot["months"]]
-    rest, nonrice = m.count("-"), sum(c in "US" for c in m)
+    rest, nonrice, up, rice = m.count("-"), sum(c in "US" for c in m), m.count("U"), m.count("R")
     legume = sum(c in rot.get("legume_codes", []) for c in m)
     cover, brackish = bool(rot.get("cover_optional")), "S" in m
-    x = 1 + min(legume / 2, 1) + (0.5 * min(rest / 2, 1) if cover else 0) - (BRACKISH_SOIL if brackish else 0)
-    return round(float(min(max(x, 1), 5)), 1), dict(rest=rest, nonrice=nonrice, legume=legume, cover=cover, brackish=brackish)
+    parts = {"legume": min(legume / 2, 1), "cover": min(rest / 2, 1) if cover else 0.0,
+             "dry": min((rest + up) / SOIL_DRY_MONTHS, 1), "rice": 1 - rice / 12}
+    gain = sum(SOIL_W[k] * v for k, v in parts.items())
+    x = 1 + 4 * gain - (BRACKISH_SOIL if brackish else 0)
+    x = math.floor(min(max(x, 1), 5) * 10 + 0.5 + 1e-9) / 10   # halves round up, the same in lab.js (sums like 3.85 sit on a tie)
+    return x, dict(rest=rest, nonrice=nonrice, legume=legume, cover=cover, brackish=brackish,
+                                                    dry=rest + up, rice=rice)
 
 
 def rice_pressure(t):
@@ -675,6 +686,8 @@ def confidence(rot, nd, sal, not_here, elnino=False):
     est = []
     if TOL_ESTIMATE and rot.get("rice_class") == "tolerant":
         est.append(("salt-tolerant rice counted as half a rice month in salt months", "lúa chịu mặn được tính bằng nửa tháng lúa trong các tháng mặn"))
+    if SOIL_ESTIMATE:
+        est.append(("soil score weights and dry-break months", "trọng số điểm đất và số tháng ruộng khô"))
     if BRACKISH_ESTIMATE and "S" in [c[0] for c in rot["months"]]:
         est.append(("salt left by the shrimp phase", "muối còn lại sau vụ tôm"))
     m = [c[0] for c in rot["months"]]
@@ -730,12 +743,12 @@ def make_card(rot, clim, nd, sal, elnino=False):
     why.append(sourced(line(f"Weather & salt {x}: crops in the field in {w['salt_k']} of {w['salt_n']} salt months ({peak_en}); {whole(w['hot_days'])} days at or above 35 °C while crops grow ({pw['en']}); {w['canal_mm']} mm of canal water needed in salty months ({wsrc['en']}).",
                     f"Thời tiết & mặn {vi_num(x)}: có cây trồng trên ruộng trong {w['salt_k']}/{w['salt_n']} tháng mặn ({peak_vi}); {vi_num(whole(w['hot_days']))} ngày từ 35 °C trở lên khi cây đang sinh trưởng ({pw['vi']}); cần {w['canal_mm']} mm nước tưới từ kênh trong các tháng mặn ({wsrc['vi']})."), SALINITY["sources"], POWER_SRC, HEAT_SRC, GPM_SRC))
 
-    # Soil: counted on the calendar (legume months, optional cover crop, brackish months), no satellite data
+    # Soil: counted on the calendar (legume months, optional cover crop, dry months, rice months, brackish months), no satellite data
     x, o = score_soil(rot)
     s["soil"] = x
-    cv, br = o["cover"], o["brackish"]
-    why.append(line(f"Soil {x}: {o['legume']} legume month{'' if o['legume'] == 1 else 's'}{'; cover crop optional: more if you sow one' if cv else ''}{'; brackish months leave salt in the soil' if br else ''}.",
-                    f"Đất {vi_num(x)}: {o['legume']} tháng cây họ đậu{'; cây che phủ không bắt buộc: điểm cao hơn nếu bạn gieo' if cv else ''}{'; các tháng nước lợ để lại muối trong đất' if br else ''}."))
+    cv, br, lg = o["cover"], o["brackish"], o["legume"]
+    why.append(line(f"Soil {x}: {lg} legume month{'' if lg == 1 else 's'}; {o['dry']} month{'' if o['dry'] == 1 else 's'} when the flooded soil dries out; rice in {o['rice']} of 12 months{'; cover crop optional: more if you sow one' if cv else ''}{'; brackish months leave salt in the soil' if br else ''}.",
+                    f"Đất {vi_num(x)}: {lg} tháng cây họ đậu; {o['dry']} tháng đất ruộng được khô; có lúa {o['rice']}/12 tháng{'; cây che phủ không bắt buộc: điểm cao hơn nếu bạn gieo' if cv else ''}{'; các tháng nước lợ để lại muối trong đất' if br else ''}."))
 
     # Pests: rice planthopper pressure from NASA POWER temperature, upland and shrimp pests named, rest months break the cycle
     x, o = score_pests(rot, clim)
