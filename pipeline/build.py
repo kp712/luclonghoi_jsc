@@ -433,7 +433,7 @@ def score_soil(rot):
     legume = sum(c in rot.get("legume_codes", []) for c in m)
     cover, brackish = bool(rot.get("cover_optional")), "S" in m
     x = 1 + min(legume / 2, 1) + (0.5 * min(rest / 2, 1) if cover else 0) - (BRACKISH_SOIL if brackish else 0)
-    return round(min(max(x, 1), 5), 1), dict(rest=rest, nonrice=nonrice, legume=legume, cover=cover, brackish=brackish)
+    return round(float(min(max(x, 1), 5)), 1), dict(rest=rest, nonrice=nonrice, legume=legume, cover=cover, brackish=brackish)
 
 
 def rice_pressure(t):
@@ -730,12 +730,12 @@ def make_card(rot, clim, nd, sal, elnino=False):
     why.append(sourced(line(f"Weather & salt {x}: crops in the field in {w['salt_k']} of {w['salt_n']} salt months ({peak_en}); {whole(w['hot_days'])} days at or above 35 °C while crops grow ({pw['en']}); {w['canal_mm']} mm of canal water needed in salty months ({wsrc['en']}).",
                     f"Thời tiết & mặn {vi_num(x)}: có cây trồng trên ruộng trong {w['salt_k']}/{w['salt_n']} tháng mặn ({peak_vi}); {vi_num(whole(w['hot_days']))} ngày từ 35 °C trở lên khi cây đang sinh trưởng ({pw['vi']}); cần {w['canal_mm']} mm nước tưới từ kênh trong các tháng mặn ({wsrc['vi']})."), SALINITY["sources"], POWER_SRC, HEAT_SRC, GPM_SRC))
 
-    # Soil: counted on the calendar (rest, non-rice, legume months), no satellite data
+    # Soil: counted on the calendar (legume months, optional cover crop, brackish months), no satellite data
     x, o = score_soil(rot)
     s["soil"] = x
     cv, br = o["cover"], o["brackish"]
-    why.append(line(f"Soil {x}: {mo(o['rest'])} rest, {mo(o['nonrice'])} without rice, {o['legume']} legume month{'' if o['legume'] == 1 else 's'}{'; cover crop optional: more if you sow one' if cv else ''}{'; brackish months leave salt in the soil' if br else ''}.",
-                    f"Đất {vi_num(x)}: {o['rest']} tháng nghỉ, {o['nonrice']} tháng không trồng lúa, {o['legume']} tháng cây họ đậu{'; cây che phủ không bắt buộc: điểm cao hơn nếu bạn gieo' if cv else ''}{'; các tháng nước lợ để lại muối trong đất' if br else ''}."))
+    why.append(line(f"Soil {x}: {o['legume']} legume month{'' if o['legume'] == 1 else 's'}{'; cover crop optional: more if you sow one' if cv else ''}{'; brackish months leave salt in the soil' if br else ''}.",
+                    f"Đất {vi_num(x)}: {o['legume']} tháng cây họ đậu{'; cây che phủ không bắt buộc: điểm cao hơn nếu bạn gieo' if cv else ''}{'; các tháng nước lợ để lại muối trong đất' if br else ''}."))
 
     # Pests: rice planthopper pressure from NASA POWER temperature, upland and shrimp pests named, rest months break the cycle
     x, o = score_pests(rot, clim)

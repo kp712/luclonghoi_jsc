@@ -70,7 +70,7 @@ const Dash = (() => {
       tabs: { salt: "Mặn", money: "Tiền", soil: "Đất & nước" }, river: "Sông (trạm đo)", field: "Trong ruộng (ước tính)",
       seen: (n) => `Vệ tinh NASA MODIS thấy khoảng ${n} vụ/năm`, rain: (n) => `Mưa cả năm khoảng ${n} mm (NASA GPM IMERG)`, clay: "Đất sét", range: (a, b, c) => `${a}–${c} triệu/công (giữa ${b})`,
       areaSalt: { high: "Mặn cao", medium: "Mặn vừa", low: "Mặn thấp" }, conf: "Độ tin cậy", confL: { high: "cao", medium: "vừa", low: "thấp" },
-      scSrc: "Nước: NASA POWER + GPM IMERG · Mặn: trạm đo + NASA POWER · Thu nhập: lợi nhuận đã công bố", why: "Vì sao"
+      scSrc: "Nước: NASA POWER + GPM IMERG · Mặn: trạm đo + NASA POWER · Thu nhập: lợi nhuận đã công bố · Sâu bệnh: nhiệt độ NASA POWER (đường cong rầy nâu, Horgan và cộng sự 2020)", why: "Vì sao"
     },
     en: {
       viewing: "Viewing", nowTag: "(this month)", resetM: "Back to this month", pickM: "Pick a month to view", tapTile: "Tap a tile to open it large with details. Tap a month to view that month.", open: "Open",
@@ -125,7 +125,7 @@ const Dash = (() => {
       tabs: { salt: "Salt", money: "Money", soil: "Soil & water" }, river: "River (station)", field: "In the field (estimate)",
       seen: (n) => `NASA MODIS sees about ${n} crops a year`, rain: (n) => `Rain about ${n} mm a year (NASA GPM IMERG)`, clay: "Clay", range: (a, b, c) => `${a}–${c} M₫/công (middle ${b})`,
       areaSalt: { high: "High salt", medium: "Medium salt", low: "Low salt" }, conf: "Confidence", confL: { high: "high", medium: "medium", low: "low" },
-      scSrc: "Water: NASA POWER + GPM IMERG · Salt: stations + NASA POWER · Income: published profit", why: "Why"
+      scSrc: "Water: NASA POWER + GPM IMERG · Salt: stations + NASA POWER · Income: published profit · Pests: NASA POWER temperature (brown planthopper curve, Horgan et al. 2020)", why: "Why"
     }
   };
   const T = (k) => W[lang()][k];

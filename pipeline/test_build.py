@@ -442,6 +442,8 @@ def test_sites_json_contract():
         for c in flat(s):
             assert all(1 <= v <= 5 for v in c["scores"].values() if v is not None), c["scores"]
             assert c["scores"]["pests"] is not None and any(x["en"].startswith("Pests ") for x in c["why"]), c["id"]
+            soil = next(x["en"] for x in c["why"] if x["en"].startswith("Soil "))
+            assert soil.split(":")[0].split()[1] == f"{c['scores']['soil']:.1f}", soil  # always one decimal, e.g. "Soil 1.0"
             if c["id"] == "rice_upland":  # the crop's named pest, once
                 assert sum("in every month it is in the field" in x["en"] for x in c["risks"]) == 1
             assert c["scores"]["income"] is not None or c["crop"] == "mungbean", c["id"]  # only mung bean has no figure
