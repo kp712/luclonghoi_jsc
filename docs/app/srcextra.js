@@ -59,6 +59,6 @@ const SrcExtra = (() => {
     const m = $("#modal"); if (!m) return;
     new MutationObserver(() => inject()).observe(m, { attributes: true, childList: true, subtree: true });
   }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
+  if (document.readyState === "loading" || AppReady.waiting()) AppReady.on(start); else start();
   return { inject };
 })();

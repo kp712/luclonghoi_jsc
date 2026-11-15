@@ -177,6 +177,6 @@ const D5 = (() => {
     themeBtn(); slider(); sync(); paintSlider(); paintTheme();
     if (App.site()) area();
   }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
+  if (document.readyState === "loading" || AppReady.waiting()) AppReady.on(start); else start();
   return { area, plan, month: setMonth, mon: () => mon };
 })();

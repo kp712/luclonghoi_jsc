@@ -748,3 +748,8 @@ body.lang-vi .brand-tag, body.lang-vi .rail-tags { letter-spacing: 0 }
 @media (max-width: 760px) {   /* the bar's row is 56px; --top-h follows the whole bar (app.js) when it wraps to two rows on narrow phones */
   #topbar { min-height: 56px } #brand, .tools { height: 56px }
 }
+
+/* loading line shown by load.js while sites.json downloads */
+.boot-wait { position:fixed; z-index:99990; left:50%; top:50%; transform:translate(-50%, -50%); margin:0; padding:12px 18px; border-radius:14px; background:var(--panel-solid, #13201a); color:var(--ink, #e8efea); font:600 1rem/1.4 var(--font, system-ui, sans-serif); box-shadow:0 6px 24px rgb(0 0 0 / .25) }
+.boot-wait span[lang="en"] { display:block; font-weight:400; font-size:.875rem; opacity:.75 }
+.d-body:focus-visible { outline-offset:-3px }

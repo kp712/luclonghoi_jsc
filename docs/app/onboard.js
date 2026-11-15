@@ -105,6 +105,6 @@ const Onboard = (() => {
       setTimeout(() => start(document.body.classList.contains("drawer-open") ? P2 : P1, null), 150);
     }, true);
   }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", watch); else watch();
+  if (document.readyState === "loading" || AppReady.waiting()) AppReady.on(watch); else watch();
   return { start: (part) => start(part === 2 ? P2 : P1, null), running };
 })();

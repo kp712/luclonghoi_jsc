@@ -303,6 +303,6 @@ const Home = (() => {
 
   /* "Ruộng của tôi" (dash.js) is the first screen now; the landing page shows only when that module is absent */
   function init() { if (location.hash === "#plan-lab" || typeof Dash !== "undefined") hide(); else show() }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
+  if (document.readyState === "loading" || AppReady.waiting()) AppReady.on(init); else init();
   return { render, show, hide, isOn: () => shown };
 })();

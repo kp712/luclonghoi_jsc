@@ -264,7 +264,7 @@ const Side = (() => {
     const onMq = () => { placeSlider(); };
     mq.addEventListener ? mq.addEventListener("change", onMq) : mq.addListener(onMq);
   }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
+  if (document.readyState === "loading" || AppReady.waiting()) AppReady.on(start); else start();
   function toSub(x) { sub = x === "b" ? "b" : "a"; paintSub(); const b = $(".d-body"); if (b) b.scrollTop = 0 }
   return { render, full: setFull, sub: toSub };
 })();

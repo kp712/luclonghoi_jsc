@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Mekong Rotation Explorer</title>
 <meta name="description" content="Crop rotation and salt planning for coastal Sóc Trăng farmers, from NASA data.">
+<link rel="preload" href="data/sites.json" as="fetch" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com">
@@ -145,7 +146,7 @@
   </header>
   <div class="d-prog" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 
-  <div class="d-body">
+  <div class="d-body" tabindex="0" role="region" aria-labelledby="dTitle">
     <section class="view on" id="v1" aria-label="Area">
       <div id="areaHead"><p class="eyebrow">Selected area</p><p class="ph-big">Long Phú</p></div>
       <div class="seg" id="modeSeg" role="group" aria-label="Year">
@@ -238,25 +239,25 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="app/load.js"></script>
-<script src="app/builder.js"></script>
-<script src="app/tiles.js"></script>
-<script src="app/districts.js"></script>
-<script src="app/nitrogen.js"></script>
-<script src="app/strings.js"></script>
-<script src="app/season.js"></script>
-<script src="app/map.js"></script>
-<script src="app/app.js"></script>
-<script src="app/lab.js"></script>
-<script src="app/rx.js"></script>
-<script src="app/extra.js"></script>
-<script src="app/side.js"></script>
-<script src="app/cost.js"></script>
-<script src="app/srcextra.js"></script>
-<script src="app/scene.js"></script>
-<script src="app/home.js"></script>
-<script src="app/onboard.js"></script>
-<script src="app/learn.js"></script>
-<script src="app/mentor.js"></script>
-<script src="app/dash.js"></script>
+<script type="text/x-after-data" data-src="app/builder.js"></script>
+<script type="text/x-after-data" data-src="app/tiles.js"></script>
+<script type="text/x-after-data" data-src="app/districts.js"></script>
+<script type="text/x-after-data" data-src="app/nitrogen.js"></script>
+<script type="text/x-after-data" data-src="app/strings.js"></script>
+<script type="text/x-after-data" data-src="app/season.js"></script>
+<script type="text/x-after-data" data-src="app/map.js"></script>
+<script type="text/x-after-data" data-src="app/app.js"></script>
+<script type="text/x-after-data" data-src="app/lab.js"></script>
+<script type="text/x-after-data" data-src="app/rx.js"></script>
+<script type="text/x-after-data" data-src="app/extra.js"></script>
+<script type="text/x-after-data" data-src="app/side.js"></script>
+<script type="text/x-after-data" data-src="app/cost.js"></script>
+<script type="text/x-after-data" data-src="app/srcextra.js"></script>
+<script type="text/x-after-data" data-src="app/scene.js"></script>
+<script type="text/x-after-data" data-src="app/home.js"></script>
+<script type="text/x-after-data" data-src="app/onboard.js"></script>
+<script type="text/x-after-data" data-src="app/learn.js"></script>
+<script type="text/x-after-data" data-src="app/mentor.js"></script>
+<script type="text/x-after-data" data-src="app/dash.js"></script>
 </body>
 </html>
