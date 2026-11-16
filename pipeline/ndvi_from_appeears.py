@@ -1,7 +1,7 @@
 """MODIS NDVI via NASA AppEEARS (free Earthdata login). Two steps:
 1) python ndvi_from_appeears.py              -> writes data/appeears_points.csv to upload to AppEEARS
 2) python ndvi_from_appeears.py results.csv  -> converts the AppEEARS download to data/raw/ndvi_<id>.json
-Full click path is in the README.
+Full click path is in METHODS.md.
 """
 import csv
 import json
