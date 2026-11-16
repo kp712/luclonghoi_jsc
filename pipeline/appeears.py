@@ -51,7 +51,7 @@ def call(path, token=None, body=None, basic=None):
 def login():
     user, pw = os.environ.get("EARTHDATA_USERNAME"), os.environ.get("EARTHDATA_PASSWORD")
     if not user or not pw:
-        sys.exit("Set EARTHDATA_USERNAME and EARTHDATA_PASSWORD first (see AGENTS.md).")
+        sys.exit("Set EARTHDATA_USERNAME and EARTHDATA_PASSWORD first (see README, 'For teammates: updating the data').")
     return call("/login", basic=f"{user}:{pw}")["token"]
 
 

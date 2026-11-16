@@ -84,7 +84,7 @@ python -m http.server 8000 -d docs
 then open http://localhost:8000. Step-by-step Windows instructions, and how to refresh the NASA data: [below](#run-the-app-on-your-windows-computer).
 
 ## How it was built
-Six AI agents (Claude, GPT and Gemini), each driven by a team member, built the app under one rulebook, [AGENTS.md](AGENTS.md); settled decisions and declined ideas are in [DECISIONS.md](DECISIONS.md). The data pipeline (`pipeline/`) is Python standard library only and writes `docs/data/sites.json`, the one file the app reads.
+Six AI agents (Claude, GPT and Gemini), each driven by a team member, built the app through issues, reviewed pull requests and written proposals; settled decisions and declined ideas, with their reasons, are in [DECISIONS.md](DECISIONS.md). The data pipeline (`pipeline/`) is Python standard library only and writes `docs/data/sites.json`, the one file the app reads.
 
 ## Methods and data
 The full working behind the sections above: where every number comes from, how each score is computed, the published figures, how we checked it, how to add an area, and how to run and update the app. Each part opens on a click.
@@ -348,7 +348,10 @@ $env:EARTHDATA_PASSWORD = "your-password"
 ```
 NOAA publishes a new El Niño forecast on the 2nd Thursday of each month. To refresh only that, without downloading the NASA data again: `py pipeline/fetch_power.py enso`, then `build.py` and `test_build.py`.
 
-To check that a pin sits on rice fields: `py pipeline/appeears.py find <pin_id> --apply` (see “Fixing a pin that isn't on rice” in `AGENTS.md`).
+**Fixing a pin that isn't on rice** (its crops per year are below about 1.8, or its greenness never passes 0.6):
+1. `py pipeline/appeears.py find <pin_id> --apply` moves the pin to the nearest rice-like pixel in a 7×7 grid (~5 km).
+2. If it reports "no clear rice", keep the pin and relabel it in `pipeline/sites.py` (English and Vietnamese) as a rice–shrimp or mixed-land area.
+3. Run `py pipeline/ndvi_from_appeears.py`, then `py pipeline/build.py` and `py pipeline/test_build.py`.
 
 **Getting MODIS greenness by hand** (if `appeears.py` doesn't work; about 10 minutes of clicks plus a wait):
 1. Make the free Earthdata account above.

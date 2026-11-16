@@ -40,7 +40,7 @@ def parse(text):
 def opener():
     user, pw = os.environ.get("EARTHDATA_USERNAME"), os.environ.get("EARTHDATA_PASSWORD")
     if not user or not pw:
-        sys.exit("Set EARTHDATA_USERNAME and EARTHDATA_PASSWORD first (see AGENTS.md).")
+        sys.exit("Set EARTHDATA_USERNAME and EARTHDATA_PASSWORD first (see README, 'For teammates: updating the data').")
     pm = urllib.request.HTTPPasswordMgrWithDefaultRealm()
     pm.add_password(None, "https://urs.earthdata.nasa.gov", user, pw)
     return urllib.request.build_opener(urllib.request.HTTPBasicAuthHandler(pm),
