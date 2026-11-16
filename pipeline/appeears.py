@@ -1,0 +1,182 @@
+"""Fetch MODIS NDVI from NASA AppEEARS with no clicking.
+Needs environment variables EARTHDATA_USERNAME and EARTHDATA_PASSWORD (free account: urs.earthdata.nasa.gov).
+
+  python pipeline/appeears.py ndvi                             # NDVI for every pin -> data/raw/ndvi_<id>.json
+  python pipeline/appeears.py hls                              # NASA HLS 30 m greenness for every pin -> data/raw/hls_<id>.json (cross-check only)
+  python pipeline/appeears.py find vinh_chau my_xuyen          # search ~5 km around pins for rice-like pixels
+  python pipeline/appeears.py find vinh_chau my_xuyen --apply  # ...and move each pin to the best one
+
+AppEEARS queues the job; it can take minutes to hours. The script waits, and if it is stopped,
+running the same command again resumes the same job instead of submitting a new one.
+"""
+import base64
+import hashlib
+import json
+import math
+import os
+import re
+import sys
+import time
+import urllib.request
+
+import hls
+import ndvi
+from ndvi_from_appeears import DATA, convert, parse_raw
+from sites import SITES
+
+API = "https://appeears.earthdatacloud.nasa.gov/api"
+CACHE = DATA / "appeears"          # downloads + job ids (gitignored)
+SITES_PY = DATA.parent / "pipeline" / "sites.py"
+STEP, N = 0.015, 3                 # grid: 7 x 7 points, ~1.6 km apart, covers ~5 km around the pin
+
+
+START = "02-18-2000"  # first MODIS Terra 16-day NDVI
+
+
+def call(path, token=None, body=None, basic=None):
+    data = json.dumps(body).encode() if body is not None else (b"" if basic else None)
+    req = urllib.request.Request(API + path, data=data,
+                                 method="POST" if (body is not None or basic) else "GET")
+    if body is not None:
+        req.add_header("Content-Type", "application/json")
+    if basic:
+        req.add_header("Authorization", "Basic " + base64.b64encode(basic.encode()).decode())
+    if token:  # unredirected: downloads redirect to cloud storage, which rejects a second auth header
+        req.add_unredirected_header("Authorization", "Bearer " + token)
+    with urllib.request.urlopen(req, timeout=300) as r:
+        raw = r.read()
+    return json.loads(raw) if r.headers.get_content_type() == "application/json" else raw
+
+
+def login():
+    user, pw = os.environ.get("EARTHDATA_USERNAME"), os.environ.get("EARTHDATA_PASSWORD")
+    if not user or not pw:
+        sys.exit("Set EARTHDATA_USERNAME and EARTHDATA_PASSWORD first (see README, 'For teammates: updating the data').")
+    return call("/login", basic=f"{user}:{pw}")["token"]
+
+
+MODIS_LAYERS = [{"product": "MOD13Q1.061", "layer": "_250m_16_days_NDVI"}]
+HLS_START, HLS_END = "12-01-2014", "11-30-2024"  # the RECENT seasons in build.py (Sentinel-2 starts late 2015)
+
+
+def run_task(name, coords, layers=None, start=START, end="12-31-2025"):
+    """Submit (or resume) a point task (default: MOD13Q1 NDVI 2000-2025); return the path of the results CSV."""
+    CACHE.mkdir(parents=True, exist_ok=True)
+    # name includes a hash of the request, so moving a pin never reuses an old download (the MODIS hash is unchanged)
+    key = [coords, start] if layers is None else [coords, start, end, layers]
+    name += "-" + hashlib.md5(json.dumps(key, sort_keys=True).encode()).hexdigest()[:8]
+    out, job = CACHE / f"{name}.csv", CACHE / f"{name}.task"
+    if out.exists():
+        return out
+    token = login()
+    if job.exists():
+        task_id = job.read_text(encoding="utf-8").strip()
+        print("resuming AppEEARS job", task_id)
+    else:
+        task = {"task_type": "point", "task_name": name, "params": {
+            "dates": [{"startDate": start, "endDate": end}],
+            "layers": layers or MODIS_LAYERS,
+            "coordinates": coords}}
+        task_id = call("/task", token, task)["task_id"]
+        job.write_text(task_id, encoding="utf-8")
+        print("submitted AppEEARS job", task_id)
+    while (status := call(f"/task/{task_id}", token)["status"]) != "done":
+        if status == "error":
+            job.unlink()
+            sys.exit(f"AppEEARS job {task_id} failed; run again to resubmit.")
+        print(time.strftime("%H:%M"), "job status:", status, "- checking again in 60 s", flush=True)
+        time.sleep(60)
+    files = call(f"/bundle/{task_id}", token)["files"]
+    f = next(f for f in files if f["file_name"].endswith("-results.csv"))
+    out.write_bytes(call(f"/bundle/{task_id}/{f['file_id']}", token))
+    print("downloaded", out)
+    return out
+
+
+def rice_like(series):
+    """Return (is_rice, crops/yr, typical peak, typical low). Rice = 2-3 green peaks a year with bare/flooded dips."""
+    if not series:
+        return False, 0.0, 0.0, 0.0
+    years = {}
+    for d, v in series.items():
+        years.setdefault(d[:4], []).append(v)
+    peak = sum(max(v) for v in years.values()) / len(years)
+    low = sum(min(v) for v in years.values()) / len(years)
+    crops = ndvi.crops_per_year(series)
+    # shortcut: thresholds are rules of thumb for Mekong rice; a shrimp pond stays low, an orchard stays flat-high
+    return 1.8 <= crops <= 3.3 and peak >= 0.6 and low <= 0.35, crops, round(peak, 2), round(low, 2)
+
+
+def grid(site):
+    """7 x 7 candidate points around a pin. IDs are letters+digits only (AppEEARS strips underscores)."""
+    base = site["id"].replace("_", "")
+    return [{"id": f"{base}{i + N}{j + N}", "category": site["id"],
+             "latitude": round(site["lat"] + i * STEP, 4), "longitude": round(site["lon"] + j * STEP, 4)}
+            for i in range(-N, N + 1) for j in range(-N, N + 1)]
+
+
+def km(lat1, lon1, lat2, lon2):
+    return 111.2 * math.hypot(lat2 - lat1, (lon2 - lon1) * math.cos(math.radians(lat1)))
+
+
+def move_pin_text(text, sid, lat, lon):
+    new, n = re.subn(rf'("id": "{sid}", "lat": )[-\d.]+(, "lon": )[-\d.]+', rf"\g<1>{lat}\g<2>{lon}", text)
+    assert n == 1, f"could not find pin {sid} in sites.py"
+    return new
+
+
+def find(ids, apply):
+    sites = [s for s in SITES if s["id"] in ids]
+    assert len(sites) == len(ids), f"unknown pin in {ids}; known: {[s['id'] for s in SITES]}"
+    pts = [p for s in sites for p in grid(s)]
+    with open(run_task("find-" + "-".join(sorted(ids)), pts), encoding="utf-8", newline="") as f:
+        series = parse_raw(f)
+    for s in sites:
+        rows = []
+        for p in grid(s):
+            if p["id"] in series:
+                ok, crops, peak, low = rice_like(series[p["id"]])
+                rows.append((not ok, km(s["lat"], s["lon"], p["latitude"], p["longitude"]), p, crops, peak, low))
+        rows.sort(key=lambda r: (r[0], r[1]))  # rice-like first, then nearest
+        good = [r for r in rows if not r[0]]
+        print(f"\n{s['id']}: {len(good)} of {len(rows)} points look like rice")
+        for bad, dist, p, crops, peak, low in rows[:5]:
+            print(f"  {'RICE ' if not bad else 'no   '} {p['latitude']}, {p['longitude']}  {dist:.1f} km away"
+                  f"  crops/yr {crops}  peak {peak}  low {low}")
+        if not good:
+            print(f"  -> no clear rice near {s['id']}: keep the pin and relabel it as mixed / rice-shrimp land")
+        elif apply:
+            p = good[0][2]
+            SITES_PY.write_text(move_pin_text(SITES_PY.read_text(encoding="utf-8"), s["id"], p["latitude"], p["longitude"]),
+                                encoding="utf-8")
+            (DATA / "raw" / f"ndvi_{s['id']}.json").write_text(json.dumps(series[p["id"]]), encoding="utf-8")
+            print(f"  -> moved {s['id']} to {p['latitude']}, {p['longitude']} and saved its NDVI")
+    if apply:
+        print("\nNext: python pipeline/ndvi_from_appeears.py  (refresh the upload file), then build.py and test_build.py")
+
+
+def main(args):
+    if args[:1] == ["ndvi"]:
+        pts = [{"id": s["id"].replace("_", ""), "category": "pin", "latitude": s["lat"], "longitude": s["lon"]} for s in SITES]
+        convert(run_task("ndvi", pts))
+    elif args[:1] == ["hls"]:
+        pts = [p for s in SITES for p in hls.points(s)]
+        layers = [{"product": p, "layer": l} for p, l in hls.LAYERS]
+        out = run_task("hls", pts, layers, HLS_START, HLS_END)
+        try:
+            with open(out, encoding="utf-8", newline="") as f:
+                series = hls.refresh(f, [s["id"] for s in SITES], DATA / "raw")
+        except ValueError as e:
+            sys.exit(f"ERROR: {e}. Existing data/raw/hls_*.json left untouched.")
+        for sid, s in series.items():
+            print(sid, len(s), "clear HLS dates" + ("  (WARNING: zero coverage, every month unknown)" if not s else ""))
+    elif args[:1] == ["find"] and len(args) > 1:
+        find([a for a in args[1:] if a != "--apply"], "--apply" in args)
+    else:
+        sys.exit(__doc__)
+
+
+if __name__ == "__main__":
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
+    main(sys.argv[1:])

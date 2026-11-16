@@ -1,0 +1,341 @@
+{
+ "_readme": "Hand-curated inputs per crop for the 12-month plan: seed rate (shrimp: stocking density), fertiliser N-P2O5-K2O per ha for one season, and key steps, in English and Vietnamese. Every figure needs a source whose note quotes it; verified: true only after reading the source. null or [] = no checked figure yet (the app says so). duration_days (rice, mungbean, watermelon, maize; used by the seed check, #10) = [min, max] days the crop occupies the field, from sowing or transplanting into the field to the LAST harvest (no nursery time); null when no source places both ends. Optional scope (EN/VI) is shown under the crop when the figures come from outside the Mekong Delta.",
+ "crops": [
+  {
+   "id": "rice",
+   "name": {
+    "en": "Rice",
+    "vi": "Lúa"
+   },
+   "seed": {
+    "en": "70–80 kg/ha of certified seed (no more than 70 kg/ha from 2028)",
+    "vi": "70–80 kg/ha giống xác nhận (từ năm 2028 không quá 70 kg/ha)"
+   },
+   "fertiliser": {
+    "en": "Winter–spring on alluvial soil: N 90–100, P2O5 30–40, K2O 30–40 kg/ha; cut N by 15–20% in summer–autumn and autumn–winter",
+    "vi": "Vụ Đông Xuân, đất phù sa: N 90–100, P2O5 30–40, K2O 30–40 kg/ha; vụ Hè Thu và Thu Đông giảm đạm 15–20%"
+   },
+   "duration_days": [90, 100],
+   "steps": [
+    {
+     "en": "Prepare and level the field (no more than 5 cm between high and low spots), then drain it 6–12 hours before row or cluster sowing.",
+     "vi": "Làm đất, san phẳng mặt ruộng (cao thấp chênh không quá 5 cm), rút nước 6–12 giờ trước khi sạ hàng hoặc sạ cụm."
+    },
+    {
+     "en": "Put all organic fertiliser, lime and phosphate in before sowing; top-dress 40% N at 7–10 days, 40% N + 40% K2O at 18–22 days, 20% N + 60% K2O at 38–42 days after sowing.",
+     "vi": "Bón lót toàn bộ phân hữu cơ, vôi và lân trước khi sạ; bón thúc 40% N lúc 7–10 ngày, 40% N + 40% K2O lúc 18–22 ngày, 20% N + 60% K2O lúc 38–42 ngày sau sạ."
+    },
+    {
+     "en": "From tillering until heading, drain the field at least twice and let it stay dry for at least 3 days each time (alternate wetting and drying).",
+     "vi": "Từ đẻ nhánh đến trước trỗ, rút cạn nước ít nhất 2 lần, mỗi lần để ruộng khô ít nhất 3 ngày (tưới ướt khô xen kẽ)."
+    },
+    {
+     "en": "Drain 7–15 days before harvest; harvest when 85–90% of grains are ripe and dry the paddy within 24 hours.",
+     "vi": "Rút nước 7–15 ngày trước thu hoạch; gặt khi lúa chín 85–90% và sấy lúa trong vòng 24 giờ."
+    }
+   ],
+   "sources": [
+    {
+     "title": "Cục Trồng trọt và Bảo vệ thực vật (10 Nov 2025), Quy trình sản xuất lúa chất lượng cao và phát thải thấp vùng ĐBSCL (kèm QĐ 4043/QĐ-TTTV-TTBVTV); copy on Cà Mau provincial portal",
+     "url": "https://storage-vnportal.vnpt.vn/cmu-khdn/5342/Vanban/quy-trinh-4043-qt-san-xuat-lua-clc-va-ptt-vung-dbscl-1.pdf",
+     "verified": true,
+     "note": "Checked. PDF read in full (pdftotext). §1.2: 'Trước năm 2028: lượng giống 70 - 80 kg/ha.' / 'Từ năm 2028 trở đi: lượng giống không quá 70 kg/ha.' §1.5b: 'Đối với đất phù sa: 90-100 kg N, 30-40 kg P2O5 và 30-40 kg K2O.' (vụ Đông Xuân) and 'Lượng phân đạm sử dụng trong vụ Hè Thu và Thu Đông giảm 15 - 20% so với vụ Đông Xuân.' §1.5c: 'nên bón lót 100% phân hữu cơ, vôi và lân trước khi gieo sạ'; 'Lần 1 (7 - 10 ngày sau sạ): bón 40% N.' 'Lần 2 (18 - 22 ngày sau sạ): bón 40% N + 40% K2O' 'Lần 3 (38 - 42 ngày sau sạ): bón 20% N + 60% K2O'. §1.1: 'rút nước khỏi mặt ruộng từ 6 - 12 giờ trước khi vận hành máy sạ hàng, sạ cụm'; 'chênh lệch giữa điểm cao nhất và thấp nhất tối đa không quá 5 cm'. §1.4: 'cần thực hiện rút nước tối thiểu 02 lần' ... 'ruộng khô tối thiểu 03 ngày liên tục'; 'rút nước trước thu hoạch từ 7 - 15 ngày'. §2a: 'khi lúa chín khoảng 85 - 90%'; §2b: 'Lúa cần được sấy khô trong vòng 24 giờ sau khi thu hoạch.'"
+    },
+    {
+     "title": "Trung tâm Khuyến nông Quốc gia (29 Mar 2024), Quy trình kỹ thuật sản xuất lúa chất lượng cao và phát thải thấp vùng Đồng bằng sông Cửu Long",
+     "url": "https://khuyennongvn.gov.vn/khoa-hoc-cong-nghe/khcn-trong-nuoc/quy-trinh-ky-thuat-san-xuat-lua-chat-luong-cao-va-phat-thai-thap-vung-dong-bang-song-cuu-long-24342.html",
+     "verified": true,
+     "note": "Checked. Page fetched and read; this is the 2024 publication of the protocol under the same name (the page gives no decision number; not compared line by line with the 2025 PDF above). Heading: 'b. Lượng phân bón cho 01 ha đối với lúa gieo sạ' (so the rates are per hectare), then 'Phân bón đa lượng đối với vụ Đông Xuân:'. 'Đối với đất phù sa: 90-100 kg N, 30-40 kg P2O5 và 30-40 kg K2O.' Other soils on the same page: 'Đối với đất phèn nhẹ: 80-100 kg N, 40-50 kg P2O5 và 25-30 kg K2O.' 'Đối với đất phèn trung bình: 60-80 kg N, 50-60 kg P2O5 và 25-30 kg K2O.' (so acid-sulfate soils do use different rates, as the README limitation says). 'Lượng phân đạm trong vụ Hè Thu và Thu Đông giảm 15 - 20% so với vụ Đông Xuân.' Soils not on the page: saline soil, grey soil, coastal alluvium."
+    },
+    {
+     "title": "Báo Cần Thơ (14 Mar 2012), Đưa vào sản xuất nhiều giống lúa ngắn ngày",
+     "url": "https://baocantho.com.vn/dua-vao-san-xuat-nhieu-giong-lua-ngan-ngay-a18700.html",
+     "verified": true,
+     "note": "Checked. duration_days [90, 100]: about the Cửu Long Rice Research Institute's varieties: 'Hầu hết các giống lúa do Viện chọn tạo với ký hiệu OM đều có thời gian sinh trưởng ngắn, từ 90-100 ngày.' Endpoints: 'thời gian sinh trưởng' is counted from sowing to 85–90% ripe grain (QCVN 01-55:2011, next source), which is also the harvest point in the protocol above ('khi lúa chín khoảng 85 - 90%'). The protocol is for direct seeding ('lúa gieo sạ'), so sowing is in the field and there is no nursery; rice is harvested once, so this is also the last harvest. Scope: 'hầu hết' (most) OM varieties, ordinary rice; ST and other fragrant varieties are not covered (rice_st is not in the seed check). The article is from 2012."
+    },
+    {
+     "title": "Bộ NN&PTNT (2011), QCVN 01-55:2011/BNNPTNT Quy chuẩn kỹ thuật quốc gia về khảo nghiệm giá trị canh tác và sử dụng của giống lúa (Thông tư 48/2011/TT-BNNPTNT); text on LuatVietnam",
+     "url": "https://luatvietnam.vn/nong-nghiep/quy-chuan-qcvn-01-55-2011-bnnptnt-khao-nghiem-gia-tri-canh-tac-su-dung-giong-lua-161430-d3.html",
+     "verified": true,
+     "note": "Checked. Defines the endpoints of rice 'thời gian sinh trưởng' used for duration_days: Bảng 1, item 7 'Thời gian sinh trưởng' (ngày): 'Tính số ngày từ khi gieo đến khi khoảng 85 đến 90% số hạt trên bông chín'; §3.4.2: 'Tính thời gian từ gieo đến chín.'"
+    },
+    {
+     "title": "Vietnam News (10 Jan 2024), Mekong Delta saltwater intrusion to peak in March",
+     "url": "https://vietnamnews.vn/society/1639031/mekong-delta-saltwater-intrusion-to-peak-in-march.html",
+     "verified": true,
+     "note": "Checked, for the seed check (#10); it backs no figure in this file. Attributed to 'Nguyễn Mạnh Hùng, head of the directorate's irrigation and operation management division' (Directorate of Water Resources): rice farmers in saltwater-prone areas 'sowed seeds in October and November' and would harvest 'amid the peak of the saltwater intrusion in March'; farmers 'have sowed their rice earlier'. Unattributed: 'Most crops can only tolerate salinity of 1 gramme per litre.' So the article does NOT say Oct–Nov sowing clears the salt months; it says that crop meets the March peak. 'Harvest before the salt months' is our own rule."
+    }
+   ]
+  },
+  {
+   "id": "rice_st",
+   "name": {
+    "en": "Salt-tolerant rice",
+    "vi": "Lúa chịu mặn"
+   },
+   "seed": {
+    "en": "About 70 kg/ha (7 kg per 1,000 m²) in a shrimp–rice field; sow sparsely or in wide rows",
+    "vi": "Khoảng 70 kg/ha (7 kg/1.000 m²) trên ruộng tôm – lúa; sạ thưa hoặc sạ hàng rộng"
+   },
+   "fertiliser": null,
+   "steps": [
+    {
+     "en": "End the shrimp crop early (best by July) and wash out salt from late July to August: flood with heavy rain for 2–3 nights, drain, and repeat 3–5 times.",
+     "vi": "Kết thúc vụ tôm sớm (tốt nhất trong tháng 7), rửa mặn từ cuối tháng 7 đến tháng 8: hứng mưa ngập ruộng 2–3 đêm rồi xổ cạn, lặp lại 3–5 lần."
+    },
+    {
+     "en": "Spread lime 300–500 kg/ha and harrow it in; sow only when the field water is below 2‰ salinity.",
+     "vi": "Rải vôi 300–500 kg/ha rồi xới trộn; chỉ gieo sạ khi nước ruộng có độ mặn dưới 2‰."
+    },
+    {
+     "en": "Use salt-tolerant varieties such as ST24 or ST25.",
+     "vi": "Dùng giống lúa chịu mặn như ST24, ST25."
+    },
+    {
+     "en": "Keep water in the field all season; split N in thirds at 10, 20–25 and 40–45 days after sowing, P in halves at 10 and 20–25 days, and all K at 40–45 days.",
+     "vi": "Luôn giữ nước trong ruộng; chia đạm 3 lần bằng nhau lúc 10, 20–25 và 40–45 ngày sau sạ, lân 2 lần lúc 10 và 20–25 ngày, kali bón hết lúc 40–45 ngày."
+    }
+   ],
+   "sources": [
+    {
+     "title": "Trung tâm Khuyến nông Quốc gia (May 2022), Diễn đàn Khuyến nông @ Nông nghiệp: Giải pháp xử lý môi trường sản xuất tôm-lúa vùng ĐBSCL (Kiên Giang); papers by Sở NN&PTNT Kiên Giang, Viện Nghiên cứu Nuôi trồng thủy sản II and Trung tâm Khuyến nông Sóc Trăng",
+     "url": "https://khuyennongvn.gov.vn/portals/0/tailieu/2022/05/hangweb/diendan_so_1_2022_kiengiang.pdf",
+     "verified": true,
+     "note": "Checked. PDF read (pdftotext). Sở NN&PTNT Kiên Giang paper, 'V. TÓM TẮT QUY TRÌNH CANH TÁC LÚA - TÔM TẠI KIÊN GIANG', p.25–26: 'Bón vôi CaO 200-500 kg/ha, xới trục làm thay đổi mặt đất'; '5.8. Phân bón ... Áp dụng nền phân vô cơ giảm 25-30% theo khuyến cáo NPK (100-60-30). Lượng bón NPK cho lúa trên nền đất tôm tương đương (70-40-20).' with split table N 1/3 at 10, 1/3 at 20-25, 1/3 at 40-45 days after sowing; P 1/2 at 10 and 1/2 at 20-25; K2O all at 40-45 (NO units are printed, and P is not labelled P2O5, so the app shows 'no checked figure' for this crop's fertiliser instead of 'N 70, P2O5 40, K2O 20 kg/ha'; rechecked against the same PDF text, and no other source found that prints the units of '100-60-30'. The split proportions above are as printed and still used in the steps). '5.7 ... luôn luôn giử nước trong ruộng'. Viện NC NTTS II paper, 'II. KỸ THUẬT NUÔI TÔM LUÂN CANH TRONG HỆ THỐNG TÔM - LÚA', p.35–36: 'Bước 3: Sử dụng vôi bột nóng (CaO) rải đều khắp mương và trảng với liều lượng 600 - 800 kg/ha'; 'Bước 4: ... bơm thay nước ở mương 2 - 3 lần trong 1 tuần.' 'Bước 5: Phơi mặt trảng (khoảng 7 - 10 ngày)' ... 'nước cấp cần bơm qua lưới lọc'; 'Bước 7: ... độ trong từ 30 - 40 cm ... pH từ 7,5 - 8,5 thì có thể tiến hành thả tôm'; '2.2 ... Thời điểm thả đầu tiên nên trước hoặc ngay sau Tết nguyên đán' ... '(thông thường tháng 2 đến tháng 7 dương lịch)'; 'Nên thả mật độ tổng số là 5 con/m2 /năm (tính trên cả diện tích mương và trảng), chia thành 3 đợt: đợt 1 thả 2,5 con/m2, đợt 2 thả 1,5 con/m2, đợt 3 thả 1 con/m2, mỗi đợt thả cách nhau 1 tháng'. TTKN Sóc Trăng paper (Mỹ Xuyên): 'Chọn giống lúa chất lượng, chịu mặn và có giá trị kinh tế như ST24, ST25,...' 'Áp dụng việc sạ thưa hoặc cấy tạo thành hàng rộng'."
+    },
+    {
+     "title": "Trạm Khuyến nông huyện Phước Long, Bạc Liêu, on khuyennongvn.gov.vn (24 Nov 2017), Bạc Liêu: Hai mô hình nuôi tôm kết hợp có hiệu quả cao và được nhân rộng ở Phước Long",
+     "url": "https://khuyennongvn.gov.vn/chuong-trinh-nganh-nong-nghiep/tai-co-cau-nganh-nong-nghiep/bac-lieu-hai-mo-hinh-nuoi-tom-ket-hop-co-hieu-qua-cao-va-duoc-nhan-rong-o-phuoc-long-16304.html",
+     "verified": true,
+     "note": "Checked. Page fetched and read. Shrimp–rice model: 'tôm sú: từ 2 - 3 con/m2' ... 'lúa sạ: 7 kg/1.000m2' (= 70 kg/ha). 'Lượng vôi bón thêm trước khi làm lúa ở mức hợp lý nhất là 150-160 kg/ha/vụ và lượng phân vô cơ ở mức hợp lý nhất là 50-100 kg/ha/vụ.' 'Độ mặn khi sạ/cấy để lúa phát triển tốt là ở mức thấp dưới 2%0'. Varieties: 'Một bụi đỏ, OM4900, B-TE1, OM2517, OM 6600, OM 5954, HR 182'."
+    },
+    {
+     "title": "Trung tâm Khuyến nông tỉnh Cà Mau, on khuyennongvn.gov.vn (4 Aug 2016), Phương pháp rửa mặn trong canh tác lúa, tôm",
+     "url": "https://khuyennongvn.gov.vn/khoa-hoc-cong-nghe/khcn-trong-nuoc/phuong-phap-rua-man-trong-canh-tac-lua-tom-14486.html",
+     "verified": true,
+     "note": "Checked. Page fetched and read (Ks. Trần Ngọc Lãm). 'tốt nhất kết thúc vụ tôm vào tháng 7). Thời gian rửa mặn hợp lý nhất là từ cuối tháng 7 đến tháng 8 dương lịch, từ tháng 9 đến tháng 12 dương lịch là thời vụ canh tác lúa.' 'Đón các trận mưa lớn, giữ cho ngập mặt ruộng, ngâm ruộng qua 2 đến 3 đêm, sau đó lại xổ cạn như trước và lặp lại từ 3 đến 5 lần.' 'bón vôi (CaO hoặc CaCO3) đều trên mặt ruộng với liều lượng 300 - 500 kg/ha.' 'khi đạt dưới 2‰ là tiến hành gieo sạ.'"
+    }
+   ]
+  },
+  {
+   "id": "mungbean",
+   "name": {
+    "en": "Mung bean",
+    "vi": "Đậu xanh"
+   },
+   "seed": {
+    "en": "30 kg/ha (national extension norm); a rice-land demo used about 20 kg/ha",
+    "vi": "30 kg/ha (định mức khuyến nông); mô hình trên đất lúa dùng khoảng 20 kg/ha"
+   },
+   "fertiliser": {
+    "en": "N 46, P2O5 66, K2O 72 kg/ha",
+    "vi": "N 46, P2O5 66, K2O 72 kg/ha"
+   },
+   "duration_days": null,
+   "steps": [
+    {
+     "en": "Mung bean cannot stand waterlogging: raise beds (1 m wide and 30–40 cm high on poorly drained rice land) with 30–35 cm drains.",
+     "vi": "Đậu xanh không chịu úng: bắt buộc lên luống (đất thoát nước kém lên luống rộng 1 m, cao 30–40 cm), rãnh thoát nước rộng 30–35 cm."
+    },
+    {
+     "en": "Sow in rows 30–40 cm apart and 18–20 cm between holes, 2–3 seeds per hole, thinned to 1–2 plants; never sow seed directly on fertiliser.",
+     "vi": "Gieo hàng cách hàng 30–40 cm, hốc cách hốc 18–20 cm, 2–3 hạt/hốc, tỉa còn 1–2 cây; không gieo hạt trực tiếp lên phân."
+    },
+    {
+     "en": "Top-dress N and K at 1–2 true leaves (10–15 days) and again at 4–5 true leaves (25–30 days), then loosen the soil and hill up.",
+     "vi": "Bón thúc đạm và kali khi cây có 1–2 lá thật (10–15 ngày) và khi có 4–5 lá thật (25–30 ngày), kết hợp xới và vun gốc."
+    },
+    {
+     "en": "Weed and break the soil crust at 13–15 days; before flowering give one irrigation and drain it off straight away.",
+     "vi": "Xới phá váng, làm cỏ lúc 13–15 ngày; trước ra hoa tưới thấm 1 lần và rút nước ngay."
+    }
+   ],
+   "sources": [
+    {
+     "title": "Bộ NN&PTNT (24 Feb 2022), Phụ lục I Định mức kinh tế kỹ thuật khuyến nông, lĩnh vực Trồng trọt – BVTV (QĐ 726/QĐ-BNN-KN), Trung tâm Khuyến nông Quốc gia",
+     "url": "https://khuyennongvn.gov.vn/portals/0/tailieu/2022/07/hangweb/pl_01_dinh_muc_kn_trong_trot_kem_theo_qd.pdf",
+     "verified": true,
+     "note": "Checked. PDF read (pdftotext); national norms for extension demo models, per 1 ha, not specific to the Mekong Delta or to rice land. §4.1 'Mô hình sản xuất đậu xanh - Mã sản phẩm: TR3401', table C: 'Giống kg 30', 'Đạm nguyên chất (N) kg 46', 'Lân nguyên chất (P2O5) kg 66', 'Kali nguyên chất (K2O) kg 72'. §2.3 'Mô hình sản xuất ngô thương phẩm - Mã sản phẩm: TR1123', table C: 'Giống ngô lai kg 18', 'Đạm nguyên chất (N) kg 160', 'Lân nguyên chất (P2O5) kg 80', 'Kali nguyên chất (K2O) kg 85', 'Phân hữu cơ sinh học kg 1.000'. (Same file §1.1 lúa thuần, Mekong Delta column: giống 50, N 80, P2O5 60, K2O 60 kg/ha, not used.)"
+    },
+    {
+     "title": "Trung tâm Khuyến nông Quảng Trị, on khuyennongvn.gov.vn (11 Sep 2018), Quảng Trị: Hiệu quả mô hình chuyển đổi cây đậu xanh trên đất lúa thiếu nước",
+     "url": "https://khuyennongvn.gov.vn/hoat-dong-khuyen-nong/chuyen-giao-tbkt/quang-tri-hieu-qua-mo-hinh-chuyen-doi-cay-dau-xanh-tren-dat-lua-thieu-nuoc-17502.html",
+     "verified": true,
+     "note": "Checked. Page fetched and read; guidance quoted from the head of Cam Lộ district extension station (central Vietnam, rice land, not Mekong). 'Cây đậu xanh là cây không chịu ngập úng, vì vậy biện pháp lên luống là bắt buộc.' 'Đối với chân đất thoát nước tốt, lên luống có chiều rộng khoảng 2,5- 3 m, cao 20- 25 cm; chân đất thoát nước kém, lên luống rộng 1m, cao 30-40 cm.' 'rãnh thoát nước rộng 30- 35cm'; 'không được gieo hạt trực tiếp lên phân.' 'gieo hàng cách hàng 30- 40cm, cây cách cây 18- 20 cm (gieo 2- 3 hạt/hốc, đậu mọc đều tỉa để 1- 2 cây/hốc)' 'Để đảm bảo mật độ cho 1ha cần khoảng 20 kg giống (1kg/sào 500m2).' 'Bón thúc lần 1: Khi cây có 1- 2 lá thật (10-15 ngày sau gieo)' ... 'Bón thúc lần 2: Khi cây có 4-5 lá thật (25- 30 ngày sau gieo)' ... 'kết hợp xới, vun cao chống đổ.' 'sau gieo 13- 15 ngày thì tiến hành xới xáo, phá váng, diệt cỏ dại' ... 'tưới thấm 1 đợt và khi tưới xong phải rút nước ngay.' (Its fertiliser line '60 kg đạm + 40 kg Kali' is ambiguous product vs nutrient, so not used.)"
+    },
+    {
+     "title": "Vusta, from Khoa học phổ thông số 454 (1999), Trồng đậu xanh",
+     "url": "https://vusta.vn/trong-dau-xanh-p80678.html",
+     "verified": true,
+     "note": "Checked. duration_days left null (no checked figure). Southern varieties: 'có thời gian sinh trưởng ngắn 60-70 ngày'; but after harvest 'cây đậu xanh sẽ cho thêm một đợt bông thứ hai' and 'Tỉ lệ hái đợt đầu vào khoảng 70-80%', so 60–70 days does not reach the last picking. Viện Cây lương thực và Cây thực phẩm's ĐX23 page ('Thời gian sinh trưởng từ 72 – 80 ngày', 'thu hoạch từ 2-3 lần/vụ') covers 'Các tỉnh phía Bắc' only, so it is not used either."
+    }
+   ],
+   "scope": {
+    "en": "National guide, not specific to the Mekong Delta: check with your extension officer.",
+    "vi": "Hướng dẫn chung cả nước, không riêng cho Đồng bằng sông Cửu Long: hãy hỏi cán bộ khuyến nông."
+   }
+  },
+  {
+   "id": "watermelon",
+   "name": {
+    "en": "Watermelon",
+    "vi": "Dưa hấu"
+   },
+   "seed": {
+    "en": "0.5–1 kg/ha of seed, for 6,500–9,000 plants/ha",
+    "vi": "0,5–1 kg hạt/ha, mật độ 6.500–9.000 cây/ha"
+   },
+   "fertiliser": null,
+   "duration_days": null,
+   "steps": [
+    {
+     "en": "On rice land after the rice crop, make beds 2.5–3 m wide with drains 30 cm wide and 25 cm deep, treat the soil with 300 kg/ha lime, and cover with mulch film after the basal fertiliser.",
+     "vi": "Trên đất sau lúa, lên luống rộng 2,5–3 m, rãnh rộng 30 cm sâu 25 cm, xử lý đất bằng vôi 300 kg/ha, phủ màng sau khi bón lót."
+    },
+    {
+     "en": "Soak seed 4–5 hours in warm water, incubate 2–3 days, sow in pots, and transplant at 2 true leaves at 2.5–3 m × 0.5 m.",
+     "vi": "Ngâm hạt nước ấm 4–5 giờ, ủ 2–3 ngày, gieo vào bầu, trồng ra ruộng khi cây có 2 lá thật, khoảng cách 2,5–3 m × 0,5 m."
+    },
+    {
+     "en": "Top-dress N and K at 7–10, 15 and 20–25 days after transplanting, then feed the fruit; keep one fruit per vine at the 3rd–4th flower.",
+     "vi": "Bón thúc đạm và kali lúc 7–10, 15 và 20–25 ngày sau trồng, sau đó bón nuôi trái; để mỗi dây 1 trái ở vị trí hoa thứ 3–4."
+    },
+    {
+     "en": "Cut back watering 7–10 days before harvest and pick about 25–30 days after pollination (in the South) when fruit is 70–80% ripe.",
+     "vi": "Giảm, cắt nước 7–10 ngày trước thu hoạch; ở miền Nam thu hoạch khoảng 25–30 ngày sau thụ phấn khi trái chín 70–80%."
+    }
+   ],
+   "sources": [
+    {
+     "title": "Trung tâm Khuyến nông Quốc gia (19 Feb 2021), Kỹ thuật trồng và chăm sóc cây dưa hấu",
+     "url": "https://khuyennongvn.gov.vn/khoa-hoc-cong-nghe/khcn-trong-nuoc/ky-thuat-trong-va-cham-soc-cay-dua-hau-20894.html",
+     "verified": true,
+     "note": "Checked. Page fetched and read. §1: 'Rãnh rộng 30cm, sâu 25 cm.' 'Sau khi bón lót, tiến hành phủ màng nông nghiệp.' §3: 'Ngâm hạt trong nước ấm (2 sôi 3 lạnh) từ 4 - 5 giờ.' 'Ủ hạt trong khăn bông 2- 3 ngày' 'Lượng hạt giống cần dùng cho 1 ha là 0,5 - 1 kg, tùy theo hạt nhỏ, hay hạt to.' §4: 'Khoảng cách thích hợp là 2,5 - 3m x 0,5 m'; 'mật độ 6.500 - 9.000 cây/ha.' §5: 'Khi cây con có 2 lá thật thì tiến hành trồng ra ruộng.' §6a: 'Bón lót: Phân chuồng mục nên bón 25 - 30 tấn/ha, NPK tổng hợp loại 13 -13 - 0 bón 250 - 300 kg/ha, lân super bón 100 kg/ha.' 'Bón thúc: N: 80 - 150 kg/ha; K2O: 80 - 100 kg/ha.' Fertiliser figure NOT confirmed (rechecked), so the app shows 'no checked figure' instead of 'N 113–189, P2O5 49–55, K2O 80–100 kg/ha'. Why: the fertiliser table on the same page gives product weights in kg, not nutrients (rows as read, six values each: 'Đạm urea (kg)' 10-20 / 20-30 / 20-30 / 10-30 / 10-20 / 10-20; 'Clorua kali (kg)' 10-15 / 20-25 / 20-25 / 10-20 / 10-15 / 10; 'Lân super (kg)' 100; 'NPK 13 - 13 - 0 (kg)' 250-300; 'Phân chuồng (tấn /ha)' 20-30). The urea values add up to 80-150, the same range the text calls 'N: 80 - 150 kg/ha', so the text may be giving urea product, not N; if so N would be far lower (roughly 37-69 kg/ha at 46% N in urea, our assumption). The page does not say which. The older conversion also assumed 16% P2O5 in 'lân super', which the page does not state. The table also gives manure as 20-30 t/ha where the text says 25-30. §1: 'Lên luống rộng 2,5 - 3 m loại luống đơn' ... 'Xử lý đất bằng vôi bột 300 kg/ha'. §2b: 'Vụ hè: thu hoạch sau tết âm lịch, trồng trên đất sau lúa ở An Giang, Kiên Giang, Đồng Tháp'. §6b: 'Lần 1: sau trồng 7 - 10 ngày' ... 'Lần 2: sau trồng 15 ngày' ... 'Lần 3: khi cây ra hoa, 20 - 25 ngày sau trồng'. §7b: 'Nên để mỗi dây 1 quả, ở vị trí hoa 3 - 4'. §8: 'khoảng 25 - 30 ngày ở miền Nam, khi quả chín 70 - 80% thì thu hoạch' and 'trước khi thu hoạch 7 - 10 ngày cần phải giảm, cắt nước'. Page is a general national guide, not Mekong-specific."
+    },
+    {
+     "title": "Báo Sóc Trăng (1 Apr 2025), Xã Kế Thành phát triển trồng dưa hấu dưới ruộng lúa",
+     "url": "https://baosoctrang.org.vn/nong-nghiep/202504/xa-ke-thanh-phat-trien-trong-dua-hau-duoi-ruong-lua-c825f0e/",
+     "verified": true,
+     "note": "Checked. duration_days left null (no checked figure). A Sóc Trăng farmer: 'Dưa từ lúc gieo hạt đến thu hoạch khoảng 60 ngày'; Báo Sóc Trăng (15 Apr 2025, in rotations.json) gives first harvest 'đến ngày thứ 55'. Neither says when the last picking ends, and the 60 days is approximate, so per #35 (last harvest, not first) this is not used."
+    }
+   ]
+  },
+  {
+   "id": "maize",
+   "name": {
+    "en": "Maize",
+    "vi": "Bắp (ngô)"
+   },
+   "seed": {
+    "en": "18 kg/ha of F1 hybrid seed, for 60,000–65,000 plants/ha",
+    "vi": "18 kg/ha giống bắp lai F1, mật độ 60.000–65.000 cây/ha"
+   },
+   "fertiliser": {
+    "en": "N 160, P2O5 80, K2O 85 kg/ha, plus 1,000 kg/ha bio-organic fertiliser",
+    "vi": "N 160, P2O5 80, K2O 85 kg/ha, cộng 1.000 kg/ha phân hữu cơ sinh học"
+   },
+   "duration_days": null,
+   "steps": [
+    {
+     "en": "After the rice harvest, cut stubble low and leave the straw as mulch; plant when the soil is moist (85–90%) and cut a drainage furrow 18–20 cm deep every 3–6 rows.",
+     "vi": "Sau gặt lúa, cắt sát gốc rạ, để rơm phủ đất; trồng khi đất đủ ẩm (85–90%), cứ 3–6 hàng đào 1 rãnh thoát nước sâu 18–20 cm."
+    },
+    {
+     "en": "Plant rows 60–65 cm apart with 22–24 cm between plants.",
+     "vi": "Trồng hàng cách hàng 60–65 cm, cây cách cây 22–24 cm."
+    },
+    {
+     "en": "Put all manure, superphosphate and 1/3 of the urea in at planting; top-dress 1/3 urea + 1/2 potash at 5–6 leaves and the rest at 10–11 leaves.",
+     "vi": "Bón lót toàn bộ phân chuồng, lân và 1/3 urê; bón thúc 1/3 urê + 1/2 kali khi bắp 5–6 lá, phần còn lại khi bắp 10–11 lá."
+    },
+    {
+     "en": "Keep the soil moist but never let the field stay flooded for more than 24 hours.",
+     "vi": "Giữ đất đủ ẩm nhưng không để ruộng ngập quá 24 giờ."
+    }
+   ],
+   "sources": [
+    {
+     "title": "Bộ NN&PTNT (24 Feb 2022), Phụ lục I Định mức kinh tế kỹ thuật khuyến nông, lĩnh vực Trồng trọt – BVTV (QĐ 726/QĐ-BNN-KN), Trung tâm Khuyến nông Quốc gia",
+     "url": "https://khuyennongvn.gov.vn/portals/0/tailieu/2022/07/hangweb/pl_01_dinh_muc_kn_trong_trot_kem_theo_qd.pdf",
+     "verified": true,
+     "note": "Checked. PDF read (pdftotext); national norms for extension demo models, per 1 ha, not specific to the Mekong Delta or to rice land. §4.1 'Mô hình sản xuất đậu xanh - Mã sản phẩm: TR3401', table C: 'Giống kg 30', 'Đạm nguyên chất (N) kg 46', 'Lân nguyên chất (P2O5) kg 66', 'Kali nguyên chất (K2O) kg 72'. §2.3 'Mô hình sản xuất ngô thương phẩm - Mã sản phẩm: TR1123', table C: 'Giống ngô lai kg 18', 'Đạm nguyên chất (N) kg 160', 'Lân nguyên chất (P2O5) kg 80', 'Kali nguyên chất (K2O) kg 85', 'Phân hữu cơ sinh học kg 1.000'. (Same file §1.1 lúa thuần, Mekong Delta column: giống 50, N 80, P2O5 60, K2O 60 kg/ha, not used.)"
+    },
+    {
+     "title": "Trung tâm Khuyến nông Quốc gia (8 Sep 2015), Quy trình kỹ thuật trồng ngô vụ đông trên đất 2 lúa (Phần 1)",
+     "url": "https://khuyennongvn.gov.vn/khoa-hoc-cong-nghe/khcn-trong-nuoc/quy-trinh-ky-thuat-trong-ngo-vu-dong-tren-dat-2-lua-phan-1-12767.html",
+     "verified": true,
+     "note": "Checked. Page fetched and read. Written for northern/north-central Vietnam ('áp dụng cho khu vực Trung du miền núi phía Bắc, đồng bằng sông Hồng và Bắc Trung bộ, trên chân đất sản xuất 2 vụ lúa'), used here only for steps on rice land. §4: 'Toàn bộ lượng rạ để lại ruộng dùng để che phủ đất' ... 'Ruộng trồng độ ẩm yêu cầu tốt nhất từ 85-90%' ... 'với ruộng khó thoát nước cứ 3-4 hàng tạo 1 rãnh thoát nước. Độ sâu của rãnh thoát từ 18-20 cm'. §5: 'mật độ từ 60.000 - 65.000 cây/ha' 'hàng cách hàng từ 60 - 65 cm, cây cách cây từ 22 - 24 cm.' §6.2: 'Bón lót ... Toàn bộ phân chuồng, phân lân supe + 1/3 lượng urê' 'Bón thúc lần 1 Khi ngô 5-6 lá Bón 1/3 lượng urê + 1/2 lượng Kali clorua.' 'Bón thúc lần 2 Khi ngô 10-11 lá Bón hết lượng phân còn lại'. §7: 'không để ruộng bị ngập quá 24 giờ'."
+    },
+    {
+     "title": "Lê Phước Toàn, Ngô Ngọc Hưng (2018), Đánh giá phương pháp xác định nhu cầu phân bón NPK lên năng suất bắp lai trên đất phù sa bao đê và không bao đê tại An Phú - An Giang, Tạp chí Khoa học Trường Đại học Cần Thơ 54(9B): 47-58",
+     "url": "https://ctujsvn.ctu.edu.vn/index.php/ctujsvn/article/download/3074/745",
+     "verified": true,
+     "note": "Checked. duration_days left null (no checked figure). Candidate: hybrid NK7328 in An Giang, 'Thời gian sinh trưởng 100-105 ngày'; the trial harvested at stage R6. Not used: it is one variety, the paper does not define the endpoints of 'thời gian sinh trưởng', and the maize test standard (QCVN 01-56) could not be opened to confirm them. Grain maize may also stay in the field to dry after R6."
+    }
+   ],
+   "scope": {
+    "en": "National guide, not specific to the Mekong Delta: check with your extension officer.",
+    "vi": "Hướng dẫn chung cả nước, không riêng cho Đồng bằng sông Cửu Long: hãy hỏi cán bộ khuyến nông."
+   }
+  },
+  {
+   "id": "shrimp",
+   "name": {
+    "en": "Black tiger shrimp",
+    "vi": "Tôm sú"
+   },
+   "seed": {
+    "en": "5 post-larvae per m² per year in total, stocked in 3 batches a month apart (2.5, 1.5 and 1 per m²); many shrimp–rice farms stock 2–3 per m²",
+    "vi": "Tổng 5 con/m²/năm, thả 3 đợt cách nhau 1 tháng (2,5; 1,5 và 1 con/m²); nhiều ruộng tôm – lúa thả 2–3 con/m²"
+   },
+   "fertiliser": {
+    "en": "Lime (quicklime CaO) 600–800 kg/ha over canals and platform before stocking; no N-P-K",
+    "vi": "Vôi nóng (CaO) 600–800 kg/ha rải khắp mương và trảng trước khi thả; không bón NPK"
+   },
+   "steps": [
+    {
+     "en": "Lower the water, dry the platform and pump the sludge out of the canals; canals should be about 25–30% of the field.",
+     "vi": "Bơm bớt nước phơi trảng, sên vét bùn đáy mương; diện tích mương khoảng 25–30% diện tích ruộng."
+    },
+    {
+     "en": "Spread quicklime 600–800 kg/ha, flush the canals 2–3 times in a week, dry the platform 7–10 days, then fill through a filter net.",
+     "vi": "Rải vôi nóng 600–800 kg/ha, thay nước mương 2–3 lần trong 1 tuần, phơi trảng 7–10 ngày rồi cấp nước qua lưới lọc."
+    },
+    {
+     "en": "Stock when water clarity is 30–40 cm and pH 7.5–8.5; first batch around Tết (late January–early February), PL12–13 at first and bigger seed later.",
+     "vi": "Thả tôm khi độ trong 30–40 cm, pH 7,5–8,5; đợt đầu trước hoặc ngay sau Tết (cuối tháng 1, đầu tháng 2), lần đầu dùng giống PL12–13, các lần sau dùng giống lớn hơn."
+    },
+    {
+     "en": "Finish the shrimp crop by July so there is time to wash out salt before the rice crop.",
+     "vi": "Kết thúc vụ tôm trong tháng 7 để kịp rửa mặn trước vụ lúa."
+    }
+   ],
+   "sources": [
+    {
+     "title": "Trung tâm Khuyến nông Quốc gia (May 2022), Diễn đàn Khuyến nông @ Nông nghiệp: Giải pháp xử lý môi trường sản xuất tôm-lúa vùng ĐBSCL (Kiên Giang); papers by Sở NN&PTNT Kiên Giang, Viện Nghiên cứu Nuôi trồng thủy sản II and Trung tâm Khuyến nông Sóc Trăng",
+     "url": "https://khuyennongvn.gov.vn/portals/0/tailieu/2022/05/hangweb/diendan_so_1_2022_kiengiang.pdf",
+     "verified": true,
+     "note": "Checked. PDF read (pdftotext). Sở NN&PTNT Kiên Giang paper, 'V. TÓM TẮT QUY TRÌNH CANH TÁC LÚA - TÔM TẠI KIÊN GIANG', p.25–26: 'Bón vôi CaO 200-500 kg/ha, xới trục làm thay đổi mặt đất'; '5.8. Phân bón ... Áp dụng nền phân vô cơ giảm 25-30% theo khuyến cáo NPK (100-60-30). Lượng bón NPK cho lúa trên nền đất tôm tương đương (70-40-20).' with split table N 1/3 at 10, 1/3 at 20-25, 1/3 at 40-45 days after sowing; P 1/2 at 10 and 1/2 at 20-25; K2O all at 40-45 (units not printed; read as kg/ha N-P2O5-K2O, the usual form). '5.7 ... luôn luôn giử nước trong ruộng'. Viện NC NTTS II paper, 'II. KỸ THUẬT NUÔI TÔM LUÂN CANH TRONG HỆ THỐNG TÔM - LÚA', p.35–36: 'Bước 3: Sử dụng vôi bột nóng (CaO) rải đều khắp mương và trảng với liều lượng 600 - 800 kg/ha'; 'Bước 4: ... bơm thay nước ở mương 2 - 3 lần trong 1 tuần.' 'Bước 5: Phơi mặt trảng (khoảng 7 - 10 ngày)' ... 'nước cấp cần bơm qua lưới lọc'; 'Bước 7: ... độ trong từ 30 - 40 cm ... pH từ 7,5 - 8,5 thì có thể tiến hành thả tôm'; '2.2 ... Thời điểm thả đầu tiên nên trước hoặc ngay sau Tết nguyên đán' ... '(thông thường tháng 2 đến tháng 7 dương lịch)'; 'Nên thả mật độ tổng số là 5 con/m2 /năm (tính trên cả diện tích mương và trảng), chia thành 3 đợt: đợt 1 thả 2,5 con/m2, đợt 2 thả 1,5 con/m2, đợt 3 thả 1 con/m2, mỗi đợt thả cách nhau 1 tháng'. TTKN Sóc Trăng paper (Mỹ Xuyên): 'Chọn giống lúa chất lượng, chịu mặn và có giá trị kinh tế như ST24, ST25,...' 'Áp dụng việc sạ thưa hoặc cấy tạo thành hàng rộng'."
+    },
+    {
+     "title": "Tổng cục Thủy sản, on khuyennongvn.gov.vn (2 Dec 2016), “Giải mặn, tích ngọt” khi nuôi tôm trong ruộng lúa nhằm thích ứng với biến đổi khí hậu",
+     "url": "https://khuyennongvn.gov.vn/khoa-hoc-cong-nghe/khcn-trong-nuoc/giai-man-tich-ngot-khi-nuoi-tom-trong-ruong-lua-nham-thich-ung-voi-bien-doi-khi-hau-15077.html",
+     "verified": true,
+     "note": "Checked. Page fetched and read (Anh Vũ, Tổng cục Thủy sản). 'số lần thả tôm giống thích hợp nhất trong mô hình tôm - lúa ở đồng bằng sông Cửu Long là 2 - 3 lần/vụ và mật độ thả tổng cộng tối đa 5 con/m2'. 'Tỷ lệ diện tích mương chiếm khoảng từ 25 - 30% diện tích ruộng được coi là hợp lý.' 'Trong những lần thả đầu có thể dùng tôm giống cỡ PL12 - 13, sau đó nên thả tôm giống cỡ lớn hơn'. 'độ mặn tốt nhất của ruộng trước khi xuống giống là thấp hơn 2‰.'"
+    },
+    {
+     "title": "Trạm Khuyến nông huyện Phước Long, Bạc Liêu, on khuyennongvn.gov.vn (24 Nov 2017), Bạc Liêu: Hai mô hình nuôi tôm kết hợp có hiệu quả cao và được nhân rộng ở Phước Long",
+     "url": "https://khuyennongvn.gov.vn/chuong-trinh-nganh-nong-nghiep/tai-co-cau-nganh-nong-nghiep/bac-lieu-hai-mo-hinh-nuoi-tom-ket-hop-co-hieu-qua-cao-va-duoc-nhan-rong-o-phuoc-long-16304.html",
+     "verified": true,
+     "note": "Checked. Page fetched and read. Shrimp–rice model: 'tôm sú: từ 2 - 3 con/m2' ... 'lúa sạ: 7 kg/1.000m2' (= 70 kg/ha). 'Lượng vôi bón thêm trước khi làm lúa ở mức hợp lý nhất là 150-160 kg/ha/vụ và lượng phân vô cơ ở mức hợp lý nhất là 50-100 kg/ha/vụ.' 'Độ mặn khi sạ/cấy để lúa phát triển tốt là ở mức thấp dưới 2%0'. Varieties: 'Một bụi đỏ, OM4900, B-TE1, OM2517, OM 6600, OM 5954, HR 182'."
+    },
+    {
+     "title": "Trung tâm Khuyến nông tỉnh Cà Mau, on khuyennongvn.gov.vn (4 Aug 2016), Phương pháp rửa mặn trong canh tác lúa, tôm",
+     "url": "https://khuyennongvn.gov.vn/khoa-hoc-cong-nghe/khcn-trong-nuoc/phuong-phap-rua-man-trong-canh-tac-lua-tom-14486.html",
+     "verified": true,
+     "note": "Checked. Page fetched and read (Ks. Trần Ngọc Lãm). 'tốt nhất kết thúc vụ tôm vào tháng 7). Thời gian rửa mặn hợp lý nhất là từ cuối tháng 7 đến tháng 8 dương lịch, từ tháng 9 đến tháng 12 dương lịch là thời vụ canh tác lúa.' 'Đón các trận mưa lớn, giữ cho ngập mặt ruộng, ngâm ruộng qua 2 đến 3 đêm, sau đó lại xổ cạn như trước và lặp lại từ 3 đến 5 lần.' 'bón vôi (CaO hoặc CaCO3) đều trên mặt ruộng với liều lượng 300 - 500 kg/ha.' 'khi đạt dưới 2‰ là tiến hành gieo sạ.'"
+    }
+   ]
+  }
+ ]
+}

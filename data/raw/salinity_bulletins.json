@@ -1,0 +1,211 @@
+{
+ "_readme": "Measured highest salinity (g/l, about ‰) over the 10 days before each issue date, at the 5 former Sóc Trăng stations in Table 1 of Vietnam's national hydro-meteorological forecast centre (NCHMF) salinity bulletins. The 20 bulletins found online for the 2024-2026 dry seasons; not every 10-day period was online. Values read from the PDFs with pdftotext by column; null = no reading printed.",
+ "source": {
+  "title": "NCHMF (Trung tâm Dự báo KTTV quốc gia), Tin dự báo xâm nhập mặn trên khu vực Nam Bộ, 10-day bulletins 2024-2026",
+  "url": "https://kttv.gov.vn/kttv/vi-VN/1/xam-nhap-man-20-18.html"
+ },
+ "bulletins": {
+  "2024-03-20": {
+   "url": "https://kttv.gov.vn//upload/thuyvan2/2024/3/20/dbqg_xman_20240320_1500.pdf",
+   "max_ppt": {
+    "long_phu": 19.9,
+    "soc_trang": 3.3,
+    "thanh_phu": 1.1,
+    "tran_de": 23.7,
+    "dai_ngai": 8.9
+   }
+  },
+  "2024-03-31": {
+   "url": "https://kttv.gov.vn//upload/thuyvan2/2024/3/31/dbqg_xman_20240331_1500.pdf",
+   "max_ppt": {
+    "long_phu": 15.1,
+    "soc_trang": 2.9,
+    "thanh_phu": 0.9,
+    "tran_de": 18.9,
+    "dai_ngai": 6.3
+   }
+  },
+  "2024-04-10": {
+   "url": "https://kttv.gov.vn//upload/thuyvan2/2024/4/10/dbqg_xman_20240410_1500.pdf",
+   "max_ppt": {
+    "long_phu": 15.0,
+    "soc_trang": 2.7,
+    "thanh_phu": 1.9,
+    "tran_de": 19.2,
+    "dai_ngai": 4.9
+   }
+  },
+  "2024-04-20": {
+   "url": "https://kttv.gov.vn//upload/thuyvan2/2024/4/20/dbqg_xman_20240420_1500.pdf",
+   "max_ppt": {
+    "long_phu": 12.8,
+    "soc_trang": 2.3,
+    "thanh_phu": 5.1,
+    "tran_de": 16.7,
+    "dai_ngai": 4.2
+   }
+  },
+  "2024-04-30": {
+   "url": "https://kttv.gov.vn//upload/thuyvan2/2024/4/30/dbqg_xman_20240430_1500.pdf",
+   "max_ppt": {
+    "long_phu": 15.1,
+    "soc_trang": 2.8,
+    "thanh_phu": 5.2,
+    "tran_de": 20.4,
+    "dai_ngai": 5.2
+   }
+  },
+  "2024-05-10": {
+   "url": "https://kttv.gov.vn//upload/thuyvan2/2024/5/10/dbqg_xman_20240510_1500.pdf",
+   "max_ppt": {
+    "long_phu": 16.2,
+    "soc_trang": 4.4,
+    "thanh_phu": 8.0,
+    "tran_de": 19.9,
+    "dai_ngai": 5.3
+   }
+  },
+  "2024-05-20": {
+   "url": "https://kttv.gov.vn//upload/thuyvan2/2024/5/20/dbqg_xman_20240520_1500.pdf",
+   "max_ppt": {
+    "long_phu": 7.9,
+    "soc_trang": 2.1,
+    "thanh_phu": 2.4,
+    "tran_de": 11.8,
+    "dai_ngai": 1.8
+   }
+  },
+  "2025-01-20": {
+   "url": "https://kttv.gov.vn//upload/thuyvan2/2025/1/20/dbqg_xman_20250120_1500.pdf",
+   "max_ppt": {
+    "long_phu": 9.4,
+    "soc_trang": 0.8,
+    "thanh_phu": 0.7,
+    "tran_de": 12.3,
+    "dai_ngai": 3.7
+   }
+  },
+  "2025-02-10": {
+   "url": "https://kttv.gov.vn//upload/thuyvan2/2025/2/10/dbqg_xman_20250210_1500.pdf",
+   "max_ppt": {
+    "long_phu": 14.6,
+    "soc_trang": 2.9,
+    "thanh_phu": 0.6,
+    "tran_de": 19.1,
+    "dai_ngai": 6.4
+   },
+   "period_printed": "21-31/1/2025 (header as printed; likely a copy error)"
+  },
+  "2025-02-28": {
+   "url": "https://kttv.gov.vn//upload/thuyvan2/2025/2/28/dbqg_xman_20250228_1500.pdf",
+   "max_ppt": {
+    "long_phu": 17.8,
+    "soc_trang": 1.6,
+    "thanh_phu": 0.6,
+    "tran_de": 21.9,
+    "dai_ngai": 8.9
+   }
+  },
+  "2025-03-10": {
+   "url": "https://kttv.gov.vn//upload/thuyvan2/2025/3/10/dbqg_xman_20250310_1500.pdf",
+   "max_ppt": {
+    "long_phu": 19.6,
+    "soc_trang": 2.5,
+    "thanh_phu": 0.8,
+    "tran_de": 23.1,
+    "dai_ngai": 10.5
+   }
+  },
+  "2025-03-20": {
+   "url": "https://kttv.gov.vn//upload/thuyvan2/2025/3/20/dbqg_xman_20250320_1500.pdf",
+   "max_ppt": {
+    "long_phu": 16.7,
+    "soc_trang": 1.3,
+    "thanh_phu": 1.0,
+    "tran_de": 20.9,
+    "dai_ngai": 5.6
+   }
+  },
+  "2025-03-31": {
+   "url": "https://kttv.gov.vn//upload/thuyvan2/2025/3/31/dbqg_xman_20250331_1500.pdf",
+   "max_ppt": {
+    "long_phu": 13.6,
+    "soc_trang": 2.2,
+    "thanh_phu": 1.6,
+    "tran_de": 17.4,
+    "dai_ngai": 7.2
+   }
+  },
+  "2025-04-20": {
+   "url": "https://kttv.gov.vn//upload/thuyvan2/2025/4/20/dbqg_xman_20250420_1500.pdf",
+   "max_ppt": {
+    "long_phu": 10.7,
+    "soc_trang": 1.2,
+    "thanh_phu": 1.6,
+    "tran_de": 13.6,
+    "dai_ngai": 3.7
+   }
+  },
+  "2025-04-30": {
+   "url": "https://kttv.gov.vn//upload/thuyvan2/2025/4/30/dbqg_xman_20250430_1500.pdf",
+   "max_ppt": {
+    "long_phu": 10.3,
+    "soc_trang": 1.0,
+    "thanh_phu": 3.0,
+    "tran_de": 15.8,
+    "dai_ngai": 2.5
+   }
+  },
+  "2026-03-20": {
+   "url": "https://kttv.gov.vn//upload/thuyvan2/2026/3/20/dbqg_xman_20260320_1500.pdf",
+   "max_ppt": {
+    "long_phu": 7.3,
+    "soc_trang": 0.8,
+    "thanh_phu": 0.4,
+    "tran_de": 8.5,
+    "dai_ngai": 4.0
+   }
+  },
+  "2026-03-31": {
+   "url": "https://kttv.gov.vn//upload/thuyvan2/2026/3/31/dbqg_xman_20260331_1500.pdf",
+   "max_ppt": {
+    "long_phu": 12.1,
+    "soc_trang": null,
+    "thanh_phu": null,
+    "tran_de": 15.7,
+    "dai_ngai": 3.6
+   }
+  },
+  "2026-04-10": {
+   "url": "https://kttv.gov.vn//upload/thuyvan2/2026/4/10/dbqg_xman_20260410_1500.pdf",
+   "max_ppt": {
+    "long_phu": 3.1,
+    "soc_trang": 0.5,
+    "thanh_phu": 0.6,
+    "tran_de": 5.7,
+    "dai_ngai": 0.5
+   },
+   "period_printed": "21-31/3/2026 (header as printed; likely a copy error)"
+  },
+  "2026-05-10": {
+   "url": "https://kttv.gov.vn//upload/thuyvan1/2026/5/10/dbqg_xman_20260510_1500.pdf",
+   "max_ppt": {
+    "long_phu": 9.3,
+    "soc_trang": 1.5,
+    "thanh_phu": 1.6,
+    "tran_de": 13.0,
+    "dai_ngai": 3.0
+   }
+  },
+  "2026-05-31": {
+   "url": "https://kttv.gov.vn//upload/thuyvan1/2026/5/31/dbqg_xman_20260531_1500.pdf",
+   "max_ppt": {
+    "long_phu": 3.4,
+    "soc_trang": 0.6,
+    "thanh_phu": 0.6,
+    "tran_de": 6.4,
+    "dai_ngai": 0.5
+   }
+  }
+ }
+}
