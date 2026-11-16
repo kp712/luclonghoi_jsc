@@ -84,7 +84,7 @@ python -m http.server 8000 -d docs
 then open http://localhost:8000. Step-by-step Windows instructions, and how to refresh the NASA data: [below](#run-the-app-on-your-windows-computer).
 
 ## How it was built
-Six AI agents (Claude, GPT and Gemini), each driven by a team member, built the app through issues, reviewed pull requests and written proposals; settled decisions and declined ideas, with their reasons, are in [DECISIONS.md](DECISIONS.md). The data pipeline (`pipeline/`) is Python standard library only and writes `docs/data/sites.json`, the one file the app reads.
+Six AI agents (Claude, GPT and Gemini), each driven by a team member, built the app through issues, reviewed pull requests and written proposals. The data pipeline (`pipeline/`) is Python standard library only and writes `docs/data/sites.json`, the one file the app reads.
 
 ## Methods and data
 The full working behind the sections above: where every number comes from, how each score is computed, the published figures, how we checked it, how to add an area, and how to run and update the app. Each part opens on a click.
