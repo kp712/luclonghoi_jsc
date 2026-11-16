@@ -1,5 +1,5 @@
 {
- "_readme": "Published PRODUCTION COST (money spent before revenue), million ₫ per ha, per crop key (same keys as pipeline/profits.json). cost = the figure, or the midpoint of range [low, high]; range is null for a single number. unit 'crop' = per crop, 'year' = per year (shrimp: one season a year). year = harvest year (winter–spring 2023–24 = 2024). kind: government | cooperative | university | news | farmer. method: 'stated' (page states the cost), 'revenue-minus-profit' (yield × price, or stated revenue, minus stated profit; arithmetic in calc), 'unit-cost-x-yield' (giá thành ₫/kg × yield). bound: 'upper' or 'lower' when the page says 'over'/'under' so the computed cost is a bound, not a value. covers: what the cost includes when it is known (some surveys leave out land preparation, machinery or harvest, or include family labour); none of these figures includes land rent unless covers says so. 1 công taken as 1,000 m² unless the page states its size. Quotes are Vietnamese as printed (the Mỹ Xuyên PDF uses a legacy font; its quote is transcribed from the decoded text). Checked 2026-11-14. machines: 'excluded' when covers says machinery is left out, else 'not_stated' (no figure says machine hire is included). labour: 'family' (family labour counted, no hired labour), 'included' (labour cost listed), or 'not_stated'. Both are read from covers only, never guessed.",
+ "_readme": "Published PRODUCTION COST (money spent before revenue), million ₫ per ha, per crop key (same keys as pipeline/profits.json). cost = the figure, or the midpoint of range [low, high]; range is null for a single number. unit 'crop' = per crop, 'year' = per year (shrimp: one season a year). year = harvest year (winter–spring 2023–24 = 2024). kind: government | cooperative | university | news | farmer. method: 'stated' (page states the cost), 'revenue-minus-profit' (yield × price, or stated revenue, minus stated profit; arithmetic in calc), 'unit-cost-x-yield' (giá thành ₫/kg × yield). bound: 'upper' or 'lower' when the page says 'over'/'under' so the computed cost is a bound, not a value. covers: what the cost includes when it is known (some surveys leave out land preparation, machinery or harvest, or include family labour); none of these figures includes land rent unless covers says so. 1 công taken as 1,000 m² unless the page states its size. Quotes are Vietnamese as printed (the Mỹ Xuyên PDF uses a legacy font; its quote is transcribed from the decoded text). Checked. machines: 'excluded' when covers says machinery is left out, else 'not_stated' (no figure says machine hire is included). labour: 'family' (family labour counted, no hired labour), 'included' (labour cost listed), or 'not_stated'. Both are read from covers only, never guessed.",
  "figures": [
   {
    "key": "rice_ws",
@@ -15,8 +15,7 @@
    "source": {
     "title": "VOV (28 Mar 2025), Kiên Giang thí điểm canh tác lúa giảm phát thải, lợi nhuận 55,5 triệu đồng/ha",
     "url": "https://vov.vn/kinh-te/kien-giang-thi-diem-canh-tac-lua-giam-phat-thai-loi-nhuan-555-trieu-dongha-post1188014.vov",
-    "quote": "tổng thu nhập đạt 82,2 triệu đồng/ha … lợi nhuận cho nhà nông lên đến 55,5 triệu đồng/ha",
-    "checked": "2026-11-14"
+    "quote": "tổng thu nhập đạt 82,2 triệu đồng/ha … lợi nhuận cho nhà nông lên đến 55,5 triệu đồng/ha"
    },
    "machines": "not_stated",
    "labour": "not_stated"
@@ -38,8 +37,7 @@
    "source": {
     "title": "VietnamPlus (10 Jan 2024), Sóc Trăng: Lúa Đông Xuân có giá bán và lợi nhuận cao kỷ lục",
     "url": "https://www.vietnamplus.vn/soc-trang-lua-dong-xuan-co-gia-ban-va-loi-nhuan-cao-ky-luc-post920243.vnp",
-    "quote": "Ước tính năng suất đầu vụ đạt 6,5 tấn/ha … giá lúa thường từ 8.700-10.000 đồng/kg … lợi nhuận từ 30-50 triệu đồng/ha",
-    "checked": "2026-11-14"
+    "quote": "Ước tính năng suất đầu vụ đạt 6,5 tấn/ha … giá lúa thường từ 8.700-10.000 đồng/kg … lợi nhuận từ 30-50 triệu đồng/ha"
    },
    "machines": "not_stated",
    "labour": "not_stated"
@@ -58,8 +56,7 @@
    "source": {
     "title": "Tất Anh Thư et al. (2025), Đánh giá hiện trạng canh tác và hiệu quả tài chính của mô hình trồng lúa trên đất phèn tại huyện Long Mỹ, tỉnh Hậu Giang, Tạp chí Khoa học ĐH Cần Thơ 61(5B): 133-142",
     "url": "https://ctujsvn.ctu.edu.vn/index.php/ctujsvn/article/download/7025/5153/33034",
-    "quote": "Tổng chi phí (đồng/ha) 16.048.625±2.391.169 17.449.439±2.245.109",
-    "checked": "2026-11-14"
+    "quote": "Tổng chi phí (đồng/ha) 16.048.625±2.391.169 17.449.439±2.245.109"
    },
    "machines": "excluded",
    "labour": "family"
@@ -78,8 +75,7 @@
    "source": {
     "title": "VietnamPlus (10 Jan 2024), Sóc Trăng: Lúa Đông Xuân có giá bán và lợi nhuận cao kỷ lục",
     "url": "https://www.vietnamplus.vn/soc-trang-lua-dong-xuan-co-gia-ban-va-loi-nhuan-cao-ky-luc-post920243.vnp",
-    "quote": "chi phí đầu tư giảm còn 15 triệu đồng/ha",
-    "checked": "2026-11-14"
+    "quote": "chi phí đầu tư giảm còn 15 triệu đồng/ha"
    },
    "machines": "not_stated",
    "labour": "not_stated"
@@ -99,8 +95,7 @@
    "source": {
     "title": "VietnamPlus (10 Jan 2024), Sóc Trăng: Lúa Đông Xuân có giá bán và lợi nhuận cao kỷ lục",
     "url": "https://www.vietnamplus.vn/soc-trang-lua-dong-xuan-co-gia-ban-va-loi-nhuan-cao-ky-luc-post920243.vnp",
-    "quote": "năng suất đạt trên 7 tấn, giá bán 11.500 đồng/kg … trừ chi phí nông dân lợi nhuận 60 triệu đồng/ha",
-    "checked": "2026-11-14"
+    "quote": "năng suất đạt trên 7 tấn, giá bán 11.500 đồng/kg … trừ chi phí nông dân lợi nhuận 60 triệu đồng/ha"
    },
    "machines": "not_stated",
    "labour": "not_stated"
@@ -122,8 +117,7 @@
    "source": {
     "title": "Tuổi Trẻ (24 Jul 2024), Đồng Tháp thu hoạch lúa hè thu cuối vụ, nông dân đạt lợi nhuận 26 - 32 triệu đồng mỗi ha",
     "url": "https://tuoitre.vn/dong-thap-thu-hoach-lua-he-thu-cuoi-vu-nong-dan-dat-loi-nhuan-26-32-trieu-dong-moi-ha-20240724164140909.htm",
-    "quote": "Giá thành sản xuất lúa vụ hè thu dao động 3.458 - 3.667 đồng/kg … năng suất trung bình 6,8 tấn/ha",
-    "checked": "2026-11-14"
+    "quote": "Giá thành sản xuất lúa vụ hè thu dao động 3.458 - 3.667 đồng/kg … năng suất trung bình 6,8 tấn/ha"
    },
    "machines": "not_stated",
    "labour": "not_stated"
@@ -142,8 +136,7 @@
    "source": {
     "title": "VnExpress (11 May 2024), Nông dân Đồng Tháp trúng đậm vụ lúa Hè Thu",
     "url": "https://vnexpress.net/nong-dan-dong-thap-trung-dam-vu-lua-he-thu-4744751.html",
-    "quote": "Mỗi kg lúa chủ ruộng bán với giá 8.600 đồng, sau khi trừ chi phí ông lãi khoảng 50 triệu đồng một ha.",
-    "checked": "2026-11-14"
+    "quote": "Mỗi kg lúa chủ ruộng bán với giá 8.600 đồng, sau khi trừ chi phí ông lãi khoảng 50 triệu đồng một ha."
    },
    "machines": "not_stated",
    "labour": "not_stated"
@@ -162,8 +155,7 @@
    "source": {
     "title": "Thương hiệu và Công luận, citing VOV (10 Sep 2024), Tin vui trồng lúa theo mô hình thí điểm 1 triệu ha, nông dân thu lời gần 50 triệu/ha",
     "url": "https://thuonghieucongluan.com.vn/tin-vui-trong-lua-theo-mo-hinh-thi-diem-1-trieu-ha-nong-dan-thu-loi-gan-50-trieu-ha-a235179.html",
-    "quote": "năng suất lúa sản xuất trong Đề án đạt 6,5 tấn/ha, với giá lúa ST25 được bán 10.800/kg",
-    "checked": "2026-11-14"
+    "quote": "năng suất lúa sản xuất trong Đề án đạt 6,5 tấn/ha, với giá lúa ST25 được bán 10.800/kg"
    },
    "machines": "not_stated",
    "labour": "not_stated"
@@ -182,8 +174,7 @@
    "source": {
     "title": "Thương hiệu và Công luận, citing VOV (10 Sep 2024), Tin vui trồng lúa theo mô hình thí điểm 1 triệu ha, nông dân thu lời gần 50 triệu/ha",
     "url": "https://thuonghieucongluan.com.vn/tin-vui-trong-lua-theo-mo-hinh-thi-diem-1-trieu-ha-nong-dan-thu-loi-gan-50-trieu-ha-a235179.html",
-    "quote": "tổng chi phí sản xuất thấp hơn trên 5,3 triệu/ha so với ngoài mô hình, giảm hơn 20%",
-    "checked": "2026-11-14"
+    "quote": "tổng chi phí sản xuất thấp hơn trên 5,3 triệu/ha so với ngoài mô hình, giảm hơn 20%"
    },
    "machines": "not_stated",
    "labour": "not_stated"
@@ -204,7 +195,7 @@
     "title": "Báo Tin tức – Dân tộc & Miền núi, Sản xuất lúa – tôm đặc sản cho nông dân Sóc Trăng thu nhập bạc tỷ",
     "url": "https://dantocmiennui.baotintuc.vn/san-xuat-lua-tom-dac-san-cho-nong-dan-soc-trang-thu-nhap-bac-ty-post354705.html",
     "quote": "năng suất đạt 6,5 tấn/ha, giá lúa được đơn vị bao tiêu là 11.000 đồng/kg, trừ chi phí lợi nhuận … trên 50 triệu đồng/ha",
-    "checked": "2026-11-06 (quote from profits.json note, not re-opened today)"
+    "checked": "quote from profits.json note, not re-opened"
    },
    "machines": "not_stated",
    "labour": "not_stated"
@@ -226,8 +217,7 @@
    "source": {
     "title": "Nguyễn Thành Tâm, Nguyễn Thị Tuyết Mai, Đặng Kiều Nhân (2024), Đánh giá hiện trạng sản xuất lúa vụ thu đông tại tỉnh An Giang, Tạp chí Khoa học ĐH Cần Thơ 60(6B): 151-160",
     "url": "https://doi.org/10.22144/ctujos.2024.476",
-    "quote": "tổng chi phí sản xuất lúa vụ Thu Đông năm 2020 dao động từ 15.422.077 đồng/ha đến 27.392.192 đồng/ha, trung bình 23.272.285 đồng/ha",
-    "checked": "2026-11-14"
+    "quote": "tổng chi phí sản xuất lúa vụ Thu Đông năm 2020 dao động từ 15.422.077 đồng/ha đến 27.392.192 đồng/ha, trung bình 23.272.285 đồng/ha"
    },
    "machines": "not_stated",
    "labour": "not_stated"
@@ -246,8 +236,7 @@
    "source": {
     "title": "Nông nghiệp Việt Nam (16 Oct 2023), Nhìn vào vụ lúa Thu Đông 2023 – Bài 2: Vùng hạ chuẩn bị mở đồng",
     "url": "https://nongnghiepmoitruong.vn/nhin-vao-vu-lua-thu-dong-2023-bai-2-vung-ha-chuan-bi-mo-dong-d364409.html",
-    "quote": "Năng suất lúa tươi tạm tính khoảng 6 tấn/ha … Năm nay, giá thành sản xuất lúa khoảng 3.400 đồng/kg.",
-    "checked": "2026-11-14"
+    "quote": "Năng suất lúa tươi tạm tính khoảng 6 tấn/ha … Năm nay, giá thành sản xuất lúa khoảng 3.400 đồng/kg."
    },
    "machines": "not_stated",
    "labour": "not_stated"
@@ -269,8 +258,7 @@
    "source": {
     "title": "Nông nghiệp Việt Nam (16 Oct 2023), Nhìn vào vụ lúa Thu Đông 2023 – Bài 2: Vùng hạ chuẩn bị mở đồng",
     "url": "https://nongnghiepmoitruong.vn/nhin-vao-vu-lua-thu-dong-2023-bai-2-vung-ha-chuan-bi-mo-dong-d364409.html",
-    "quote": "sau khi trừ đi chi phí (từ 20 - 22 triệu đồng/ha), lợi nhuận vẫn đạt hơn 50%",
-    "checked": "2026-11-14"
+    "quote": "sau khi trừ đi chi phí (từ 20 - 22 triệu đồng/ha), lợi nhuận vẫn đạt hơn 50%"
    },
    "machines": "not_stated",
    "labour": "not_stated"
@@ -289,8 +277,7 @@
    "source": {
     "title": "Tất Anh Thư et al. (2025), Đánh giá hiện trạng canh tác và hiệu quả tài chính của mô hình trồng lúa trên đất phèn tại huyện Long Mỹ, tỉnh Hậu Giang, Tạp chí Khoa học ĐH Cần Thơ 61(5B): 133-142",
     "url": "https://ctujsvn.ctu.edu.vn/index.php/ctujsvn/article/download/7025/5153/33034",
-    "quote": "Tổng chi phí (đồng/ha) 16.048.625±2.391.169 17.449.439±2.245.109",
-    "checked": "2026-11-14"
+    "quote": "Tổng chi phí (đồng/ha) 16.048.625±2.391.169 17.449.439±2.245.109"
    },
    "machines": "excluded",
    "labour": "family"
@@ -309,8 +296,7 @@
    "source": {
     "title": "Đặc điểm kỹ thuật, kinh tế, xã hội và môi trường của mô hình lúa - tôm và chuyên tôm tại huyện Mỹ Xuyên, tỉnh Sóc Trăng, Tạp chí Nông nghiệp và Phát triển nông thôn, kỳ 1 tháng 11/2024, Bảng 6 (survey Mar–May 2024)",
     "url": "https://tapchikhoahoc.nnmt.net.vn/index.php/vjae/article/view/104",
-    "quote": "Chi phí của mô hình lúa - tôm là 28,18 triệu đồng/1.000 m2/năm (2,04 triệu đồng/vụ lúa và 26,14 triệu đồng/vụ tôm)",
-    "checked": "2026-11-14"
+    "quote": "Chi phí của mô hình lúa - tôm là 28,18 triệu đồng/1.000 m2/năm (2,04 triệu đồng/vụ lúa và 26,14 triệu đồng/vụ tôm)"
    },
    "machines": "not_stated",
    "labour": "not_stated"
@@ -330,8 +316,7 @@
    "source": {
     "title": "Nhân Dân (10 Mar 2021), Lúa thơm - tôm sạch ở Sóc Trăng",
     "url": "https://nhandan.vn/post-637970.html",
-    "quote": "vừa thu hoạch hơn 16 tấn lúa ST25 từ 2 ha, bán gần 8.300 đồng/kg … Trừ chi phí, anh Bằng lãi hơn 90 triệu đồng.",
-    "checked": "2026-11-14"
+    "quote": "vừa thu hoạch hơn 16 tấn lúa ST25 từ 2 ha, bán gần 8.300 đồng/kg … Trừ chi phí, anh Bằng lãi hơn 90 triệu đồng."
    },
    "machines": "not_stated",
    "labour": "not_stated"
@@ -350,8 +335,7 @@
    "source": {
     "title": "Nhân Dân (6 May 2026), Cần quy hoạch cụ thể vùng sản xuất tôm-lúa",
     "url": "https://nhandan.vn/can-quy-hoach-cu-the-vung-san-xuat-tom-lua-post960415.html",
-    "quote": "đạt 6 tấn/ha, thu nhập hơn 70 triệu đồng/ha … lãi gần 40 triệu đồng/ha",
-    "checked": "2026-11-14"
+    "quote": "đạt 6 tấn/ha, thu nhập hơn 70 triệu đồng/ha … lãi gần 40 triệu đồng/ha"
    },
    "machines": "not_stated",
    "labour": "not_stated"
@@ -371,8 +355,7 @@
    "source": {
     "title": "VnBusiness (18 Jul 2025), 'Cha đẻ' của các giống gạo ST chia sẻ kinh nghiệm lợi nhuận từ mô hình luân canh lúa - tôm",
     "url": "https://vnbusiness.vn/cha-de-cua-cac-giong-gao-st-chia-se-kinh-nghiem-loi-nhuan-tu-mo-hinh-luan-canh-lua-tom.html",
-    "quote": "chi phí chưa tới 20 triệu đồng/ha, giúp tăng lợi nhuận gấp rưỡi",
-    "checked": "2026-11-14"
+    "quote": "chi phí chưa tới 20 triệu đồng/ha, giúp tăng lợi nhuận gấp rưỡi"
    },
    "machines": "not_stated",
    "labour": "not_stated"
@@ -391,8 +374,7 @@
    "source": {
     "title": "Đặc điểm kỹ thuật, kinh tế, xã hội và môi trường của mô hình lúa - tôm và chuyên tôm tại huyện Mỹ Xuyên, tỉnh Sóc Trăng, Tạp chí Nông nghiệp và Phát triển nông thôn, kỳ 1 tháng 11/2024, Bảng 6 (survey Mar–May 2024)",
     "url": "https://tapchikhoahoc.nnmt.net.vn/index.php/vjae/article/view/104",
-    "quote": "Chi phí của mô hình lúa - tôm là 28,18 triệu đồng/1.000 m2/năm (2,04 triệu đồng/vụ lúa và 26,14 triệu đồng/vụ tôm)",
-    "checked": "2026-11-14"
+    "quote": "Chi phí của mô hình lúa - tôm là 28,18 triệu đồng/1.000 m2/năm (2,04 triệu đồng/vụ lúa và 26,14 triệu đồng/vụ tôm)"
    },
    "machines": "not_stated",
    "labour": "not_stated"
@@ -414,8 +396,7 @@
    "source": {
     "title": "VnEconomy (13 Nov 2023), Giải pháp cho vùng nhiễm mặn Bạc Liêu: Hiệu quả mô hình tôm – lúa",
     "url": "https://vneconomy.vn/giai-phap-cho-vung-nhiem-man-bac-lieu-hieu-qua-mo-hinh-tom-lua.htm",
-    "quote": "mỗi vụ thu về 160-200 triệu đồng tiền bán tôm, sau khi trừ đi các khoản chi phí, lợi nhuận còn khoảng 120 triệu đồng",
-    "checked": "2026-11-14"
+    "quote": "mỗi vụ thu về 160-200 triệu đồng tiền bán tôm, sau khi trừ đi các khoản chi phí, lợi nhuận còn khoảng 120 triệu đồng"
    },
    "machines": "not_stated",
    "labour": "not_stated"
@@ -434,8 +415,7 @@
    "source": {
     "title": "Nguyễn Tuấn Anh, Đoàn Doãn Tuấn et al. (2025), Nguồn lực và khả năng hộ sản xuất nông lâm thủy sản áp dụng mô hình canh tác hiệu quả, bền vững vùng hưởng lợi dự án Cái Lớn - Cái Bé, Tạp chí KH&CN Thủy lợi 93",
     "url": "https://vawr.org.vn/Upload/BaibaoKH/nguyen-tuan-anh_93_2025.pdf",
-    "quote": "Mô hình tôm lúa là mô hình bền vững có hiệu quả kinh tế cao. Với mức đầu tư 32,2 tr.đ/ha/năm",
-    "checked": "2026-11-14"
+    "quote": "Mô hình tôm lúa là mô hình bền vững có hiệu quả kinh tế cao. Với mức đầu tư 32,2 tr.đ/ha/năm"
    },
    "use": false,
    "why_not": {
@@ -459,8 +439,7 @@
    "source": {
     "title": "Lê Hồng Việt et al. (2018), Ảnh hưởng của luân canh lúa-dưa hấu đến độ hữu dụng của đạm, lân trong đất và năng suất lúa trên nền đất phèn tại tỉnh Hậu Giang, Tạp chí Khoa học ĐH Cần Thơ 54 (chuyên đề Nông nghiệp): 235-240",
     "url": "https://ctujsvn.ctu.edu.vn/index.php/ctujsvn/article/download/3218/601/601",
-    "quote": "Tổng chi phí của mô hình canh tác dưa hấu là 31,017 triệu đồng",
-    "checked": "2026-11-14"
+    "quote": "Tổng chi phí của mô hình canh tác dưa hấu là 31,017 triệu đồng"
    },
    "machines": "not_stated",
    "labour": "included"
@@ -482,8 +461,7 @@
    "source": {
     "title": "Thanh Tra (13 Mar 2020), Đảm bảo thu nhập cho nông dân trong mùa khô hạn",
     "url": "https://thanhtra.com.vn/tai-chinh-701717FFD/dam-bao-thu-nhap-cho-nong-dan-trong-mua-kho-han-541B6999.html",
-    "quote": "mỗi công dưa hấu nếu cho năng suất tốt từ 3-4 tấn, giá bán khoảng 4.000 đồng/kg … thu lãi từ 5-10 triệu đồng",
-    "checked": "2026-11-14"
+    "quote": "mỗi công dưa hấu nếu cho năng suất tốt từ 3-4 tấn, giá bán khoảng 4.000 đồng/kg … thu lãi từ 5-10 triệu đồng"
    },
    "machines": "not_stated",
    "labour": "not_stated"
@@ -506,8 +484,7 @@
    "source": {
     "title": "Báo Sóc Trăng (1 Apr 2025), Xã Kế Thành phát triển trồng dưa hấu dưới ruộng lúa",
     "url": "https://baosoctrang.org.vn/nong-nghiep/202504/xa-ke-thanh-phat-trien-trong-dua-hau-duoi-ruong-lua-c825f0e/",
-    "quote": "năng suất 6 tấn trái/3.000m2, giá bán 7.000 - 10.000 đồng/kg … trừ chi phí lợi nhuận hơn 30 triệu đồng/vụ/năm",
-    "checked": "2026-11-14"
+    "quote": "năng suất 6 tấn trái/3.000m2, giá bán 7.000 - 10.000 đồng/kg … trừ chi phí lợi nhuận hơn 30 triệu đồng/vụ/năm"
    },
    "machines": "not_stated",
    "labour": "not_stated"
@@ -527,8 +504,7 @@
    "source": {
     "title": "Báo Tin tức – Dân tộc & Miền núi (3 Jun 2024), Trồng rau màu cho lợi nhuận trên 100 triệu đồng/ha",
     "url": "https://dantocmiennui.baotintuc.vn/trong-rau-mau-cho-loi-nhuan-tren-100-trieu-dongha-post351672.html",
-    "quote": "với 8.000 m2 dưa hấu, ông đạt sản lượng 24 tấn quả, bán giá 8.000 đồng/kg … trừ chi phí còn lãi trên 80 triệu đồng",
-    "checked": "2026-11-14"
+    "quote": "với 8.000 m2 dưa hấu, ông đạt sản lượng 24 tấn quả, bán giá 8.000 đồng/kg … trừ chi phí còn lãi trên 80 triệu đồng"
    },
    "machines": "not_stated",
    "labour": "not_stated"

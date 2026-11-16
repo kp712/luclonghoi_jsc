@@ -1,5 +1,5 @@
 {
- "_readme": "Published profit after costs (million ₫ per ha) for each crop key that rotations.json 'profit' maps a calendar code to. value = the figure, or the midpoint of a range (the range is in 'place'); unit 'crop' = per crop, 'year' = per year (the shrimp season, one a year). year = harvest year (winter–spring 2023–24 = 2024). kind: survey | government | university | cooperative | farmer | news (a reporter's area figure with no named source). Rule: Mekong Delta, 2020–2025, profit after costs, a stated unit, from a survey, government, university or cooperative source (not a single farmer, not a news figure with no named source); anything else has fallback: true and is used only where the key has nothing better. build.py takes the median of each key's qualifying figures when it has at least 2, otherwise of all its figures. loss: share of a key's profit lost; view typical (applied in both views) or elnino (El Niño view only); applies 'all' or 'salt_months' (only when a month of that crop is in the pin's salt months). A loss whose source note says 'team estimate' has no source for that number. Each source quote was checked by Claude on 2026-11-06. Upland crop keys: watermelon, maize, mungbean (no checked figure yet: its income is not scored); upland_other holds figures for other or unnamed upland crops, kept for the README cross-check and not scored.",
+ "_readme": "Published profit after costs (million ₫ per ha) for each crop key that rotations.json 'profit' maps a calendar code to. value = the figure, or the midpoint of a range (the range is in 'place'); unit 'crop' = per crop, 'year' = per year (the shrimp season, one a year). year = harvest year (winter–spring 2023–24 = 2024). kind: survey | government | university | cooperative | farmer | news (a reporter's area figure with no named source). Rule: Mekong Delta, 2020–2025, profit after costs, a stated unit, from a survey, government, university or cooperative source (not a single farmer, not a news figure with no named source); anything else has fallback: true and is used only where the key has nothing better. build.py takes the median of each key's qualifying figures when it has at least 2, otherwise of all its figures. loss: share of a key's profit lost; view typical (applied in both views) or elnino (El Niño view only); applies 'all' or 'salt_months' (only when a month of that crop is in the pin's salt months). A loss whose source note says 'team estimate' has no source for that number. Each source quote was checked by Claude. Upland crop keys: watermelon, maize, mungbean (no checked figure yet: its income is not scored); upland_other holds figures for other or unnamed upland crops, kept for the README cross-check and not scored.",
  "figures": [
   {
    "key": "rice_ws",
@@ -12,7 +12,7 @@
    "source": {
     "title": "VietnamPlus (10 Jan 2024), Sóc Trăng: Lúa Đông Xuân có giá bán và lợi nhuận cao kỷ lục",
     "url": "https://www.vietnamplus.vn/soc-trang-lua-dong-xuan-co-gia-ban-va-loi-nhuan-cao-ky-luc-post920243.vnp",
-    "note": "Checked 2026-11-06. Winter–spring 2023–24, a record-price season. Long Phú district agriculture office (Lâm Văn Vũ): 'Giá lúa vụ lúa năm nay, tăng cao hơn nhiều so với năm trước, nên trừ các khoản chi phí nông dân lợi nhuận từ 30-50 triệu đồng/ha.' (varieties not stated). Hưng Lợi cooperative (Long Đức, Long Phú), ST25: 'trừ chi phí nông dân lợi nhuận 60 triệu đồng/ha.'; its Đài Thơm 8: 'Riêng với giống Đài Thơm năng suất vượt trội hơn và giá bán 10.000 đồng/kg, trừ chi phí lợi nhuận 50 triệu đồng/ha.' Prices: ST25 '11.000 đồng/kg' and '11.500 đồng/kg', Đài Thơm '10.000 đồng/kg', ordinary rice '8.700-10.000 đồng/kg'.",
+    "note": "Checked. Winter–spring 2023–24, a record-price season. Long Phú district agriculture office (Lâm Văn Vũ): 'Giá lúa vụ lúa năm nay, tăng cao hơn nhiều so với năm trước, nên trừ các khoản chi phí nông dân lợi nhuận từ 30-50 triệu đồng/ha.' (varieties not stated). Hưng Lợi cooperative (Long Đức, Long Phú), ST25: 'trừ chi phí nông dân lợi nhuận 60 triệu đồng/ha.'; its Đài Thơm 8: 'Riêng với giống Đài Thơm năng suất vượt trội hơn và giá bán 10.000 đồng/kg, trừ chi phí lợi nhuận 50 triệu đồng/ha.' Prices: ST25 '11.000 đồng/kg' and '11.500 đồng/kg', Đài Thơm '10.000 đồng/kg', ordinary rice '8.700-10.000 đồng/kg'.",
     "verified": true
    }
   },
@@ -27,7 +27,7 @@
    "source": {
     "title": "VietnamPlus (10 Jan 2024), Sóc Trăng: Lúa Đông Xuân có giá bán và lợi nhuận cao kỷ lục",
     "url": "https://www.vietnamplus.vn/soc-trang-lua-dong-xuan-co-gia-ban-va-loi-nhuan-cao-ky-luc-post920243.vnp",
-    "note": "Checked 2026-11-06. Winter–spring 2023–24, a record-price season. Long Phú district agriculture office (Lâm Văn Vũ): 'Giá lúa vụ lúa năm nay, tăng cao hơn nhiều so với năm trước, nên trừ các khoản chi phí nông dân lợi nhuận từ 30-50 triệu đồng/ha.' (varieties not stated). Hưng Lợi cooperative (Long Đức, Long Phú), ST25: 'trừ chi phí nông dân lợi nhuận 60 triệu đồng/ha.'; its Đài Thơm 8: 'Riêng với giống Đài Thơm năng suất vượt trội hơn và giá bán 10.000 đồng/kg, trừ chi phí lợi nhuận 50 triệu đồng/ha.' Prices: ST25 '11.000 đồng/kg' and '11.500 đồng/kg', Đài Thơm '10.000 đồng/kg', ordinary rice '8.700-10.000 đồng/kg'.",
+    "note": "Checked. Winter–spring 2023–24, a record-price season. Long Phú district agriculture office (Lâm Văn Vũ): 'Giá lúa vụ lúa năm nay, tăng cao hơn nhiều so với năm trước, nên trừ các khoản chi phí nông dân lợi nhuận từ 30-50 triệu đồng/ha.' (varieties not stated). Hưng Lợi cooperative (Long Đức, Long Phú), ST25: 'trừ chi phí nông dân lợi nhuận 60 triệu đồng/ha.'; its Đài Thơm 8: 'Riêng với giống Đài Thơm năng suất vượt trội hơn và giá bán 10.000 đồng/kg, trừ chi phí lợi nhuận 50 triệu đồng/ha.' Prices: ST25 '11.000 đồng/kg' and '11.500 đồng/kg', Đài Thơm '10.000 đồng/kg', ordinary rice '8.700-10.000 đồng/kg'.",
     "verified": true
    }
   },
@@ -42,7 +42,7 @@
    "source": {
     "title": "Báo Tin tức – TTXVN (21 Mar 2024), Nông dân Sóc Trăng tăng lợi nhuận vụ lúa Đông Xuân từ 20-30%",
     "url": "https://baotintuc.vn/kinh-te/nong-dan-soc-trang-tang-loi-nhuan-vu-lua-dong-xuan-tu-2030-20240321173910010.htm",
-    "note": "Checked 2026-11-06. Winter–spring 2023–24. Thạnh Trị district chairman Lê Thanh Chúc (district: 'diện tích lúa đặc sản chiếm gần 60%'): 'bình quân nông dân lợi nhuận trên 40 triệu đồng/ha, tăng 10 triệu đồng/ha.' Phường 2, Ngã Năm (Party secretary Võ Văn Bé; 'trên 95% diện tích sản xuất lúa đặc sản', ST25 is the variety the farmers quoted grow): 'trừ chi phí lợi nhuận của nông dân từ 40-50 triệu đồng/ha, cao hơn từ 20-30% so với vụ trước.'",
+    "note": "Checked. Winter–spring 2023–24. Thạnh Trị district chairman Lê Thanh Chúc (district: 'diện tích lúa đặc sản chiếm gần 60%'): 'bình quân nông dân lợi nhuận trên 40 triệu đồng/ha, tăng 10 triệu đồng/ha.' Phường 2, Ngã Năm (Party secretary Võ Văn Bé; 'trên 95% diện tích sản xuất lúa đặc sản', ST25 is the variety the farmers quoted grow): 'trừ chi phí lợi nhuận của nông dân từ 40-50 triệu đồng/ha, cao hơn từ 20-30% so với vụ trước.'",
     "verified": true
    }
   },
@@ -57,7 +57,7 @@
    "source": {
     "title": "VOV (12 Oct 2024), Sóc Trăng xuất khẩu gạo đạt 510 triệu USD",
     "url": "https://vov.vn/kinh-te/soc-trang-xuat-khau-gao-dat-510-trieu-usd-post1127803.vov",
-    "note": "Checked 2026-11-06. Province average (no official named): 'Riêng lợi nhuận bình quân vụ lúa Đông Xuân 2023-2024 đạt trên 36 triệu đồng/ha, tăng gần 34% so với vụ Đông Xuân 2022-2023.' Provincial Department of Agriculture's 50 ha ST25 demonstration, summer–autumn 2024 ('mô hình trình diễn 50ha lúa đối với vụ Hè Thu 2024 trong đề án đạt năng suất 6,5 tấn/ha'): 'Với giá lúa ST25 thời điểm đó được bán 10.800 đồng/kg, nông dân tham gia đề án kiếm lợi nhuận gần 49 triệu đồng/ha.'",
+    "note": "Checked. Province average (no official named): 'Riêng lợi nhuận bình quân vụ lúa Đông Xuân 2023-2024 đạt trên 36 triệu đồng/ha, tăng gần 34% so với vụ Đông Xuân 2022-2023.' Provincial Department of Agriculture's 50 ha ST25 demonstration, summer–autumn 2024 ('mô hình trình diễn 50ha lúa đối với vụ Hè Thu 2024 trong đề án đạt năng suất 6,5 tấn/ha'): 'Với giá lúa ST25 thời điểm đó được bán 10.800 đồng/kg, nông dân tham gia đề án kiếm lợi nhuận gần 49 triệu đồng/ha.'",
     "verified": true
    }
   },
@@ -72,7 +72,7 @@
    "source": {
     "title": "Tuổi Trẻ (20 Apr 2025), Giá vật tư tăng, nông dân ĐBSCL lo lắng bước vào vụ hè thu",
     "url": "https://tuoitre.vn/gia-vat-tu-tang-nong-dan-dbscl-lo-lang-buoc-vao-vu-he-thu-2025042008041922.htm",
-    "note": "Checked 2026-11-06. Winter–spring 2024–25, Trần Văn Thời district (Cà Mau), from the district Phòng Nông nghiệp và Môi trường: 'Người dân thu về lợi nhuận ước khoảng 30 - 40 triệu đồng/ha.'",
+    "note": "Checked. Winter–spring 2024–25, Trần Văn Thời district (Cà Mau), from the district Phòng Nông nghiệp và Môi trường: 'Người dân thu về lợi nhuận ước khoảng 30 - 40 triệu đồng/ha.'",
     "verified": true
    }
   },
@@ -87,7 +87,7 @@
    "source": {
     "title": "Sài Gòn Giải Phóng (6 Mar 2023), Giá lúa đông xuân tăng, nông dân ĐBSCL lãi bình quân 20-30 triệu đồng/ha",
     "url": "https://www.sggp.org.vn/gia-lua-dong-xuan-tang-nong-dan-dbscl-lai-binh-quan-20-30-trieu-dongha-post681034.html",
-    "note": "Checked 2026-11-06. Winter–spring 2022–23, border districts of Kiên Giang and An Giang (reporter's figure, no official named): 'tính ra sau khi trừ chi phí, bà con thu lời khoảng 20-30 triệu đồng/ha lúa.'",
+    "note": "Checked. Winter–spring 2022–23, border districts of Kiên Giang and An Giang (reporter's figure, no official named): 'tính ra sau khi trừ chi phí, bà con thu lời khoảng 20-30 triệu đồng/ha lúa.'",
     "verified": true
    }
   },
@@ -102,7 +102,7 @@
    "source": {
     "title": "Thanh Tra (18 Aug 2020), Sóc Trăng: Nông dân phấn khởi vì giá lúa ở mức cao",
     "url": "https://thanhtra.com.vn/an-sinh-AFA9C5670/soc-trang-nong-dan-phan-khoi-vi-gia-lua-o-muc-cao-8045F604.html",
-    "note": "Checked 2026-11-06. Summer–autumn 2020, Châu Thành district (Sóc Trăng), head of the district agriculture office (ông Luân): 'Đến thời điểm này, trung bình bà con thu lợi nhuận từ 16 - 18 triệu/ha'. Varieties named: 'OM18, OM5451 và các dòng lúa ST'.",
+    "note": "Checked. Summer–autumn 2020, Châu Thành district (Sóc Trăng), head of the district agriculture office (ông Luân): 'Đến thời điểm này, trung bình bà con thu lợi nhuận từ 16 - 18 triệu/ha'. Varieties named: 'OM18, OM5451 và các dòng lúa ST'.",
     "verified": true
    }
   },
@@ -117,7 +117,7 @@
    "source": {
     "title": "VnExpress (11 May 2024), Nông dân Đồng Tháp trúng đậm vụ lúa Hè Thu",
     "url": "https://vnexpress.net/nong-dan-dong-thap-trung-dam-vu-lua-he-thu-4744751.html",
-    "note": "Checked 2026-11-06. Summer–autumn 2024: 'Theo Sở Nông nghiệp và Phát triển nông thôn Đồng Tháp vụ Hè Thu cả tỉnh xuống giống gần 120.000 ha lúa, giá thành (chi phí sản xuất) mỗi kg lúa ở mức 3.400-3.600 đồng, lợi nhuận khoảng 30 triệu đồng mỗi ha, tăng 6-7 triệu so với cùng kỳ.'",
+    "note": "Checked. Summer–autumn 2024: 'Theo Sở Nông nghiệp và Phát triển nông thôn Đồng Tháp vụ Hè Thu cả tỉnh xuống giống gần 120.000 ha lúa, giá thành (chi phí sản xuất) mỗi kg lúa ở mức 3.400-3.600 đồng, lợi nhuận khoảng 30 triệu đồng mỗi ha, tăng 6-7 triệu so với cùng kỳ.'",
     "verified": true
    }
   },
@@ -132,7 +132,7 @@
    "source": {
     "title": "Dân tộc & Phát triển (15 Sep 2025), Mô hình lúa chuyên canh chất lượng cao ở ĐBSCL đạt lợi nhuận trên 36 triệu/ha",
     "url": "https://dantocphattrien.vietnamnet.vn/mo-hinh-lua-chuyen-canh-chat-luong-cao-o-dbscl-dat-loi-nhuan-tren-36-trieuha-1757931414277.htm",
-    "note": "Checked 2026-11-06. Summer–autumn 2025, Crop Production and Plant Protection Department review of the 1-million-ha programme's model fields: 'có 10/11 mô hình chuyên canh chất lượng cao ở Đồng bằng sông Cửu Long (ĐBSCL) có lợi nhuận từ 14,5 - 36,3 triệu đồng/ha', 'tăng 4,6 - 15,8 triệu đồng/ha so với diện tích lúa ngoài mô hình' (model fields, so above the usual field).",
+    "note": "Checked. Summer–autumn 2025, Crop Production and Plant Protection Department review of the 1-million-ha programme's model fields: 'có 10/11 mô hình chuyên canh chất lượng cao ở Đồng bằng sông Cửu Long (ĐBSCL) có lợi nhuận từ 14,5 - 36,3 triệu đồng/ha', 'tăng 4,6 - 15,8 triệu đồng/ha so với diện tích lúa ngoài mô hình' (model fields, so above the usual field).",
     "verified": true
    }
   },
@@ -147,7 +147,7 @@
    "source": {
     "title": "Nguyễn Thành Tâm, Nguyễn Thị Tuyết Mai & Đặng Kiều Nhân (2024), Đánh giá hiện trạng sản xuất lúa vụ thu đông tại tỉnh An Giang, Tạp chí Khoa học Đại học Cần Thơ 60(6): 151–160",
     "url": "https://doi.org/10.22144/ctujos.2024.476",
-    "note": "Checked 2026-11-06. Full text (PDF). Survey of 68 farms in 9 districts, autumn–winter 2020. Bảng 5 'Hạch toán hiệu quả sản xuất lúa vụ Thu Đông 2020 tại tỉnh An Giang', row 'Trung bình': Tổng chi '23.272.285', Tổng thu '51.159.698', Lợi nhuận (đồng/ha) '27.887.413'. Conclusion: 'lợi nhuận trung bình thu được khoảng 27,9 triệu đồng'.",
+    "note": "Checked. Full text (PDF). Survey of 68 farms in 9 districts, autumn–winter 2020. Bảng 5 'Hạch toán hiệu quả sản xuất lúa vụ Thu Đông 2020 tại tỉnh An Giang', row 'Trung bình': Tổng chi '23.272.285', Tổng thu '51.159.698', Lợi nhuận (đồng/ha) '27.887.413'. Conclusion: 'lợi nhuận trung bình thu được khoảng 27,9 triệu đồng'.",
     "verified": true
    }
   },
@@ -162,7 +162,7 @@
    "source": {
     "title": "VietnamPlus (20 Nov 2023), Lúa Thu Đông ở Đồng bằng sông Cửu Long được mùa, được giá",
     "url": "https://www.vietnamplus.vn/lua-thu-dong-o-dong-bang-song-cuu-long-duoc-mua-duoc-gia-post908660.vnp",
-    "note": "Checked 2026-11-06. Autumn–winter 2023 (TTXVN, no official named): 'Sau khi trừ các chi phí, vụ lúa Thu Đông ở Đồng Tháp lãi hơn 30 triệu đồng/ha, tăng 15 triệu đồng/ha so cùng kỳ năm 2022.'",
+    "note": "Checked. Autumn–winter 2023 (TTXVN, no official named): 'Sau khi trừ các chi phí, vụ lúa Thu Đông ở Đồng Tháp lãi hơn 30 triệu đồng/ha, tăng 15 triệu đồng/ha so cùng kỳ năm 2022.'",
     "verified": true
    }
   },
@@ -177,7 +177,7 @@
    "source": {
     "title": "VOV (27 Nov 2023), Giá lúa vụ Thu Đông tăng kỉ lục, nông dân Tiền Giang lãi khoảng 40 triệu đồng/ha",
     "url": "https://vov.vn/kinh-te/gia-lua-vu-thu-dong-tang-ki-luc-nong-dan-tien-giang-lai-khoang-40-trieu-dongha-post1061766.vov",
-    "note": "Checked 2026-11-06. Autumn–winter 2023, Tiền Giang, record prices (reporter's figure): 'Với mức giá này nông dân đạt mức lợi nhuận khoảng 40 triệu đồng/ha.'",
+    "note": "Checked. Autumn–winter 2023, Tiền Giang, record prices (reporter's figure): 'Với mức giá này nông dân đạt mức lợi nhuận khoảng 40 triệu đồng/ha.'",
     "verified": true
    }
   },
@@ -192,7 +192,7 @@
    "source": {
     "title": "VOV (8 Dec 2024), Lúa Thu đông sớm được cả giá lẫn năng suất, nông dân Trà Vinh phấn khởi",
     "url": "https://vov.vn/kinh-te/lua-thu-dong-som-duoc-ca-gia-lan-nang-suat-nong-dan-tra-vinh-phan-khoi-post1140522.vov",
-    "note": "Checked 2026-11-06. Early autumn–winter 2024, Cầu Kè district, Trà Vinh (reporter's figure): 'Với mức giá này, sau khi trừ các khoản chi phí nông dân có lợi nhuận gần 30 triệu đồng/ha.'",
+    "note": "Checked. Early autumn–winter 2024, Cầu Kè district, Trà Vinh (reporter's figure): 'Với mức giá này, sau khi trừ các khoản chi phí nông dân có lợi nhuận gần 30 triệu đồng/ha.'",
     "verified": true
    }
   },
@@ -207,7 +207,7 @@
    "source": {
     "title": "VietnamPlus (10 Jan 2024), Sóc Trăng: Lúa Đông Xuân có giá bán và lợi nhuận cao kỷ lục",
     "url": "https://www.vietnamplus.vn/soc-trang-lua-dong-xuan-co-gia-ban-va-loi-nhuan-cao-ky-luc-post920243.vnp",
-    "note": "Checked 2026-11-06. Winter–spring 2023–24, a record-price season. Long Phú district agriculture office (Lâm Văn Vũ): 'Giá lúa vụ lúa năm nay, tăng cao hơn nhiều so với năm trước, nên trừ các khoản chi phí nông dân lợi nhuận từ 30-50 triệu đồng/ha.' (varieties not stated). Hưng Lợi cooperative (Long Đức, Long Phú), ST25: 'trừ chi phí nông dân lợi nhuận 60 triệu đồng/ha.'; its Đài Thơm 8: 'Riêng với giống Đài Thơm năng suất vượt trội hơn và giá bán 10.000 đồng/kg, trừ chi phí lợi nhuận 50 triệu đồng/ha.' Prices: ST25 '11.000 đồng/kg' and '11.500 đồng/kg', Đài Thơm '10.000 đồng/kg', ordinary rice '8.700-10.000 đồng/kg'.",
+    "note": "Checked. Winter–spring 2023–24, a record-price season. Long Phú district agriculture office (Lâm Văn Vũ): 'Giá lúa vụ lúa năm nay, tăng cao hơn nhiều so với năm trước, nên trừ các khoản chi phí nông dân lợi nhuận từ 30-50 triệu đồng/ha.' (varieties not stated). Hưng Lợi cooperative (Long Đức, Long Phú), ST25: 'trừ chi phí nông dân lợi nhuận 60 triệu đồng/ha.'; its Đài Thơm 8: 'Riêng với giống Đài Thơm năng suất vượt trội hơn và giá bán 10.000 đồng/kg, trừ chi phí lợi nhuận 50 triệu đồng/ha.' Prices: ST25 '11.000 đồng/kg' and '11.500 đồng/kg', Đài Thơm '10.000 đồng/kg', ordinary rice '8.700-10.000 đồng/kg'.",
     "verified": true
    }
   },
@@ -222,7 +222,7 @@
    "source": {
     "title": "Nhân Dân (24 Jan 2025), Nỗ lực bình ổn giá lúa, bảo đảm lợi ích cho nhà nông",
     "url": "https://nhandan.vn/no-luc-binh-on-gia-lua-bao-dam-loi-ich-cho-nha-nong-post857553.html",
-    "note": "Checked 2026-11-06. Winter–spring 2024–25, Hưng Lợi cooperative (Long Đức, Long Phú, Sóc Trăng), 'gần 603 ha, trong đó 90% số diện tích sản xuất lúa ST25': 'giá lúa ST25 giảm nhưng lợi nhuận của xã viên vẫn đạt lợi nhuận từ 40 triệu đồng/ha trở lên.'",
+    "note": "Checked. Winter–spring 2024–25, Hưng Lợi cooperative (Long Đức, Long Phú, Sóc Trăng), 'gần 603 ha, trong đó 90% số diện tích sản xuất lúa ST25': 'giá lúa ST25 giảm nhưng lợi nhuận của xã viên vẫn đạt lợi nhuận từ 40 triệu đồng/ha trở lên.'",
     "verified": true
    }
   },
@@ -237,7 +237,7 @@
    "source": {
     "title": "Báo Tin tức – TTXVN (21 Mar 2024), Nông dân Sóc Trăng tăng lợi nhuận vụ lúa Đông Xuân từ 20-30%",
     "url": "https://baotintuc.vn/kinh-te/nong-dan-soc-trang-tang-loi-nhuan-vu-lua-dong-xuan-tu-2030-20240321173910010.htm",
-    "note": "Checked 2026-11-06. Winter–spring 2023–24. Thạnh Trị district chairman Lê Thanh Chúc (district: 'diện tích lúa đặc sản chiếm gần 60%'): 'bình quân nông dân lợi nhuận trên 40 triệu đồng/ha, tăng 10 triệu đồng/ha.' Phường 2, Ngã Năm (Party secretary Võ Văn Bé; 'trên 95% diện tích sản xuất lúa đặc sản', ST25 is the variety the farmers quoted grow): 'trừ chi phí lợi nhuận của nông dân từ 40-50 triệu đồng/ha, cao hơn từ 20-30% so với vụ trước.'",
+    "note": "Checked. Winter–spring 2023–24. Thạnh Trị district chairman Lê Thanh Chúc (district: 'diện tích lúa đặc sản chiếm gần 60%'): 'bình quân nông dân lợi nhuận trên 40 triệu đồng/ha, tăng 10 triệu đồng/ha.' Phường 2, Ngã Năm (Party secretary Võ Văn Bé; 'trên 95% diện tích sản xuất lúa đặc sản', ST25 is the variety the farmers quoted grow): 'trừ chi phí lợi nhuận của nông dân từ 40-50 triệu đồng/ha, cao hơn từ 20-30% so với vụ trước.'",
     "verified": true
    }
   },
@@ -252,7 +252,7 @@
    "source": {
     "title": "VOV (12 Oct 2024), Sóc Trăng xuất khẩu gạo đạt 510 triệu USD",
     "url": "https://vov.vn/kinh-te/soc-trang-xuat-khau-gao-dat-510-trieu-usd-post1127803.vov",
-    "note": "Checked 2026-11-06. Province average (no official named): 'Riêng lợi nhuận bình quân vụ lúa Đông Xuân 2023-2024 đạt trên 36 triệu đồng/ha, tăng gần 34% so với vụ Đông Xuân 2022-2023.' Provincial Department of Agriculture's 50 ha ST25 demonstration, summer–autumn 2024 ('mô hình trình diễn 50ha lúa đối với vụ Hè Thu 2024 trong đề án đạt năng suất 6,5 tấn/ha'): 'Với giá lúa ST25 thời điểm đó được bán 10.800 đồng/kg, nông dân tham gia đề án kiếm lợi nhuận gần 49 triệu đồng/ha.'",
+    "note": "Checked. Province average (no official named): 'Riêng lợi nhuận bình quân vụ lúa Đông Xuân 2023-2024 đạt trên 36 triệu đồng/ha, tăng gần 34% so với vụ Đông Xuân 2022-2023.' Provincial Department of Agriculture's 50 ha ST25 demonstration, summer–autumn 2024 ('mô hình trình diễn 50ha lúa đối với vụ Hè Thu 2024 trong đề án đạt năng suất 6,5 tấn/ha'): 'Với giá lúa ST25 thời điểm đó được bán 10.800 đồng/kg, nông dân tham gia đề án kiếm lợi nhuận gần 49 triệu đồng/ha.'",
     "verified": true
    }
   },
@@ -267,7 +267,7 @@
    "source": {
     "title": "Báo Tin tức Dân tộc & Miền núi (8 Oct 2024), Sản xuất lúa, tôm đặc sản cho nông dân Sóc Trăng thu nhập bạc tỷ",
     "url": "https://dantocmiennui.baotintuc.vn/san-xuat-lua-tom-dac-san-cho-nong-dan-soc-trang-thu-nhap-bac-ty-post354705.html",
-    "note": "Checked 2026-11-06. Summer–autumn 2024, Đông Đầy cooperative group (Thạnh Thới An, Trần Đề, Sóc Trăng): 'Vụ lúa Hè Thu vừa qua, trên phần ruộng của tổ hợp tác đã thu hoạch giống lúa ST25, năng suất đạt 6,5 tấn/ha, giá lúa được đơn vị bao tiêu là 11.000 đồng/kg, trừ chi phí lợi nhuận của thành viên tổ hợp tác đạt tới trên 50 triệu đồng/ha.'",
+    "note": "Checked. Summer–autumn 2024, Đông Đầy cooperative group (Thạnh Thới An, Trần Đề, Sóc Trăng): 'Vụ lúa Hè Thu vừa qua, trên phần ruộng của tổ hợp tác đã thu hoạch giống lúa ST25, năng suất đạt 6,5 tấn/ha, giá lúa được đơn vị bao tiêu là 11.000 đồng/kg, trừ chi phí lợi nhuận của thành viên tổ hợp tác đạt tới trên 50 triệu đồng/ha.'",
     "verified": true
    }
   },
@@ -282,7 +282,7 @@
    "source": {
     "title": "Báo Sóc Trăng (7 Jan 2024), Mô hình luân canh lúa - đậu nành: Giải pháp sản xuất hiệu quả và bền vững",
     "url": "https://baosoctrang.org.vn/huyen-thanh-tri/202401/mo-hinh-luan-canh-lua-au-nanh-giai-phap-san-xuat-hieu-qua-va-ben-vung-f9d1891/",
-    "note": "Checked 2026-11-06. One farmer (Phạm Thanh Ca, Phú Lộc, Thạnh Trị), soybean after winter–spring rice: 'Qua 3 tháng gieo trồng, 2ha đậu nành trên đất lúa cho năng suất 2 tấn/ha, giá bán 20.000 đồng/kg, anh bỏ túi gần 16 triệu đồng/ha.' Soybean, not mung bean: no checked mung bean profit was found for the Delta.",
+    "note": "Checked. One farmer (Phạm Thanh Ca, Phú Lộc, Thạnh Trị), soybean after winter–spring rice: 'Qua 3 tháng gieo trồng, 2ha đậu nành trên đất lúa cho năng suất 2 tấn/ha, giá bán 20.000 đồng/kg, anh bỏ túi gần 16 triệu đồng/ha.' Soybean, not mung bean: no checked mung bean profit was found for the Delta.",
     "verified": true
    }
   },
@@ -297,7 +297,7 @@
    "source": {
     "title": "Báo Tin tức Dân tộc & Miền núi (3 Jun 2024), Trồng rau màu cho lợi nhuận trên 100 triệu đồng/ha",
     "url": "https://dantocmiennui.baotintuc.vn/trong-rau-mau-cho-loi-nhuan-tren-100-trieu-dongha-post351672.html",
-    "note": "Checked 2026-11-07. Dry season 2023–24, Director of Tiền Giang's Department of Agriculture: 'Theo Giám đốc Sở Nông nghiệp và Phát triển nông thôn Nguyễn Văn Mẫn, qua khảo sát,' ... 'dưa hấu lãi trên 82 triệu đồng/ha, bắp lãi trên 100 triệu đồng/ ha'. A lower bound; the page compares with rice but does not say the land was rice before.",
+    "note": "Checked. Dry season 2023–24, Director of Tiền Giang's Department of Agriculture: 'Theo Giám đốc Sở Nông nghiệp và Phát triển nông thôn Nguyễn Văn Mẫn, qua khảo sát,' ... 'dưa hấu lãi trên 82 triệu đồng/ha, bắp lãi trên 100 triệu đồng/ ha'. A lower bound; the page compares with rice but does not say the land was rice before.",
     "verified": true
    }
   },
@@ -312,7 +312,7 @@
    "source": {
     "title": "Báo Tin tức Dân tộc & Miền núi (3 Jun 2024), Trồng rau màu cho lợi nhuận trên 100 triệu đồng/ha",
     "url": "https://dantocmiennui.baotintuc.vn/trong-rau-mau-cho-loi-nhuan-tren-100-trieu-dongha-post351672.html",
-    "note": "Checked 2026-11-07. Same survey sentence as the watermelon figure: 'bắp lãi trên 100 triệu đồng/ ha'. A lower bound.",
+    "note": "Checked. Same survey sentence as the watermelon figure: 'bắp lãi trên 100 triệu đồng/ ha'. A lower bound.",
     "verified": true
    }
   },
@@ -327,7 +327,7 @@
    "source": {
     "title": "VietnamPlus (12 Apr 2024), Đồng Tháp: Chuyển hơn 10.000ha đất lúa kém hiệu quả sang cây trồng giá trị cao",
     "url": "https://www.vietnamplus.vn/dong-thap-chuyen-hon-10000ha-dat-lua-kem-hieu-qua-sang-cay-trong-gia-tri-cao-post939832.vnp",
-    "note": "Checked 2026-11-07. Huỳnh Tất Đạt, Deputy Director of Đồng Tháp's Department of Agriculture: 'Vì hiện nay trồng hoa màu trong vòng 2-3 tháng cho thu hoạch, lãi từ 50-77 triệu đồng/ha.' Rice land converted to upland crops (maize, sesame, chili, sweet potato and others); (50 + 77) / 2 = 63.5.",
+    "note": "Checked. Huỳnh Tất Đạt, Deputy Director of Đồng Tháp's Department of Agriculture: 'Vì hiện nay trồng hoa màu trong vòng 2-3 tháng cho thu hoạch, lãi từ 50-77 triệu đồng/ha.' Rice land converted to upland crops (maize, sesame, chili, sweet potato and others); (50 + 77) / 2 = 63.5.",
     "verified": true
    }
   },
@@ -342,7 +342,7 @@
    "source": {
     "title": "Báo Tin tức Dân tộc & Miền núi (15 Oct 2023), Long An: Chuyển đổi cây trồng trên đất lúa giúp thu lãi hàng trăm triệu đồng/ha",
     "url": "https://dantocmiennui.baotintuc.vn/long-an-chuyen-doi-cay-trong-tren-dat-lua-giup-thu-lai-hang-tram-trieu-dongha-post342409.html",
-    "note": "Checked 2026-11-07. '...như trồng dưa hấu mang lại lợi nhuận từ 70 -150 triệu đồng/ha mỗi vụ'; the conversion is 'chuyển đổi cây trồng từ đất trồng lúa'. The page attributes the conversion area, not this profit, to the provincial Department of Agriculture, so it counts as news. (70 + 150) / 2 = 110.",
+    "note": "Checked. '...như trồng dưa hấu mang lại lợi nhuận từ 70 -150 triệu đồng/ha mỗi vụ'; the conversion is 'chuyển đổi cây trồng từ đất trồng lúa'. The page attributes the conversion area, not this profit, to the provincial Department of Agriculture, so it counts as news. (70 + 150) / 2 = 110.",
     "verified": true
    }
   },
@@ -357,7 +357,7 @@
    "source": {
     "title": "Báo Sóc Trăng (1 Apr 2025), Xã Kế Thành phát triển trồng dưa hấu dưới ruộng lúa",
     "url": "https://baosoctrang.org.vn/nong-nghiep/202504/xa-ke-thanh-phat-trien-trong-dua-hau-duoi-ruong-lua-c825f0e/",
-    "note": "Checked 2026-11-07. Ông Sơn Đươl: 'Gia đình tôi có 3.000m2 đất canh tác lúa 3 vụ/năm' ... 'trừ chi phí lợi nhuận hơn 30 triệu đồng/vụ/năm.' 30 M / 0.3 ha = 100 M per ha.",
+    "note": "Checked. Ông Sơn Đươl: 'Gia đình tôi có 3.000m2 đất canh tác lúa 3 vụ/năm' ... 'trừ chi phí lợi nhuận hơn 30 triệu đồng/vụ/năm.' 30 M / 0.3 ha = 100 M per ha.",
     "verified": true
    }
   },
@@ -372,7 +372,7 @@
    "source": {
     "title": "VnBusiness (22 Jul 2025), Rau màu trên chân ruộng lúa giúp nông dân bội thu",
     "url": "https://vnbusiness.vn/rau-mau-tren-chan-ruong-lua-giup-nong-dan-boi-thu.html",
-    "note": "Checked 2026-11-07. 'Chỉ sau hơn 2 tháng, người dân đã thu lợi nhuận 60-70 triệu đồng từ 5 công dưa hấu, một con số ấn tượng so với trồng lúa.' Planted after the winter–spring rice. 65 M / 5 công, công taken as 1,000 m² (size not stated; a 1,296 m² công would give about 100).",
+    "note": "Checked. 'Chỉ sau hơn 2 tháng, người dân đã thu lợi nhuận 60-70 triệu đồng từ 5 công dưa hấu, một con số ấn tượng so với trồng lúa.' Planted after the winter–spring rice. 65 M / 5 công, công taken as 1,000 m² (size not stated; a 1,296 m² công would give about 100).",
     "verified": true
    }
   },
@@ -387,7 +387,7 @@
    "source": {
     "title": "Thanh Tra (13 Mar 2020), Đảm bảo thu nhập cho nông dân trong mùa khô hạn",
     "url": "https://thanhtra.com.vn/tai-chinh-701717FFD/dam-bao-thu-nhap-cho-nong-dan-trong-mua-kho-han-541B6999.html",
-    "note": "Checked 2026-11-07. Anh Sơn Thu (ấp Cần Đước, xã Thạnh Phú): 'mỗi công dưa hấu nếu cho năng suất tốt từ 3-4 tấn, giá bán khoảng 4.000 đồng/kg' ... 'thì trung bình nông dân sẽ thu lãi từ 5-10 triệu đồng.' 7.5 M per công, công taken as 1,000 m² (size not stated).",
+    "note": "Checked. Anh Sơn Thu (ấp Cần Đước, xã Thạnh Phú): 'mỗi công dưa hấu nếu cho năng suất tốt từ 3-4 tấn, giá bán khoảng 4.000 đồng/kg' ... 'thì trung bình nông dân sẽ thu lãi từ 5-10 triệu đồng.' 7.5 M per công, công taken as 1,000 m² (size not stated).",
     "verified": true
    }
   },
@@ -402,7 +402,7 @@
    "source": {
     "title": "Vietbao (21 Oct 2026), Từ mô hình cho lợi nhuận gấp ba, Phó Giám đốc Trung tâm Khuyến nông Quốc gia gợi mở cách canh tác thích ứng với hạn mặn",
     "url": "https://vietbao.vn/tu-mo-hinh-cho-loi-nhuan-gap-ba-pho-giam-doc-trung-tam-khuyen-nong-quoc-gia-goi-mo-cach-canh-tac-thich-ung-voi-han-man-612326.html",
-    "note": "Checked 2026-11-06. National Agricultural Extension Centre rice–shrimp pilot, 2022–2024, Hòa Tú 1 (Mỹ Xuyên, Sóc Trăng): 'năng suất tôm sú đạt gần 600 kg/ha, năng suất lúa đạt 5,4 tấn/ha, lợi nhuận khoảng 79 triệu đồng/ha nuôi tôm, gấp 3 lần so với sản xuất vụ lúa tương ứng.' A pilot model, so above the usual farm.",
+    "note": "Checked. National Agricultural Extension Centre rice–shrimp pilot, 2022–2024, Hòa Tú 1 (Mỹ Xuyên, Sóc Trăng): 'năng suất tôm sú đạt gần 600 kg/ha, năng suất lúa đạt 5,4 tấn/ha, lợi nhuận khoảng 79 triệu đồng/ha nuôi tôm, gấp 3 lần so với sản xuất vụ lúa tương ứng.' A pilot model, so above the usual farm.",
     "verified": true
    }
   },
@@ -417,7 +417,7 @@
    "source": {
     "title": "Thủy sản Việt Nam (6 Jul 2020), Tôm – lúa: Mô hình canh tác của tương lai",
     "url": "https://thuysanvietnam.com.vn/tom-lua-mo-hinh-canh-tac-cua-tuong-lai/",
-    "note": "Checked 2026-11-06. Bạc Liêu rice–shrimp, shrimp season Feb–Jul: 'Tôm sú đạt năng suất bình quân 300 – 400 kg/ha, thu lãi 35 – 40 triệu đồng/ha.' The article summarises research and does not say which year the figure is from, so it is used only as a fallback.",
+    "note": "Checked. Bạc Liêu rice–shrimp, shrimp season Feb–Jul: 'Tôm sú đạt năng suất bình quân 300 – 400 kg/ha, thu lãi 35 – 40 triệu đồng/ha.' The article summarises research and does not say which year the figure is from, so it is used only as a fallback.",
     "verified": true
    }
   },
@@ -432,7 +432,7 @@
    "source": {
     "title": "Ministry of Agriculture and Environment, climate-change adaptation bulletin (March 2026), Mô hình tôm - lúa và bí quyết thuận thiên, thích ứng biến đổi khí hậu",
     "url": "https://adaptation.dcc.mae.gov.vn/wp-content/uploads/2026/04/Ban-tin-TUBDKH-t3.2026_TN1.pdf",
-    "note": "Checked 2026-11-06. PDF, p. 3: 'Tại TP Cần Thơ, năm 2025 địa phương xuống giống 1.874ha lúa trên nền đất nuôi tôm, trong đó giống lúa ST chiếm hơn 42%. Năng suất đạt bình quân 6 - 6,5 tấn/ha, lợi nhuận khoảng 25 - 30 triệu đồng/ha.' (Cần Thơ city now includes the former Sóc Trăng province; the bulletin's farmers are in Hòa Tú.)",
+    "note": "Checked. PDF, p. 3: 'Tại TP Cần Thơ, năm 2025 địa phương xuống giống 1.874ha lúa trên nền đất nuôi tôm, trong đó giống lúa ST chiếm hơn 42%. Năng suất đạt bình quân 6 - 6,5 tấn/ha, lợi nhuận khoảng 25 - 30 triệu đồng/ha.' (Cần Thơ city now includes the former Sóc Trăng province; the bulletin's farmers are in Hòa Tú.)",
     "verified": true
    }
   },
@@ -447,7 +447,7 @@
    "source": {
     "title": "Nhân Dân (10 Mar 2021), Lúa thơm - tôm sạch ở Sóc Trăng",
     "url": "https://nhandan.vn/post-637970.html",
-    "note": "Checked 2026-11-06. Sóc Trăng rice–shrimp. One farmer (Mỹ Xuyên): 'Nông dân Huỳnh Thanh Bằng, ngụ xã Gia Hòa 2, huyện Mỹ Xuyên vừa thu hoạch hơn 16 tấn lúa ST25 từ 2 ha, bán gần 8.300 đồng/kg, mức giá cao nhất từ trước đến nay. Trừ chi phí, anh Bằng lãi hơn 90 triệu đồng.' (90 M from 2 ha = 45 M/ha). Shrimp losses, province-wide (the paragraph follows the remarks of Huỳnh Ngọc Nhã, director of Sóc Trăng's Department of Agriculture; no district named): 'Trước đây, luân canh theo mô hình tôm - lúa, nuôi tôm thiệt hại khoảng 20%/năm.' and 'Trong hai năm qua diện tích nuôi tôm bị thiệt hại giảm dần, từ 10% xuống còn 8,4%.'",
+    "note": "Checked. Sóc Trăng rice–shrimp. One farmer (Mỹ Xuyên): 'Nông dân Huỳnh Thanh Bằng, ngụ xã Gia Hòa 2, huyện Mỹ Xuyên vừa thu hoạch hơn 16 tấn lúa ST25 từ 2 ha, bán gần 8.300 đồng/kg, mức giá cao nhất từ trước đến nay. Trừ chi phí, anh Bằng lãi hơn 90 triệu đồng.' (90 M from 2 ha = 45 M/ha). Shrimp losses, province-wide (the paragraph follows the remarks of Huỳnh Ngọc Nhã, director of Sóc Trăng's Department of Agriculture; no district named): 'Trước đây, luân canh theo mô hình tôm - lúa, nuôi tôm thiệt hại khoảng 20%/năm.' and 'Trong hai năm qua diện tích nuôi tôm bị thiệt hại giảm dần, từ 10% xuống còn 8,4%.'",
     "verified": true
    }
   }
@@ -461,7 +461,7 @@
    "source": {
     "title": "Nhân Dân (10 Mar 2021), Lúa thơm - tôm sạch ở Sóc Trăng",
     "url": "https://nhandan.vn/post-637970.html",
-    "note": "Checked 2026-11-06. Sóc Trăng rice–shrimp. One farmer (Mỹ Xuyên): 'Nông dân Huỳnh Thanh Bằng, ngụ xã Gia Hòa 2, huyện Mỹ Xuyên vừa thu hoạch hơn 16 tấn lúa ST25 từ 2 ha, bán gần 8.300 đồng/kg, mức giá cao nhất từ trước đến nay. Trừ chi phí, anh Bằng lãi hơn 90 triệu đồng.' (90 M from 2 ha = 45 M/ha). Shrimp losses, province-wide (the paragraph follows the remarks of Huỳnh Ngọc Nhã, director of Sóc Trăng's Department of Agriculture; no district named): 'Trước đây, luân canh theo mô hình tôm - lúa, nuôi tôm thiệt hại khoảng 20%/năm.' and 'Trong hai năm qua diện tích nuôi tôm bị thiệt hại giảm dần, từ 10% xuống còn 8,4%.' Share used: 0.092, the mean of the two years' damaged shares (10% and 8.4%), counting a damaged area as a lost shrimp season.",
+    "note": "Checked. Sóc Trăng rice–shrimp. One farmer (Mỹ Xuyên): 'Nông dân Huỳnh Thanh Bằng, ngụ xã Gia Hòa 2, huyện Mỹ Xuyên vừa thu hoạch hơn 16 tấn lúa ST25 từ 2 ha, bán gần 8.300 đồng/kg, mức giá cao nhất từ trước đến nay. Trừ chi phí, anh Bằng lãi hơn 90 triệu đồng.' (90 M from 2 ha = 45 M/ha). Shrimp losses, province-wide (the paragraph follows the remarks of Huỳnh Ngọc Nhã, director of Sóc Trăng's Department of Agriculture; no district named): 'Trước đây, luân canh theo mô hình tôm - lúa, nuôi tôm thiệt hại khoảng 20%/năm.' and 'Trong hai năm qua diện tích nuôi tôm bị thiệt hại giảm dần, từ 10% xuống còn 8,4%.' Share used: 0.092, the mean of the two years' damaged shares (10% and 8.4%), counting a damaged area as a lost shrimp season.",
     "verified": true
    },
    "estimate": false
@@ -474,7 +474,7 @@
    "source": {
     "title": "General Statistics Office of Vietnam (May 2016), Báo cáo tình hình kinh tế – xã hội tháng 5 và 5 tháng năm 2016",
     "url": "https://www.nso.gov.vn/du-lieu-va-so-lieu-thong-ke/2020/11/bao-cao-tinh-hinh-kinh-te-xa-hoi-thang-5-va-5-thang-nam-2016/",
-    "note": "Checked 2026-11-06. El Niño 2015–16, the strongest of the app's El Niño seasons: 'Công tác thu hoạch lúa đông xuân ở vùng Đồng bằng sông Cửu Long đã hoàn tất với sản lượng ước tính đạt 10 triệu tấn, giảm 1,1 triệu tấn so với vụ đông xuân 2015. Vụ lúa đông xuân ở đồng bằng sông Cửu Long năm nay bị ảnh hưởng lớn do tình trạng khô hạn và xâm nhập mặn.' 1.1 / 11.1 ≈ 0.10 of the winter–spring harvest lost. Share used: 0.10 of winter–spring rice profit.",
+    "note": "Checked. El Niño 2015–16, the strongest of the app's El Niño seasons: 'Công tác thu hoạch lúa đông xuân ở vùng Đồng bằng sông Cửu Long đã hoàn tất với sản lượng ước tính đạt 10 triệu tấn, giảm 1,1 triệu tấn so với vụ đông xuân 2015. Vụ lúa đông xuân ở đồng bằng sông Cửu Long năm nay bị ảnh hưởng lớn do tình trạng khô hạn và xâm nhập mặn.' 1.1 / 11.1 ≈ 0.10 of the winter–spring harvest lost. Share used: 0.10 of winter–spring rice profit.",
     "verified": true
    },
    "estimate": false
@@ -487,7 +487,7 @@
    "source": {
     "title": "General Statistics Office of Vietnam (May 2016), Báo cáo tình hình kinh tế – xã hội tháng 5 và 5 tháng năm 2016",
     "url": "https://www.nso.gov.vn/du-lieu-va-so-lieu-thong-ke/2020/11/bao-cao-tinh-hinh-kinh-te-xa-hoi-thang-5-va-5-thang-nam-2016/",
-    "note": "Checked 2026-11-06. El Niño 2015–16, the strongest of the app's El Niño seasons: 'Công tác thu hoạch lúa đông xuân ở vùng Đồng bằng sông Cửu Long đã hoàn tất với sản lượng ước tính đạt 10 triệu tấn, giảm 1,1 triệu tấn so với vụ đông xuân 2015. Vụ lúa đông xuân ở đồng bằng sông Cửu Long năm nay bị ảnh hưởng lớn do tình trạng khô hạn và xâm nhập mặn.' 1.1 / 11.1 ≈ 0.10 of the winter–spring harvest lost. team estimate: 0.10. The figure is for the winter–spring crop; we use the same share for a summer–autumn crop in the salt months.",
+    "note": "Checked. El Niño 2015–16, the strongest of the app's El Niño seasons: 'Công tác thu hoạch lúa đông xuân ở vùng Đồng bằng sông Cửu Long đã hoàn tất với sản lượng ước tính đạt 10 triệu tấn, giảm 1,1 triệu tấn so với vụ đông xuân 2015. Vụ lúa đông xuân ở đồng bằng sông Cửu Long năm nay bị ảnh hưởng lớn do tình trạng khô hạn và xâm nhập mặn.' 1.1 / 11.1 ≈ 0.10 of the winter–spring harvest lost. team estimate: 0.10. The figure is for the winter–spring crop; we use the same share for a summer–autumn crop in the salt months.",
     "verified": true
    },
    "estimate": true
@@ -500,7 +500,7 @@
    "source": {
     "title": "General Statistics Office of Vietnam (May 2016), Báo cáo tình hình kinh tế – xã hội tháng 5 và 5 tháng năm 2016",
     "url": "https://www.nso.gov.vn/du-lieu-va-so-lieu-thong-ke/2020/11/bao-cao-tinh-hinh-kinh-te-xa-hoi-thang-5-va-5-thang-nam-2016/",
-    "note": "Checked 2026-11-06. El Niño 2015–16, the strongest of the app's El Niño seasons: 'Công tác thu hoạch lúa đông xuân ở vùng Đồng bằng sông Cửu Long đã hoàn tất với sản lượng ước tính đạt 10 triệu tấn, giảm 1,1 triệu tấn so với vụ đông xuân 2015. Vụ lúa đông xuân ở đồng bằng sông Cửu Long năm nay bị ảnh hưởng lớn do tình trạng khô hạn và xâm nhập mặn.' 1.1 / 11.1 ≈ 0.10 of the winter–spring harvest lost. team estimate: 0.10. The figure is for the winter–spring crop; we use the same share for an autumn–winter crop in the salt months.",
+    "note": "Checked. El Niño 2015–16, the strongest of the app's El Niño seasons: 'Công tác thu hoạch lúa đông xuân ở vùng Đồng bằng sông Cửu Long đã hoàn tất với sản lượng ước tính đạt 10 triệu tấn, giảm 1,1 triệu tấn so với vụ đông xuân 2015. Vụ lúa đông xuân ở đồng bằng sông Cửu Long năm nay bị ảnh hưởng lớn do tình trạng khô hạn và xâm nhập mặn.' 1.1 / 11.1 ≈ 0.10 of the winter–spring harvest lost. team estimate: 0.10. The figure is for the winter–spring crop; we use the same share for an autumn–winter crop in the salt months.",
     "verified": true
    },
    "estimate": true
@@ -513,7 +513,7 @@
    "source": {
     "title": "General Statistics Office of Vietnam (May 2016), Báo cáo tình hình kinh tế – xã hội tháng 5 và 5 tháng năm 2016",
     "url": "https://www.nso.gov.vn/du-lieu-va-so-lieu-thong-ke/2020/11/bao-cao-tinh-hinh-kinh-te-xa-hoi-thang-5-va-5-thang-nam-2016/",
-    "note": "Checked 2026-11-06. El Niño 2015–16, the strongest of the app's El Niño seasons: 'Công tác thu hoạch lúa đông xuân ở vùng Đồng bằng sông Cửu Long đã hoàn tất với sản lượng ước tính đạt 10 triệu tấn, giảm 1,1 triệu tấn so với vụ đông xuân 2015. Vụ lúa đông xuân ở đồng bằng sông Cửu Long năm nay bị ảnh hưởng lớn do tình trạng khô hạn và xâm nhập mặn.' 1.1 / 11.1 ≈ 0.10 of the winter–spring harvest lost. team estimate: 0.10, the same as rice. No source gives a salt-damage share for upland crops; the card says upland crops are also hurt by salty irrigation water.",
+    "note": "Checked. El Niño 2015–16, the strongest of the app's El Niño seasons: 'Công tác thu hoạch lúa đông xuân ở vùng Đồng bằng sông Cửu Long đã hoàn tất với sản lượng ước tính đạt 10 triệu tấn, giảm 1,1 triệu tấn so với vụ đông xuân 2015. Vụ lúa đông xuân ở đồng bằng sông Cửu Long năm nay bị ảnh hưởng lớn do tình trạng khô hạn và xâm nhập mặn.' 1.1 / 11.1 ≈ 0.10 of the winter–spring harvest lost. team estimate: 0.10, the same as rice. No source gives a salt-damage share for upland crops; the card says upland crops are also hurt by salty irrigation water.",
     "verified": true
    },
    "estimate": true
@@ -526,7 +526,7 @@
    "source": {
     "title": "General Statistics Office of Vietnam (May 2016), Báo cáo tình hình kinh tế – xã hội tháng 5 và 5 tháng năm 2016",
     "url": "https://www.nso.gov.vn/du-lieu-va-so-lieu-thong-ke/2020/11/bao-cao-tinh-hinh-kinh-te-xa-hoi-thang-5-va-5-thang-nam-2016/",
-    "note": "Checked 2026-11-06. El Niño 2015–16, the strongest of the app's El Niño seasons: 'Công tác thu hoạch lúa đông xuân ở vùng Đồng bằng sông Cửu Long đã hoàn tất với sản lượng ước tính đạt 10 triệu tấn, giảm 1,1 triệu tấn so với vụ đông xuân 2015. Vụ lúa đông xuân ở đồng bằng sông Cửu Long năm nay bị ảnh hưởng lớn do tình trạng khô hạn và xâm nhập mặn.' 1.1 / 11.1 ≈ 0.10 of the winter–spring harvest lost. team estimate: 0.10, the same as rice. No source gives a salt-damage share for upland crops; the card says upland crops are also hurt by salty irrigation water.",
+    "note": "Checked. El Niño 2015–16, the strongest of the app's El Niño seasons: 'Công tác thu hoạch lúa đông xuân ở vùng Đồng bằng sông Cửu Long đã hoàn tất với sản lượng ước tính đạt 10 triệu tấn, giảm 1,1 triệu tấn so với vụ đông xuân 2015. Vụ lúa đông xuân ở đồng bằng sông Cửu Long năm nay bị ảnh hưởng lớn do tình trạng khô hạn và xâm nhập mặn.' 1.1 / 11.1 ≈ 0.10 of the winter–spring harvest lost. team estimate: 0.10, the same as rice. No source gives a salt-damage share for upland crops; the card says upland crops are also hurt by salty irrigation water.",
     "verified": true
    },
    "estimate": true
@@ -539,7 +539,7 @@
    "source": {
     "title": "General Statistics Office of Vietnam (May 2016), Báo cáo tình hình kinh tế – xã hội tháng 5 và 5 tháng năm 2016",
     "url": "https://www.nso.gov.vn/du-lieu-va-so-lieu-thong-ke/2020/11/bao-cao-tinh-hinh-kinh-te-xa-hoi-thang-5-va-5-thang-nam-2016/",
-    "note": "Checked 2026-11-06. El Niño 2015–16, the strongest of the app's El Niño seasons: 'Công tác thu hoạch lúa đông xuân ở vùng Đồng bằng sông Cửu Long đã hoàn tất với sản lượng ước tính đạt 10 triệu tấn, giảm 1,1 triệu tấn so với vụ đông xuân 2015. Vụ lúa đông xuân ở đồng bằng sông Cửu Long năm nay bị ảnh hưởng lớn do tình trạng khô hạn và xâm nhập mặn.' 1.1 / 11.1 ≈ 0.10 of the winter–spring harvest lost. team estimate: 0.10, the same as rice. No source gives a salt-damage share for upland crops; the card says upland crops are also hurt by salty irrigation water.",
+    "note": "Checked. El Niño 2015–16, the strongest of the app's El Niño seasons: 'Công tác thu hoạch lúa đông xuân ở vùng Đồng bằng sông Cửu Long đã hoàn tất với sản lượng ước tính đạt 10 triệu tấn, giảm 1,1 triệu tấn so với vụ đông xuân 2015. Vụ lúa đông xuân ở đồng bằng sông Cửu Long năm nay bị ảnh hưởng lớn do tình trạng khô hạn và xâm nhập mặn.' 1.1 / 11.1 ≈ 0.10 of the winter–spring harvest lost. team estimate: 0.10, the same as rice. No source gives a salt-damage share for upland crops; the card says upland crops are also hurt by salty irrigation water.",
     "verified": true
    },
    "estimate": true
@@ -552,7 +552,7 @@
    "source": {
     "title": "General Statistics Office of Vietnam (May 2016), Báo cáo tình hình kinh tế – xã hội tháng 5 và 5 tháng năm 2016",
     "url": "https://www.nso.gov.vn/du-lieu-va-so-lieu-thong-ke/2020/11/bao-cao-tinh-hinh-kinh-te-xa-hoi-thang-5-va-5-thang-nam-2016/",
-    "note": "Checked 2026-11-06. El Niño 2015–16, the strongest of the app's El Niño seasons: 'Công tác thu hoạch lúa đông xuân ở vùng Đồng bằng sông Cửu Long đã hoàn tất với sản lượng ước tính đạt 10 triệu tấn, giảm 1,1 triệu tấn so với vụ đông xuân 2015. Vụ lúa đông xuân ở đồng bằng sông Cửu Long năm nay bị ảnh hưởng lớn do tình trạng khô hạn và xâm nhập mặn.' 1.1 / 11.1 ≈ 0.10 of the winter–spring harvest lost. team estimate: 0.05 = 0.10 × TOL (0.5, salt-tolerant rice counts half; build.py). No source gives ST rice's damage share.",
+    "note": "Checked. El Niño 2015–16, the strongest of the app's El Niño seasons: 'Công tác thu hoạch lúa đông xuân ở vùng Đồng bằng sông Cửu Long đã hoàn tất với sản lượng ước tính đạt 10 triệu tấn, giảm 1,1 triệu tấn so với vụ đông xuân 2015. Vụ lúa đông xuân ở đồng bằng sông Cửu Long năm nay bị ảnh hưởng lớn do tình trạng khô hạn và xâm nhập mặn.' 1.1 / 11.1 ≈ 0.10 of the winter–spring harvest lost. team estimate: 0.05 = 0.10 × TOL (0.5, salt-tolerant rice counts half; build.py). No source gives ST rice's damage share.",
     "verified": true
    },
    "estimate": true
@@ -565,7 +565,7 @@
    "source": {
     "title": "General Statistics Office of Vietnam (May 2016), Báo cáo tình hình kinh tế – xã hội tháng 5 và 5 tháng năm 2016",
     "url": "https://www.nso.gov.vn/du-lieu-va-so-lieu-thong-ke/2020/11/bao-cao-tinh-hinh-kinh-te-xa-hoi-thang-5-va-5-thang-nam-2016/",
-    "note": "Checked 2026-11-06. El Niño 2015–16, the strongest of the app's El Niño seasons: 'Công tác thu hoạch lúa đông xuân ở vùng Đồng bằng sông Cửu Long đã hoàn tất với sản lượng ước tính đạt 10 triệu tấn, giảm 1,1 triệu tấn so với vụ đông xuân 2015. Vụ lúa đông xuân ở đồng bằng sông Cửu Long năm nay bị ảnh hưởng lớn do tình trạng khô hạn và xâm nhập mặn.' 1.1 / 11.1 ≈ 0.10 of the winter–spring harvest lost. team estimate: 0.05 = 0.10 × TOL (0.5, salt-tolerant rice counts half; build.py). No source gives ST rice's damage share.",
+    "note": "Checked. El Niño 2015–16, the strongest of the app's El Niño seasons: 'Công tác thu hoạch lúa đông xuân ở vùng Đồng bằng sông Cửu Long đã hoàn tất với sản lượng ước tính đạt 10 triệu tấn, giảm 1,1 triệu tấn so với vụ đông xuân 2015. Vụ lúa đông xuân ở đồng bằng sông Cửu Long năm nay bị ảnh hưởng lớn do tình trạng khô hạn và xâm nhập mặn.' 1.1 / 11.1 ≈ 0.10 of the winter–spring harvest lost. team estimate: 0.05 = 0.10 × TOL (0.5, salt-tolerant rice counts half; build.py). No source gives ST rice's damage share.",
     "verified": true
    },
    "estimate": true
