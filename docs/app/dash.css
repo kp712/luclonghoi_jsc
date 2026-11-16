@@ -688,7 +688,7 @@ body.dv-zoomed { overflow:hidden }
 @keyframes bmPing { 0% { transform:scale(.5); opacity:.9 } 70%, 100% { transform:scale(1.6); opacity:0 } }
 @media (prefers-reduced-motion:reduce) { .bm-dot::after { animation:none; opacity:.5 } .dv-backmap .bm-ic { transition:none } }
 
-/* ---------- Simple view: less on the page, clearer calendar (critique 15 Nov) ---------- */
+/* ---------- Simple view: less on the page, clearer calendar (critique) ---------- */
 body.dv-simple #hubBtn { display:none }                                  /* Tools is an Advanced feature */
 .s-cal .rb .mo { color:var(--ink) }
 body.lang-vi .s-cal .rb .mo, body.lang-vi .z-panel .rb:not(.sm) .mo { font-size:.9375rem; line-height:1.15 }   /* plain month numbers, readable outdoors */

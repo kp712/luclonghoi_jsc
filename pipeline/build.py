@@ -107,13 +107,13 @@ GPM_SRC = {"title": "NASA GPM IMERG Final monthly v07 (GPM_3IMERGM), 0.1° (~10 
 POWER_SRC = {"title": "NASA POWER daily API (MERRA-2 based)", "url": "https://power.larc.nasa.gov/", "verified": True}
 MODIS_SRC = {"title": "NASA MODIS MOD13Q1 v6.1 NDVI, 250 m", "url": "https://lpdaac.usgs.gov/products/mod13q1v061/", "verified": True}
 HEAT_SRC = {"title": "Yoshida S. (1981), Fundamentals of Rice Crop Science, IRRI (heat at flowering)", "url": "http://books.irri.org/9711040522_content.pdf",
-            "note": "Checked 2026-11-06. Section 2.3.6, p. 81: 'High percentages of spikelet sterility occur if temperatures exceed 35°C at anthesis and last for more than 1 hour.' Table 2.4 (p. 72) gives 35 °C as the critical high temperature at anthesis (as a daily mean). Whereas Yoshida measures exposure at flowering (anthesis), our daily-maximum proxy counts NASA POWER days whose daily maximum reaches or exceeds 35 °C across the months a crop is in the field.", "verified": True}
+            "note": "Checked. Section 2.3.6, p. 81: 'High percentages of spikelet sterility occur if temperatures exceed 35°C at anthesis and last for more than 1 hour.' Table 2.4 (p. 72) gives 35 °C as the critical high temperature at anthesis (as a daily mean). Whereas Yoshida measures exposure at flowering (anthesis), our daily-maximum proxy counts NASA POWER days whose daily maximum reaches or exceeds 35 °C across the months a crop is in the field.", "verified": True}
 FAO29_SRC = {"title": "Ayers & Westcot (1985), Water quality for agriculture, FAO Irrigation and Drainage Paper 29 Rev. 1, Table 4 and 5",
              "url": "https://www.fao.org/4/t0234e/T0234E03.htm", "verified": True,
-             "note": "Checked 2026-11-07. Table 4 (irrigation water salinity ECw, dS/m, at 100% and 90% yield potential): 'Corn (maize) (Zea mays) 1.7 1.1 2.5 1.7'; 'Rice (paddy) (Oriza sativa) 3.0 2.0 3.8 2.6'. Watermelon has no number; Table 5 lists it as moderately sensitive. Mung bean is not listed."}
+             "note": "Checked. Table 4 (irrigation water salinity ECw, dS/m, at 100% and 90% yield potential): 'Corn (maize) (Zea mays) 1.7 1.1 2.5 1.7'; 'Rice (paddy) (Oriza sativa) 3.0 2.0 3.8 2.6'. Watermelon has no number; Table 5 lists it as moderately sensitive. Mung bean is not listed."}
 FAO48_SRC = {"title": "Rhoades, Kandiah & Mashali (1992), The use of saline waters for crop production, FAO Irrigation and Drainage Paper 48 (conversion factors)",
              "url": "https://www.fao.org/4/t0667e/t0667e02.htm", "verified": True,
-             "note": "Checked 2026-11-07. Box 'Useful conversion factors and formulas': 'TDS (mg/l) » EC (dS/m) × 640' 'for EC between 0.1 and 5.0 dS/m'. So maize's 1.1 dS/m ≈ 0.7‰, and 4‰ is about 5 dS/m or more."}
+             "note": "Checked. Box 'Useful conversion factors and formulas': 'TDS (mg/l) » EC (dS/m) × 640' 'for EC between 0.1 and 5.0 dS/m'. So maize's 1.1 dS/m ≈ 0.7‰, and 4‰ is about 5 dS/m or more."}
 SOIL_SRC = {"title": "SoilGrids 2.0 (ISRIC): modelled soil clay, organic carbon, pH, 250 m (not NASA)", "url": "https://soilgrids.org/", "verified": True}
 
 
