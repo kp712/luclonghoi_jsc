@@ -10,7 +10,7 @@ import pathlib
 import re
 import sys
 import urllib.request
-from datetime import date, datetime
+from datetime import datetime
 
 from sites import SITES
 
@@ -34,7 +34,7 @@ def parse_enso(page):
 
 def fetch_enso():
     with urllib.request.urlopen(ENSO_URL, timeout=120) as r:
-        out = dict(parse_enso(r.read().decode("utf-8", "replace")), url=ENSO_URL, fetched=date.today().isoformat())
+        out = dict(parse_enso(r.read().decode("utf-8", "replace")), url=ENSO_URL)
     (RAW / "enso_outlook.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
     print("NOAA outlook", out["issued"], out["status"])
 

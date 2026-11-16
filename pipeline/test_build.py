@@ -385,9 +385,10 @@ def test_noaa_outlook():
 <strong>ENSO Alert System Status: </font><span style="color:red">El Ni&ntilde;o Advisory</span></strong>
 <u>Synopsis:</u>&nbsp;<strong>El Ni&ntilde;o continues to strengthen, with a strong-to-very strong El Ni&ntilde;o likely
  through January-March 2027 (remaining greater than an 83&#37; chance).</strong> El Niño strengthened further."""
-    o = dict(fetch_power.parse_enso(page), url="u", fetched="2026-11-06")
+    o = dict(fetch_power.parse_enso(page), url="u")
     assert o["issued"] == "2026-10-08" and o["status"] == "El Niño Advisory" and o["synopsis"].endswith("83% chance)."), o
     out = build.outlook(o)
+    assert "Fetched" not in out["source"]["note"], out["source"]["note"]
     assert out["elnino"] and out["text"]["en"] == "NOAA forecast (8 Oct 2026): over 83% chance of a strong-to-very strong El Niño through Jan–Mar 2027."
     assert out["text"]["vi"] == "Dự báo của NOAA (8/10/2026): khả năng có El Niño mạnh đến rất mạnh kéo dài đến tháng 1–3/2027 là trên 83%."
     assert out["source"]["verified"] and o["synopsis"] in out["source"]["note"]  # NOAA's own words are the quote

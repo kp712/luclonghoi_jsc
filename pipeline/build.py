@@ -72,7 +72,7 @@ SEASONS = ", ".join(f"{y}–{(y + 1) % 100:02d}" for y in ELNINO)
 ONI_SRC = {"title": f"NOAA CPC Oceanic Niño Index (ONI): {len(ELNINO)} El Niño winters, Dec 2000 – Nov 2024",
            "url": "https://www.cpc.ncep.noaa.gov/data/indices/oni.ascii.txt",
            "note": "Dec–Feb ONI 0.5 or more: " + ", ".join(f"{y}–{(y + 1) % 100:02d} ({v})" for y, v in ONI.items())
-                   + ". Saved in data/raw/oni.txt (fetched 2026-11-05); checked 2026-11-05 against NOAA's live file: Dec–Feb values 2001–2024 identical.", "verified": True}
+                   + ". Saved in data/raw/oni.txt; checked against NOAA's live file: Dec–Feb values 2001–2024 identical.", "verified": True}
 # NOAA CPC's latest ENSO status (data/raw/enso_outlook.json, from pipeline/fetch_power.py): the app opens on the El Niño view
 # while NOAA says El Niño is here or coming (Advisory = present, Watch = favoured within 6 months).
 ENSO_VI = {"El Niño Advisory": "đang có El Niño", "El Niño Watch": "El Niño có thể hình thành",
@@ -98,7 +98,7 @@ def outlook(o):
         text = {"en": f"NOAA El Niño status ({when['en']}): {o['status']}.",
                 "vi": f"Tình trạng El Niño theo NOAA ({when['vi']}): {ENSO_VI.get(o['status'], o['status'])}."}
     src = {"title": f"NOAA CPC ENSO Diagnostic Discussion, {when['en']}: {o['status']}", "url": o["url"],
-           "note": f"Synopsis: \"{o['synopsis']}\" Fetched {o['fetched']} by pipeline/fetch_power.py (data/raw/enso_outlook.json).", "verified": True}
+           "note": f"Synopsis: \"{o['synopsis']}\" Saved by pipeline/fetch_power.py (data/raw/enso_outlook.json).", "verified": True}
     return {"elnino": o["status"] in ("El Niño Advisory", "El Niño Watch"), "text": text, "source": src}
 
 
